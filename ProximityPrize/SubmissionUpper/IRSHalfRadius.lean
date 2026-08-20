@@ -190,7 +190,7 @@ theorem winningSetSoundness_eq_one
     (hδ : δ ∈ Set.Ico (1 / 2 : ℝ≥0) Benchmark.IRSProfile.minRelativeDistance) :
     winningSetDensity Benchmark.IRSProfile.encoder δ = 1 := by
   apply HalfRadiusCollision.winningSetSoundness_eq_one_of_many_interpolation_sets
-    (F := F) Benchmark.IRSProfile.encoder δ (m := m) (f := powerWord)
+    (F := F) Benchmark.IRSProfile.encoder δ (m := m) (mZero := m) (f := powerWord)
   · have hlt : (δ : ℝ) < 131073 / 262144 := by
       exact_mod_cast hδ.2
     norm_num [m, k, s, I, Benchmark.IRSProfile.totalDimension,
