@@ -16,10 +16,10 @@ abbrev I := ProximityPrize.Benchmark.IRSProfile.Index
 abbrev k := ProximityPrize.Benchmark.IRSProfile.totalDimension
 abbrev s := ProximityPrize.Benchmark.IRSProfile.interleaving
 abbrev rowK := 131072
-abbrev extra := 7931
-abbrev agreement := 139003
-abbrev signatureWidth := 7932
-abbrev unsafeIndex := 123141
+abbrev extra := 7932
+abbrev agreement := 139004
+abbrev signatureWidth := 7933
+abbrev unsafeIndex := 123140
 
 namespace IRSProfile
 
@@ -87,20 +87,32 @@ theorem base_field_card_lt_two_pow_31 : Fintype.card K < 2 ^ 31 := by
   rw [ZMod.card]
   norm_num [_root_.KoalaBear.fieldSize]
 
-theorem base_field_pow_7944_lt_two_pow_246264 :
-    (Fintype.card K) ^ 7944 < 2 ^ 246264 := by
-  have hpow : ∀ q : Nat, q < 2 ^ 31 → q ^ 7944 < 2 ^ 246264 := by
-    intro q hq
-    calc
-      q ^ 7944 < (2 ^ 31) ^ 7944 :=
-        Nat.pow_lt_pow_left hq (by norm_num)
-      _ = 2 ^ (31 * 7944) := (pow_mul 2 31 7944).symm
-      _ = 2 ^ 246264 := by norm_num
-  exact hpow (Fintype.card K) base_field_card_lt_two_pow_31
+set_option exponentiation.threshold 3000 in
+theorem base_field_pow_90_lt_two_pow_2789 :
+    (Fintype.card K) ^ 90 < 2 ^ 2789 := by
+  rw [ZMod.card]
+  norm_num [_root_.KoalaBear.fieldSize]
 
-theorem signature_sieve_lt_two_pow_246264 :
+set_option maxRecDepth 100000 in
+theorem base_field_pow_7945_lt_two_pow_246262 :
+    (Fintype.card K) ^ 7945 < 2 ^ 246262 := by
+  let q := Fintype.card K
+  have hq : q < 2 ^ 31 := base_field_card_lt_two_pow_31
+  have hblock : q ^ 90 < 2 ^ 2789 := base_field_pow_90_lt_two_pow_2789
+  calc
+    q ^ 7945 = (q ^ 90) ^ 88 * q ^ 25 := by
+      rw [← pow_mul, ← pow_add]
+    _ < (2 ^ 2789) ^ 88 * (2 ^ 31) ^ 25 := by
+      gcongr
+    _ = 2 ^ (2789 * 88 + 31 * 25) := by
+      rw [← pow_mul, ← pow_mul, ← pow_add]
+    _ < 2 ^ 246262 := by
+      apply Nat.pow_lt_pow_right (by norm_num)
+      norm_num
+
+theorem signature_sieve_lt_two_pow_246262 :
     Fintype.card (Fin signatureWidth → K) * (Fintype.card F - 1) ^ 2 <
-      2 ^ 246264 := by
+      2 ^ 246262 := by
   have hcardF : Fintype.card F = _root_.KoalaBear.fieldSize ^ 6 := by
     exact _root_.KoalaBear.card_ext6
   have hcardK : Fintype.card K = _root_.KoalaBear.fieldSize := by
@@ -121,49 +133,49 @@ theorem signature_sieve_lt_two_pow_246264 :
         Nat.pow_le_pow_left (Nat.sub_le _ _) 2
       _ = q ^ 12 := by rw [← pow_mul]
   have hcombine : ∀ q : Nat,
-      q ^ signatureWidth * q ^ 12 = q ^ 7944 := by
+      q ^ signatureWidth * q ^ 12 = q ^ 7945 := by
     intro q
-    change q ^ 7932 * q ^ 12 = q ^ 7944
+    change q ^ 7933 * q ^ 12 = q ^ 7945
     rw [← pow_add]
   calc
     Fintype.card (Fin signatureWidth → K) * (Fintype.card F - 1) ^ 2 ≤
         (Fintype.card K) ^ signatureWidth * (Fintype.card K) ^ 12 := by
       rw [hsig, hcardF, hcardK]
       exact hmul _root_.KoalaBear.fieldSize signatureWidth
-    _ = (Fintype.card K) ^ 7944 := hcombine (Fintype.card K)
-    _ < 2 ^ 246264 := base_field_pow_7944_lt_two_pow_246264
+    _ = (Fintype.card K) ^ 7945 := hcombine (Fintype.card K)
+    _ < 2 ^ 246262 := base_field_pow_7945_lt_two_pow_246262
 
-theorem two_pow_246264_lt_central_choose :
-    2 ^ 246264 < Nat.choose 246282 123141 := by
-  have hcentral := Nat.four_pow_lt_mul_centralBinom 123141 (by norm_num)
+theorem two_pow_246262_lt_central_choose :
+    2 ^ 246262 < Nat.choose 246280 123140 := by
+  have hcentral := Nat.four_pow_lt_mul_centralBinom 123140 (by norm_num)
   rw [Nat.centralBinom_eq_two_mul_choose] at hcentral
   norm_num only [Nat.reduceMul] at hcentral
   by_contra hnot
-  have hle : Nat.choose 246282 123141 ≤ 2 ^ 246264 :=
+  have hle : Nat.choose 246280 123140 ≤ 2 ^ 246262 :=
     Nat.le_of_not_gt hnot
-  have hbad : 4 ^ 123141 < 123141 * 2 ^ 246264 :=
-    lt_of_lt_of_le hcentral (Nat.mul_le_mul_left 123141 hle)
-  have hreverse : 123141 * 2 ^ 246264 < 4 ^ 123141 := by
+  have hbad : 4 ^ 123140 < 123140 * 2 ^ 246262 :=
+    lt_of_lt_of_le hcentral (Nat.mul_le_mul_left 123140 hle)
+  have hreverse : 123140 * 2 ^ 246262 < 4 ^ 123140 := by
     calc
-      123141 * 2 ^ 246264 < 2 ^ 17 * 2 ^ 246264 := by
+      123140 * 2 ^ 246262 < 2 ^ 17 * 2 ^ 246262 := by
         gcongr <;> norm_num
-      _ = 2 ^ (17 + 246264) := (pow_add 2 17 246264).symm
-      _ < 2 ^ (2 * 123141) :=
+      _ = 2 ^ (17 + 246262) := (pow_add 2 17 246262).symm
+      _ < 2 ^ (2 * 123140) :=
         Nat.pow_lt_pow_right (by norm_num) (by norm_num)
-      _ = (2 ^ 2) ^ 123141 := pow_mul 2 2 123141
-      _ = 4 ^ 123141 := by norm_num
+      _ = (2 ^ 2) ^ 123140 := pow_mul 2 2 123140
+      _ = 4 ^ 123140 := by norm_num
   exact (Nat.not_lt_of_ge hreverse.le) hbad
 
-theorem two_pow_246264_lt_card_candidateSets :
-    2 ^ 246264 < Fintype.card CandidateSets := by
-  have hconcrete : 2 ^ 246264 < Nat.choose 262144 139003 := by
+theorem two_pow_246262_lt_card_candidateSets :
+    2 ^ 246262 < Fintype.card CandidateSets := by
+  have hconcrete : 2 ^ 246262 < Nat.choose 262144 139004 := by
     calc
-      2 ^ 246264 < Nat.choose 246282 123141 :=
-        two_pow_246264_lt_central_choose
-      _ = Nat.centralBinom 123141 := by
+      2 ^ 246262 < Nat.choose 246280 123140 :=
+        two_pow_246262_lt_central_choose
+      _ = Nat.centralBinom 123140 := by
         rw [Nat.centralBinom_eq_two_mul_choose]
-      _ ≤ Nat.choose 262144 123141 := Nat.choose_le_choose 123141 (by norm_num)
-      _ = Nat.choose 262144 139003 := Nat.choose_symm_of_eq_add (by norm_num)
+      _ ≤ Nat.choose 262144 123140 := Nat.choose_le_choose 123140 (by norm_num)
+      _ = Nat.choose 262144 139004 := Nat.choose_symm_of_eq_add (by norm_num)
   rw [← Nat.card_eq_fintype_card, Set.powersetCard.card]
   have hcardI : Nat.card I = 262144 := by
     rw [I, Benchmark.IRSProfile.Index, Nat.card_fin]
@@ -174,8 +186,8 @@ theorem two_pow_246264_lt_card_candidateSets :
 theorem signature_card_mul_field_sq_lt :
     Fintype.card (Fin signatureWidth → K) * (Fintype.card F - 1) ^ 2 <
       Fintype.card CandidateSets :=
-  signature_sieve_lt_two_pow_246264.trans
-    two_pow_246264_lt_card_candidateSets
+  signature_sieve_lt_two_pow_246262.trans
+    two_pow_246262_lt_card_candidateSets
 
 lemma exists_large_fiber {α β : Type} [Fintype α] [Fintype β] [DecidableEq β]
     (f : α → β) (sieve : Nat)
