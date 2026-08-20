@@ -2,79 +2,99 @@
 Copyright (c) 2026 Proximity Prize Contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
-import ProximityPrize.SubmissionUpper.PrescribedTop
+import ProximityPrize.SubmissionUpper.IRSHalfRadius
+import ProximityPrize.SubmissionUpper.TwistDensity
 
 open ToyProblem
 open scoped NNReal
 
 namespace ProximityPrize.Benchmark.Upper
 
--- The exact spot-check comparison at `delta* = 30669/65536`, in `Nat`:
--- `2 ^ 193146 <= 34867 ^ 12800` is `2 ^ (-11654/100) <= (34867/65536) ^ 128`
--- after clearing denominators and raising to the hundredth power.
-set_option maxHeartbeats 1000000 in
-set_option maxRecDepth 4000000 in
-set_option exponentiation.threshold 300000 in
-theorem score_nat : (2 : ℕ) ^ 193146 ≤ 34867 ^ 12800 := by decide
-
-theorem claimedUnsafeRadius_122676_eq :
-    claimedUnsafeRadius 122676 = (30669 / 65536 : ℝ≥0) := by
+theorem claimedUnsafeRadius_131072_eq_half :
+    claimedUnsafeRadius 131072 = (1 / 2 : ℝ≥0) := by
   unfold claimedUnsafeRadius ProximityGap.gridPt
   norm_num [IRSProfile.Index]
 
-theorem score_base :
-    ((2 : ℝ≥0) ^ (11654 : ℕ))⁻¹ ≤ ((34867 : ℝ≥0) / 65536) ^ (12800 : ℕ) := by
-  have hnat : (2 : ℕ) ^ 204800 ≤ 2 ^ 11654 * 34867 ^ 12800 := by
-    calc (2 : ℕ) ^ 204800 = 2 ^ 11654 * 2 ^ 193146 := by rw [← pow_add]
-      _ ≤ 2 ^ 11654 * 34867 ^ 12800 := Nat.mul_le_mul_left _ score_nat
-  have h1 : ((65536 : ℝ≥0)) ^ (12800 : ℕ) = (2 : ℝ≥0) ^ (204800 : ℕ) := by
-    rw [show (65536 : ℝ≥0) = 2 ^ (16 : ℕ) by norm_num, ← pow_mul]
-  have hR : ((65536 : ℝ≥0)) ^ (12800 : ℕ)
-      ≤ (34867 : ℝ≥0) ^ (12800 : ℕ) * (2 : ℝ≥0) ^ (11654 : ℕ) := by
-    rw [h1]
-    have : ((2 : ℕ) ^ 204800 : ℝ≥0) ≤ ((2 ^ 11654 * 34867 ^ 12800 : ℕ) : ℝ≥0) := by
-      exact_mod_cast hnat
-    push_cast at this
-    calc (2 : ℝ≥0) ^ (204800 : ℕ) ≤ 2 ^ (11654 : ℕ) * 34867 ^ (12800 : ℕ) := this
-      _ = (34867 : ℝ≥0) ^ (12800 : ℕ) * (2 : ℝ≥0) ^ (11654 : ℕ) := by ring
-  rw [div_pow, le_div_iff₀ (by positivity), inv_mul_eq_div,
-    div_le_iff₀ (by positivity)]
-  exact hR
+theorem claimedUnsafeRadius_122642_eq :
+    claimedUnsafeRadius 122642 = (122642 / 262144 : ℝ≥0) := by
+  unfold claimedUnsafeRadius ProximityGap.gridPt
+  norm_num [IRSProfile.Index]
+
+theorem candidate_score_twist :
+    (2 : ℝ≥0) ^ (-(((11649 : Nat) : ℝ) / 100)) ≤
+      (1 - claimedUnsafeRadius 122642) ^ IRSProfile.repetitions := by
+  rw [claimedUnsafeRadius_122642_eq]
+  rw [show IRSProfile.repetitions = 128 by rfl]
+  rw [← NNReal.coe_le_coe]
+  push_cast [NNReal.coe_rpow]
+  rw [← Real.rpow_le_rpow_iff (by positivity) (by positivity) (by norm_num : (0 : ℝ) < 100)]
+  rw [← Real.rpow_mul (by positivity)]
+  have hexp : -((11649 : ℝ) / 100) * 100 = -(11649 : ℝ) := by norm_num
+  rw [hexp]
+  rw [Real.rpow_neg (by positivity)]
+  rw [inv_eq_one_div, div_le_iff₀ (by positivity)]
+  have hfrac : (122642 / 262144 : ℝ≥0) ≤ 1 :=
+    (div_le_one (by norm_num)).2 (by norm_num)
+  rw [NNReal.coe_sub hfrac, NNReal.coe_div]
+  simp only [NNReal.coe_one, NNReal.coe_ofNat]
+  rw [show (100 : ℝ) = ((100 : ℕ) : ℝ) by norm_num, Real.rpow_natCast]
+  rw [← pow_mul]
+  norm_num only [Nat.reduceMul]
+  rw [div_pow, div_mul_eq_mul_div, le_div_iff₀ (by positivity), one_mul]
+  set_option maxRecDepth 1000000 in
+    exact_mod_cast (by decide : 131072 ^ 12800 ≤ 69751 ^ 12800 * 2 ^ 11649)
 
 theorem candidate_score :
-    (2 : ℝ≥0) ^ (-(((11654 : Nat) : ℝ) / 100)) ≤
-      (1 - claimedUnsafeRadius 122676) ^ IRSProfile.repetitions := by
-  rw [claimedUnsafeRadius_122676_eq]
-  have hcross : (1 : ℝ≥0) - 30669 / 65536 = 34867 / 65536 := by
+    (2 : ℝ≥0) ^ (-(((12800 : Nat) : ℝ) / 100)) ≤
+      (1 - claimedUnsafeRadius 131072) ^ IRSProfile.repetitions := by
+  rw [claimedUnsafeRadius_131072_eq_half]
+  have ht : IRSProfile.repetitions = 128 := rfl
+  have hcross : (1 : ℝ≥0) - 1 / 2 = 1 / 2 := by
     rw [tsub_eq_of_eq_add]
     norm_num
-  rw [show IRSProfile.repetitions = 128 from rfl, hcross]
-  have hstart : (2 : ℝ≥0) ^ (-(((11654 : ℕ) : ℝ)))
-      ≤ ((34867 : ℝ≥0) / 65536) ^ ((12800 : ℕ) : ℝ) := by
-    rw [NNReal.rpow_neg, NNReal.rpow_natCast, NNReal.rpow_natCast]
-    exact score_base
-  have hmono := NNReal.rpow_le_rpow hstart (by norm_num : (0 : ℝ) ≤ 1 / 100)
-  rw [← NNReal.rpow_mul, ← NNReal.rpow_mul] at hmono
-  rw [show (-(((11654 : ℕ) : ℝ))) * (1 / 100) = -(((11654 : Nat) : ℝ) / 100) by
-    push_cast; ring] at hmono
-  rw [show ((12800 : ℕ) : ℝ) * (1 / 100) = ((128 : ℕ) : ℝ) by push_cast; norm_num] at hmono
-  rwa [NNReal.rpow_natCast] at hmono
+  rw [ht, hcross]
+  have hbits : -(((12800 : Nat) : ℝ) / 100) = -(128 : ℝ) := by
+    norm_num
+  rw [hbits, ← NNReal.coe_le_coe]
+  push_cast [NNReal.coe_rpow]
+  rw [Real.rpow_neg (by norm_num : (0 : ℝ) ≤ 2),
+    show (128 : ℝ) = ((128 : Nat) : ℝ) by norm_num,
+    Real.rpow_natCast, div_pow, inv_eq_one_div,
+    div_le_div_iff₀ (by positivity) (by positivity), one_mul]
+  norm_num
 
-/-- The prescribed-top-coefficient collision family certifies the unsafe suffix
-from `delta* = 30669/65536` onward, giving a `116.54`-bit upper certificate. -/
-theorem candidate : ProtocolClaimUpper 11654 122676 where
+/-- The half-radius interpolation attack gives a `128.00`-bit upper seed. -/
+theorem candidate_baseline : ProtocolClaimUpper 12800 131072 where
   admissible := by
-    rw [claimedUnsafeRadius_122676_eq]
+    rw [claimedUnsafeRadius_131072_eq_half]
     unfold IRSProfile.minRelativeDistance
     norm_num
   unsafeAbove := by
     intro δ hδ
-    have hband : δ ∈ Set.Ico (30669 / 65536 : ℝ≥0) IRSProfile.minRelativeDistance := by
-      simpa only [claimedUnsafeRadius_122676_eq] using hδ
-    rw [ProximityPrize.SubmissionUpper.PrescribedTop.winningSetDensity_eq_one
-      δ hband.1 hband.2]
+    have hband : δ ∈ Set.Ico (1 / 2 : ℝ≥0) IRSProfile.minRelativeDistance := by
+      simpa only [claimedUnsafeRadius_131072_eq_half] using hδ
+    rw [ProximityPrize.SubmissionUpper.IRSHalfRadius.IRSProfile.winningSetSoundness_eq_one
+      δ hband]
     unfold epsilonStar ProximityGap.prizeThreshold
     norm_num
   score := candidate_score
+
+theorem candidate : ProtocolClaimUpper 11649 122642 where
+  admissible := by
+    rw [claimedUnsafeRadius_122642_eq]
+    unfold IRSProfile.minRelativeDistance
+    norm_num
+  unsafeAbove := by
+    intro δ hδ
+    rw [claimedUnsafeRadius_122642_eq] at hδ
+    by_cases hhalf : δ < 1 / 2
+    · exact ProximityPrize.SubmissionUpper.twist_winning_density δ hδ.1 hhalf
+    · have hband : δ ∈ Set.Ico (1 / 2 : ℝ≥0) IRSProfile.minRelativeDistance :=
+        ⟨le_of_not_gt hhalf, hδ.2⟩
+      rw [ProximityPrize.SubmissionUpper.IRSHalfRadius.IRSProfile.winningSetSoundness_eq_one
+        δ hband]
+      unfold epsilonStar ProximityGap.prizeThreshold
+      norm_num
+  score := candidate_score_twist
 
 end ProximityPrize.Benchmark.Upper
