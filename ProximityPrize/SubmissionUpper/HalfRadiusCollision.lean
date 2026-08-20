@@ -129,40 +129,94 @@ lemma exists_dot_offdiag_le {k : ℕ} (A : Finset (Fin k → F)) :
       by_cases heq : dot xy.1 v = dot xy.2 v <;> simp [hne, heq]
   simpa only [hoff] using hv
 
-theorem exists_dot_injective_on_subset {k : ℕ}
-    (A : Finset (Fin k → F)) (L : ℕ) (hLpos : 0 < L)
-    (hLcard : L ≤ A.card) (hLsq : L ^ 2 ≤ Fintype.card F) :
-    ∃ B : Finset (Fin k → F), B ⊆ A ∧ B.card = L ∧
-      ∃ v : Fin k → F, Set.InjOn (fun x => dot x v) B := by
+/-- Some linear functional has an image whose density is at least
+`|A| / (|F| + |A| - 1)`.  This is the quantitative form of the collision
+argument: unlike `exists_dot_surjective_of_card_sq_lt`, it does not require the
+image to be all of `F`. -/
+theorem exists_dot_image_card_bound {k : ℕ} (A : Finset (Fin k → F)) :
+    ∃ v : Fin k → F,
+      A.card * Fintype.card F ≤
+        (A.image (fun x => dot x v)).card * (Fintype.card F + A.card - 1) := by
   classical
-  letI : Nonempty F := ⟨0⟩
-  obtain ⟨B, hBA, hBcard⟩ := Finset.exists_subset_card_eq hLcard
-  obtain ⟨v, hv⟩ := exists_dot_offdiag_le B
-  let O := ((B.product B).filter fun xy =>
+  by_cases hA : A.card = 0
+  · refine ⟨0, ?_⟩
+    simp [hA]
+  obtain ⟨v, hoff⟩ := exists_dot_offdiag_le A
+  let q := Fintype.card F
+  let N := A.card
+  let O := ((A.product A).filter fun xy =>
     xy.1 ≠ xy.2 ∧ dot xy.1 v = dot xy.2 v).card
-  have hOltQ : Fintype.card F * O < Fintype.card F := by
+  let E := ((A.product A).filter fun xy => dot xy.1 v = dot xy.2 v).card
+  let c : F → ℕ := fun y => (A.filter fun x => dot x v = y).card
+  let support : Finset F := Finset.univ.filter fun y => c y ≠ 0
+  have hYeq : support = A.image (fun x => dot x v) := by
+    ext y
+    simp only [support, Finset.mem_filter, Finset.mem_univ, true_and, c]
+    exact Finset.fiber_card_ne_zero_iff_mem_image A (fun x => dot x v) y
+  have hsumc : ∑ y ∈ support, c y = N := by
+    have hall : ∑ y : F, c y = A.card := by
+      symm
+      simpa only [c] using (Finset.card_eq_sum_card_fiberwise
+        (s := A) (t := (Finset.univ : Finset F)) (f := fun x => dot x v)
+        (fun _ _ => Finset.mem_univ _))
+    change ∑ y ∈ support, c y = A.card
+    rw [← hall]
+    apply Finset.sum_subset (Finset.subset_univ _)
+    intro y _ hyY
+    simp only [support, Finset.mem_filter, Finset.mem_univ, true_and, not_not] at hyY
+    exact hyY
+  have hsumsq : ∑ y ∈ support, c y ^ 2 = E := by
+    have hall : ∑ y : F, c y ^ 2 = E := by
+      simp only [c, E, Finset.card_filter]
+      simp only [pow_two, Finset.mul_sum, Finset.sum_mul]
+      rw [Finset.sum_comm]
+      simp
+      rw [Finset.card_filter, Finset.sum_product_right]
+      simp_rw [Finset.card_filter]
+    rw [← hall]
+    apply Finset.sum_subset (Finset.subset_univ _)
+    intro y _ hyY
+    simp only [support, Finset.mem_filter, Finset.mem_univ, true_and, not_not] at hyY
+    simp [hyY]
+  have hE : E = N + O := by
+    simp only [E, N, O]
+    rw [show ((A.product A).filter fun xy => dot xy.1 v = dot xy.2 v) =
+        A.diag ∪ ((A.product A).filter fun xy =>
+          xy.1 ≠ xy.2 ∧ dot xy.1 v = dot xy.2 v) by
+      ext xy
+      rcases xy with ⟨x, y⟩
+      by_cases hxy : x = y <;> simp [hxy]]
+    rw [Finset.card_union_of_disjoint]
+    · simp
+    · rw [Finset.disjoint_left]
+      rintro ⟨x, y⟩ hdiag hoffdiag
+      simp only [Finset.mem_diag] at hdiag
+      simp only [Finset.mem_filter] at hoffdiag
+      exact hoffdiag.2.1 hdiag.2
+  have hlower : N ^ 2 ≤ support.card * E := by
+    have hcauchy := sq_sum_le_card_mul_sum_sq (s := support) (f := c)
+    rw [hsumc, hsumsq] at hcauchy
+    exact hcauchy
+  have hupper : q * O ≤ N * (N - 1) := by
+    simpa only [q, N, O] using hoff
+  have hNpos : 0 < N := by simpa only [N] using Nat.pos_of_ne_zero hA
+  have hcombined : q * N ^ 2 ≤
+      support.card * (q * N + N * (N - 1)) := by
     calc
-      Fintype.card F * O ≤ B.card * (B.card - 1) := by simpa only [O] using hv
-      _ = L * (L - 1) := by rw [hBcard]
-      _ < L ^ 2 := by
-        rw [pow_two]
-        exact Nat.mul_lt_mul_of_pos_left (Nat.sub_lt hLpos (by omega)) hLpos
-      _ ≤ Fintype.card F := hLsq
-  have hOlt : O < 1 := by
-    have hFpos : 0 < Fintype.card F := Fintype.card_pos
-    apply (Nat.mul_lt_mul_left hFpos).mp
-    simpa only [mul_one] using hOltQ
-  have hOzero : O = 0 := by omega
-  refine ⟨B, hBA, hBcard, v, ?_⟩
-  intro x hx y hy hxy
-  change x ∈ B at hx
-  change y ∈ B at hy
-  by_contra hne
-  have hm : (x, y) ∈ (B.product B).filter (fun xy =>
-      xy.1 ≠ xy.2 ∧ dot xy.1 v = dot xy.2 v) := by
-    simp [hx, hy, hne, hxy]
-  have : 0 < O := Finset.card_pos.mpr ⟨(x, y), hm⟩
-  omega
+      q * N ^ 2 ≤ q * (support.card * E) := Nat.mul_le_mul_left q hlower
+      _ = support.card * (q * N + q * O) := by rw [hE]; ring
+      _ ≤ support.card * (q * N + N * (N - 1)) := by
+        exact Nat.mul_le_mul_left support.card (Nat.add_le_add_left hupper (q * N))
+  have hleft : q * N ^ 2 = N * (N * q) := by ring
+  have hright : support.card * (q * N + N * (N - 1)) =
+      N * (support.card * (q + N - 1)) := by
+    have hN : 1 ≤ N := hNpos
+    rw [show q + N - 1 = q + (N - 1) by omega]
+    ring
+  rw [hleft, hright] at hcombined
+  refine ⟨v, ?_⟩
+  rw [← hYeq]
+  simpa only [q, N] using Nat.le_of_mul_le_mul_left hcombined hNpos
 
 theorem exists_dot_surjective_of_card_sq_lt {k : ℕ} (A : Finset (Fin k → F))
     (hlarge : (Fintype.card F - 1) ^ 2 < A.card) :
@@ -274,33 +328,36 @@ theorem exists_dot_surjective_of_card_sq_lt {k : ℕ} (A : Finset (Fin k → F))
 open ToyProblem
 open scoped NNReal
 
-theorem card_ratio_le_winningSetDensity_of_large_fixed_word_list
+/-- Quantitative fixed-word collision bound.  A family of `N` distinct close
+messages yields winning-set density at least `N / (|F| + N - 1)`; no
+surjectivity assumption on the selected linear functional is needed. -/
+theorem winningSetDensity_ge_of_fixed_word_list
     {ι B : Type} [Fintype ι]
     [Fintype B] [DecidableEq B] [AddCommGroup B] [Module F B]
-    {k m L : ℕ} (enc : (Fin k → F) →ₗ[F] (ι → B)) (δ : ℝ≥0)
+    {k m : ℕ} (enc : (Fin k → F) →ₗ[F] (ι → B)) (δ : ℝ≥0)
     (hlower : ((m - 1 : ℕ) : ℝ) <
       (1 - (δ : ℝ)) * Fintype.card ι)
     (hupper : (1 - (δ : ℝ)) * Fintype.card ι ≤ (m : ℝ))
     {J : Type} [Fintype J] [DecidableEq J]
     (p : J → Fin k → F) (T : J → Finset ι) (f : ι → B)
     (hp : Function.Injective p)
-    (hLpos : 0 < L) (hLsq : L ^ 2 ≤ Fintype.card F)
-    (hlarge : L < Fintype.card J)
+    (hJpos : 0 < Fintype.card J)
     (hTcard : ∀ a, (T a).card = m)
     (hag : ∀ a i, i ∈ T a → f i = enc (p a) i)
     (hzero : ∀ (u : Fin k → F) (S : Finset ι), m ≤ S.card →
       (∀ i ∈ S, enc u i = 0) → u = 0) :
-    (L : ℝ≥0) / Fintype.card F ≤ winningSetDensity enc δ := by
+    (Fintype.card J : ℝ≥0) /
+        ((Fintype.card F + Fintype.card J - 1 : ℕ) : ℝ≥0) ≤
+      winningSetDensity enc δ := by
   classical
   let P : Finset (Fin k → F) := Finset.univ.image p
   have hPcard : P.card = Fintype.card J := by
     simp only [P, Finset.card_image_of_injective Finset.univ hp, Finset.card_univ]
-  obtain ⟨D, hDP, hDcard, v, hvinj⟩ :=
-    exists_dot_injective_on_subset P L hLpos (by rw [hPcard]; omega) hLsq
-  let G : Finset F := D.image (fun u => dot u v)
-  have hGcard : G.card = L := by
-    change (D.image (fun u => dot u v)).card = L
-    rw [Finset.card_image_of_injOn hvinj, hDcard]
+  obtain ⟨v, hv⟩ := exists_dot_image_card_bound P
+  let img : Finset F := P.image (fun u => dot u v)
+  have hv' : Fintype.card J * Fintype.card F ≤
+      img.card * (Fintype.card F + Fintype.card J - 1) := by
+    simpa only [img, hPcard] using hv
   let x : ViolatingInstance enc δ :=
     { v := v
       μ₁ := 0
@@ -324,15 +381,15 @@ theorem card_ratio_le_winningSetDensity_of_large_fixed_word_list
         have hc1 := hc 1
         rw [hmzero] at hc1
         simp at hc1 }
-  have hGsub : (↑G : Set F) ⊆ winningSetFor enc δ x.v x.μ₁ x.μ₂ x.f₁ x.f₂ := by
+  have hYsub : (img : Set F) ⊆
+      winningSetFor enc δ x.v x.μ₁ x.μ₂ x.f₁ x.f₂ := by
     intro γ hγ
-    have hγ' : γ ∈ G := hγ
-    simp only [G, Finset.mem_image] at hγ'
-    rcases hγ' with ⟨u, huD, huγ⟩
-    have huP : u ∈ P := hDP huD
+    have hγ' : γ ∈ img := hγ
+    simp only [img, Finset.mem_image] at hγ'
+    rcases hγ' with ⟨u, huP, huγ⟩
     simp only [P, Finset.mem_image, Finset.mem_univ, true_and] at huP
     rcases huP with ⟨a, rfl⟩
-    rw [winningSetFor, Set.mem_setOf_eq]
+    simp only [winningSetFor, Set.mem_setOf_eq]
     refine ⟨![enc (p a)], ?_, T a, ?_, ?_⟩
     · refine ⟨![p a], ?_, ?_⟩
       · intro i
@@ -346,18 +403,26 @@ theorem card_ratio_le_winningSetDensity_of_large_fixed_word_list
     · intro i j hj
       fin_cases i
       simpa [x] using hag a j hj
-  have hwinFinite : (winningSetFor enc δ x.v x.μ₁ x.μ₂ x.f₁ x.f₂).Finite :=
-    Set.finite_univ.subset (Set.subset_univ _)
-  have hcardWin : G.card ≤
+  have hYcard : img.card ≤
       (winningSetFor enc δ x.v x.μ₁ x.μ₂ x.f₁ x.f₂).ncard := by
-    simpa using Set.ncard_le_ncard hGsub hwinFinite
-  calc
-    (L : ℝ≥0) / Fintype.card F = (G.card : ℝ≥0) / Fintype.card F := by rw [hGcard]
-    _ ≤ ((winningSetFor enc δ x.v x.μ₁ x.μ₂ x.f₁ x.f₂).ncard : ℝ≥0) /
-        Fintype.card F := by
-      gcongr
-    _ = winningSetRatio x := by rw [winningSetRatio]
-    _ ≤ winningSetDensity enc δ := winningSetRatio_le_winningSetDensity x
+    rw [← Set.ncard_coe_finset img]
+    exact Set.ncard_le_ncard hYsub (Set.toFinite _)
+  have hnat : Fintype.card J * Fintype.card F ≤
+      (winningSetFor enc δ x.v x.μ₁ x.μ₂ x.f₁ x.f₂).ncard *
+        (Fintype.card F + Fintype.card J - 1) :=
+    hv'.trans (Nat.mul_le_mul_right _ hYcard)
+  refine le_trans ?_ (winningSetRatio_le_winningSetDensity x)
+  rw [winningSetRatio]
+  have hqpos : (0 : ℝ≥0) < (Fintype.card F : ℝ≥0) := by
+    exact_mod_cast Fintype.card_pos
+  have hdenNat : 0 < Fintype.card F + Fintype.card J - 1 := by
+    have hq : 0 < Fintype.card F := Fintype.card_pos
+    omega
+  have hden : (0 : ℝ≥0) <
+      ((Fintype.card F + Fintype.card J - 1 : ℕ) : ℝ≥0) := by
+    exact_mod_cast hdenNat
+  rw [div_le_div_iff₀ hden hqpos]
+  exact_mod_cast hnat
 
 theorem winningSetSoundness_eq_one_of_large_fixed_word_list
     {ι B : Type} [Fintype ι]
