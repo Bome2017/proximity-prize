@@ -16,7 +16,7 @@ theorem claimedUnsafeRadius_130048_eq :
   norm_num [IRSProfile.Index]
 
 theorem candidate_score :
-    (2 : ℝ≥0) ^ (-(((12699 : Nat) : ℝ) / 100)) ≤
+    (2 : ℝ≥0) ^ (-(((12669 : Nat) : ℝ) / 100)) ≤
       (1 - claimedUnsafeRadius 130048) ^ IRSProfile.repetitions := by
   rw [claimedUnsafeRadius_130048_eq]
   have ht : IRSProfile.repetitions = 128 := rfl
@@ -25,46 +25,48 @@ theorem candidate_score :
     rw [tsub_eq_of_eq_add]
     norm_num
   rw [hcross]
-  have hbits : -(((12699 : Nat) : ℝ) / 100) = -(12699 / 100 : ℝ) := by
+  have hbits : -(((12669 : Nat) : ℝ) / 100) = -(12669 / 100 : ℝ) := by
     norm_num
   rw [hbits, ← NNReal.coe_le_coe]
   push_cast [NNReal.coe_rpow]
   rw [Real.rpow_neg (by norm_num : (0 : ℝ) ≤ 2)]
-  change ((2 : Real) ^ (12699 / 100 : Real))⁻¹ ≤
+  change ((2 : Real) ^ (12669 / 100 : Real))⁻¹ ≤
     (129 / 256 : Real) ^ 128
   rw [← pow_le_pow_iff_left₀ (by positivity) (by positivity) (by norm_num : (100 : Nat) ≠ 0)]
   rw [inv_pow, ← Real.rpow_natCast, ← Real.rpow_mul (by positivity)]
   rw [← pow_mul]
   norm_num only [Nat.cast_ofNat, div_mul_cancel₀, OfNat.ofNat, Nat.reduceMul]
-  have hbern : (1 : Real) + 100 * (1 / 128) ≤
-      (1 + 1 / 128 : Real) ^ 100 :=
-    one_add_mul_le_pow (by norm_num : (-2 : Real) ≤ 1 / 128) 100
-  have hratio : (2 : Real) ^ 101 ≤ (129 / 128 : Real) ^ 12800 := by
-    have hpow : (2 : Real) ^ 101 ≤ (57 / 32 : Real) ^ 128 := by norm_num
-    have hstep : (57 / 32 : Real) ^ 128 ≤
-        ((129 / 128 : Real) ^ 100) ^ 128 := by
+  have hbern : (1 : Real) + 25 * (1 / 128) ≤
+      (1 + 1 / 128 : Real) ^ 25 :=
+    one_add_mul_le_pow (by norm_num : (-2 : Real) ≤ 1 / 128) 25
+  have hratio : (2 : Real) ^ 131 ≤ (129 / 128 : Real) ^ 12800 := by
+    have hpow : (2 : Real) ^ 131 ≤ (153 / 128 : Real) ^ 512 := by
+      set_option exponentiation.threshold 1024 in
+        norm_num
+    have hstep : (153 / 128 : Real) ^ 512 ≤
+        ((129 / 128 : Real) ^ 25) ^ 512 := by
       apply pow_le_pow_left₀ (by positivity)
       norm_num at hbern ⊢
     calc
-      (2 : Real) ^ 101 ≤ (57 / 32 : Real) ^ 128 := hpow
-      _ ≤ ((129 / 128 : Real) ^ 100) ^ 128 := hstep
+      (2 : Real) ^ 131 ≤ (153 / 128 : Real) ^ 512 := hpow
+      _ ≤ ((129 / 128 : Real) ^ 25) ^ 512 := hstep
       _ = (129 / 128 : Real) ^ 12800 := by
         rw [← pow_mul]
   have hfactor : (129 / 256 : Real) =
       (1 / 2 : Real) * (129 / 128 : Real) := by norm_num
   rw [hfactor, mul_pow]
   calc
-    ((2 : Real) ^ (12699 : Real))⁻¹ = (1 / 2 : Real) ^ 12699 := by
+    ((2 : Real) ^ (12669 : Real))⁻¹ = (1 / 2 : Real) ^ 12669 := by
       rw [div_pow]
       simp
-    _ = (1 / 2 : Real) ^ 12800 * (2 : Real) ^ 101 := by
-      rw [show 12800 = 12699 + 101 by norm_num, pow_add]
+    _ = (1 / 2 : Real) ^ 12800 * (2 : Real) ^ 131 := by
+      rw [show 12800 = 12669 + 131 by norm_num, pow_add]
       ring
     _ ≤ (1 / 2 : Real) ^ 12800 * (129 / 128 : Real) ^ 12800 :=
       mul_le_mul_of_nonneg_left hratio (by positivity)
 
 /-- A 1024-coefficient Vieta signature lowers the verified attack bound. -/
-theorem candidate : ProtocolClaimUpper 12699 130048 where
+theorem candidate : ProtocolClaimUpper 12669 130048 where
   admissible := by
     rw [claimedUnsafeRadius_130048_eq]
     unfold IRSProfile.minRelativeDistance
