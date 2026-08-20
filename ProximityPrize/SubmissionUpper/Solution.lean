@@ -2,77 +2,67 @@
 Copyright (c) 2026 Proximity Prize Contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
-import ProximityPrize.SubmissionUpper.PrescribedTop
+import ProximityPrize.SubmissionUpper.SubHalfPigeonhole
 
 open ToyProblem
 open scoped NNReal
 
 namespace ProximityPrize.Benchmark.Upper
 
--- The exact spot-check comparison at `delta* = 30669/65536`, in `Nat`:
--- `2 ^ 193146 <= 34867 ^ 12800` is `2 ^ (-11654/100) <= (34867/65536) ^ 128`
--- after clearing denominators and raising to the hundredth power.
-set_option maxHeartbeats 1000000 in
-set_option maxRecDepth 4000000 in
-set_option exponentiation.threshold 300000 in
-theorem score_nat : (2 : ℕ) ^ 193146 ≤ 34867 ^ 12800 := by decide
+set_option maxRecDepth 100000
 
-theorem claimedUnsafeRadius_122676_eq :
-    claimedUnsafeRadius 122676 = (30669 / 65536 : ℝ≥0) := by
+theorem claimedUnsafeRadius_122692_eq :
+    claimedUnsafeRadius 122692 = (30673 / 65536 : ℝ≥0) := by
   unfold claimedUnsafeRadius ProximityGap.gridPt
   norm_num [IRSProfile.Index]
 
-theorem score_base :
-    ((2 : ℝ≥0) ^ (11654 : ℕ))⁻¹ ≤ ((34867 : ℝ≥0) / 65536) ^ (12800 : ℕ) := by
-  have hnat : (2 : ℕ) ^ 204800 ≤ 2 ^ 11654 * 34867 ^ 12800 := by
-    calc (2 : ℕ) ^ 204800 = 2 ^ 11654 * 2 ^ 193146 := by rw [← pow_add]
-      _ ≤ 2 ^ 11654 * 34867 ^ 12800 := Nat.mul_le_mul_left _ score_nat
-  have h1 : ((65536 : ℝ≥0)) ^ (12800 : ℕ) = (2 : ℝ≥0) ^ (204800 : ℕ) := by
-    rw [show (65536 : ℝ≥0) = 2 ^ (16 : ℕ) by norm_num, ← pow_mul]
-  have hR : ((65536 : ℝ≥0)) ^ (12800 : ℕ)
-      ≤ (34867 : ℝ≥0) ^ (12800 : ℕ) * (2 : ℝ≥0) ^ (11654 : ℕ) := by
-    rw [h1]
-    have : ((2 : ℕ) ^ 204800 : ℝ≥0) ≤ ((2 ^ 11654 * 34867 ^ 12800 : ℕ) : ℝ≥0) := by
-      exact_mod_cast hnat
-    push_cast at this
-    calc (2 : ℝ≥0) ^ (204800 : ℕ) ≤ 2 ^ (11654 : ℕ) * 34867 ^ (12800 : ℕ) := this
-      _ = (34867 : ℝ≥0) ^ (12800 : ℕ) * (2 : ℝ≥0) ^ (11654 : ℕ) := by ring
-  rw [div_pow, le_div_iff₀ (by positivity), inv_mul_eq_div,
-    div_le_iff₀ (by positivity)]
-  exact hR
-
 theorem candidate_score :
-    (2 : ℝ≥0) ^ (-(((11654 : Nat) : ℝ) / 100)) ≤
-      (1 - claimedUnsafeRadius 122676) ^ IRSProfile.repetitions := by
-  rw [claimedUnsafeRadius_122676_eq]
-  have hcross : (1 : ℝ≥0) - 30669 / 65536 = 34867 / 65536 := by
+    (2 : ℝ≥0) ^ (-(((11656 : Nat) : ℝ) / 100)) ≤
+      (1 - claimedUnsafeRadius 122692) ^ IRSProfile.repetitions := by
+  rw [claimedUnsafeRadius_122692_eq]
+  have ht : IRSProfile.repetitions = 128 := rfl
+  rw [ht]
+  have hcross : (1 : ℝ≥0) - 30673 / 65536 = 34863 / 65536 := by
     rw [tsub_eq_of_eq_add]
     norm_num
-  rw [show IRSProfile.repetitions = 128 from rfl, hcross]
-  have hstart : (2 : ℝ≥0) ^ (-(((11654 : ℕ) : ℝ)))
-      ≤ ((34867 : ℝ≥0) / 65536) ^ ((12800 : ℕ) : ℝ) := by
-    rw [NNReal.rpow_neg, NNReal.rpow_natCast, NNReal.rpow_natCast]
-    exact score_base
-  have hmono := NNReal.rpow_le_rpow hstart (by norm_num : (0 : ℝ) ≤ 1 / 100)
-  rw [← NNReal.rpow_mul, ← NNReal.rpow_mul] at hmono
-  rw [show (-(((11654 : ℕ) : ℝ))) * (1 / 100) = -(((11654 : Nat) : ℝ) / 100) by
-    push_cast; ring] at hmono
-  rw [show ((12800 : ℕ) : ℝ) * (1 / 100) = ((128 : ℕ) : ℝ) by push_cast; norm_num] at hmono
-  rwa [NNReal.rpow_natCast] at hmono
+  rw [hcross]
+  have hbits : -(((11656 : Nat) : ℝ) / 100) = -(11656 / 100 : ℝ) := by
+    norm_num
+  rw [hbits, ← NNReal.coe_le_coe]
+  push_cast [NNReal.coe_rpow]
+  rw [Real.rpow_neg (by norm_num : (0 : ℝ) ≤ 2)]
+  change ((2 : Real) ^ (11656 / 100 : Real))⁻¹ ≤
+    (34863 / 65536 : Real) ^ 128
+  rw [← pow_le_pow_iff_left₀ (by positivity) (by positivity) (by norm_num : (100 : Nat) ≠ 0)]
+  rw [inv_pow, ← Real.rpow_natCast, ← Real.rpow_mul (by positivity)]
+  rw [← pow_mul]
+  norm_num only [Nat.cast_ofNat, div_mul_cancel₀, OfNat.ofNat, Nat.reduceMul]
+  have hratio : (2 : Real) ^ 1144 ≤ (34863 / 32768 : Real) ^ 12800 := by
+    set_option exponentiation.threshold 13000 in
+      norm_num
+  have hfactor : (34863 / 65536 : Real) =
+      (1 / 2 : Real) * (34863 / 32768 : Real) := by norm_num
+  rw [hfactor, mul_pow]
+  calc
+    ((2 : Real) ^ (11656 : Real))⁻¹ = (1 / 2 : Real) ^ 11656 := by
+      rw [div_pow]
+      simp
+    _ = (1 / 2 : Real) ^ 12800 * (2 : Real) ^ 1144 := by
+      rw [show 12800 = 11656 + 1144 by norm_num, pow_add]
+      rw [mul_assoc, ← mul_pow]
+      norm_num
+    _ ≤ (1 / 2 : Real) ^ 12800 * (34863 / 32768 : Real) ^ 12800 :=
+      mul_le_mul_of_nonneg_left hratio (by positivity)
 
-/-- The prescribed-top-coefficient collision family certifies the unsafe suffix
-from `delta* = 30669/65536` onward, giving a `116.54`-bit upper certificate. -/
-theorem candidate : ProtocolClaimUpper 11654 122676 where
+theorem candidate : ProtocolClaimUpper 11656 122692 where
   admissible := by
-    rw [claimedUnsafeRadius_122676_eq]
+    rw [claimedUnsafeRadius_122692_eq]
     unfold IRSProfile.minRelativeDistance
     norm_num
   unsafeAbove := by
     intro δ hδ
-    have hband : δ ∈ Set.Ico (30669 / 65536 : ℝ≥0) IRSProfile.minRelativeDistance := by
-      simpa only [claimedUnsafeRadius_122676_eq] using hδ
-    rw [ProximityPrize.SubmissionUpper.PrescribedTop.winningSetDensity_eq_one
-      δ hband.1 hband.2]
+    rw [ProximityPrize.SubmissionUpper.SubHalfPigeonhole.IRSProfile.winningSetSoundness_eq_one
+      δ hδ]
     unfold epsilonStar ProximityGap.prizeThreshold
     norm_num
   score := candidate_score
