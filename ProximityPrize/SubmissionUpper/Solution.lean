@@ -2,81 +2,80 @@
 Copyright (c) 2026 Proximity Prize Contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
-import ProximityPrize.SubmissionUpper.IRSHalfRadius
-import ProximityPrize.SubmissionUpper.BelowHalf
+import ProximityPrize.SubmissionUpper.SubHalfPigeonhole
 
 open ToyProblem
 open scoped NNReal
 
 namespace ProximityPrize.Benchmark.Upper
 
-theorem claimedUnsafeRadius_130048_eq :
-    claimedUnsafeRadius 130048 = (127 / 256 : ℝ≥0) := by
+theorem claimedUnsafeRadius_129681_eq :
+    claimedUnsafeRadius 129681 = (129681 / 262144 : ℝ≥0) := by
   unfold claimedUnsafeRadius ProximityGap.gridPt
   norm_num [IRSProfile.Index]
 
+theorem two_rpow_seven_fourths_le :
+    (2 : ℝ) ^ (7 / 4 : ℝ) ≤ 7 / 2 := by
+  apply (pow_le_pow_iff_left₀ (by positivity : 0 ≤ (2 : ℝ) ^ (7 / 4 : ℝ))
+    (by norm_num : 0 ≤ (7 / 2 : ℝ)) (by norm_num : (4 : ℕ) ≠ 0)).mp
+  calc
+    ((2 : ℝ) ^ (7 / 4 : ℝ)) ^ 4 =
+        ((2 : ℝ) ^ (7 / 4 : ℝ)) ^ (4 : ℝ) := by
+      exact (Real.rpow_natCast ((2 : ℝ) ^ (7 / 4 : ℝ)) 4).symm
+    _ = (2 : ℝ) ^ ((7 / 4 : ℝ) * 4) :=
+      (Real.rpow_mul (by norm_num : (0 : ℝ) ≤ 2) _ _).symm
+    _ = (2 : ℝ) ^ 7 := by norm_num
+    _ ≤ (7 / 2 : ℝ) ^ 4 := by norm_num
+
+theorem seven_halves_le_ratio_pow :
+    (7 / 2 : ℝ) ≤ ((132463 : ℝ) / 131072) ^ 128 := by
+  have hblock := one_add_mul_le_pow (a := (1391 / 131072 : ℝ))
+    (by norm_num) 16
+  have hpow := pow_le_pow_left₀
+    (by positivity : 0 ≤ (1 : ℝ) + 16 * (1391 / 131072 : ℝ)) hblock 8
+  calc
+    (7 / 2 : ℝ) ≤ (1 + 16 * (1391 / 131072 : ℝ)) ^ 8 := by norm_num
+    _ ≤ ((1 + (1391 / 131072 : ℝ)) ^ 16) ^ 8 := hpow
+    _ = (1 + (1391 / 131072 : ℝ)) ^ 128 := by rw [← pow_mul]
+    _ = ((132463 : ℝ) / 131072) ^ 128 := by congr 1 <;> norm_num
+
 theorem candidate_score :
-    (2 : ℝ≥0) ^ (-(((12699 : Nat) : ℝ) / 100)) ≤
-      (1 - claimedUnsafeRadius 130048) ^ IRSProfile.repetitions := by
-  rw [claimedUnsafeRadius_130048_eq]
+    (2 : ℝ≥0) ^ (-(((12625 : Nat) : ℝ) / 100)) ≤
+      (1 - claimedUnsafeRadius 129681) ^ IRSProfile.repetitions := by
+  rw [claimedUnsafeRadius_129681_eq]
   have ht : IRSProfile.repetitions = 128 := rfl
-  rw [ht]
-  have hcross : (1 : ℝ≥0) - 127 / 256 = 129 / 256 := by
+  have hcross : (1 : ℝ≥0) - 129681 / 262144 = 132463 / 262144 := by
     rw [tsub_eq_of_eq_add]
     norm_num
-  rw [hcross]
-  have hbits : -(((12699 : Nat) : ℝ) / 100) = -(12699 / 100 : ℝ) := by
-    norm_num
+  rw [ht, hcross]
+  have hbits : -(((12625 : Nat) : ℝ) / 100) =
+      (7 / 4 : ℝ) + (-(128 : ℝ)) := by norm_num
   rw [hbits, ← NNReal.coe_le_coe]
   push_cast [NNReal.coe_rpow]
-  rw [Real.rpow_neg (by norm_num : (0 : ℝ) ≤ 2)]
-  change ((2 : Real) ^ (12699 / 100 : Real))⁻¹ ≤
-    (129 / 256 : Real) ^ 128
-  rw [← pow_le_pow_iff_left₀ (by positivity) (by positivity) (by norm_num : (100 : Nat) ≠ 0)]
-  rw [inv_pow, ← Real.rpow_natCast, ← Real.rpow_mul (by positivity)]
-  rw [← pow_mul]
-  norm_num only [Nat.cast_ofNat, div_mul_cancel₀, OfNat.ofNat, Nat.reduceMul]
-  have hbern : (1 : Real) + 100 * (1 / 128) ≤
-      (1 + 1 / 128 : Real) ^ 100 :=
-    one_add_mul_le_pow (by norm_num : (-2 : Real) ≤ 1 / 128) 100
-  have hratio : (2 : Real) ^ 101 ≤ (129 / 128 : Real) ^ 12800 := by
-    have hpow : (2 : Real) ^ 101 ≤ (57 / 32 : Real) ^ 128 := by norm_num
-    have hstep : (57 / 32 : Real) ^ 128 ≤
-        ((129 / 128 : Real) ^ 100) ^ 128 := by
-      apply pow_le_pow_left₀ (by positivity)
-      norm_num at hbern ⊢
-    calc
-      (2 : Real) ^ 101 ≤ (57 / 32 : Real) ^ 128 := hpow
-      _ ≤ ((129 / 128 : Real) ^ 100) ^ 128 := hstep
-      _ = (129 / 128 : Real) ^ 12800 := by
-        rw [← pow_mul]
-  have hfactor : (129 / 256 : Real) =
-      (1 / 2 : Real) * (129 / 128 : Real) := by norm_num
-  rw [hfactor, mul_pow]
-  calc
-    ((2 : Real) ^ (12699 : Real))⁻¹ = (1 / 2 : Real) ^ 12699 := by
-      rw [div_pow]
-      simp
-    _ = (1 / 2 : Real) ^ 12800 * (2 : Real) ^ 101 := by
-      rw [show 12800 = 12699 + 101 by norm_num, pow_add]
-      ring
-    _ ≤ (1 / 2 : Real) ^ 12800 * (129 / 128 : Real) ^ 12800 :=
-      mul_le_mul_of_nonneg_left hratio (by positivity)
+  rw [Real.rpow_add (by norm_num : (0 : ℝ) < 2)]
+  rw [show (132463 : ℝ) / 262144 =
+      ((132463 : ℝ) / 131072) * (1 / 2) by ring]
+  rw [mul_pow]
+  rw [show ((1 : ℝ) / 2) ^ 128 = 2 ^ (-(128 : ℝ)) by
+    rw [Real.rpow_neg (by norm_num),
+      show (128 : ℝ) = ((128 : Nat) : ℝ) by norm_num,
+      Real.rpow_natCast]
+    norm_num]
+  apply mul_le_mul_of_nonneg_right _ (by positivity)
+  exact two_rpow_seven_fourths_le.trans seven_halves_le_ratio_pow
 
-/-- A 1024-coefficient Vieta signature lowers the verified attack bound. -/
-theorem candidate : ProtocolClaimUpper 12699 130048 where
+/-- A 1,391-coefficient fiber collision gives a `126.25`-bit upper bound. -/
+theorem candidate : ProtocolClaimUpper 12625 129681 where
   admissible := by
-    rw [claimedUnsafeRadius_130048_eq]
+    rw [claimedUnsafeRadius_129681_eq]
     unfold IRSProfile.minRelativeDistance
     norm_num
   unsafeAbove := by
     intro δ hδ
-    have hleft : ProximityGap.gridPt (ι := IRSProfile.Index) 130048 ≤ δ := by
-      exact hδ.1
-    have hsound : winningSetDensity IRSProfile.encoder δ = 1 :=
-      ProximityPrize.SubmissionUpper.BelowHalf.IRSProfile.winningSetSoundness_eq_one_suffix
-        δ (And.intro hleft hδ.2)
-    rw [hsound]
+    have hband : δ ∈ Set.Ico (claimedUnsafeRadius 129681)
+        IRSProfile.minRelativeDistance := hδ
+    rw [ProximityPrize.SubmissionUpper.SubHalfPigeonhole.IRSProfile.winningSetSoundness_eq_one
+      δ hband]
     unfold epsilonStar ProximityGap.prizeThreshold
     norm_num
   score := candidate_score
