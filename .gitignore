@@ -1,0 +1,10 @@
+/.lake
+/.benchmark-tools
+/ProximityPrize/Benchmark/Challenge.lean
+/ProximityPrize/Benchmark/ChallengeUpper.lean
+/.yukon
+/benchmark-results
+/score.json
+build.log
+__pycache__/
+*.pyc
