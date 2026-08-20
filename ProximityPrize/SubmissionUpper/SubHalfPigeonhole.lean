@@ -15,10 +15,10 @@ abbrev I := ProximityPrize.Benchmark.IRSProfile.Index
 abbrev k := ProximityPrize.Benchmark.IRSProfile.totalDimension
 abbrev s := ProximityPrize.Benchmark.IRSProfile.interleaving
 abbrev rowK := 131072
-abbrev extra := 8
-abbrev agreement := 131080
-abbrev signatureWidth := 9
-abbrev unsafeIndex := 131064
+abbrev extra := 1024
+abbrev agreement := 132096
+abbrev signatureWidth := 1025
+abbrev unsafeIndex := 130048
 
 namespace IRSProfile
 
@@ -61,47 +61,47 @@ theorem field_card_lt_two_pow_186 : Fintype.card F < 2 ^ 186 := by
   rw [_root_.KoalaBear.card_ext6]
   norm_num [_root_.KoalaBear.fieldSize]
 
-theorem field_pow_11_lt_two_pow_2046 :
-    (Fintype.card F) ^ 11 < 2 ^ 2046 := by
-  have hpow : ∀ q : Nat, q < 2 ^ 186 → q ^ 11 < 2 ^ 2046 := by
+theorem field_pow_1027_lt_two_pow_191022 :
+    (Fintype.card F) ^ 1027 < 2 ^ 191022 := by
+  have hpow : ∀ q : Nat, q < 2 ^ 186 → q ^ 1027 < 2 ^ 191022 := by
     intro q hq
     calc
-      q ^ 11 < (2 ^ 186) ^ 11 :=
+      q ^ 1027 < (2 ^ 186) ^ 1027 :=
         Nat.pow_lt_pow_left hq (by norm_num)
-      _ = 2 ^ (186 * 11) := (pow_mul 2 186 11).symm
-      _ = 2 ^ 2046 := by norm_num
+      _ = 2 ^ (186 * 1027) := (pow_mul 2 186 1027).symm
+      _ = 2 ^ 191022 := by norm_num
   exact hpow (Fintype.card F) field_card_lt_two_pow_186
 
-theorem two_pow_2046_lt_small_central_choose :
-    2 ^ 2046 < Nat.choose 2060 1030 := by
-  have hcentral := Nat.four_pow_lt_mul_centralBinom 1030 (by norm_num)
+theorem two_pow_191022_lt_small_central_choose :
+    2 ^ 191022 < Nat.choose 192000 96000 := by
+  have hcentral := Nat.four_pow_lt_mul_centralBinom 96000 (by norm_num)
   rw [Nat.centralBinom_eq_two_mul_choose] at hcentral
   norm_num only [Nat.reduceMul] at hcentral
   by_contra hnot
-  have hle : Nat.choose 2060 1030 ≤ 2 ^ 2046 := Nat.le_of_not_gt hnot
-  have hbad : 4 ^ 1030 < 1030 * 2 ^ 2046 :=
-    lt_of_lt_of_le hcentral (Nat.mul_le_mul_left 1030 hle)
-  have hreverse : 1030 * 2 ^ 2046 < 4 ^ 1030 := by
+  have hle : Nat.choose 192000 96000 ≤ 2 ^ 191022 := Nat.le_of_not_gt hnot
+  have hbad : 4 ^ 96000 < 96000 * 2 ^ 191022 :=
+    lt_of_lt_of_le hcentral (Nat.mul_le_mul_left 96000 hle)
+  have hreverse : 96000 * 2 ^ 191022 < 4 ^ 96000 := by
     calc
-      1030 * 2 ^ 2046 < 2 ^ 11 * 2 ^ 2046 := by gcongr <;> norm_num
-      _ = 2 ^ (11 + 2046) := (pow_add 2 11 2046).symm
-      _ < 2 ^ (2 * 1030) := Nat.pow_lt_pow_right (by norm_num) (by norm_num)
-      _ = (2 ^ 2) ^ 1030 := pow_mul 2 2 1030
-      _ = 4 ^ 1030 := by norm_num
+      96000 * 2 ^ 191022 < 2 ^ 17 * 2 ^ 191022 := by gcongr <;> norm_num
+      _ = 2 ^ (17 + 191022) := (pow_add 2 17 191022).symm
+      _ < 2 ^ (2 * 96000) := Nat.pow_lt_pow_right (by norm_num) (by norm_num)
+      _ = (2 ^ 2) ^ 96000 := pow_mul 2 2 96000
+      _ = 4 ^ 96000 := by norm_num
   exact (Nat.not_lt_of_ge hreverse.le) hbad
 
-theorem two_pow_2046_lt_card_candidateSets :
-    2 ^ 2046 < Fintype.card CandidateSets := by
-  have hconcrete : 2 ^ 2046 < Nat.choose 262144 131080 := by
+theorem two_pow_191022_lt_card_candidateSets :
+    2 ^ 191022 < Fintype.card CandidateSets := by
+  have hconcrete : 2 ^ 191022 < Nat.choose 262144 132096 := by
     calc
-      2 ^ 2046 < Nat.choose 2060 1030 := two_pow_2046_lt_small_central_choose
-      _ = Nat.centralBinom 1030 := by
+      2 ^ 191022 < Nat.choose 192000 96000 := two_pow_191022_lt_small_central_choose
+      _ = Nat.centralBinom 96000 := by
         rw [Nat.centralBinom_eq_two_mul_choose]
-      _ < Nat.centralBinom 131064 := Nat.centralBinom_strictMono (by norm_num)
-      _ = Nat.choose 262128 131064 := by
+      _ < Nat.centralBinom 130048 := Nat.centralBinom_strictMono (by norm_num)
+      _ = Nat.choose 260096 130048 := by
         rw [Nat.centralBinom_eq_two_mul_choose]
-      _ ≤ Nat.choose 262144 131064 := Nat.choose_le_choose 131064 (by norm_num)
-      _ = Nat.choose 262144 131080 :=
+      _ ≤ Nat.choose 262144 130048 := Nat.choose_le_choose 130048 (by norm_num)
+      _ = Nat.choose 262144 132096 :=
         Nat.choose_symm_of_eq_add (by norm_num)
   rw [← Nat.card_eq_fintype_card, Set.powersetCard.card]
   have hcardI : Nat.card I = 262144 := by
@@ -124,15 +124,18 @@ theorem signature_card_mul_field_sq_lt :
     intro q w
     exact Nat.mul_le_mul_left _
       (Nat.pow_le_pow_left (Nat.sub_le q 1) 2)
+  have hcombine : ∀ q : Nat, q ^ signatureWidth * q ^ 2 = q ^ 1027 := by
+    intro q
+    change q ^ 1025 * q ^ 2 = q ^ 1027
+    rw [← pow_add]
   calc
     Fintype.card (Fin signatureWidth → F) * (Fintype.card F - 1) ^ 2 ≤
         (Fintype.card F) ^ signatureWidth * (Fintype.card F) ^ 2 := by
       rw [hsig]
       exact hmul (Fintype.card F) signatureWidth
-    _ = (Fintype.card F) ^ 11 := by
-      norm_num [signatureWidth, ← pow_add]
-    _ < 2 ^ 2046 := field_pow_11_lt_two_pow_2046
-    _ < Fintype.card CandidateSets := two_pow_2046_lt_card_candidateSets
+    _ = (Fintype.card F) ^ 1027 := hcombine (Fintype.card F)
+    _ < 2 ^ 191022 := field_pow_1027_lt_two_pow_191022
+    _ < Fintype.card CandidateSets := two_pow_191022_lt_card_candidateSets
 
 lemma exists_large_fiber {α β : Type} [Fintype α] [Fintype β] [DecidableEq β]
     (f : α → β) (sieve : Nat)
