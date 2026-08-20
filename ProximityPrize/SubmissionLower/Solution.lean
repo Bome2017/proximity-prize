@@ -160,6 +160,20 @@ theorem certifiedGammaError_quarter_le_two_pow_neg_160 :
         ENNReal.toReal_div, ENNReal.toReal_div]
       norm_num [IRSProfile.Index, IRSProfile.Field, KoalaBear.Ext6]
 
+theorem two_rpow_twenty_two_div_twenty_five_ge :
+    (235 : ℝ≥0) / 128 ≤ (2 : ℝ≥0) ^ ((22 : ℝ) / 25) := by
+  have hroot :
+      (235 : ℝ≥0) / 128 ≤
+        ((2 : ℝ≥0) ^ (22 : ℕ)) ^ ((25 : ℝ)⁻¹) := by
+    rw [NNReal.le_rpow_inv_iff (by norm_num : (0 : ℝ) < 25)]
+    norm_num [div_pow, div_le_iff₀]
+  calc
+    (235 : ℝ≥0) / 128 ≤
+        ((2 : ℝ≥0) ^ (22 : ℕ)) ^ ((25 : ℝ)⁻¹) := hroot
+    _ = (2 : ℝ≥0) ^ ((22 : ℝ) / 25) := by
+      rw [← NNReal.rpow_natCast_mul]
+      norm_num [div_eq_mul_inv]
+
 end ProximityPrize.SubmissionLower
 
 namespace ProximityPrize.Benchmark
@@ -169,7 +183,7 @@ open scoped NNReal
 set_option maxRecDepth 100000
 
 /-- The exact lower baseline consumed by Comparator. -/
-theorem candidate : ProtocolClaim 5300 1 4 where
+theorem candidate : ProtocolClaim 5312 1 4 where
   admissible := by
     constructor <;> norm_num [claimedRadius, IRSProfile.minRelativeDistance]
   reduction := by
@@ -187,12 +201,22 @@ theorem candidate : ProtocolClaim 5300 1 4 where
     rw [ToyProblem.Impl.IRS.certifiedGammaError, hr, hc]
     exact h
   score := by
-    have hError : claimedError 5300 = (1 : ℝ≥0) / 2 ^ (53 : ℕ) := by
-      unfold claimedError
-      rw [show -((((5300 : ℕ) : ℝ) / 100)) = -((53 : ℕ) : ℝ) by norm_num,
-        NNReal.rpow_neg, NNReal.rpow_natCast]
-      norm_num
-    rw [hError, ← NNReal.coe_le_coe]
-    norm_num [claimedRadius, IRSProfile.repetitions, div_le_iff₀]
+    calc
+      (1 - claimedRadius 1 4) ^ IRSProfile.repetitions ≤
+          ((1 : ℝ≥0) / 2 ^ (54 : ℕ)) * (235 / 128) := by
+        rw [← NNReal.coe_le_coe]
+        norm_num [claimedRadius, IRSProfile.repetitions, div_le_iff₀]
+      _ ≤ ((1 : ℝ≥0) / 2 ^ (54 : ℕ)) *
+            (2 : ℝ≥0) ^ ((22 : ℝ) / 25) := by
+        exact mul_le_mul_of_nonneg_left
+          ProximityPrize.SubmissionLower.two_rpow_twenty_two_div_twenty_five_ge
+          (by positivity)
+      _ = claimedError 5312 := by
+        unfold claimedError
+        rw [show -((((5312 : ℕ) : ℝ) / 100)) =
+            -((54 : ℕ) : ℝ) + (22 : ℝ) / 25 by norm_num,
+          NNReal.rpow_add (by norm_num : (2 : ℝ≥0) ≠ 0),
+          NNReal.rpow_neg, NNReal.rpow_natCast]
+        norm_num
 
 end ProximityPrize.Benchmark
