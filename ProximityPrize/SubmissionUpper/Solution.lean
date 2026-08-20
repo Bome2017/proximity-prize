@@ -9,67 +9,67 @@ open scoped NNReal
 
 namespace ProximityPrize.Benchmark.Upper
 
--- The exact spot-check comparison at `delta* = 30669/65536`, in `Nat`:
--- `2 ^ 193146 <= 34867 ^ 12800` is `2 ^ (-11654/100) <= (34867/65536) ^ 128`
+-- The exact spot-check comparison at `delta* = 30663/65536`, in `Nat`:
+-- `2 ^ 193149 <= 34873 ^ 12800` is `2 ^ (-11651/100) <= (34873/65536) ^ 128`
 -- after clearing denominators and raising to the hundredth power.
 set_option maxHeartbeats 1000000 in
 set_option maxRecDepth 4000000 in
 set_option exponentiation.threshold 300000 in
-theorem score_nat : (2 : ℕ) ^ 193146 ≤ 34867 ^ 12800 := by decide
+theorem score_nat : (2 : ℕ) ^ 193149 ≤ 34873 ^ 12800 := by decide
 
 theorem claimedUnsafeRadius_122676_eq :
-    claimedUnsafeRadius 122676 = (30669 / 65536 : ℝ≥0) := by
+    claimedUnsafeRadius 122652 = (30663 / 65536 : ℝ≥0) := by
   unfold claimedUnsafeRadius ProximityGap.gridPt
   norm_num [IRSProfile.Index]
 
 theorem score_base :
-    ((2 : ℝ≥0) ^ (11654 : ℕ))⁻¹ ≤ ((34867 : ℝ≥0) / 65536) ^ (12800 : ℕ) := by
-  have hnat : (2 : ℕ) ^ 204800 ≤ 2 ^ 11654 * 34867 ^ 12800 := by
-    calc (2 : ℕ) ^ 204800 = 2 ^ 11654 * 2 ^ 193146 := by rw [← pow_add]
-      _ ≤ 2 ^ 11654 * 34867 ^ 12800 := Nat.mul_le_mul_left _ score_nat
+    ((2 : ℝ≥0) ^ (11651 : ℕ))⁻¹ ≤ ((34873 : ℝ≥0) / 65536) ^ (12800 : ℕ) := by
+  have hnat : (2 : ℕ) ^ 204800 ≤ 2 ^ 11651 * 34873 ^ 12800 := by
+    calc (2 : ℕ) ^ 204800 = 2 ^ 11651 * 2 ^ 193149 := by rw [← pow_add]
+      _ ≤ 2 ^ 11651 * 34873 ^ 12800 := Nat.mul_le_mul_left _ score_nat
   have h1 : ((65536 : ℝ≥0)) ^ (12800 : ℕ) = (2 : ℝ≥0) ^ (204800 : ℕ) := by
     rw [show (65536 : ℝ≥0) = 2 ^ (16 : ℕ) by norm_num, ← pow_mul]
   have hR : ((65536 : ℝ≥0)) ^ (12800 : ℕ)
-      ≤ (34867 : ℝ≥0) ^ (12800 : ℕ) * (2 : ℝ≥0) ^ (11654 : ℕ) := by
+      ≤ (34873 : ℝ≥0) ^ (12800 : ℕ) * (2 : ℝ≥0) ^ (11651 : ℕ) := by
     rw [h1]
-    have : ((2 : ℕ) ^ 204800 : ℝ≥0) ≤ ((2 ^ 11654 * 34867 ^ 12800 : ℕ) : ℝ≥0) := by
+    have : ((2 : ℕ) ^ 204800 : ℝ≥0) ≤ ((2 ^ 11651 * 34873 ^ 12800 : ℕ) : ℝ≥0) := by
       exact_mod_cast hnat
     push_cast at this
-    calc (2 : ℝ≥0) ^ (204800 : ℕ) ≤ 2 ^ (11654 : ℕ) * 34867 ^ (12800 : ℕ) := this
-      _ = (34867 : ℝ≥0) ^ (12800 : ℕ) * (2 : ℝ≥0) ^ (11654 : ℕ) := by ring
+    calc (2 : ℝ≥0) ^ (204800 : ℕ) ≤ 2 ^ (11651 : ℕ) * 34873 ^ (12800 : ℕ) := this
+      _ = (34873 : ℝ≥0) ^ (12800 : ℕ) * (2 : ℝ≥0) ^ (11651 : ℕ) := by ring
   rw [div_pow, le_div_iff₀ (by positivity), inv_mul_eq_div,
     div_le_iff₀ (by positivity)]
   exact hR
 
 theorem candidate_score :
-    (2 : ℝ≥0) ^ (-(((11654 : Nat) : ℝ) / 100)) ≤
-      (1 - claimedUnsafeRadius 122676) ^ IRSProfile.repetitions := by
+    (2 : ℝ≥0) ^ (-(((11651 : Nat) : ℝ) / 100)) ≤
+      (1 - claimedUnsafeRadius 122652) ^ IRSProfile.repetitions := by
   rw [claimedUnsafeRadius_122676_eq]
-  have hcross : (1 : ℝ≥0) - 30669 / 65536 = 34867 / 65536 := by
+  have hcross : (1 : ℝ≥0) - 30663 / 65536 = 34873 / 65536 := by
     rw [tsub_eq_of_eq_add]
     norm_num
   rw [show IRSProfile.repetitions = 128 from rfl, hcross]
-  have hstart : (2 : ℝ≥0) ^ (-(((11654 : ℕ) : ℝ)))
-      ≤ ((34867 : ℝ≥0) / 65536) ^ ((12800 : ℕ) : ℝ) := by
+  have hstart : (2 : ℝ≥0) ^ (-(((11651 : ℕ) : ℝ)))
+      ≤ ((34873 : ℝ≥0) / 65536) ^ ((12800 : ℕ) : ℝ) := by
     rw [NNReal.rpow_neg, NNReal.rpow_natCast, NNReal.rpow_natCast]
     exact score_base
   have hmono := NNReal.rpow_le_rpow hstart (by norm_num : (0 : ℝ) ≤ 1 / 100)
   rw [← NNReal.rpow_mul, ← NNReal.rpow_mul] at hmono
-  rw [show (-(((11654 : ℕ) : ℝ))) * (1 / 100) = -(((11654 : Nat) : ℝ) / 100) by
+  rw [show (-(((11651 : ℕ) : ℝ))) * (1 / 100) = -(((11651 : Nat) : ℝ) / 100) by
     push_cast; ring] at hmono
   rw [show ((12800 : ℕ) : ℝ) * (1 / 100) = ((128 : ℕ) : ℝ) by push_cast; norm_num] at hmono
   rwa [NNReal.rpow_natCast] at hmono
 
 /-- The prescribed-top-coefficient collision family certifies the unsafe suffix
-from `delta* = 30669/65536` onward, giving a `116.54`-bit upper certificate. -/
-theorem candidate : ProtocolClaimUpper 11654 122676 where
+from `delta* = 30663/65536` onward, giving a `116.54`-bit upper certificate. -/
+theorem candidate : ProtocolClaimUpper 11651 122652 where
   admissible := by
     rw [claimedUnsafeRadius_122676_eq]
     unfold IRSProfile.minRelativeDistance
     norm_num
   unsafeAbove := by
     intro δ hδ
-    have hband : δ ∈ Set.Ico (30669 / 65536 : ℝ≥0) IRSProfile.minRelativeDistance := by
+    have hband : δ ∈ Set.Ico (30663 / 65536 : ℝ≥0) IRSProfile.minRelativeDistance := by
       simpa only [claimedUnsafeRadius_122676_eq] using hδ
     rw [ProximityPrize.SubmissionUpper.PrescribedTop.winningSetDensity_eq_one
       δ hband.1 hband.2]
