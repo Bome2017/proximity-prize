@@ -10,16 +10,15 @@ open Polynomial
 open ToyProblem ToyProblem.Impl.IRS
 open scoped BigOperators NNReal
 
-abbrev K := _root_.KoalaBear.Field
-abbrev F := _root_.KoalaBear.Ext6
+abbrev F := ProximityPrize.Benchmark.IRSProfile.Field
 abbrev I := ProximityPrize.Benchmark.IRSProfile.Index
 abbrev k := ProximityPrize.Benchmark.IRSProfile.totalDimension
 abbrev s := ProximityPrize.Benchmark.IRSProfile.interleaving
 abbrev rowK := 131072
-abbrev extra := 7931
-abbrev agreement := 139003
-abbrev signatureWidth := 7932
-abbrev unsafeIndex := 123141
+abbrev extra := 1391
+abbrev agreement := 132463
+abbrev signatureWidth := 1392
+abbrev unsafeIndex := 129681
 
 namespace IRSProfile
 
@@ -36,134 +35,69 @@ abbrev CandidateSets := Set.powersetCard I agreement
 
 noncomputable instance : Fintype CandidateSets := Fintype.ofFinite _
 
-def emb : K →+* F :=
-  CompPoly.Extension.Ext.ofBaseRingHom _root_.KoalaBear.ext6Params
+noncomputable def nodes (T : CandidateSets) : Finset F :=
+  (T : Finset I).image Benchmark.IRSProfile.domain
 
-theorem emb_injective : Function.Injective emb := RingHom.injective emb
-
-def baseDomain : I ↪ K where
-  toFun i := Benchmark.IRSProfile.baseNttDomain.node i
-  inj' := by
-    intro i j hij
-    apply Fin.ext
-    exact Benchmark.IRSProfile.baseNttDomain.primitive.pow_inj i.isLt j.isLt hij
-
-@[simp] theorem emb_baseDomain (i : I) :
-    emb (baseDomain i) = Benchmark.IRSProfile.domain i := rfl
-
-noncomputable def baseNodes (T : CandidateSets) : Finset K :=
-  (T : Finset I).image baseDomain
-
-theorem card_baseNodes (T : CandidateSets) : (baseNodes T).card = agreement := by
-  rw [baseNodes, Finset.card_image_of_injective _ baseDomain.injective]
+theorem card_nodes (T : CandidateSets) : (nodes T).card = agreement := by
+  rw [nodes, Finset.card_image_of_injective _ Benchmark.IRSProfile.domain.injective]
   exact T.prop
 
-noncomputable def rootPolyK (T : CandidateSets) : Polynomial K :=
-  (baseNodes T).prod fun a => Polynomial.X - Polynomial.C a
-
-theorem rootPolyK_monic (T : CandidateSets) : (rootPolyK T).Monic := by
-  simpa only [rootPolyK] using
-    (Polynomial.monic_prod_X_sub_C (fun x : K => x) (baseNodes T))
-
-theorem rootPolyK_natDegree (T : CandidateSets) :
-    (rootPolyK T).natDegree = agreement := by
-  rw [rootPolyK, Polynomial.natDegree_finsetProd_X_sub_C_eq_card, card_baseNodes]
-
-noncomputable def signature (T : CandidateSets) : Fin signatureWidth → K :=
-  fun i => (rootPolyK T).coeff (rowK + i)
-
 noncomputable def rootPoly (T : CandidateSets) : Polynomial F :=
-  (rootPolyK T).map emb
+  (nodes T).prod fun a => Polynomial.X - Polynomial.C a
 
 theorem rootPoly_monic (T : CandidateSets) : (rootPoly T).Monic := by
-  exact (rootPolyK_monic T).map emb
+  simpa only [rootPoly] using
+    (Polynomial.monic_prod_X_sub_C (fun x : F => x) (nodes T))
 
 theorem rootPoly_natDegree (T : CandidateSets) :
     (rootPoly T).natDegree = agreement := by
-  rw [rootPoly, Polynomial.natDegree_map_eq_of_injective emb_injective,
-    rootPolyK_natDegree]
+  rw [rootPoly, Polynomial.natDegree_finsetProd_X_sub_C_eq_card, card_nodes]
 
-theorem base_field_card_lt_two_pow_31 : Fintype.card K < 2 ^ 31 := by
-  rw [ZMod.card]
+noncomputable def signature (T : CandidateSets) : Fin signatureWidth → F :=
+  fun i => (rootPoly T).coeff (rowK + i)
+
+theorem field_card_lt_two_pow_186 : Fintype.card F < 2 ^ 186 := by
+  change Fintype.card _root_.KoalaBear.Ext6 < 2 ^ 186
+  rw [_root_.KoalaBear.card_ext6]
   norm_num [_root_.KoalaBear.fieldSize]
 
-theorem base_field_pow_7944_lt_two_pow_246264 :
-    (Fintype.card K) ^ 7944 < 2 ^ 246264 := by
-  have hpow : ∀ q : Nat, q < 2 ^ 31 → q ^ 7944 < 2 ^ 246264 := by
+theorem field_pow_1394_lt_two_pow_259284 :
+    (Fintype.card F) ^ 1394 < 2 ^ 259284 := by
+  have hpow : ∀ q : Nat, q < 2 ^ 186 → q ^ 1394 < 2 ^ 259284 := by
     intro q hq
     calc
-      q ^ 7944 < (2 ^ 31) ^ 7944 :=
+      q ^ 1394 < (2 ^ 186) ^ 1394 :=
         Nat.pow_lt_pow_left hq (by norm_num)
-      _ = 2 ^ (31 * 7944) := (pow_mul 2 31 7944).symm
-      _ = 2 ^ 246264 := by norm_num
-  exact hpow (Fintype.card K) base_field_card_lt_two_pow_31
+      _ = 2 ^ (186 * 1394) := (pow_mul 2 186 1394).symm
+      _ = 2 ^ 259284 := by norm_num
+  exact hpow (Fintype.card F) field_card_lt_two_pow_186
 
-theorem signature_sieve_lt_two_pow_246264 :
-    Fintype.card (Fin signatureWidth → K) * (Fintype.card F - 1) ^ 2 <
-      2 ^ 246264 := by
-  have hcardF : Fintype.card F = _root_.KoalaBear.fieldSize ^ 6 := by
-    exact _root_.KoalaBear.card_ext6
-  have hcardK : Fintype.card K = _root_.KoalaBear.fieldSize := by
-    exact ZMod.card _
-  have hfun : ∀ w : Nat, Fintype.card (Fin w → K) =
-      (Fintype.card K) ^ w := fun w => by
-    simpa only [Fintype.card_fin] using
-      (Fintype.card_fun : Fintype.card (Fin w → K) =
-        Fintype.card K ^ Fintype.card (Fin w))
-  have hsig : Fintype.card (Fin signatureWidth → K) =
-      (Fintype.card K) ^ signatureWidth := hfun signatureWidth
-  have hmul : ∀ q w : Nat,
-      q ^ w * (q ^ 6 - 1) ^ 2 ≤ q ^ w * q ^ 12 := by
-    intro q w
-    apply Nat.mul_le_mul_left
-    calc
-      (q ^ 6 - 1) ^ 2 ≤ (q ^ 6) ^ 2 :=
-        Nat.pow_le_pow_left (Nat.sub_le _ _) 2
-      _ = q ^ 12 := by rw [← pow_mul]
-  have hcombine : ∀ q : Nat,
-      q ^ signatureWidth * q ^ 12 = q ^ 7944 := by
-    intro q
-    change q ^ 7932 * q ^ 12 = q ^ 7944
-    rw [← pow_add]
-  calc
-    Fintype.card (Fin signatureWidth → K) * (Fintype.card F - 1) ^ 2 ≤
-        (Fintype.card K) ^ signatureWidth * (Fintype.card K) ^ 12 := by
-      rw [hsig, hcardF, hcardK]
-      exact hmul _root_.KoalaBear.fieldSize signatureWidth
-    _ = (Fintype.card K) ^ 7944 := hcombine (Fintype.card K)
-    _ < 2 ^ 246264 := base_field_pow_7944_lt_two_pow_246264
-
-theorem two_pow_246264_lt_central_choose :
-    2 ^ 246264 < Nat.choose 246282 123141 := by
-  have hcentral := Nat.four_pow_lt_mul_centralBinom 123141 (by norm_num)
+theorem two_pow_259284_lt_central_choose :
+    2 ^ 259284 < Nat.choose 259362 129681 := by
+  have hcentral := Nat.four_pow_lt_mul_centralBinom 129681 (by norm_num)
   rw [Nat.centralBinom_eq_two_mul_choose] at hcentral
   norm_num only [Nat.reduceMul] at hcentral
   by_contra hnot
-  have hle : Nat.choose 246282 123141 ≤ 2 ^ 246264 :=
-    Nat.le_of_not_gt hnot
-  have hbad : 4 ^ 123141 < 123141 * 2 ^ 246264 :=
-    lt_of_lt_of_le hcentral (Nat.mul_le_mul_left 123141 hle)
-  have hreverse : 123141 * 2 ^ 246264 < 4 ^ 123141 := by
+  have hle : Nat.choose 259362 129681 ≤ 2 ^ 259284 := Nat.le_of_not_gt hnot
+  have hbad : 4 ^ 129681 < 129681 * 2 ^ 259284 :=
+    lt_of_lt_of_le hcentral (Nat.mul_le_mul_left 129681 hle)
+  have hreverse : 129681 * 2 ^ 259284 < 4 ^ 129681 := by
     calc
-      123141 * 2 ^ 246264 < 2 ^ 17 * 2 ^ 246264 := by
-        gcongr <;> norm_num
-      _ = 2 ^ (17 + 246264) := (pow_add 2 17 246264).symm
-      _ < 2 ^ (2 * 123141) :=
-        Nat.pow_lt_pow_right (by norm_num) (by norm_num)
-      _ = (2 ^ 2) ^ 123141 := pow_mul 2 2 123141
-      _ = 4 ^ 123141 := by norm_num
+      129681 * 2 ^ 259284 < 2 ^ 17 * 2 ^ 259284 := by gcongr <;> norm_num
+      _ = 2 ^ (17 + 259284) := (pow_add 2 17 259284).symm
+      _ < 2 ^ (2 * 129681) := Nat.pow_lt_pow_right (by norm_num) (by norm_num)
+      _ = (2 ^ 2) ^ 129681 := pow_mul 2 2 129681
+      _ = 4 ^ 129681 := by norm_num
   exact (Nat.not_lt_of_ge hreverse.le) hbad
 
-theorem two_pow_246264_lt_card_candidateSets :
-    2 ^ 246264 < Fintype.card CandidateSets := by
-  have hconcrete : 2 ^ 246264 < Nat.choose 262144 139003 := by
+theorem two_pow_259284_lt_card_candidateSets :
+    2 ^ 259284 < Fintype.card CandidateSets := by
+  have hconcrete : 2 ^ 259284 < Nat.choose 262144 132463 := by
     calc
-      2 ^ 246264 < Nat.choose 246282 123141 :=
-        two_pow_246264_lt_central_choose
-      _ = Nat.centralBinom 123141 := by
-        rw [Nat.centralBinom_eq_two_mul_choose]
-      _ ≤ Nat.choose 262144 123141 := Nat.choose_le_choose 123141 (by norm_num)
-      _ = Nat.choose 262144 139003 := Nat.choose_symm_of_eq_add (by norm_num)
+      2 ^ 259284 < Nat.choose 259362 129681 := two_pow_259284_lt_central_choose
+      _ ≤ Nat.choose 262144 129681 := Nat.choose_le_choose 129681 (by norm_num)
+      _ = Nat.choose 262144 132463 :=
+        Nat.choose_symm_of_eq_add (by norm_num)
   rw [← Nat.card_eq_fintype_card, Set.powersetCard.card]
   have hcardI : Nat.card I = 262144 := by
     rw [I, Benchmark.IRSProfile.Index, Nat.card_fin]
@@ -172,10 +106,31 @@ theorem two_pow_246264_lt_card_candidateSets :
   exact hconcrete
 
 theorem signature_card_mul_field_sq_lt :
-    Fintype.card (Fin signatureWidth → K) * (Fintype.card F - 1) ^ 2 <
-      Fintype.card CandidateSets :=
-  signature_sieve_lt_two_pow_246264.trans
-    two_pow_246264_lt_card_candidateSets
+    Fintype.card (Fin signatureWidth → F) * (Fintype.card F - 1) ^ 2 <
+      Fintype.card CandidateSets := by
+  have hfun : ∀ w : Nat, Fintype.card (Fin w → F) =
+      (Fintype.card F) ^ w := fun w => by
+    simpa only [Fintype.card_fin] using
+      (Fintype.card_fun : Fintype.card (Fin w → F) =
+        Fintype.card F ^ Fintype.card (Fin w))
+  have hsig : Fintype.card (Fin signatureWidth → F) =
+      (Fintype.card F) ^ signatureWidth := hfun signatureWidth
+  have hmul : ∀ q w : Nat, q ^ w * (q - 1) ^ 2 ≤ q ^ w * q ^ 2 := by
+    intro q w
+    exact Nat.mul_le_mul_left _
+      (Nat.pow_le_pow_left (Nat.sub_le q 1) 2)
+  have hcombine : ∀ q : Nat, q ^ signatureWidth * q ^ 2 = q ^ 1394 := by
+    intro q
+    change q ^ 1392 * q ^ 2 = q ^ 1394
+    rw [← pow_add]
+  calc
+    Fintype.card (Fin signatureWidth → F) * (Fintype.card F - 1) ^ 2 ≤
+        (Fintype.card F) ^ signatureWidth * (Fintype.card F) ^ 2 := by
+      rw [hsig]
+      exact hmul (Fintype.card F) signatureWidth
+    _ = (Fintype.card F) ^ 1394 := hcombine (Fintype.card F)
+    _ < 2 ^ 259284 := field_pow_1394_lt_two_pow_259284
+    _ < Fintype.card CandidateSets := two_pow_259284_lt_card_candidateSets
 
 lemma exists_large_fiber {α β : Type} [Fintype α] [Fintype β] [DecidableEq β]
     (f : α → β) (sieve : Nat)
@@ -200,13 +155,13 @@ lemma exists_large_fiber {α β : Type} [Fintype α] [Fintype β] [DecidableEq �
   omega
 
 theorem exists_signature_fiber :
-    ∃ y : Fin signatureWidth → K,
+    ∃ y : Fin signatureWidth → F,
       (Fintype.card F - 1) ^ 2 <
         (Finset.univ.filter fun T : CandidateSets => signature T = y).card := by
   exact exists_large_fiber signature ((Fintype.card F - 1) ^ 2)
     signature_card_mul_field_sq_lt
 
-noncomputable def chosenSignature : Fin signatureWidth → K :=
+noncomputable def chosenSignature : Fin signatureWidth → F :=
   Classical.choose exists_signature_fiber
 
 noncomputable def fiberSets : Finset CandidateSets :=
@@ -231,14 +186,14 @@ theorem member_signature (T : FiberSets) :
     signature T.1 = chosenSignature := by
   exact (Finset.mem_filter.mp T.2).2
 
-noncomputable def diffPolyK (T : FiberSets) : Polynomial K :=
-  rootPolyK anchor.1 - rootPolyK T.1
+noncomputable def diffPoly (T : FiberSets) : Polynomial F :=
+  rootPoly anchor.1 - rootPoly T.1
 
-theorem diffPolyK_degree_lt (T : FiberSets) :
-    (diffPolyK T).degree < (rowK : Nat) := by
+theorem diffPoly_degree_lt (T : FiberSets) :
+    (diffPoly T).degree < (rowK : Nat) := by
   rw [Polynomial.degree_lt_iff_coeff_zero]
   intro n hn
-  rw [diffPolyK, Polynomial.coeff_sub]
+  rw [diffPoly, Polynomial.coeff_sub]
   by_cases hna : n ≤ agreement
   · have hi : n - rowK < signatureWidth := by
       norm_num [agreement, rowK, signatureWidth] at hna hn ⊢
@@ -251,21 +206,9 @@ theorem diffPolyK_degree_lt (T : FiberSets) :
     exact sub_eq_zero.mpr hs
   · have hgt : agreement < n := Nat.lt_of_not_ge hna
     rw [Polynomial.coeff_eq_zero_of_natDegree_lt
-        (rootPolyK_natDegree anchor.1 ▸ hgt),
+        (rootPoly_natDegree anchor.1 ▸ hgt),
       Polynomial.coeff_eq_zero_of_natDegree_lt
-        (rootPolyK_natDegree T.1 ▸ hgt), sub_zero]
-
-noncomputable def diffPoly (T : FiberSets) : Polynomial F :=
-  (diffPolyK T).map emb
-
-theorem diffPoly_degree_lt (T : FiberSets) :
-    (diffPoly T).degree < (rowK : Nat) := by
-  rw [diffPoly, Polynomial.degree_map_eq_of_injective emb_injective]
-  exact diffPolyK_degree_lt T
-
-theorem diffPoly_eq (T : FiberSets) :
-    diffPoly T = rootPoly anchor.1 - rootPoly T.1 := by
-  simp only [diffPoly, diffPolyK, rootPoly, Polynomial.map_sub]
+        (rootPoly_natDegree T.1 ▸ hgt), sub_zero]
 
 noncomputable def coeff (T : FiberSets) : Fin (k / s) → F :=
   Polynomial.degreeLTEquiv F (k / s) ⟨diffPoly T, by
@@ -293,14 +236,11 @@ noncomputable def fixedWord : I → Fin s → F :=
 theorem rootPoly_eval_eq_zero (T : CandidateSets) (j : I)
     (hj : j ∈ (T : Finset I)) :
     (rootPoly T).eval (Benchmark.IRSProfile.domain j) = 0 := by
-  have hbase : (rootPolyK T).eval (baseDomain j) = 0 := by
-    classical
-    rw [rootPolyK, Polynomial.eval_prod]
-    apply Finset.prod_eq_zero (i := baseDomain j)
-    · simp [baseNodes, hj]
-    · simp
-  rw [← emb_baseDomain, rootPoly, Polynomial.eval_map,
-    Polynomial.eval₂_hom, hbase, map_zero]
+  classical
+  rw [rootPoly, Polynomial.eval_prod]
+  apply Finset.prod_eq_zero (i := Benchmark.IRSProfile.domain j)
+  · simp [nodes, hj]
+  · simp
 
 theorem fixedWord_agrees (T : FiberSets) :
     ∀ j ∈ (T.1 : Finset I),
@@ -318,7 +258,7 @@ theorem fixedWord_agrees (T : FiberSets) :
   · subst row
     rw [show rows T 0 = coeff T by simp [rows],
       ToyProblem.Spec.rsEncoder_apply, rsPolynomial_coeff]
-    simp only [fixedWord, if_pos, diffPoly_eq, Polynomial.eval_sub]
+    simp only [fixedWord, if_pos, diffPoly, Polynomial.eval_sub]
     rw [rootPoly_eval_eq_zero T.1 j hj, sub_zero]
   · have hz := congrFun
       (map_zero (ToyProblem.Spec.rsEncoder (k / s) Benchmark.IRSProfile.domain)) j
