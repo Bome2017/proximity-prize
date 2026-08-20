@@ -16,10 +16,10 @@ abbrev I := ProximityPrize.Benchmark.IRSProfile.Index
 abbrev k := ProximityPrize.Benchmark.IRSProfile.totalDimension
 abbrev s := ProximityPrize.Benchmark.IRSProfile.interleaving
 abbrev rowK := 131072
-abbrev extra := 8178
-abbrev agreement := 139250
-abbrev signatureWidth := 8179
-abbrev unsafeIndex := 122894
+abbrev extra := 8391
+abbrev agreement := 139463
+abbrev signatureWidth := 8391
+abbrev unsafeIndex := 122681
 
 namespace IRSProfile
 
@@ -87,20 +87,20 @@ theorem base_field_card_lt_two_pow_31 : Fintype.card K < 2 ^ 31 := by
   rw [ZMod.card]
   norm_num [_root_.KoalaBear.fieldSize]
 
-theorem base_field_pow_8191_lt_two_pow_253921 :
-    (Fintype.card K) ^ 8191 < 2 ^ 253921 := by
-  have hpow : ∀ q : Nat, q < 2 ^ 31 → q ^ 8191 < 2 ^ 253921 := by
+theorem base_field_pow_8403_lt_two_pow_260493 :
+    (Fintype.card K) ^ 8403 < 2 ^ 260493 := by
+  have hpow : ∀ q : Nat, q < 2 ^ 31 → q ^ 8403 < 2 ^ 260493 := by
     intro q hq
     calc
-      q ^ 8191 < (2 ^ 31) ^ 8191 :=
+      q ^ 8403 < (2 ^ 31) ^ 8403 :=
         Nat.pow_lt_pow_left hq (by norm_num)
-      _ = 2 ^ (31 * 8191) := (pow_mul 2 31 8191).symm
-      _ = 2 ^ 253921 := by norm_num
+      _ = 2 ^ (31 * 8403) := (pow_mul 2 31 8403).symm
+      _ = 2 ^ 260493 := by norm_num
   exact hpow (Fintype.card K) base_field_card_lt_two_pow_31
 
-theorem signature_sieve_lt_two_pow_253921 :
+theorem signature_sieve_lt_two_pow_260493 :
     Fintype.card (Fin signatureWidth → K) * (Fintype.card F - 1) ^ 2 <
-      2 ^ 253921 := by
+      2 ^ 260493 := by
   have hcardF : Fintype.card F = _root_.KoalaBear.fieldSize ^ 6 := by
     exact _root_.KoalaBear.card_ext6
   have hcardK : Fintype.card K = _root_.KoalaBear.fieldSize := by
@@ -121,125 +121,182 @@ theorem signature_sieve_lt_two_pow_253921 :
         Nat.pow_le_pow_left (Nat.sub_le _ _) 2
       _ = q ^ 12 := by rw [← pow_mul]
   have hcombine : ∀ q : Nat,
-      q ^ signatureWidth * q ^ 12 = q ^ 8191 := by
+      q ^ signatureWidth * q ^ 12 = q ^ 8403 := by
     intro q
-    change q ^ 8179 * q ^ 12 = q ^ 8191
+    change q ^ 8391 * q ^ 12 = q ^ 8403
     rw [← pow_add]
   calc
     Fintype.card (Fin signatureWidth → K) * (Fintype.card F - 1) ^ 2 ≤
         (Fintype.card K) ^ signatureWidth * (Fintype.card K) ^ 12 := by
       rw [hsig, hcardF, hcardK]
       exact hmul _root_.KoalaBear.fieldSize signatureWidth
-    _ = (Fintype.card K) ^ 8191 := hcombine (Fintype.card K)
-    _ < 2 ^ 253921 := base_field_pow_8191_lt_two_pow_253921
+    _ = (Fintype.card K) ^ 8403 := hcombine (Fintype.card K)
+    _ < 2 ^ 260493 := base_field_pow_8403_lt_two_pow_260493
 
-theorem three_mul_choose_le_two_mul_choose_succ {n j : Nat}
-    (hj : j ≤ n) (hpos : 0 < n + 1 - j) (hratio : n + 1 ≤ 3 * j) :
-    3 * Nat.choose n j ≤ 2 * Nat.choose (n + 1) j := by
-  refine Nat.le_of_mul_le_mul_right (c := n + 1 - j) ?_ hpos
-  calc
-    (3 * Nat.choose n j) * (n + 1 - j) =
-        Nat.choose n j * (3 * (n + 1 - j)) := by ac_rfl
-    _ ≤ Nat.choose n j * (2 * (n + 1)) := by
-      have hsplit : n + 1 = j + (n + 1 - j) := by omega
-      apply Nat.mul_le_mul_left
-      rw [hsplit] at hratio ⊢
-      omega
-    _ = 2 * (Nat.choose n j * (n + 1)) := by ac_rfl
-    _ = 2 * (Nat.choose (n + 1) j * (n + 1 - j)) := by
-      rw [Nat.choose_mul_succ_eq]
-    _ = (2 * Nat.choose (n + 1) j) * (n + 1 - j) := by ac_rfl
+set_option maxRecDepth 1000000
 
-theorem three_pow_mul_choose_le_two_pow_mul_choose_add {n j t : Nat}
-    (hj : j ≤ n) (hsteps : n + t ≤ 3 * j) :
-    3 ^ t * Nat.choose n j ≤ 2 ^ t * Nat.choose (n + t) j := by
-  induction t with
-  | zero => simp
-  | succ t ih =>
-      specialize ih (by omega)
-      have ht : n + t + 1 ≤ 3 * j := by omega
-      have hjn : j ≤ n + t := hj.trans (Nat.le_add_right n t)
-      have hpos : 0 < n + t + 1 - j :=
-        Nat.sub_pos_of_lt (lt_of_le_of_lt hjn (by omega))
-      have hstep := three_mul_choose_le_two_mul_choose_succ hjn hpos ht
-      calc
-        3 ^ (t + 1) * Nat.choose n j = 3 * (3 ^ t * Nat.choose n j) := by
-          rw [pow_succ]
-          ac_rfl
-        _ ≤ 3 * (2 ^ t * Nat.choose (n + t) j) := Nat.mul_le_mul_left 3 ih
-        _ = 2 ^ t * (3 * Nat.choose (n + t) j) := by ac_rfl
-        _ ≤ 2 ^ t * (2 * Nat.choose (n + t + 1) j) :=
-          Nat.mul_le_mul_left (2 ^ t) hstep
-        _ = 2 ^ (t + 1) * Nat.choose (n + (t + 1)) j := by
-          rw [pow_succ, show n + t + 1 = n + (t + 1) by omega]
-          ac_rfl
-
-theorem two_pow_245771_lt_central_choose :
-    2 ^ 245771 < Nat.choose 245788 122894 := by
-  have hcentral := Nat.four_pow_lt_mul_centralBinom 122894 (by norm_num)
-  rw [Nat.centralBinom_eq_two_mul_choose] at hcentral
-  norm_num only [Nat.reduceMul] at hcentral
-  by_contra hnot
-  have hle : Nat.choose 245788 122894 ≤ 2 ^ 245771 :=
-    Nat.le_of_not_gt hnot
-  have hbad : 4 ^ 122894 < 122894 * 2 ^ 245771 :=
-    lt_of_lt_of_le hcentral (Nat.mul_le_mul_left 122894 hle)
-  have hreverse : 122894 * 2 ^ 245771 < 4 ^ 122894 := by
+theorem seven_mul_choose_le_two_mul_choose_add_two {n j : Nat}
+    (hjn : j ≤ n)
+    (hratio : 7 * (n + 1 - j) * (n + 2 - j) ≤
+      2 * ((n + 1) * (n + 2))) :
+    7 * Nat.choose n j ≤ 2 * Nat.choose (n + 2) j := by
+  have hd1 : 0 < n + 1 - j := by omega
+  have hd2 : 0 < n + 2 - j := by omega
+  have heq : Nat.choose n j * (n + 1) * (n + 2) =
+      Nat.choose (n + 2) j * (n + 1 - j) * (n + 2 - j) := by
     calc
-      122894 * 2 ^ 245771 < 2 ^ 17 * 2 ^ 245771 := by
+      Nat.choose n j * (n + 1) * (n + 2) =
+          (Nat.choose (n + 1) j * (n + 1 - j)) * (n + 2) := by
+            rw [Nat.choose_mul_succ_eq]
+      _ = (Nat.choose (n + 1) j * (n + 2)) * (n + 1 - j) := by ring
+      _ = (Nat.choose (n + 2) j * (n + 2 - j)) * (n + 1 - j) := by
+            rw [Nat.choose_mul_succ_eq]
+      _ = Nat.choose (n + 2) j * (n + 1 - j) * (n + 2 - j) := by ring
+  apply Nat.le_of_mul_le_mul_right (c := (n + 1 - j) * (n + 2 - j))
+  · calc
+      (7 * Nat.choose n j) * ((n + 1 - j) * (n + 2 - j)) =
+          Nat.choose n j * (7 * (n + 1 - j) * (n + 2 - j)) := by ring
+      _ ≤ Nat.choose n j * (2 * ((n + 1) * (n + 2))) :=
+        Nat.mul_le_mul_left _ hratio
+      _ = 2 * (Nat.choose n j * (n + 1) * (n + 2)) := by ring
+      _ = 2 * (Nat.choose (n + 2) j * (n + 1 - j) * (n + 2 - j)) := by
+        rw [heq]
+      _ = (2 * Nat.choose (n + 2) j) *
+          ((n + 1 - j) * (n + 2 - j)) := by ring
+  · exact Nat.mul_pos hd1 hd2
+
+theorem seven_pow_mul_central_le_two_pow_mul_choose_steps
+    (j d : Nat)
+    (hj : 2 ≤ j)
+    (hratio : ∀ i < d,
+      7 * (2 * j + 2 * i + 1 - j) * (2 * j + 2 * i + 2 - j) ≤
+        2 * ((2 * j + 2 * i + 1) * (2 * j + 2 * i + 2))) :
+    7 ^ d * Nat.centralBinom j ≤
+      2 ^ d * Nat.choose (2 * j + 2 * d) j := by
+  induction d with
+  | zero =>
+      simp [Nat.centralBinom_eq_two_mul_choose]
+  | succ d ih =>
+      have ih' := ih (fun i hi => hratio i (Nat.lt_succ_of_lt hi))
+      have hstep := seven_mul_choose_le_two_mul_choose_add_two
+        (n := 2 * j + 2 * d) (j := j) (by omega) (hratio d (by omega))
+      calc
+        7 ^ (d + 1) * Nat.centralBinom j =
+            7 * (7 ^ d * Nat.centralBinom j) := by rw [pow_succ]; ring
+        _ ≤ 7 * (2 ^ d * Nat.choose (2 * j + 2 * d) j) :=
+          Nat.mul_le_mul_left 7 ih'
+        _ = 2 ^ d * (7 * Nat.choose (2 * j + 2 * d) j) := by ring
+        _ ≤ 2 ^ d * (2 * Nat.choose (2 * j + 2 * d + 2) j) :=
+          Nat.mul_le_mul_left _ hstep
+        _ = 2 ^ (d + 1) * Nat.choose (2 * j + 2 * (d + 1)) j := by
+          rw [pow_succ,
+            show 2 * j + 2 * d + 2 = 2 * j + 2 * (d + 1) by omega]
+          ac_rfl
+
+theorem ratio_122681_8391 : ∀ i < 8391,
+    7 * (2 * 122681 + 2 * i + 1 - 122681) *
+          (2 * 122681 + 2 * i + 2 - 122681) ≤
+      2 * ((2 * 122681 + 2 * i + 1) *
+        (2 * 122681 + 2 * i + 2)) := by
+  intro i hi
+  have hsub1 : 2 * 122681 + 2 * i + 1 - 122681 = 122682 + 2 * i := by
+    omega
+  have hsub2 : 2 * 122681 + 2 * i + 2 - 122681 = 122683 + 2 * i := by
+    omega
+  rw [hsub1, hsub2]
+  have h1 : 15 * (122682 + 2 * i) ≤
+      8 * (2 * 122681 + 2 * i + 1) := by omega
+  have h2 : 15 * (122683 + 2 * i) ≤
+      8 * (2 * 122681 + 2 * i + 2) := by omega
+  apply Nat.le_of_mul_le_mul_left (c := 32) (by
+    calc
+      32 * (7 * (122682 + 2 * i) * (122683 + 2 * i)) =
+          224 * ((122682 + 2 * i) * (122683 + 2 * i)) := by ring
+      _ ≤ 225 * ((122682 + 2 * i) * (122683 + 2 * i)) := by
+        exact Nat.mul_le_mul_right _ (by norm_num)
+      _ = (15 * (122682 + 2 * i)) * (15 * (122683 + 2 * i)) := by ring
+      _ ≤ (8 * (2 * 122681 + 2 * i + 1)) *
+          (8 * (2 * 122681 + 2 * i + 2)) :=
+        mul_le_mul h1 h2 (by omega) (by omega)
+      _ = 32 * (2 * ((2 * 122681 + 2 * i + 1) *
+          (2 * 122681 + 2 * i + 2))) := by ring) (by norm_num)
+
+theorem seven_pow_8391_mul_central_le :
+    7 ^ 8391 * Nat.centralBinom 122681 ≤
+      2 ^ 8391 * Nat.choose 262144 122681 := by
+  have h := seven_pow_mul_central_le_two_pow_mul_choose_steps
+    122681 8391 (by norm_num) ratio_122681_8391
+  norm_num only [Nat.reduceMul, Nat.reduceAdd] at h
+  exact h
+
+theorem two_pow_245345_lt_central_122681 :
+    2 ^ 245345 < Nat.centralBinom 122681 := by
+  have hcentral := Nat.four_pow_lt_mul_centralBinom 122681 (by norm_num)
+  by_contra hnot
+  have hle : Nat.centralBinom 122681 ≤ 2 ^ 245345 := Nat.le_of_not_gt hnot
+  have hbad : 4 ^ 122681 < 122681 * 2 ^ 245345 :=
+    lt_of_lt_of_le hcentral (Nat.mul_le_mul_left 122681 hle)
+  have hreverse : 122681 * 2 ^ 245345 < 4 ^ 122681 := by
+    calc
+      122681 * 2 ^ 245345 < 2 ^ 17 * 2 ^ 245345 := by
         gcongr <;> norm_num
-      _ = 2 ^ (17 + 245771) := (pow_add 2 17 245771).symm
-      _ = (2 ^ 2) ^ 122894 := by
-        convert pow_mul 2 2 122894 using 1 <;> norm_num
-      _ = 4 ^ 122894 := by norm_num
+      _ = 2 ^ (17 + 245345) := (pow_add 2 17 245345).symm
+      _ = 2 ^ (2 * 122681) := by norm_num
+      _ = (2 ^ 2) ^ 122681 := pow_mul 2 2 122681
+      _ = 4 ^ 122681 := by norm_num
   exact (Nat.not_lt_of_ge hreverse.le) hbad
 
-theorem two_pow_24534_lt_three_pow_16356 :
-    2 ^ 24534 < 3 ^ 16356 := by
+theorem two_pow_23556_lt_seven_pow_8391 : 2 ^ 23556 < 7 ^ 8391 := by
+  have hbase : 2 ^ 306 < 7 ^ 109 := by
+    calc
+      2 ^ 306 = (2 ^ 153) ^ 2 := by
+        convert pow_mul 2 153 2 using 1 <;> norm_num
+      _ < 7 ^ 109 := by norm_num
+  have hbulk : (2 ^ 306) ^ 76 < (7 ^ 109) ^ 76 :=
+    Nat.pow_lt_pow_left hbase (by norm_num)
+  have htail : 2 ^ 300 < 7 ^ 107 := by
+    calc
+      2 ^ 300 = (2 ^ 150) ^ 2 := by
+        convert pow_mul 2 150 2 using 1 <;> norm_num
+      _ < 7 ^ 107 := by norm_num
+  have hproduct : (2 ^ 306) ^ 76 * 2 ^ 300 <
+      (7 ^ 109) ^ 76 * 7 ^ 107 :=
+    mul_lt_mul hbulk htail.le (by positivity) (by positivity)
   calc
-    2 ^ 24534 = (2 ^ 3) ^ 8178 := by
-      convert pow_mul 2 3 8178 using 1 <;> norm_num
-    _ < (3 ^ 2) ^ 8178 := Nat.pow_lt_pow_left (by norm_num) (by norm_num)
-    _ = 3 ^ 16356 := by
-      convert (pow_mul 3 2 8178).symm using 1 <;> norm_num
+    2 ^ 23556 = (2 ^ 306) ^ 76 * 2 ^ 300 := by
+      rw [← pow_mul, ← pow_add]
+    _ < (7 ^ 109) ^ 76 * 7 ^ 107 := hproduct
+    _ = 7 ^ 8391 := by
+      rw [← pow_mul, ← pow_add]
 
-theorem two_pow_253921_lt_choose :
-    2 ^ 253921 < Nat.choose 262144 122894 := by
-  have hgrowth :
-      3 ^ 16356 * Nat.choose 245788 122894 ≤
-        2 ^ 16356 * Nat.choose 262144 122894 := by
-    have h := three_pow_mul_choose_le_two_pow_mul_choose_add
-      (n := 245788) (j := 122894) (t := 16356) (by norm_num) (by norm_num)
-    norm_num only [Nat.reduceAdd] at h
-    exact h
-  have hthree : 2 ^ 24506 < 3 ^ 16356 :=
-    (Nat.pow_lt_pow_right (by norm_num) (by norm_num : 24506 < 24534)).trans
-      two_pow_24534_lt_three_pow_16356
-  have hprod :
-      2 ^ 24506 * 2 ^ 245771 <
-        3 ^ 16356 * Nat.choose 245788 122894 := by
-    calc
-      2 ^ 24506 * 2 ^ 245771 < 3 ^ 16356 * 2 ^ 245771 :=
-        Nat.mul_lt_mul_of_pos_right hthree (by positivity)
-      _ < 3 ^ 16356 * Nat.choose 245788 122894 :=
-        Nat.mul_lt_mul_of_pos_left two_pow_245771_lt_central_choose
-          (by positivity)
+theorem two_pow_260493_lt_candidate_choose :
+    2 ^ 260493 < Nat.choose 262144 139463 := by
+  have hproduct :
+      2 ^ 23556 * 2 ^ 245345 <
+        7 ^ 8391 * Nat.centralBinom 122681 :=
+    mul_lt_mul two_pow_23556_lt_seven_pow_8391
+      two_pow_245345_lt_central_122681.le (by positivity) (by positivity)
   have hscaled :
-      2 ^ 16356 * 2 ^ 253921 <
-        2 ^ 16356 * Nat.choose 262144 122894 := by
+      2 ^ 8391 * 2 ^ 260510 <
+        2 ^ 8391 * Nat.choose 262144 122681 := by
     calc
-      2 ^ 16356 * 2 ^ 253921 = 2 ^ 24506 * 2 ^ 245771 := by
-        rw [← pow_add, ← pow_add]
-      _ < 3 ^ 16356 * Nat.choose 245788 122894 := hprod
-      _ ≤ 2 ^ 16356 * Nat.choose 262144 122894 := hgrowth
-  exact Nat.lt_of_mul_lt_mul_left hscaled
+      2 ^ 8391 * 2 ^ 260510 = 2 ^ 268901 := by rw [← pow_add]
+      _ = 2 ^ 23556 * 2 ^ 245345 := by rw [← pow_add]
+      _ < 7 ^ 8391 * Nat.centralBinom 122681 := hproduct
+      _ ≤ 2 ^ 8391 * Nat.choose 262144 122681 :=
+        seven_pow_8391_mul_central_le
+  have hstrong : 2 ^ 260510 < Nat.choose 262144 122681 :=
+    Nat.lt_of_mul_lt_mul_left hscaled
+  calc
+    2 ^ 260493 < 2 ^ 260510 :=
+      Nat.pow_lt_pow_right (by norm_num) (by norm_num)
+    _ < Nat.choose 262144 122681 := hstrong
+    _ = Nat.choose 262144 139463 := Nat.choose_symm_of_eq_add (by norm_num)
 
-theorem two_pow_253921_lt_card_candidateSets :
-    2 ^ 253921 < Fintype.card CandidateSets := by
-  have hconcrete : 2 ^ 253921 < Nat.choose 262144 139250 := by
-    calc
-      2 ^ 253921 < Nat.choose 262144 122894 := two_pow_253921_lt_choose
-      _ = Nat.choose 262144 139250 := Nat.choose_symm_of_eq_add (by norm_num)
+theorem two_pow_260493_lt_card_candidateSets :
+    2 ^ 260493 < Fintype.card CandidateSets := by
+  have hconcrete : 2 ^ 260493 < Nat.choose 262144 139463 :=
+    two_pow_260493_lt_candidate_choose
   rw [← Nat.card_eq_fintype_card, Set.powersetCard.card]
   have hcardI : Nat.card I = 262144 := by
     rw [I, Benchmark.IRSProfile.Index, Nat.card_fin]
@@ -250,8 +307,8 @@ theorem two_pow_253921_lt_card_candidateSets :
 theorem signature_card_mul_field_sq_lt :
     Fintype.card (Fin signatureWidth → K) * (Fintype.card F - 1) ^ 2 <
       Fintype.card CandidateSets :=
-  signature_sieve_lt_two_pow_253921.trans
-    two_pow_253921_lt_card_candidateSets
+  signature_sieve_lt_two_pow_260493.trans
+    two_pow_260493_lt_card_candidateSets
 
 lemma exists_large_fiber {α β : Type} [Fintype α] [Fintype β] [DecidableEq β]
     (f : α → β) (sieve : Nat)
@@ -315,21 +372,27 @@ theorem diffPolyK_degree_lt (T : FiberSets) :
   rw [Polynomial.degree_lt_iff_coeff_zero]
   intro n hn
   rw [diffPolyK, Polynomial.coeff_sub]
-  by_cases hna : n ≤ agreement
-  · have hi : n - rowK < signatureWidth := by
-      norm_num [agreement, rowK, signatureWidth] at hna hn ⊢
-      omega
-    let i : Fin signatureWidth := ⟨n - rowK, hi⟩
-    have hs := congrFun
-      ((member_signature anchor).trans (member_signature T).symm) i
-    have hadd : rowK + (n - rowK) = n := Nat.add_sub_of_le hn
-    rw [signature, signature, show rowK + i.1 = n by simpa [i] using hadd] at hs
-    exact sub_eq_zero.mpr hs
-  · have hgt : agreement < n := Nat.lt_of_not_ge hna
-    rw [Polynomial.coeff_eq_zero_of_natDegree_lt
-        (rootPolyK_natDegree anchor.1 ▸ hgt),
-      Polynomial.coeff_eq_zero_of_natDegree_lt
-        (rootPolyK_natDegree T.1 ▸ hgt), sub_zero]
+  by_cases htop : n = agreement
+  · subst n
+    have ha := (rootPolyK_monic anchor.1).coeff_natDegree
+    have hT := (rootPolyK_monic T.1).coeff_natDegree
+    rw [rootPolyK_natDegree] at ha hT
+    rw [ha, hT, sub_self]
+  · by_cases hna : n ≤ agreement
+    · have hi : n - rowK < signatureWidth := by
+        norm_num [agreement, rowK, signatureWidth] at hna hn htop ⊢
+        omega
+      let i : Fin signatureWidth := ⟨n - rowK, hi⟩
+      have hs := congrFun
+        ((member_signature anchor).trans (member_signature T).symm) i
+      have hadd : rowK + (n - rowK) = n := Nat.add_sub_of_le hn
+      rw [signature, signature, show rowK + i.1 = n by simpa [i] using hadd] at hs
+      exact sub_eq_zero.mpr hs
+    · have hgt : agreement < n := Nat.lt_of_not_ge hna
+      rw [Polynomial.coeff_eq_zero_of_natDegree_lt
+          (rootPolyK_natDegree anchor.1 ▸ hgt),
+        Polynomial.coeff_eq_zero_of_natDegree_lt
+          (rootPolyK_natDegree T.1 ▸ hgt), sub_zero]
 
 noncomputable def diffPoly (T : FiberSets) : Polynomial F :=
   (diffPolyK T).map emb
