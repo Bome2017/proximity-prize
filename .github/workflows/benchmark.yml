@@ -1,0 +1,76 @@
+name: Benchmark Track
+
+on:
+  workflow_call:
+    inputs:
+      profile:
+        description: reduction-threshold profile
+        required: true
+        type: string
+  workflow_dispatch:
+    inputs:
+      profile:
+        description: reduction-threshold profile
+        required: true
+        default: lower
+        type: choice
+        options:
+          - lower
+          - upper
+
+permissions:
+  id-token: write
+  contents: read
+  actions: read
+
+jobs:
+  benchmark:
+    name: benchmark (IRS reduction threshold — ${{ inputs.profile }})
+    runs-on: ubuntu-24.04
+    timeout-minutes: 50
+    env:
+      BASE: https://proximity-prize.zksecurity.xyz
+      PROFILE: ${{ inputs.profile }}
+
+    steps:
+      - name: Checkout dispatched commit
+        uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+          clean: true
+          persist-credentials: false
+
+      - name: Resolve immutable challenge policy
+        shell: bash
+        run: |
+          case "$PROFILE" in
+            lower)
+              challenge=proximity-prize-reduction-lower
+              ;;
+            upper)
+              challenge=proximity-prize-reduction-upper
+              ;;
+            *)
+              echo "unknown benchmark profile: $PROFILE" >&2
+              exit 2
+              ;;
+          esac
+          echo "CHALLENGE=$challenge" >> "$GITHUB_ENV"
+          echo "CHALLENGE_VERSION=$(python3 scripts/challenges.py version "$challenge")" >> "$GITHUB_ENV"
+
+      - name: Benchmark with independent verifier
+        env:
+          REPOSITORY: ${{ github.repository }}
+          COMMIT: ${{ github.sha }}
+        run: python3 scripts/submit.py > verifier-result.json
+
+      - name: Write Yukon score
+        run: python3 scripts/write-verifier-score.py "$PROFILE" verifier-result.json
+
+      - name: Upload score
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
+        with:
+          name: benchmark-score-irs-reduction-threshold-${{ inputs.profile }}
+          path: .yukon/*-score.json
+          if-no-files-found: error
