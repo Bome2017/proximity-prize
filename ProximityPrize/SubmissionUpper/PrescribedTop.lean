@@ -14,7 +14,7 @@ vanishing polynomial shares its top `r` coefficients with a fixed one.  Each suc
 subset still yields a genuine codeword agreeing with a single fixed word on all `t`
 points, so the attack survives at radius `(n - t)/n = 1/2 - r/n`.
 
-With `r = 8420` this certifies the unsafe suffix from `delta* = 15/32` onward.
+With `r = 8430` this certifies the unsafe suffix below `15/32`.
 -/
 
 namespace ProximityPrize.SubmissionUpper.PrescribedTop
@@ -31,10 +31,10 @@ abbrev K := _root_.KoalaBear.Field
 abbrev FF := IRSProfile.Field
 abbrev Idx := IRSProfile.Index
 
-/-- Agreement-set size: `m + r = 131072 + 8420`. -/
-abbrev tt : ℕ := 139492
+/-- Agreement-set size: `m + r = 131072 + 8430`. -/
+abbrev tt : ℕ := 139502
 /-- Number of prescribed top coefficients. -/
-abbrev rr : ℕ := 8420
+abbrev rr : ℕ := 8430
 
 noncomputable def nodes (j : Idx) : K := IRSProfile.baseNttDomain.node j
 
@@ -61,11 +61,11 @@ theorem card_K : Fintype.card K = 2 ^ 31 - 2 ^ 24 + 1 :=
 theorem card_FF : Fintype.card FF = (2 ^ 31 - 2 ^ 24 + 1) ^ 6 :=
   _root_.KoalaBear.card_ext6
 
-theorem card_keys : Fintype.card (Fin rr → K) = (2 ^ 31 - 2 ^ 24 + 1) ^ 8420 := by
+theorem card_keys : Fintype.card (Fin rr → K) = (2 ^ 31 - 2 ^ 24 + 1) ^ 8430 := by
   rw [Fintype.card_fun, card_K, Fintype.card_fin]
 
 theorem card_powerset :
-    (Finset.powersetCard tt (Finset.univ : Finset Idx)).card = Nat.choose 262144 139492 := by
+    (Finset.powersetCard tt (Finset.univ : Finset Idx)).card = Nat.choose 262144 139502 := by
   rw [Finset.card_powersetCard, Finset.card_univ, card_Idx]
 
 
@@ -86,50 +86,50 @@ theorem pair_lower (A k i : ℕ) (hik : i ≤ k) :
 
 /-- Squared upper bound on the ascending factorial, via pairing. -/
 theorem prod_sq_up :
-    4 ^ 8420 * (∏ i ∈ Finset.range 8420, (131072 + 1 + i)) ^ 2 ≤ 270565 ^ 16840 := by
-  have hrefl : (∏ i ∈ Finset.range 8420, (131072 + 1 + (8420 - 1 - i)))
-      = ∏ i ∈ Finset.range 8420, (131072 + 1 + i) :=
-    Finset.prod_range_reflect (fun i => 131072 + 1 + i) 8420
-  have hsq : (∏ i ∈ Finset.range 8420,
-        ((131072 + 1 + i) * (131072 + 1 + (8420 - 1 - i))))
-      = (∏ i ∈ Finset.range 8420, (131072 + 1 + i)) ^ 2 := by
+    4 ^ 8430 * (∏ i ∈ Finset.range 8430, (131072 + 1 + i)) ^ 2 ≤ 270575 ^ 16860 := by
+  have hrefl : (∏ i ∈ Finset.range 8430, (131072 + 1 + (8430 - 1 - i)))
+      = ∏ i ∈ Finset.range 8430, (131072 + 1 + i) :=
+    Finset.prod_range_reflect (fun i => 131072 + 1 + i) 8430
+  have hsq : (∏ i ∈ Finset.range 8430,
+        ((131072 + 1 + i) * (131072 + 1 + (8430 - 1 - i))))
+      = (∏ i ∈ Finset.range 8430, (131072 + 1 + i)) ^ 2 := by
     rw [Finset.prod_mul_distrib, hrefl, ← pow_two]
-  have h4 : (4 : ℕ) ^ 8420 = ∏ _i ∈ Finset.range 8420, (4 : ℕ) := by
+  have h4 : (4 : ℕ) ^ 8430 = ∏ _i ∈ Finset.range 8430, (4 : ℕ) := by
     rw [Finset.prod_const, Finset.card_range]
-  have hR : (270565 : ℕ) ^ 16840 = ∏ _i ∈ Finset.range 8420, ((270565 : ℕ) ^ 2) := by
+  have hR : (270575 : ℕ) ^ 16860 = ∏ _i ∈ Finset.range 8430, ((270575 : ℕ) ^ 2) := by
     rw [Finset.prod_const, Finset.card_range, ← pow_mul]
   rw [← hsq, h4, hR, ← Finset.prod_mul_distrib]
   refine Finset.prod_le_prod' ?_
   intro i hi
   have hik := Finset.mem_range.mp hi
-  have hsum : (131072 + 1 + i) + (131072 + 1 + (8420 - 1 - i)) = 270565 := by omega
-  calc 4 * ((131072 + 1 + i) * (131072 + 1 + (8420 - 1 - i)))
-      ≤ ((131072 + 1 + i) + (131072 + 1 + (8420 - 1 - i))) ^ 2 := four_mul_le_sq _ _
-    _ = 270565 ^ 2 := by rw [hsum]
+  have hsum : (131072 + 1 + i) + (131072 + 1 + (8430 - 1 - i)) = 270575 := by omega
+  calc 4 * ((131072 + 1 + i) * (131072 + 1 + (8430 - 1 - i)))
+      ≤ ((131072 + 1 + i) + (131072 + 1 + (8430 - 1 - i))) ^ 2 := four_mul_le_sq _ _
+    _ = 270575 ^ 2 := by rw [hsum]
 
 /-- Squared lower bound on the descending factorial, via pairing. -/
 theorem prod_sq_lo :
-    ((131072 : ℕ) * 122653) ^ 8420
-      ≤ (∏ i ∈ Finset.range 8420, (262144 - 131072 - i)) ^ 2 := by
-  have hrefl : (∏ i ∈ Finset.range 8420, (262144 - 131072 - (8420 - 1 - i)))
-      = ∏ i ∈ Finset.range 8420, (262144 - 131072 - i) :=
-    Finset.prod_range_reflect (fun i => 262144 - 131072 - i) 8420
-  have hsq : (∏ i ∈ Finset.range 8420,
-        ((262144 - 131072 - i) * (262144 - 131072 - (8420 - 1 - i))))
-      = (∏ i ∈ Finset.range 8420, (262144 - 131072 - i)) ^ 2 := by
+    ((131072 : ℕ) * 122643) ^ 8430
+      ≤ (∏ i ∈ Finset.range 8430, (262144 - 131072 - i)) ^ 2 := by
+  have hrefl : (∏ i ∈ Finset.range 8430, (262144 - 131072 - (8430 - 1 - i)))
+      = ∏ i ∈ Finset.range 8430, (262144 - 131072 - i) :=
+    Finset.prod_range_reflect (fun i => 262144 - 131072 - i) 8430
+  have hsq : (∏ i ∈ Finset.range 8430,
+        ((262144 - 131072 - i) * (262144 - 131072 - (8430 - 1 - i))))
+      = (∏ i ∈ Finset.range 8430, (262144 - 131072 - i)) ^ 2 := by
     rw [Finset.prod_mul_distrib, hrefl, ← pow_two]
-  have hL : ((131072 : ℕ) * 122653) ^ 8420
-      = ∏ _i ∈ Finset.range 8420, ((131072 : ℕ) * 122653) := by
+  have hL : ((131072 : ℕ) * 122643) ^ 8430
+      = ∏ _i ∈ Finset.range 8430, ((131072 : ℕ) * 122643) := by
     rw [Finset.prod_const, Finset.card_range]
   rw [← hsq, hL]
   refine Finset.prod_le_prod' ?_
   intro i hi
   have hik := Finset.mem_range.mp hi
-  have e1 : 262144 - 131072 - i = 122653 + (8419 - i) := by omega
-  have e2 : 262144 - 131072 - (8420 - 1 - i) = 122653 + i := by omega
-  have e3 : (131072 : ℕ) * 122653 = (122653 + 8419) * 122653 := by norm_num
+  have e1 : 262144 - 131072 - i = 122643 + (8429 - i) := by omega
+  have e2 : 262144 - 131072 - (8430 - 1 - i) = 122643 + i := by omega
+  have e3 : (131072 : ℕ) * 122643 = (122643 + 8429) * 122643 := by norm_num
   rw [e1, e2, e3]
-  exact pair_lower 122653 8419 i (by omega)
+  exact pair_lower 122643 8429 i (by omega)
 
 
 theorem choose_shift (N a : ℕ) : ∀ b : ℕ,
@@ -184,19 +184,19 @@ set_option maxHeartbeats 4000000 in
 set_option maxRecDepth 4000000 in
 set_option exponentiation.threshold 900000 in
 theorem numeric_fact2 :
-    131072 ^ 2 * (((2 ^ 31 - 2 ^ 24 + 1) ^ 8420
-        * (((2 ^ 31 - 2 ^ 24 + 1) ^ 6 - 1) ^ 2)) ^ 2) * 270565 ^ 16840
-      ≤ 4 ^ 8420 * (4 ^ 131072) ^ 2 * ((131072 : ℕ) * 122653) ^ 8420 := by decide
+    131072 ^ 2 * (((2 ^ 31 - 2 ^ 24 + 1) ^ 8430
+        * (2 ^ 31 - 2 ^ 24 + 1) ^ 2) ^ 2) * 270575 ^ 16860
+      ≤ 4 ^ 8430 * (4 ^ 131072) ^ 2 * ((131072 : ℕ) * 122643) ^ 8430 := by decide
 
 theorem key_counting :
-    (2 ^ 31 - 2 ^ 24 + 1) ^ 8420 * (((2 ^ 31 - 2 ^ 24 + 1) ^ 6 - 1) ^ 2)
-      < Nat.choose 262144 139492 := by
+    (2 ^ 31 - 2 ^ 24 + 1) ^ 8430 * (2 ^ 31 - 2 ^ 24 + 1) ^ 2
+      < Nat.choose 262144 139502 := by
   by_contra hcon
   push_neg at hcon
-  have hshift : Nat.choose 262144 139492 * (∏ i ∈ Finset.range 8420, (131072 + 1 + i))
-      = Nat.choose 262144 131072 * (∏ i ∈ Finset.range 8420, (262144 - 131072 - i)) := by
-    have h := choose_shift 262144 131072 8420
-    rwa [show (131072 + 8420 : ℕ) = 139492 by norm_num] at h
+  have hshift : Nat.choose 262144 139502 * (∏ i ∈ Finset.range 8430, (131072 + 1 + i))
+      = Nat.choose 262144 131072 * (∏ i ∈ Finset.range 8430, (262144 - 131072 - i)) := by
+    have h := choose_shift 262144 131072 8430
+    rwa [show (131072 + 8430 : ℕ) = 139502 by norm_num] at h
   have hcb : (4 : ℕ) ^ 131072 < 131072 * Nat.choose 262144 131072 := by
     have h := Nat.four_pow_lt_mul_centralBinom 131072 (by norm_num)
     rw [Nat.centralBinom_eq_two_mul_choose,
@@ -226,7 +226,7 @@ theorem pigeonhole {α β : Type} [Fintype β] [DecidableEq β]
 set_option maxRecDepth 40000 in
 theorem exists_big_fiber :
     ∃ σ : Fin rr → K,
-      ((2 ^ 31 - 2 ^ 24 + 1) ^ 6 - 1) ^ 2 <
+      (2 ^ 31 - 2 ^ 24 + 1) ^ 2 <
         ((Finset.powersetCard tt (Finset.univ : Finset Idx)).filter
           (fun J => key J = σ)).card := by
   refine pigeonhole (Finset.powersetCard tt (Finset.univ : Finset Idx)) key _ ?_
@@ -267,12 +267,12 @@ theorem g_coeff_gt {J : Finset Idx} (hJ : J.card = tt) {d : ℕ} (hd : tt < d) :
   rw [g_natDegree, hJ]; exact hd
 
 theorem coeff_eq_of_key {J J' : Finset Idx} (hkey : key J = key J')
-    {d : ℕ} (hd1 : 131072 ≤ d) (hd2 : d ≤ 139491) :
+    {d : ℕ} (hd1 : 131072 ≤ d) (hd2 : d ≤ 139501) :
     (g J).coeff d = (g J').coeff d := by
-  have hi : 139491 - d < 8420 := by omega
-  have h := congrFun hkey ⟨139491 - d, hi⟩
+  have hi : 139501 - d < 8430 := by omega
+  have h := congrFun hkey ⟨139501 - d, hi⟩
   simp only [key] at h
-  rwa [show (139492 : ℕ) - 1 - (139491 - d) = d by omega] at h
+  rwa [show (139502 : ℕ) - 1 - (139501 - d) = d by omega] at h
 
 /-- Two members of the same fibre differ by a polynomial of degree `< 131072`,
 which is exactly the row-degree budget of the code. -/
@@ -283,8 +283,8 @@ theorem sub_degree_lt {J J' : Finset Idx}
   intro d hd
   have hdn : (131072 : ℕ) ≤ d := by exact_mod_cast hd
   rw [Polynomial.coeff_sub]
-  rcases lt_trichotomy d 139492 with hlt | heq | hgt
-  · have hle : d ≤ 139491 := by omega
+  rcases lt_trichotomy d 139502 with hlt | heq | hgt
+  · have hle : d ≤ 139501 := by omega
     rw [coeff_eq_of_key (J := J') (J' := J) hkey.symm hdn hle, sub_self]
   · have : d = tt := heq
     subst this
@@ -342,7 +342,7 @@ noncomputable def sigma0 : Fin rr → K := Classical.choose exists_big_fiber
 noncomputable def Fam : Finset (Finset Idx) :=
   (Finset.powersetCard tt (Finset.univ : Finset Idx)).filter (fun J => key J = sigma0)
 
-theorem Fam_card_gt : ((2 ^ 31 - 2 ^ 24 + 1) ^ 6 - 1) ^ 2 < Fam.card :=
+theorem Fam_card_gt : (2 ^ 31 - 2 ^ 24 + 1) ^ 2 < Fam.card :=
   Classical.choose_spec exists_big_fiber
 
 theorem Fam_card_eq {J : Finset Idx} (h : J ∈ Fam) : J.card = tt :=
@@ -426,7 +426,7 @@ theorem word_agree (a : Carrier) (j : Idx) (hj : j ∈ a.val) :
 theorem word_far (u : Fin kk → FF) (S : Finset Idx) (hcard : tt < S.card)
     (hagree : ∀ j ∈ S, word j = IRSProfile.encoder u j) : False := by
   classical
-  have hSbig : 139492 < S.card := hcard
+  have hSbig : 139502 < S.card := hcard
   let q : Polynomial FF := ToyProblem.Spec.rsPolynomial (kk / ss)
     (unflatten kk ss IRSProfile.interleaving_dvd_totalDimension u 0)
   have hqdeg0 : q.degree < ((kk / ss : ℕ) : WithBot ℕ) :=
@@ -456,7 +456,7 @@ theorem word_far (u : Fin kk → FF) (S : Finset Idx) (hcard : tt < S.card)
     Polynomial.eq_of_degrees_lt_of_eval_index_eq S IRSProfile.domain.injective.injOn
       hPdegS hqdegS heval
   rw [heq] at hnd
-  have hnd' : q.natDegree = 139492 := hnd
+  have hnd' : q.natDegree = 139502 := hnd
   have hq0 : q ≠ 0 := by
     intro h0
     rw [h0] at hnd'
@@ -488,59 +488,77 @@ theorem pmsg_injective : Function.Injective pmsg := by
   rw [← gF_eval_zero_iff a.val j, ← gF_eval_zero_iff b.val j, hgF]
 
 
-/-! ## The unsafe suffix from `delta* = 15/32` -/
+/-! ## The unsafe suffix below `15/32` -/
 
 theorem card_Carrier : Fintype.card Carrier = Fam.card := Fintype.card_coe _
 
-theorem carrier_large : (Fintype.card FF - 1) ^ 2 < Fintype.card Carrier := by
-  rw [card_Carrier, card_FF]
+theorem carrier_large : (2 ^ 31 - 2 ^ 24 + 1) ^ 2 < Fintype.card Carrier := by
+  rw [card_Carrier]
   exact Fam_card_gt
 
+/-- The selected injective challenge image already has density above `2^-128`. -/
+theorem target_lt_card_ratio :
+    (ProximityGap.prizeThreshold : ℝ≥0) <
+      (((2 ^ 31 - 2 ^ 24 + 1) ^ 2 : ℕ) : ℝ≥0) / Fintype.card FF := by
+  rw [card_FF]
+  unfold ProximityGap.prizeThreshold
+  norm_num [div_pow, div_lt_div_iff₀]
+
 /-- For every radius in the certified band, the worst-case winning-challenge
-density is exactly one. -/
-theorem winningSetDensity_eq_one (δ : ℝ≥0)
-    (hlo : (30663 / 65536 : ℝ≥0) ≤ δ)
+density is strictly above the prize threshold. -/
+theorem winningSetDensity_gt_target (δ : ℝ≥0)
+    (hlo : (61321 / 131072 : ℝ≥0) ≤ δ)
     (hhi : δ < IRSProfile.minRelativeDistance) :
-    winningSetDensity IRSProfile.encoder δ = 1 := by
+    (ProximityGap.prizeThreshold : ℝ≥0) < winningSetDensity IRSProfile.encoder δ := by
   classical
   have hcardI : Fintype.card Idx = 262144 := card_Idx
-  have hd_lo : (30663 / 65536 : ℝ) ≤ (δ : ℝ) := by exact_mod_cast hlo
+  have hd_lo : (61321 / 131072 : ℝ) ≤ (δ : ℝ) := by exact_mod_cast hlo
   have hd_hi : (δ : ℝ) < 131073 / 262144 := by
     have h : (δ : ℝ) < (IRSProfile.minRelativeDistance : ℝ) := by exact_mod_cast hhi
     rwa [show ((IRSProfile.minRelativeDistance : ℝ≥0) : ℝ) = 131073 / 262144 by
       unfold IRSProfile.minRelativeDistance; norm_num] at h
   have hx_lo : (131071 : ℝ) < (1 - (δ : ℝ)) * 262144 := by nlinarith
-  have hx_hi : (1 - (δ : ℝ)) * 262144 ≤ 139492 := by nlinarith
+  have hx_hi : (1 - (δ : ℝ)) * 262144 ≤ 139502 := by nlinarith
   have hx_pos : (0 : ℝ) ≤ (1 - (δ : ℝ)) * 262144 := by linarith
   have ht'_lo : 131072 ≤ Nat.ceil ((1 - (δ : ℝ)) * 262144) := by
     have h : 131071 < Nat.ceil ((1 - (δ : ℝ)) * 262144) :=
       Nat.lt_ceil.mpr (by exact_mod_cast hx_lo)
     omega
-  have ht'_hi : Nat.ceil ((1 - (δ : ℝ)) * 262144) ≤ 139492 :=
+  have ht'_hi : Nat.ceil ((1 - (δ : ℝ)) * 262144) ≤ 139502 :=
     Nat.ceil_le.mpr (by exact_mod_cast hx_hi)
   have hsub : ∀ a : Carrier, ∃ T ⊆ a.val, T.card = Nat.ceil ((1 - (δ : ℝ)) * 262144) := by
     intro a
     exact Finset.exists_subset_card_eq (by rw [Fam_card_eq a.prop]; exact ht'_hi)
   choose T hTsub hTcard using hsub
-  refine HalfRadiusCollision.winningSetSoundness_eq_one_of_large_fixed_word_list
-    (F := FF) (m := Nat.ceil ((1 - (δ : ℝ)) * 262144))
-    IRSProfile.encoder δ ?_ ?_ pmsg T word pmsg_injective carrier_large hTcard ?_ ?_
-  · rw [hcardI]
-    have hceil : ((Nat.ceil ((1 - (δ : ℝ)) * 262144) : ℕ) : ℝ) < (1 - (δ : ℝ)) * 262144 + 1 :=
-      Nat.ceil_lt_add_one hx_pos
-    have hone : (1 : ℕ) ≤ Nat.ceil ((1 - (δ : ℝ)) * 262144) := by omega
-    rw [Nat.cast_sub hone]
-    push_cast
-    linarith
-  · rw [hcardI]
-    have h := Nat.le_ceil ((1 - (δ : ℝ)) * 262144)
-    push_cast
-    exact h
-  · intro a j hj
-    exact word_agree a j (hTsub a hj)
-  · intro u S hS hzero
-    refine IRSHalfRadius.IRSProfile.message_eq_zero_of_zero_on_many u S ?_ hzero
-    have hm : IRSHalfRadius.m = 131072 := rfl
-    omega
+  have hLsq : ((2 ^ 31 - 2 ^ 24 + 1) ^ 2) ^ 2 ≤ Fintype.card FF := by
+    rw [card_FF]
+    norm_num
+  have hratio :
+      ((((2 ^ 31 - 2 ^ 24 + 1) ^ 2 : ℕ) : ℝ≥0) / Fintype.card FF) ≤
+        winningSetDensity IRSProfile.encoder δ := by
+    apply HalfRadiusCollision.card_ratio_le_winningSetDensity_of_large_fixed_word_list
+      (F := FF) (m := Nat.ceil ((1 - (δ : ℝ)) * 262144))
+      (L := (2 ^ 31 - 2 ^ 24 + 1) ^ 2)
+      IRSProfile.encoder δ (p := pmsg) (T := T) (f := word)
+      (hp := pmsg_injective) (hLpos := by positivity) (hLsq := hLsq)
+      (hlarge := carrier_large) (hTcard := hTcard)
+    · rw [hcardI]
+      have hceil : ((Nat.ceil ((1 - (δ : ℝ)) * 262144) : ℕ) : ℝ) <
+          (1 - (δ : ℝ)) * 262144 + 1 := Nat.ceil_lt_add_one hx_pos
+      have hone : (1 : ℕ) ≤ Nat.ceil ((1 - (δ : ℝ)) * 262144) := by omega
+      rw [Nat.cast_sub hone]
+      push_cast
+      linarith
+    · rw [hcardI]
+      have h := Nat.le_ceil ((1 - (δ : ℝ)) * 262144)
+      push_cast
+      exact h
+    · intro a j hj
+      exact word_agree a j (hTsub a hj)
+    · intro u S hS hzero
+      refine IRSHalfRadius.IRSProfile.message_eq_zero_of_zero_on_many u S ?_ hzero
+      have hm : IRSHalfRadius.m = 131072 := rfl
+      omega
+  exact target_lt_card_ratio.trans_le hratio
 
 end ProximityPrize.SubmissionUpper.PrescribedTop
