@@ -129,41 +129,6 @@ lemma exists_dot_offdiag_le {k : ℕ} (A : Finset (Fin k → F)) :
       by_cases heq : dot xy.1 v = dot xy.2 v <;> simp [hne, heq]
   simpa only [hoff] using hv
 
-theorem exists_dot_injective_on_subset {k : ℕ}
-    (A : Finset (Fin k → F)) (L : ℕ) (hLpos : 0 < L)
-    (hLcard : L ≤ A.card) (hLsq : L ^ 2 ≤ Fintype.card F) :
-    ∃ B : Finset (Fin k → F), B ⊆ A ∧ B.card = L ∧
-      ∃ v : Fin k → F, Set.InjOn (fun x => dot x v) B := by
-  classical
-  letI : Nonempty F := ⟨0⟩
-  obtain ⟨B, hBA, hBcard⟩ := Finset.exists_subset_card_eq hLcard
-  obtain ⟨v, hv⟩ := exists_dot_offdiag_le B
-  let O := ((B.product B).filter fun xy =>
-    xy.1 ≠ xy.2 ∧ dot xy.1 v = dot xy.2 v).card
-  have hOltQ : Fintype.card F * O < Fintype.card F := by
-    calc
-      Fintype.card F * O ≤ B.card * (B.card - 1) := by simpa only [O] using hv
-      _ = L * (L - 1) := by rw [hBcard]
-      _ < L ^ 2 := by
-        rw [pow_two]
-        exact Nat.mul_lt_mul_of_pos_left (Nat.sub_lt hLpos (by omega)) hLpos
-      _ ≤ Fintype.card F := hLsq
-  have hOlt : O < 1 := by
-    have hFpos : 0 < Fintype.card F := Fintype.card_pos
-    apply (Nat.mul_lt_mul_left hFpos).mp
-    simpa only [mul_one] using hOltQ
-  have hOzero : O = 0 := by omega
-  refine ⟨B, hBA, hBcard, v, ?_⟩
-  intro x hx y hy hxy
-  change x ∈ B at hx
-  change y ∈ B at hy
-  by_contra hne
-  have hm : (x, y) ∈ (B.product B).filter (fun xy =>
-      xy.1 ≠ xy.2 ∧ dot xy.1 v = dot xy.2 v) := by
-    simp [hx, hy, hne, hxy]
-  have : 0 < O := Finset.card_pos.mpr ⟨(x, y), hm⟩
-  omega
-
 theorem exists_dot_surjective_of_card_sq_lt {k : ℕ} (A : Finset (Fin k → F))
     (hlarge : (Fintype.card F - 1) ^ 2 < A.card) :
     ∃ v : Fin k → F, A.image (fun x => dot x v) = Finset.univ := by
@@ -274,96 +239,11 @@ theorem exists_dot_surjective_of_card_sq_lt {k : ℕ} (A : Finset (Fin k → F))
 open ToyProblem
 open scoped NNReal
 
-theorem card_ratio_le_winningSetDensity_of_large_fixed_word_list
-    {ι B : Type} [Fintype ι]
-    [Fintype B] [DecidableEq B] [AddCommGroup B] [Module F B]
-    {k m L : ℕ} (enc : (Fin k → F) →ₗ[F] (ι → B)) (δ : ℝ≥0)
-    (hlower : ((m - 1 : ℕ) : ℝ) <
-      (1 - (δ : ℝ)) * Fintype.card ι)
-    (hupper : (1 - (δ : ℝ)) * Fintype.card ι ≤ (m : ℝ))
-    {J : Type} [Fintype J] [DecidableEq J]
-    (p : J → Fin k → F) (T : J → Finset ι) (f : ι → B)
-    (hp : Function.Injective p)
-    (hLpos : 0 < L) (hLsq : L ^ 2 ≤ Fintype.card F)
-    (hlarge : L < Fintype.card J)
-    (hTcard : ∀ a, (T a).card = m)
-    (hag : ∀ a i, i ∈ T a → f i = enc (p a) i)
-    (hzero : ∀ (u : Fin k → F) (S : Finset ι), m ≤ S.card →
-      (∀ i ∈ S, enc u i = 0) → u = 0) :
-    (L : ℝ≥0) / Fintype.card F ≤ winningSetDensity enc δ := by
-  classical
-  let P : Finset (Fin k → F) := Finset.univ.image p
-  have hPcard : P.card = Fintype.card J := by
-    simp only [P, Finset.card_image_of_injective Finset.univ hp, Finset.card_univ]
-  obtain ⟨D, hDP, hDcard, v, hvinj⟩ :=
-    exists_dot_injective_on_subset P L hLpos (by rw [hPcard]; omega) hLsq
-  let G : Finset F := D.image (fun u => dot u v)
-  have hGcard : G.card = L := by
-    change (D.image (fun u => dot u v)).card = L
-    rw [Finset.card_image_of_injOn hvinj, hDcard]
-  let x : ViolatingInstance enc δ :=
-    { v := v
-      μ₁ := 0
-      μ₂ := 1
-      f₁ := f
-      f₂ := 0
-      violates := by
-        intro hrel
-        rcases hrel with ⟨W, ⟨M, hW, hc⟩, S, hS, hA⟩
-        have hmS : m ≤ S.card := by
-          have hltR : ((m - 1 : ℕ) : ℝ) < (S.card : ℝ) :=
-            lt_of_lt_of_le hlower hS
-          have hlt : m - 1 < S.card := by exact_mod_cast hltR
-          omega
-        have henczero : ∀ i ∈ S, enc (M 1) i = 0 := by
-          intro i hi
-          have h := hA 1 i hi
-          rw [hW 1] at h
-          simpa using h.symm
-        have hmzero : M 1 = 0 := hzero (M 1) S hmS henczero
-        have hc1 := hc 1
-        rw [hmzero] at hc1
-        simp at hc1 }
-  have hGsub : (↑G : Set F) ⊆ winningSetFor enc δ x.v x.μ₁ x.μ₂ x.f₁ x.f₂ := by
-    intro γ hγ
-    have hγ' : γ ∈ G := hγ
-    simp only [G, Finset.mem_image] at hγ'
-    rcases hγ' with ⟨u, huD, huγ⟩
-    have huP : u ∈ P := hDP huD
-    simp only [P, Finset.mem_image, Finset.mem_univ, true_and] at huP
-    rcases huP with ⟨a, rfl⟩
-    rw [winningSetFor, Set.mem_setOf_eq]
-    refine ⟨![enc (p a)], ?_, T a, ?_, ?_⟩
-    · refine ⟨![p a], ?_, ?_⟩
-      · intro i
-        fin_cases i
-        rfl
-      · intro i
-        fin_cases i
-        simpa [x, dot] using huγ
-    · rw [hTcard]
-      simpa using hupper
-    · intro i j hj
-      fin_cases i
-      simpa [x] using hag a j hj
-  have hwinFinite : (winningSetFor enc δ x.v x.μ₁ x.μ₂ x.f₁ x.f₂).Finite :=
-    Set.finite_univ.subset (Set.subset_univ _)
-  have hcardWin : G.card ≤
-      (winningSetFor enc δ x.v x.μ₁ x.μ₂ x.f₁ x.f₂).ncard := by
-    simpa using Set.ncard_le_ncard hGsub hwinFinite
-  calc
-    (L : ℝ≥0) / Fintype.card F = (G.card : ℝ≥0) / Fintype.card F := by rw [hGcard]
-    _ ≤ ((winningSetFor enc δ x.v x.μ₁ x.μ₂ x.f₁ x.f₂).ncard : ℝ≥0) /
-        Fintype.card F := by
-      gcongr
-    _ = winningSetRatio x := by rw [winningSetRatio]
-    _ ≤ winningSetDensity enc δ := winningSetRatio_le_winningSetDensity x
-
 theorem winningSetSoundness_eq_one_of_large_fixed_word_list
     {ι B : Type} [Fintype ι]
     [Fintype B] [DecidableEq B] [AddCommGroup B] [Module F B]
-    {k m : ℕ} (enc : (Fin k → F) →ₗ[F] (ι → B)) (δ : ℝ≥0)
-    (hlower : ((m - 1 : ℕ) : ℝ) <
+    {k m z : ℕ} (enc : (Fin k → F) →ₗ[F] (ι → B)) (δ : ℝ≥0)
+    (hlower : ((z - 1 : ℕ) : ℝ) <
       (1 - (δ : ℝ)) * Fintype.card ι)
     (hupper : (1 - (δ : ℝ)) * Fintype.card ι ≤ (m : ℝ))
     {J : Type} [Fintype J] [DecidableEq J]
@@ -372,7 +252,7 @@ theorem winningSetSoundness_eq_one_of_large_fixed_word_list
     (hlarge : (Fintype.card F - 1) ^ 2 < Fintype.card J)
     (hTcard : ∀ a, (T a).card = m)
     (hag : ∀ a i, i ∈ T a → f i = enc (p a) i)
-    (hzero : ∀ (u : Fin k → F) (S : Finset ι), m ≤ S.card →
+    (hzero : ∀ (u : Fin k → F) (S : Finset ι), z ≤ S.card →
       (∀ i ∈ S, enc u i = 0) → u = 0) :
     winningSetDensity enc δ = 1 := by
   classical
@@ -398,17 +278,17 @@ theorem winningSetSoundness_eq_one_of_large_fixed_word_list
       violates := by
         intro hrel
         rcases hrel with ⟨W, ⟨M, hW, hc⟩, S, hS, hA⟩
-        have hmS : m ≤ S.card := by
-          have hltR : ((m - 1 : ℕ) : ℝ) < (S.card : ℝ) :=
+        have hzS : z ≤ S.card := by
+          have hltR : ((z - 1 : ℕ) : ℝ) < (S.card : ℝ) :=
             lt_of_lt_of_le hlower hS
-          have hlt : m - 1 < S.card := by exact_mod_cast hltR
+          have hlt : z - 1 < S.card := by exact_mod_cast hltR
           omega
         have henczero : ∀ i ∈ S, enc (M 1) i = 0 := by
           intro i hi
           have h := hA 1 i hi
           rw [hW 1] at h
           simpa using h.symm
-        have hmzero : M 1 = 0 := hzero (M 1) S hmS henczero
+        have hmzero : M 1 = 0 := hzero (M 1) S hzS henczero
         have hc1 := hc 1
         rw [hmzero] at hc1
         simp at hc1 }
