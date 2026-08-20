@@ -2,7 +2,8 @@
 Copyright (c) 2026 Proximity Prize Contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
-import ProximityPrize.Benchmark.TargetLower
+import ProximityPrize.SubmissionLower.LineDecoding
+import ProximityPrize.SubmissionLower.ListCertificate
 
 /-!
 # Lower reduction-threshold baseline
@@ -160,6 +161,58 @@ theorem certifiedGammaError_quarter_le_two_pow_neg_160 :
         ENNReal.toReal_div, ENNReal.toReal_div]
       norm_num [IRSProfile.Index, IRSProfile.Field, KoalaBear.Ext6]
 
+/-- At the first grid radius that can improve the score, the reduction follows from one
+profile-specific line-decodability statement.  The list contribution is discharged
+unconditionally by `squared_lambda_improved_le_18040536`. -/
+theorem certifiedGammaError_improved_le_reductionTarget_of_lineDecodable
+    (hline : CodingTheory.IsLineDecodable (F := IRSProfile.Field)
+      (IRSProfile.code : Set (IRSProfile.Index →
+        Fin IRSProfile.interleaving → IRSProfile.Field))
+      (65542 / 262144 : ℝ≥0) (2 ^ 57) (Fintype.card IRSProfile.Index + 1)) :
+    certifiedGammaError IRSProfile.code (65542 / 262144 : ℝ≥0) ≤
+      reductionTarget := by
+  have hmca :
+      mcaError (AffineLineGenerator IRSProfile.Field) IRSProfile.code
+          (65542 / 262144 : ℝ) ≤
+        ((2 ^ 57 : ℕ) : ENNReal) /
+          (Fintype.card IRSProfile.Field : ENNReal) := by
+    exact CodingTheory.IsLineDecodable.mcaError_le IRSProfile.code
+      (65542 / 262144 : ℝ≥0) (2 ^ 57) (by norm_num) (by norm_num) hline
+  have hLambdaNat :
+      (Code.Lambda SquaredCode (65542 / 262144 : ℝ)).toNat ≤ 18040536 := by
+    apply ENat.toNat_le_of_le_coe
+    simpa [ImprovedRadius] using squared_lambda_improved_le_18040536
+  have hList :
+      ((Code.Lambda SquaredCode (65542 / 262144 : ℝ)).toNat : ENNReal) /
+          (Fintype.card IRSProfile.Field : ENNReal) ≤
+        (18040536 : ENNReal) /
+          (Fintype.card IRSProfile.Field : ENNReal) := by
+    exact ENNReal.div_le_div_right (by exact_mod_cast hLambdaNat) _
+  rw [← ENNReal.coe_le_coe, coe_certifiedGammaError]
+  calc
+    mcaError (AffineLineGenerator IRSProfile.Field) IRSProfile.code
+          (65542 / 262144 : ℝ) +
+        ((Code.Lambda SquaredCode (65542 / 262144 : ℝ)).toNat : ENNReal) /
+          (Fintype.card IRSProfile.Field : ENNReal) ≤
+      ((2 ^ 57 : ℕ) : ENNReal) /
+          (Fintype.card IRSProfile.Field : ENNReal) +
+        (18040536 : ENNReal) /
+          (Fintype.card IRSProfile.Field : ENNReal) := add_le_add hmca hList
+    _ ≤ (reductionTarget : ENNReal) := by
+      have hne :
+          ((2 ^ 57 : ℕ) : ENNReal) /
+                (Fintype.card IRSProfile.Field : ENNReal) +
+              (18040536 : ENNReal) /
+                (Fintype.card IRSProfile.Field : ENNReal) ≠ ⊤ := by
+        rw [ENNReal.add_ne_top]
+        constructor <;> apply ENNReal.div_ne_top <;> simp
+      apply (ENNReal.toReal_le_toReal hne (by simp [reductionTarget])).mp
+      have hparts := ENNReal.add_ne_top.mp hne
+      rw [ENNReal.toReal_add hparts.1 hparts.2,
+        ENNReal.toReal_div, ENNReal.toReal_div]
+      norm_num [IRSProfile.Field, KoalaBear.Ext6, reductionTarget,
+        ProximityGap.prizeThreshold]
+
 theorem two_rpow_twenty_two_div_twenty_five_ge :
     (235 : ℝ≥0) / 128 ≤ (2 : ℝ≥0) ^ ((22 : ℝ) / 25) := by
   have hroot :
@@ -171,6 +224,20 @@ theorem two_rpow_twenty_two_div_twenty_five_ge :
     (235 : ℝ≥0) / 128 ≤
         ((2 : ℝ≥0) ^ (22 : ℕ)) ^ ((25 : ℝ)⁻¹) := hroot
     _ = (2 : ℝ≥0) ^ ((22 : ℝ) / 25) := by
+      rw [← NNReal.rpow_natCast_mul]
+      norm_num [div_eq_mul_inv]
+
+theorem two_rpow_eighty_seven_div_hundred_ge :
+    (1871 : ℝ≥0) / 1024 ≤ (2 : ℝ≥0) ^ ((87 : ℝ) / 100) := by
+  have hroot :
+      (1871 : ℝ≥0) / 1024 ≤
+        ((2 : ℝ≥0) ^ (87 : ℕ)) ^ ((100 : ℝ)⁻¹) := by
+    rw [NNReal.le_rpow_inv_iff (by norm_num : (0 : ℝ) < 100)]
+    norm_num [div_pow, div_le_iff₀]
+  calc
+    (1871 : ℝ≥0) / 1024 ≤
+        ((2 : ℝ≥0) ^ (87 : ℕ)) ^ ((100 : ℝ)⁻¹) := hroot
+    _ = (2 : ℝ≥0) ^ ((87 : ℝ) / 100) := by
       rw [← NNReal.rpow_natCast_mul]
       norm_num [div_eq_mul_inv]
 
@@ -215,6 +282,48 @@ theorem candidate : ProtocolClaim 5312 1 4 where
         unfold claimedError
         rw [show -((((5312 : ℕ) : ℝ) / 100)) =
             -((54 : ℕ) : ℝ) + (22 : ℝ) / 25 by norm_num,
+          NNReal.rpow_add (by norm_num : (2 : ℝ≥0) ≠ 0),
+          NNReal.rpow_neg, NNReal.rpow_natCast]
+        norm_num
+
+/-- The exact 53.13 candidate, reduced to the sole remaining profile-specific
+line-decodability theorem. -/
+theorem candidate_5313_of_lineDecodable
+    (hline : CodingTheory.IsLineDecodable (F := IRSProfile.Field)
+      (IRSProfile.code : Set (IRSProfile.Index →
+        Fin IRSProfile.interleaving → IRSProfile.Field))
+      (65542 / 262144 : ℝ≥0) (2 ^ 57) (Fintype.card IRSProfile.Index + 1)) :
+    ProtocolClaim 5313 65542 262144 where
+  admissible := by
+    constructor <;> norm_num [claimedRadius, IRSProfile.minRelativeDistance]
+  reduction := by
+    have h :=
+      ProximityPrize.SubmissionLower.certifiedGammaError_improved_le_reductionTarget_of_lineDecodable
+        hline
+    have hr : claimedRadius 65542 262144 = (65542 / 262144 : ℝ≥0) := by
+      norm_num [claimedRadius]
+    have hc :
+        ReedSolomon.Interleaved.irsCode IRSProfile.domain
+            IRSProfile.totalDimension IRSProfile.interleaving =
+          IRSProfile.code := by
+      rfl
+    rw [ToyProblem.Impl.IRS.certifiedGammaError, hr, hc]
+    exact h
+  score := by
+    calc
+      (1 - claimedRadius 65542 262144) ^ IRSProfile.repetitions ≤
+          ((1 : ℝ≥0) / 2 ^ (54 : ℕ)) * (1871 / 1024) := by
+        rw [← NNReal.coe_le_coe]
+        norm_num [claimedRadius, IRSProfile.repetitions, div_le_iff₀]
+      _ ≤ ((1 : ℝ≥0) / 2 ^ (54 : ℕ)) *
+            (2 : ℝ≥0) ^ ((87 : ℝ) / 100) := by
+        exact mul_le_mul_of_nonneg_left
+          ProximityPrize.SubmissionLower.two_rpow_eighty_seven_div_hundred_ge
+          (by positivity)
+      _ = claimedError 5313 := by
+        unfold claimedError
+        rw [show -((((5313 : ℕ) : ℝ) / 100)) =
+            -((54 : ℕ) : ℝ) + (87 : ℝ) / 100 by norm_num,
           NNReal.rpow_add (by norm_num : (2 : ℝ≥0) ≠ 0),
           NNReal.rpow_neg, NNReal.rpow_natCast]
         norm_num
