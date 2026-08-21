@@ -352,19 +352,19 @@ theorem exists_linear_resultant_witness
     (R : Polynomial (Polynomial (Polynomial
       ProximityPrize.Benchmark.IRSProfile.Field)))
     (hRi : Irreducible R) (hRdeg : R.natDegree = 1)
-    (hYZ : YZCap R 55744)
+    (hYZ : YZCap R 497543)
     (hWeighted : ∀ j a, ((R.coeff j).coeff a) ≠ 0 →
-      a + 131071 * j < 36923454)
+      a + 131071 * j < 110327280)
     (T : Finset ProximityPrize.Benchmark.IRSProfile.Field)
     (P : ProximityPrize.Benchmark.IRSProfile.Field →
       Polynomial ProximityPrize.Benchmark.IRSProfile.Field)
     (hvan : ∀ z ∈ T, triEval R z (P z) = 0) :
     ∃ Res : Polynomial ProximityPrize.Benchmark.IRSProfile.Field,
-      Res ≠ 0 ∧ Res.natDegree ≤ (2 * 36923454 - 131071) * 55744 ∧
+      Res ≠ 0 ∧ Res.natDegree ≤ (2 * 110327280 - 131071) * 497543 ∧
       ∀ z ∈ T, Res.eval z ≠ 0 → ∀ x,
         (linearHSpecialization R z x).natDegree = 1 := by
   classical
-  have hOuter : ∀ j, (R.coeff j).natDegree ≤ 36923453 := by
+  have hOuter : ∀ j, (R.coeff j).natDegree ≤ 110327279 := by
     intro j
     by_cases hz : R.coeff j = 0
     · simp [hz]
@@ -373,7 +373,7 @@ theorem exists_linear_resultant_witness
         exact Polynomial.leadingCoeff_ne_zero.mpr hz
       have hw := hWeighted j (R.coeff j).natDegree hne
       omega
-  have hInner : ∀ j, Polynomial.Bivariate.degreeX (R.coeff j) ≤ 55744 := by
+  have hInner : ∀ j, Polynomial.Bivariate.degreeX (R.coeff j) ≤ 497543 := by
     intro j
     unfold Polynomial.Bivariate.degreeX
     apply Finset.sup_le
@@ -384,14 +384,14 @@ theorem exists_linear_resultant_witness
   have hCoeffOne : R.coeff 1 ≠ 0 := by
     rw [← hRdeg]
     exact Polynomial.leadingCoeff_ne_zero.mpr hRi.ne_zero
-  have hOuterOne : (R.coeff 1).natDegree + 131071 ≤ 36923453 := by
+  have hOuterOne : (R.coeff 1).natDegree + 131071 ≤ 110327279 := by
     have hne : (R.coeff 1).coeff (R.coeff 1).natDegree ≠ 0 := by
       rw [Polynomial.coeff_natDegree]
       exact Polynomial.leadingCoeff_ne_zero.mpr hCoeffOne
     have hw := hWeighted 1 (R.coeff 1).natDegree hne
     omega
   obtain ⟨w, hwdeg⟩ := effectivePrimitiveObstructionZ_of_irreducible
-    R hRi (by omega) 55744 36923453 131071 (by norm_num [F,
+    R hRi (by omega) 497543 110327279 131071 (by norm_num [F,
       ProximityPrize.Benchmark.IRSProfile.Field]) hRdeg hOuter hOuterOne hInner
   refine ⟨w.obstruction, w.ne, ?_, ?_⟩
   · exact hwdeg.trans (by norm_num)

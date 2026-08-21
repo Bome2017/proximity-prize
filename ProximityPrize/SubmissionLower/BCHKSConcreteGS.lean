@@ -12,10 +12,10 @@ set_option maxHeartbeats 4000000
 
 def n : ℕ := 262144
 def k : ℕ := 131071
-def m : ℕ := 199
-def DX : ℕ := 36923454
-def DY : ℕ := 282
-def DZ : ℕ := 55744
+def m : ℕ := 595
+def DX : ℕ := 110327280
+def DY : ℕ := 842
+def DZ : ℕ := 497543
 
 /-- Coefficients of `X^a Y^j Z^h`. -/
 abbrev VarIndex := Σ j : Fin DY, Fin (DX - k * (j : ℕ)) × Fin (DZ - (j : ℕ))
@@ -113,17 +113,109 @@ theorem polyMap_ne_zero {F : Type} [Field F] (c : VarIndex → F) (hc : c ≠ 0)
   rw [hQ] at h
   simpa using h.symm
 
-open scoped BigOperators in
-theorem card_var : Fintype.card VarIndex = 290453508111605 := by
-  rw [Fintype.card_sigma]
-  simp only [Fintype.card_prod, Fintype.card_fin, Finset.sum_fin_eq_sum_range]
-  norm_num (config := { maxSteps := 10000000 }) [DX, DY, DZ, k, Finset.sum_range_succ]
+/- Compute the two large index-cardinality sums through one closed formula.
+Unrolling `sum_range_succ` at the concrete `DY` and `m` values produces a
+multi-megabyte proof term and makes independent kernel replay needlessly
+expensive. -/
+private theorem six_mul_sum_affine_product_int (A K B : ℤ) (N : ℕ) :
+    6 * (∑ i ∈ Finset.range N,
+      (A - K * (i : ℤ)) * (B - (i : ℤ))) =
+      (N : ℤ) *
+        (6 * A * B - 3 * (A + K * B) * ((N : ℤ) - 1) +
+          K * ((N : ℤ) - 1) * (2 * (N : ℤ) - 1)) := by
+  induction N with
+  | zero => simp
+  | succ N ih =>
+      rw [Finset.sum_range_succ, mul_add, ih]
+      push_cast
+      ring
+
+private theorem card_var_sum :
+    (∑ i ∈ Finset.range DY, (DX - k * i) * (DZ - i)) =
+      23116969928836558 := by
+  simp only [DY, DX, k, DZ]
+  have hA : ∀ i ∈ Finset.range 842, 131071 * i ≤ 110327280 := by
+    intro i hi
+    simp only [Finset.mem_range] at hi
+    omega
+  have hB : ∀ i ∈ Finset.range 842, i ≤ 497543 := by
+    intro i hi
+    simp only [Finset.mem_range] at hi
+    omega
+  have hcast :
+      ((∑ i ∈ Finset.range 842,
+        (110327280 - 131071 * i) * (497543 - i) : ℕ) : ℤ) =
+      ∑ i ∈ Finset.range 842,
+        ((110327280 : ℤ) - 131071 * (i : ℤ)) * (497543 - (i : ℤ)) := by
+    rw [Nat.cast_sum]
+    apply Finset.sum_congr rfl
+    intro i hi
+    rw [Nat.cast_mul, Nat.cast_sub (hA i hi), Nat.cast_mul,
+      Nat.cast_ofNat, Nat.cast_sub (hB i hi)]
+    norm_num
+  have hclosed := six_mul_sum_affine_product_int
+    (110327280 : ℤ) 131071 497543 842
+  rw [← hcast] at hclosed
+  have hvalue :
+      (842 : ℤ) *
+        (6 * 110327280 * 497543 -
+          3 * (110327280 + 131071 * 497543) * ((842 : ℤ) - 1) +
+          131071 * ((842 : ℤ) - 1) * (2 * (842 : ℤ) - 1)) =
+        6 * 23116969928836558 := by norm_num
+  have hsix :
+      (6 : ℤ) * ((∑ i ∈ Finset.range 842,
+        (110327280 - 131071 * i) * (497543 - i) : ℕ) : ℤ) =
+        6 * 23116969928836558 := hclosed.trans hvalue
+  omega
+
+private theorem card_con_sum :
+    n * (∑ i ∈ Finset.range m, (m - i) * (DZ - i)) =
+      23116969921740800 := by
+  simp only [n, m, DZ]
+  have hA : ∀ i ∈ Finset.range 595, i ≤ 595 := by
+    intro i hi
+    simp only [Finset.mem_range] at hi
+    omega
+  have hB : ∀ i ∈ Finset.range 595, i ≤ 497543 := by
+    intro i hi
+    simp only [Finset.mem_range] at hi
+    omega
+  have hcast :
+      ((∑ i ∈ Finset.range 595,
+        (595 - i) * (497543 - i) : ℕ) : ℤ) =
+      ∑ i ∈ Finset.range 595,
+        ((595 : ℤ) - (i : ℤ)) * (497543 - (i : ℤ)) := by
+    rw [Nat.cast_sum]
+    apply Finset.sum_congr rfl
+    intro i hi
+    rw [Nat.cast_mul, Nat.cast_sub (hA i hi), Nat.cast_sub (hB i hi)]
+    norm_num
+  have hclosed := six_mul_sum_affine_product_int
+    (595 : ℤ) 1 497543 595
+  simp only [one_mul] at hclosed
+  have hsix :
+      (6 : ℤ) * ((∑ i ∈ Finset.range 595,
+        (595 - i) * (497543 - i) : ℕ) : ℤ) =
+        6 * 88184241950 := by
+    rw [hcast]
+    calc
+      _ = _ := hclosed
+      _ = 6 * 88184241950 := by norm_num
+  have hsum : (∑ i ∈ Finset.range 595,
+      (595 - i) * (497543 - i)) = 88184241950 := by omega
+  norm_num [hsum]
 
 open scoped BigOperators in
-theorem card_con : Fintype.card ConIndex = 290453507276800 := by
+theorem card_var : Fintype.card VarIndex = 23116969928836558 := by
+  rw [Fintype.card_sigma]
+  simp only [Fintype.card_prod, Fintype.card_fin, Finset.sum_fin_eq_sum_range]
+  exact card_var_sum
+
+open scoped BigOperators in
+theorem card_con : Fintype.card ConIndex = 23116969921740800 := by
   rw [Fintype.card_prod, Fintype.card_sigma]
   simp only [Fintype.card_prod, Fintype.card_fin, Finset.sum_fin_eq_sum_range]
-  norm_num (config := { maxSteps := 10000000 }) [n, m, DZ, Finset.sum_range_succ]
+  exact card_con_sum
 
 theorem card_con_lt_var : Fintype.card ConIndex < Fintype.card VarIndex := by
   rw [card_con, card_var]

@@ -52,6 +52,9 @@ open RationalFunctions.HenselNumerators.ConcreteFiniteNumerators
 
 variable {F : Type} [Field F] [Fintype F] [DecidableEq F]
 
+/- The coarse selected-data theorem is referenced only by retired assembly
+modules.  The live proof calls the exact-`YZ` theorem below directly. -/
+/-
 /-- Final selected-data alignment theorem, using the canonical finite-Hensel lift. -/
 theorem hensel_baseZ_alignment_final
     {H : F[X][Y]} [Fact (Irreducible H)] [Fact (0 < H.natDegree)]
@@ -227,6 +230,7 @@ theorem hensel_baseZ_alignment_final
       exact (Polynomial.natDegree_add_le _ _).trans
         (max_le hp₀ ((Polynomial.natDegree_C_mul_le _ _).trans hp₁))
     exact max_lt ((hPdeg z).trans_lt hkF) (hq.trans_lt hkF)
+-/
 
 
 theorem hensel_baseZ_alignment_final_exact_yz
@@ -234,7 +238,7 @@ theorem hensel_baseZ_alignment_final_exact_yz
     (x₀ : F) (R : F[X][X][Y])
     (hHyp : HenselNumerators.Hypotheses x₀ R H)
     (hzeta : HenselNumerators.zeta R x₀ H ≠ 0)
-    (D k DX : ℕ) (hkDX : k < DX)
+    (D d k DX e : ℕ) (hkDX : k < DX)
     (hHD : Bivariate.totalDegree H ≤ D)
     (hRD : YZCap R D)
     (hRdeg : 2 ≤ Bivariate.natDegreeY R)
@@ -256,6 +260,11 @@ theorem hensel_baseZ_alignment_final_exact_yz
       (HenselNumerators.xiPre x₀ R H) ≠ 0)
     (hden : ∀ t, t < DX → ∀ z : T,
       piZ (z:F) (root z) (concreteDenRegularBridge x₀ R hHyp t) ≠ 0)
+    (hweight : ∀ t, k < t → t < DX →
+      regularWeight (Fact.out : 0 < H.natDegree)
+        (concreteBetaUpTo x₀ R hHyp hzeta DX t) D ≤
+          (WithBot.some ((2*t+1)*d*D) : WithBot ℕ))
+    (hcard : 2*DX*H.natDegree*d*D + e + 1 < T.card)
     (hkF : k < Fintype.card F)
     (A : Finset F) (hAcard : k+1 ≤ A.card) (U₀ U₁ : F → F)
     (Fib : A → Finset T)
@@ -263,6 +272,7 @@ theorem hensel_baseZ_alignment_final_exact_yz
       (((2*k+1)*Bivariate.natDegreeY R*D)+1)*H.natDegree < (Fib x).card)
     (hagree : ∀ x : A, ∀ z ∈ Fib x,
       (P z).eval (x:F) = U₀ x + (z:F) * U₁ x) :
+    (∀ t, k < t → t < DX → finiteAlpha (R:=R) (H:=H) x₀ DX t = 0) ∧
     ∃ p₀ p₁ : F[X], p₀.natDegree ≤ k ∧ p₁.natDegree ≤ k ∧
       ∀ z : T, P z = p₀ + Polynomial.C (z:F) * p₁ := by
   have hspecializes : ∀ z : T, ∀ n, n ≤ DX →
@@ -273,6 +283,14 @@ theorem hensel_baseZ_alignment_final_exact_yz
       (z:F) (root z) x₀ ((P z).eval x₀) (P z)
       (hx z) (hy z) hsL (hsimple z) rfl
       (hPdeg z |>.trans (Nat.le_of_lt hkDX)) (hExact z) (hslope z) (hW z) (hxi z) n hn
+  have hmiddle : ∀ t, k < t → t < DX →
+      finiteAlpha (R:=R) (H:=H) x₀ DX t = 0 := by
+    apply concreteFiniteAlpha_middle_vanish_regularDen x₀ R hHyp hzeta
+      D d k DX e hHD T root P (fun _ => x₀) hPdeg hspecializes
+    · intro t _ ht z; exact hden t ht z
+    · exact hweight
+    · exact hcard
+  refine ⟨hmiddle, ?_⟩
   let γ := canonicalFunctionFieldGamma H x₀ R DX k
   have hγeval : ∀ x ∈ A, γ.eval (fieldTo𝕃 (H:=H) x) =
       fieldTo𝕃 (H:=H) (U₀ x) + liftToFunctionField (H:=H) Polynomial.X * fieldTo𝕃 (H:=H) (U₁ x) := by
