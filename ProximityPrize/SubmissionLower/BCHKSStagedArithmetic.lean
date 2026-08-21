@@ -3,6 +3,9 @@ import ProximityPrize.SubmissionLower.BCHKSParameters
 
 namespace ProximityPrize.SubmissionLower
 
+/- Legacy uniform-capacity accounting.  The live staged proof uses the mixed
+linear/nonlinear bound below. -/
+/-
 /-- Summing a tailored per-factor obstruction of size `(2d-1) DZ` costs at
 most `2 DZ DY`; it is not charged the global bad budget once per factor. -/
 theorem sum_staged_R_capacities_le
@@ -30,26 +33,80 @@ theorem sum_staged_R_capacities_le
       exact Nat.add_le_add
         (Nat.add_le_add (Nat.mul_le_mul_left A hdsq) (Nat.mul_le_mul_left e hdsum))
         (Nat.mul_le_mul_left (2 * DZ) hdsum)
+-/
+
+/-- Mixed linear/nonlinear capacity accounting.  Linear first-stage factors
+retain `2*DX*DZ`; nonlinear factors use the exact-incidence coefficient
+`C*DZ*d`. -/
+theorem sum_staged_mixed_R_capacities_le
+    {ρ : Type*} [DecidableEq ρ] (Rs : Finset ρ)
+    (d bad : ρ → Nat) (DX C e DZ DY : Nat)
+    (hdsum : (∑ r ∈ Rs, d r) ≤ DY)
+    (hDX : 2 * DX ≤ C * DY)
+    (hbad : ∀ r ∈ Rs, bad r ≤ 2 * d r * DZ) :
+    (∑ r ∈ Rs,
+      ((if d r = 1 then 2 * DX * DZ else C * DZ * d r) * d r +
+        e * d r + bad r)) ≤
+      (C * DZ) * DY ^ 2 + e * DY + 2 * DZ * DY := by
+  have hdle : ∀ r ∈ Rs, d r ≤ DY := by
+    intro r hr
+    exact (Finset.single_le_sum (fun _ _ => Nat.zero_le _) hr).trans hdsum
+  have hpoint : ∀ r ∈ Rs,
+      (if d r = 1 then 2 * DX * DZ else C * DZ * d r) * d r +
+          e * d r + bad r ≤
+        C * DZ * DY * d r + e * d r + 2 * DZ * d r := by
+    intro r hr
+    have hb : bad r ≤ 2 * DZ * d r := by
+      calc
+        bad r ≤ 2 * d r * DZ := hbad r hr
+        _ = 2 * DZ * d r := by ring
+    have hfirst :
+        (if d r = 1 then 2 * DX * DZ else C * DZ * d r) * d r ≤
+          C * DZ * DY * d r := by
+      by_cases hd : d r = 1
+      · rw [if_pos hd]
+        simpa [Nat.mul_assoc, Nat.mul_comm, Nat.mul_left_comm] using
+          Nat.mul_le_mul_right (DZ * d r) hDX
+      · rw [if_neg hd]
+        simpa [Nat.mul_assoc, Nat.mul_comm, Nat.mul_left_comm] using
+          Nat.mul_le_mul_left (C * DZ * d r) (hdle r hr)
+    exact Nat.add_le_add (Nat.add_le_add_right hfirst _) hb
+  calc
+    (∑ r ∈ Rs,
+      ((if d r = 1 then 2 * DX * DZ else C * DZ * d r) * d r +
+        e * d r + bad r)) ≤
+        ∑ r ∈ Rs, (C * DZ * DY * d r + e * d r + 2 * DZ * d r) :=
+      Finset.sum_le_sum hpoint
+    _ = C * DZ * DY * (∑ r ∈ Rs, d r) +
+          e * (∑ r ∈ Rs, d r) + 2 * DZ * (∑ r ∈ Rs, d r) := by
+      simp only [Finset.sum_add_distrib, ← Finset.mul_sum]
+    _ ≤ C * DZ * DY * DY + e * DY + 2 * DZ * DY := by
+      exact Nat.add_le_add
+        (Nat.add_le_add
+          (Nat.mul_le_mul_left (C * DZ * DY) hdsum)
+          (Nat.mul_le_mul_left e hdsum))
+        (Nat.mul_le_mul_left (2 * DZ) hdsum)
+    _ = (C * DZ) * DY ^ 2 + e * DY + 2 * DZ * DY := by ring
 
 /-- The staged accounting, including one initial `Q`-bad-Z deletion and all
 tailored selected-factor obstruction budgets, fits the BCHKS numerator. -/
 theorem bchks_staged_capacity_budget :
-    2 * 33398999 * 63302 * 255 ^ 2 +
-      (bchksErrors + 1) * 255 +
-      2 * 63302 * 255 + 63302 < bchksNumerator := by
+    (632164 * 497543) * 842 ^ 2 +
+      (bchksErrors + 1) * 842 +
+      2 * 497543 * 842 + 497543 < bchksNumerator := by
   norm_num [bchksErrors, bchksNumerator]
 
 /-- Convenient consequence for a source set after deleting the one-time
 `Q`-bad set. -/
 theorem bchks_staged_card_after_Qbad
     {α : Type*} [DecidableEq α] (S QBad : Finset α)
-    (hS : bchksNumerator < S.card) (hQBad : (S ∩ QBad).card ≤ 63302) :
-    2 * 33398999 * 63302 * 255 ^ 2 +
-      (bchksErrors + 1) * 255 + 2 * 63302 * 255 < (S \ QBad).card := by
+    (hS : bchksNumerator < S.card) (hQBad : (S ∩ QBad).card ≤ 497543) :
+    (632164 * 497543) * 842 ^ 2 +
+      (bchksErrors + 1) * 842 + 2 * 497543 * 842 < (S \ QBad).card := by
   rw [Finset.card_sdiff]
   apply Nat.lt_sub_of_add_lt
   have hb := bchks_staged_capacity_budget
-  have hi : (QBad ∩ S).card ≤ 63302 := by simpa [Finset.inter_comm] using hQBad
+  have hi : (QBad ∩ S).card ≤ 497543 := by simpa [Finset.inter_comm] using hQBad
   exact (Nat.add_le_add_left hi _).trans_lt (hb.trans hS)
 
 
@@ -71,17 +128,20 @@ theorem bchks_staged_after_badZSpecializations
     {F : Type*} [Field F] [DecidableEq F]
     (Q : Polynomial (Polynomial (Polynomial F))) (S : Finset F)
     (j a : Nat) (hc : (Q.coeff j).coeff a ≠ 0)
-    (hdeg : ((Q.coeff j).coeff a).natDegree < 63302)
+    (hdeg : ((Q.coeff j).coeff a).natDegree < 497543)
     (hS : bchksNumerator < S.card) :
-    2 * 33398999 * 63302 * 255 ^ 2 +
-      (bchksErrors + 1) * 255 + 2 * 63302 * 255 <
+    (632164 * 497543) * 842 ^ 2 +
+      (bchksErrors + 1) * 842 + 2 * 497543 * 842 <
         (S \ badZSpecializations Q S).card := by
   apply bchks_staged_card_after_Qbad S (badZSpecializations Q S) hS
-  have hb := badZSpecializations_card_le_63301 Q S j a hc hdeg
+  have hb := badZSpecializations_card_le_497542 Q S j a hc hdeg
   exact (Finset.card_le_card Finset.inter_subset_right).trans (hb.trans (by omega))
 
 
 
+/- Legacy uniform normalized-factor wrapper; superseded by the mixed wrapper
+used by `exists_staged_pair_with_setup`. -/
+/-
 /-- Direct normalized-factor instantiation of the staged capacity sum. -/
 theorem positive_normalizedFactors_staged_cap_le
     {F : Type*} [Field F] [DecidableEq F] [NormalizationMonoid F]
@@ -122,6 +182,38 @@ theorem positive_normalizedFactors_staged_cap_le
     exact (Finset.mem_filter.mp hR).2
   · exact hsq
   · exact hsum
+  · intro R hR
+    exact hbad R (by simpa [Rs] using hR)
+-/
+
+/-- Direct normalized-factor form of the mixed linear/nonlinear accounting. -/
+theorem positive_normalizedFactors_mixed_staged_cap_le
+    {F : Type*} [Field F] [DecidableEq F] [NormalizationMonoid F]
+    (Q : Polynomial (Polynomial (Polynomial F))) (hQ : Q ≠ 0)
+    (bad : Polynomial (Polynomial (Polynomial F)) → Nat)
+    (DX C e DZ DY : Nat) (hQdeg : Q.natDegree ≤ DY)
+    (hDX : 2 * DX ≤ C * DY)
+    (hbad : ∀ R ∈ (UniqueFactorizationMonoid.normalizedFactors Q).toFinset.filter
+        (fun R => 0 < R.natDegree),
+      bad R ≤ 2 * R.natDegree * DZ) :
+    (∑ R ∈ (UniqueFactorizationMonoid.normalizedFactors Q).toFinset.filter
+        (fun R => 0 < R.natDegree),
+      ((if R.natDegree = 1 then 2 * DX * DZ else C * DZ * R.natDegree) *
+          R.natDegree + e * R.natDegree + bad R)) ≤
+      (C * DZ) * DY ^ 2 + e * DY + 2 * DZ * DY := by
+  let Rs := (UniqueFactorizationMonoid.normalizedFactors Q).toFinset.filter
+    fun R => 0 < R.natDegree
+  have hsum : (∑ R ∈ Rs, R.natDegree) ≤ DY := by
+    calc
+      (∑ R ∈ Rs, R.natDegree) ≤
+          ∑ R ∈ (UniqueFactorizationMonoid.normalizedFactors Q).toFinset,
+            R.natDegree := by
+        exact Finset.sum_le_sum_of_subset_of_nonneg (Finset.filter_subset _ _) (by simp)
+      _ ≤ Q.natDegree := normalizedFactors_toFinset_sum_natDegree_le Q hQ
+      _ ≤ DY := hQdeg
+  apply sum_staged_mixed_R_capacities_le Rs Polynomial.natDegree bad DX C e DZ DY
+  · exact hsum
+  · exact hDX
   · intro R hR
     exact hbad R (by simpa [Rs] using hR)
 

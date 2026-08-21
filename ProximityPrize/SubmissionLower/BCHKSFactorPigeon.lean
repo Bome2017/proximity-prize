@@ -609,14 +609,14 @@ theorem badZSpecializations_card_lt
     (badZSpecializations Q S).card < DZ :=
   (badZSpecializations_card_le_natDegree_coeff Q S j a hc).trans_lt hdeg
 
-/-- Concrete `DZ=63302` form: at most `63301` bad points. -/
-theorem badZSpecializations_card_le_63301
+/-- Concrete `DZ=497543` form: at most `497542` bad points. -/
+theorem badZSpecializations_card_le_497542
     {F : Type*} [Field F] [DecidableEq F]
     (Q : Polynomial (Polynomial (Polynomial F))) (S : Finset F)
     (j a : Nat) (hc : (Q.coeff j).coeff a ≠ 0)
-    (hdeg : ((Q.coeff j).coeff a).natDegree < 63302) :
-    (badZSpecializations Q S).card ≤ 63301 := by
-  have := badZSpecializations_card_lt Q S j a 63302 hc hdeg
+    (hdeg : ((Q.coeff j).coeff a).natDegree < 497543) :
+    (badZSpecializations Q S).card ≤ 497542 := by
+  have := badZSpecializations_card_lt Q S j a 497543 hc hdeg
   omega
 
 

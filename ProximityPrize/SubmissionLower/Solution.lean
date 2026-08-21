@@ -4,7 +4,7 @@ import ProximityPrize.SubmissionLower.BCHKSFinal6358
 namespace ProximityPrize.Benchmark
 
 /-- Unconditional sharp BCHKS25 lower-track certificate. -/
-theorem candidate : ProtocolClaim 6381 306377 1048576 :=
-  protocolClaim6381
+theorem candidate : ProtocolClaim 6394 306883 1048576 :=
+  protocolClaim6394
 
 end ProximityPrize.Benchmark
