@@ -63,9 +63,11 @@ def main() -> None:
         if status.get("status") != "verified":
             failure = status.get("failure")
             detail = failure if isinstance(failure, dict) else {}
+            where = f"{detail.get('stage', '')}/{detail.get('code', '')}".rstrip("/")
+            reason = detail.get("message") or ""
             raise ValueError(
-                f"submission {status.get('status')}: "
-                f"{detail.get('stage', '')}/{detail.get('code', '')}".rstrip("/")
+                f"submission {status.get('status')}: {where}"
+                + (f": {reason}" if reason else "")
             )
 
         challenge = require_object(status.get("challenge"), label="challenge")
