@@ -12,10 +12,10 @@ set_option maxHeartbeats 4000000
 
 def n : ℕ := 262144
 def k : ℕ := 131071
-def m : ℕ := 180
-def DX : ℕ := 33398999
-def DY : ℕ := 255
-def DZ : ℕ := 63302
+def m : ℕ := 595
+def DX : ℕ := 110327280
+def DY : ℕ := 842
+def DZ : ℕ := 497543
 
 /-- Coefficients of `X^a Y^j Z^h`. -/
 abbrev VarIndex := Σ j : Fin DY, Fin (DX - k * (j : ℕ)) × Fin (DZ - (j : ℕ))
@@ -113,17 +113,144 @@ theorem polyMap_ne_zero {F : Type} [Field F] (c : VarIndex → F) (hc : c ≠ 0)
   rw [hQ] at h
   simpa using h.symm
 
-open scoped BigOperators in
-theorem card_var : Fintype.card VarIndex = 270065366316710 := by
-  rw [Fintype.card_sigma]
-  simp only [Fintype.card_prod, Fintype.card_fin, Finset.sum_fin_eq_sum_range]
-  norm_num (config := { maxSteps := 10000000 }) [DX, DY, DZ, k, Finset.sum_range_succ]
+/-- Six times the triangular generating function
+`∑_{j < n} (A - C j)(B - j)`, as an identity in `ℤ`.  Clearing the
+denominators `2` and `6` lets the inductive step be a `ring` identity
+instead of unrolling `Finset.sum_range_succ` `n` times. -/
+lemma six_mul_sum_prod_int (n A B C : ℕ) :
+    (6 : ℤ) * ∑ j ∈ Finset.range n,
+        ((A : ℤ) - (C : ℤ) * (j : ℤ)) * ((B : ℤ) - (j : ℤ)) =
+      (n : ℤ) * (6 * (A : ℤ) * (B : ℤ)
+        - 3 * ((A : ℤ) + (C : ℤ) * (B : ℤ)) * ((n : ℤ) - 1)
+        + (C : ℤ) * ((n : ℤ) - 1) * (2 * (n : ℤ) - 1)) := by
+  induction n with
+  | zero =>
+    simp
+  | succ n ih =>
+    rw [Finset.sum_range_succ, mul_add, ih]
+    push_cast
+    ring
+
+/-- Nat subtraction matches the integer form on the actual support. -/
+lemma sum_prod_nat_int (n A B C : ℕ)
+    (hA : ∀ j < n, C * j ≤ A) (hB : ∀ j < n, j ≤ B) :
+    ((∑ j ∈ Finset.range n, (A - C * j) * (B - j) : ℕ) : ℤ) =
+      ∑ j ∈ Finset.range n,
+        ((A : ℤ) - (C : ℤ) * (j : ℤ)) * ((B : ℤ) - (j : ℤ)) := by
+  rw [Nat.cast_sum]
+  refine Finset.sum_congr rfl ?_
+  intro j hj
+  have hj' : j < n := Finset.mem_range.mp hj
+  rw [Nat.cast_mul, Nat.cast_sub (hA j hj'), Nat.cast_sub (hB j hj')]
+  rfl
+
+lemma var_sum_le_DX (j : ℕ) (hj : j < DY) : k * j ≤ DX := by
+  have hj' : j ≤ 841 := by
+    dsimp [DY] at hj
+    omega
+  have hmul : k * j ≤ k * 841 := Nat.mul_le_mul_left k hj'
+  have hk : k * 841 ≤ DX := by
+    dsimp [k, DX]
+    norm_num
+  exact hmul.trans hk
+
+lemma var_sum_le_DZ (j : ℕ) (hj : j < DY) : j ≤ DZ := by
+  dsimp [DY] at hj
+  have : 841 ≤ DZ := by
+    dsimp [DZ]
+    norm_num
+  omega
+
+lemma con_sum_le_m (t : ℕ) (ht : t < m) : 1 * t ≤ m := by
+  simpa using Nat.le_of_lt ht
+
+lemma con_sum_le_DZ (t : ℕ) (ht : t < m) : t ≤ DZ := by
+  dsimp [m] at ht
+  have : 594 ≤ DZ := by
+    dsimp [DZ]
+    norm_num
+  omega
+
+/-- Closed-form evaluation of the integer identity at the interpolant box.
+One multiplication tree, not 842 `sum_range_succ` unfoldings. -/
+lemma six_mul_card_var_value :
+    (6 : ℤ) * 23116969928836558 =
+      (DY : ℤ) * (6 * (DX : ℤ) * (DZ : ℤ)
+        - 3 * ((DX : ℤ) + (k : ℤ) * (DZ : ℤ)) * ((DY : ℤ) - 1)
+        + (k : ℤ) * ((DY : ℤ) - 1) * (2 * (DY : ℤ) - 1)) := by
+  dsimp [DX, DY, DZ, k]
+  norm_num
+
+lemma six_mul_card_con_inner_value :
+    (6 : ℤ) * 88184241950 =
+      (m : ℤ) * (6 * (m : ℤ) * (DZ : ℤ)
+        - 3 * ((m : ℤ) + (1 : ℤ) * (DZ : ℤ)) * ((m : ℤ) - 1)
+        + (1 : ℤ) * ((m : ℤ) - 1) * (2 * (m : ℤ) - 1)) := by
+  dsimp [m, DZ]
+  norm_num
 
 open scoped BigOperators in
-theorem card_con : Fintype.card ConIndex = 270065365155840 := by
+theorem card_var : Fintype.card VarIndex = 23116969928836558 := by
+  rw [Fintype.card_sigma]
+  simp only [Fintype.card_prod, Fintype.card_fin, Finset.sum_fin_eq_sum_range]
+  change ∑ j ∈ Finset.range DY, (DX - k * j) * (DZ - j) = 23116969928836558
+  have hcast :=
+    sum_prod_nat_int DY DX DZ k var_sum_le_DX var_sum_le_DZ
+  have h6 := six_mul_sum_prod_int DY DX DZ k
+  have hS :
+      ((∑ j ∈ Finset.range DY, (DX - k * j) * (DZ - j) : ℕ) : ℤ) =
+        23116969928836558 := by
+    have hm :
+        (6 : ℤ) * ((∑ j ∈ Finset.range DY, (DX - k * j) * (DZ - j) : ℕ) : ℤ) =
+          (6 : ℤ) * 23116969928836558 := by
+      calc
+        _ = (6 : ℤ) * ∑ j ∈ Finset.range DY,
+              ((DX : ℤ) - (k : ℤ) * (j : ℤ)) * ((DZ : ℤ) - (j : ℤ)) := by
+          rw [hcast]
+        _ = (DY : ℤ) * (6 * (DX : ℤ) * (DZ : ℤ)
+              - 3 * ((DX : ℤ) + (k : ℤ) * (DZ : ℤ)) * ((DY : ℤ) - 1)
+              + (k : ℤ) * ((DY : ℤ) - 1) * (2 * (DY : ℤ) - 1)) := h6
+        _ = (6 : ℤ) * 23116969928836558 := six_mul_card_var_value.symm
+    have := congrArg (fun t : ℤ => t / 6) hm
+    simpa [Int.mul_ediv_cancel_left _ (by decide : (6 : ℤ) ≠ 0)] using this
+  exact Int.natCast_inj.mp hS
+
+open scoped BigOperators in
+theorem card_con : Fintype.card ConIndex = 23116969921740800 := by
   rw [Fintype.card_prod, Fintype.card_sigma]
   simp only [Fintype.card_prod, Fintype.card_fin, Finset.sum_fin_eq_sum_range]
-  norm_num (config := { maxSteps := 10000000 }) [n, m, DZ, Finset.sum_range_succ]
+  change n * ∑ t ∈ Finset.range m, (m - t) * (DZ - t) = 23116969921740800
+  have hcast :=
+    sum_prod_nat_int m m DZ 1 con_sum_le_m con_sum_le_DZ
+  have h6 := six_mul_sum_prod_int m m DZ 1
+  have hInner :
+      ((∑ t ∈ Finset.range m, (m - t) * (DZ - t) : ℕ) : ℤ) = 88184241950 := by
+    have hm :
+        (6 : ℤ) * ((∑ t ∈ Finset.range m, (m - t) * (DZ - t) : ℕ) : ℤ) =
+          (6 : ℤ) * 88184241950 := by
+      have h1 : ∑ t ∈ Finset.range m, (m - 1 * t) * (DZ - t) =
+          ∑ t ∈ Finset.range m, (m - t) * (DZ - t) := by
+        refine Finset.sum_congr rfl ?_
+        intro t ht
+        simp
+      calc
+        _ = (6 : ℤ) * ∑ t ∈ Finset.range m,
+              ((m : ℤ) - (1 : ℤ) * (t : ℤ)) * ((DZ : ℤ) - (t : ℤ)) := by
+          rw [← h1, hcast]
+        _ = (m : ℤ) * (6 * (m : ℤ) * (DZ : ℤ)
+              - 3 * ((m : ℤ) + (1 : ℤ) * (DZ : ℤ)) * ((m : ℤ) - 1)
+              + (1 : ℤ) * ((m : ℤ) - 1) * (2 * (m : ℤ) - 1)) := h6
+        _ = (6 : ℤ) * 88184241950 := six_mul_card_con_inner_value.symm
+    have := congrArg (fun t : ℤ => t / 6) hm
+    simpa [Int.mul_ediv_cancel_left _ (by decide : (6 : ℤ) ≠ 0)] using this
+  have hn : (n : ℤ) * 88184241950 = 23116969921740800 := by
+    dsimp [n]
+    norm_num
+  have hS :
+      ((n * ∑ t ∈ Finset.range m, (m - t) * (DZ - t) : ℕ) : ℤ) =
+        23116969921740800 := by
+    rw [Nat.cast_mul, hInner, hn]
+  exact Int.natCast_inj.mp hS
 
 theorem card_con_lt_var : Fintype.card ConIndex < Fintype.card VarIndex := by
   rw [card_con, card_var]
