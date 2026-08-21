@@ -16,8 +16,8 @@ theorem exists_bchks_weighted_factor_selection
     (Q : Polynomial (Polynomial (Polynomial IRSProfile.Field)))
     (hQ : Q ≠ 0)
     (hcaps : ∀ j a, ((Q.coeff j).coeff a) ≠ 0 →
-      j < 255 ∧ a + 131071 * j < 33398999 ∧
-        ((Q.coeff j).coeff a).natDegree + j < 63302)
+      j < 842 ∧ a + 131071 * j < 110327280 ∧
+        ((Q.coeff j).coeff a).natDegree + j < 497543)
     (hQeval : ∀ z : ↥S, triEval Q z.1 (P z) = 0)
     (hS : bchksNumerator < S.card)
     (hBad : (S ∩ Bad).card ≤ bchksBadBudget)
@@ -31,7 +31,7 @@ theorem exists_bchks_weighted_factor_selection
         R ∈ UniqueFactorizationMonoid.normalizedFactors Q ∧ 0 < R.natDegree ∧
         H ∈ UniqueFactorizationMonoid.normalizedFactors (triSpecializeX R x₀) ∧
           0 < H.natDegree ∧
-        2 * 33398999 * 63302 * (R.natDegree * H.natDegree) +
+        632164 * 497543 * (R.natDegree * H.natDegree) +
             (bchksErrors + 1) < T.card ∧
         ∃ hTsub : T ⊆ S \ Bad,
           ∀ z, ∀ hz : z ∈ T,
@@ -41,14 +41,14 @@ theorem exists_bchks_weighted_factor_selection
   classical
   let Good := S \ Bad
   have hGoodLarge :
-      2 * 33398999 * 63302 * 255 ^ 2 + (bchksErrors + 1) * 255 < Good.card := by
+      632164 * 497543 * 842 ^ 2 + (bchksErrors + 1) * 842 < Good.card := by
     simpa [Good] using card_sdiff_large_for_bchks S Bad hS hBad
   have hGoodNonempty : Good.Nonempty := by
     apply Finset.card_pos.mp
     exact (by norm_num : 0 <
-      2 * 33398999 * 63302 * 255 ^ 2 + (bchksErrors + 1) * 255).trans hGoodLarge
+      632164 * 497543 * 842 ^ 2 + (bchksErrors + 1) * 842).trans hGoodLarge
   obtain ⟨z₀, hz₀⟩ := hGoodNonempty
-  have hQdeg : Q.natDegree ≤ 255 := by
+  have hQdeg : Q.natDegree ≤ 842 := by
     have hlead : Q.coeff Q.natDegree ≠ 0 := by
       rw [Polynomial.coeff_natDegree]
       exact Polynomial.leadingCoeff_ne_zero.mpr hQ
@@ -67,20 +67,20 @@ theorem exists_bchks_weighted_factor_selection
     exact hsecond z₀ hz₀ R hR (by simp [hzero, biSpecializeZ])
   let Candidates := (positiveNormalizedFactorPairs Q x₀).filter
     fun RH => 0 < RH.1.natDegree
-  have hCandidates : Candidates.card ≤ 255 := by
+  have hCandidates : Candidates.card ≤ 842 := by
     exact (Finset.card_filter_le _ _).trans
-      (positiveNormalizedFactorPairs_card_le' Q hQ x₀ 255 hQdeg hx₀)
+      (positiveNormalizedFactorPairs_card_le' Q hQ x₀ 842 hQdeg hx₀)
   have hRXdeg : ∀ R ∈ UniqueFactorizationMonoid.normalizedFactors Q,
-      (triSpecializeX R x₀).natDegree ≤ 255 := by
+      (triSpecializeX R x₀).natDegree ≤ 842 := by
     intro R hR
     exact (triSpecializeX_natDegree_le R x₀).trans
       ((Polynomial.natDegree_le_of_dvd
         (UniqueFactorizationMonoid.dvd_of_mem_normalizedFactors hR) hQ).trans hQdeg)
   have hweighted :
-      (∑ RH ∈ Candidates, RH.1.natDegree * RH.2.natDegree) ≤ 255 ^ 2 := by
+      (∑ RH ∈ Candidates, RH.1.natDegree * RH.2.natDegree) ≤ 842 ^ 2 := by
     apply (Finset.sum_le_sum_of_subset_of_nonneg (Finset.filter_subset _ _) (by simp)).trans
     exact positiveNormalizedFactorPairs_sum_mul_natDegree_le_sq
-      Q hQ x₀ 255 hQdeg hx₀ hRXdeg
+      Q hQ x₀ 842 hQdeg hx₀ hRXdeg
   let Rel : ↥Good →
       (Polynomial (Polynomial (Polynomial IRSProfile.Field)) ×
         Polynomial (Polynomial IRSProfile.Field)) → Prop :=
@@ -108,16 +108,16 @@ theorem exists_bchks_weighted_factor_selection
       exact ⟨R, hRQ, H, ⟨hHR, hHpos⟩, rfl⟩
     exact ⟨(R, H), Finset.mem_filter.mpr ⟨hpair, hRpos⟩, hRzero, hHzero⟩
   have hCapacityLarge :
-      2 * 33398999 * 63302 * 255 ^ 2 +
+      632164 * 497543 * 842 ^ 2 +
           (bchksErrors + 1) * Candidates.card < Good.attach.card := by
     rw [Finset.card_attach]
     exact (Nat.add_le_add_left
       (Nat.mul_le_mul_left (bchksErrors + 1) hCandidates)
-      (2 * 33398999 * 63302 * 255 ^ 2)).trans_lt hGoodLarge
+      (632164 * 497543 * 842 ^ 2)).trans_lt hGoodLarge
   obtain ⟨RH, hRHcand, hRHlarge⟩ :=
     exists_pair_fiber_gt_BCHKS_capacity Good.attach Candidates Rel
       Polynomial.natDegree Polynomial.natDegree
-      33398999 63302 255 bchksErrors hcover hweighted hCapacityLarge
+      316082 497543 842 bchksErrors hcover hweighted hCapacityLarge
   have hRposRH : 0 < RH.1.natDegree := (Finset.mem_filter.mp hRHcand).2
   have hmem := (Finset.mem_filter.mp hRHcand).1
   simp only [positiveNormalizedFactorPairs, Finset.mem_biUnion,

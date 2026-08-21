@@ -80,4 +80,75 @@ theorem exists_staged_weighted_selection
     exact ⟨(Finset.mem_filter.mp hzU).2, hz'.2⟩
   · simpa [T, capH] using hhfiber
 
+/-- Two-stage selection with a first-stage coefficient chosen separately for
+each `R`.  This is the form needed when linear factors retain the resultant
+budget while nonlinear factors use the exact incidence budget. -/
+theorem exists_staged_weighted_selection_by_R
+    {σ ρ η : Type*} [DecidableEq σ] [DecidableEq ρ] [DecidableEq η]
+    (S : Finset σ) (Rs : Finset ρ) (Hs : ρ → Finset η)
+    (degR : ρ → Nat) (degH : η → Nat) (bad pairA : ρ → Nat)
+    (e : Nat)
+    (RelR : σ → ρ → Prop) [DecidableRel RelR]
+    (RelH : σ → ρ → η → Prop) [∀ r, DecidableRel (fun z h => RelH z r h)]
+    (Bad : ρ → Finset σ)
+    (hRcover : ∀ z ∈ S, ∃ r ∈ Rs, RelR z r)
+    (hglobal :
+      (∑ r ∈ Rs, (pairA r * degR r + e * degR r + bad r)) < S.card)
+    (hBad : ∀ r ∈ Rs, ((S.filter fun z => RelR z r) ∩ Bad r).card ≤ bad r)
+    (hHpos : ∀ r ∈ Rs, ∀ h ∈ Hs r, 0 < degH h)
+    (hHsum : ∀ r ∈ Rs, (∑ h ∈ Hs r, degH h) ≤ degR r)
+    (hHcover : ∀ r ∈ Rs, ∀ z ∈ (S.filter fun z => RelR z r) \ Bad r,
+      ∃ h ∈ Hs r, RelH z r h) :
+    ∃ r ∈ Rs, ∃ h ∈ Hs r, ∃ T : Finset σ,
+      T ⊆ S ∧
+      (∀ z ∈ T, z ∉ Bad r) ∧
+      (∀ z ∈ T, RelR z r ∧ RelH z r h) ∧
+      pairA r * degH h + e < T.card := by
+  classical
+  let capR : ρ → Nat := fun r => pairA r * degR r + e * degR r + bad r
+  obtain ⟨r, hr, hrfiber⟩ :=
+    exists_rel_fiber_gt_capacity S Rs RelR capR hRcover (by simpa [capR] using hglobal)
+  let U := S.filter fun z => RelR z r
+  have hbadU : (U ∩ Bad r).card ≤ bad r := by simpa [U] using hBad r hr
+  have hUgood : pairA r * degR r + e * degR r < (U \ Bad r).card := by
+    rw [Finset.card_sdiff]
+    apply Nat.lt_sub_of_add_lt
+    have hbadd : pairA r * degR r + e * degR r + (Bad r ∩ U).card ≤
+        pairA r * degR r + e * degR r + bad r := by
+      apply Nat.add_le_add_left
+      simpa [Finset.inter_comm] using hbadU
+    exact hbadd.trans_lt (by simpa [capR, U] using hrfiber)
+  have hHcard : (Hs r).card ≤ degR r := by
+    calc
+      (Hs r).card = ∑ h ∈ Hs r, 1 := by simp
+      _ ≤ ∑ h ∈ Hs r, degH h := by
+        exact Finset.sum_le_sum fun h hh => hHpos r hr h hh
+      _ ≤ degR r := hHsum r hr
+  let capH : η → Nat := fun h => pairA r * degH h + e
+  have hcapHsum : (∑ h ∈ Hs r, capH h) ≤
+      pairA r * degR r + e * degR r := by
+    dsimp [capH]
+    rw [Finset.sum_add_distrib, ← Finset.mul_sum]
+    simp only [Finset.sum_const, nsmul_eq_mul]
+    exact Nat.add_le_add
+      (Nat.mul_le_mul_left (pairA r) (hHsum r hr))
+      (by simpa [Nat.mul_comm] using Nat.mul_le_mul_right e hHcard)
+  have hsecondLarge : (∑ h ∈ Hs r, capH h) < (U \ Bad r).card :=
+    hcapHsum.trans_lt hUgood
+  obtain ⟨h, hh, hhfiber⟩ :=
+    exists_rel_fiber_gt_capacity (U \ Bad r) (Hs r) (fun z h => RelH z r h)
+      capH (hHcover r hr) hsecondLarge
+  let T := (U \ Bad r).filter fun z => RelH z r h
+  refine ⟨r, hr, h, hh, T, ?_, ?_, ?_, ?_⟩
+  · intro z hz
+    have hzU : z ∈ U := (Finset.mem_sdiff.mp (Finset.mem_filter.mp hz).1).1
+    exact (Finset.mem_filter.mp hzU).1
+  · intro z hz
+    exact (Finset.mem_sdiff.mp (Finset.mem_filter.mp hz).1).2
+  · intro z hz
+    have hz' := Finset.mem_filter.mp hz
+    have hzU : z ∈ U := (Finset.mem_sdiff.mp hz'.1).1
+    exact ⟨(Finset.mem_filter.mp hzU).2, hz'.2⟩
+  · simpa [T, capH] using hhfiber
+
 end ProximityPrize.SubmissionLower

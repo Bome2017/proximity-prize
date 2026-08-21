@@ -12,10 +12,10 @@ set_option maxHeartbeats 4000000
 
 def n : ℕ := 262144
 def k : ℕ := 131071
-def m : ℕ := 180
-def DX : ℕ := 33398999
-def DY : ℕ := 255
-def DZ : ℕ := 63302
+def m : ℕ := 595
+def DX : ℕ := 110327280
+def DY : ℕ := 842
+def DZ : ℕ := 497543
 
 /-- Coefficients of `X^a Y^j Z^h`. -/
 abbrev VarIndex := Σ j : Fin DY, Fin (DX - k * (j : ℕ)) × Fin (DZ - (j : ℕ))
@@ -114,13 +114,13 @@ theorem polyMap_ne_zero {F : Type} [Field F] (c : VarIndex → F) (hc : c ≠ 0)
   simpa using h.symm
 
 open scoped BigOperators in
-theorem card_var : Fintype.card VarIndex = 270065366316710 := by
+theorem card_var : Fintype.card VarIndex = 23116969928836558 := by
   rw [Fintype.card_sigma]
   simp only [Fintype.card_prod, Fintype.card_fin, Finset.sum_fin_eq_sum_range]
   norm_num (config := { maxSteps := 10000000 }) [DX, DY, DZ, k, Finset.sum_range_succ]
 
 open scoped BigOperators in
-theorem card_con : Fintype.card ConIndex = 270065365155840 := by
+theorem card_con : Fintype.card ConIndex = 23116969921740800 := by
   rw [Fintype.card_prod, Fintype.card_sigma]
   simp only [Fintype.card_prod, Fintype.card_fin, Finset.sum_fin_eq_sum_range]
   norm_num (config := { maxSteps := 10000000 }) [n, m, DZ, Finset.sum_range_succ]
