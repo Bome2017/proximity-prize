@@ -271,4 +271,40 @@ theorem concrete_many_large_fibers_plus
     ((2 * 131071 + 2) * dH * d * D) hn hrow
   exact concrete_incidence_inequality_plus dH d D T.card hT
 
+/-- The exact incidence capacity needed at error budget `76720`.  The
+coefficient `632164` is just large enough for
+`54353 * 632164 > 131073 * 262144`; unlike the older coarse bound, it does not
+carry the Hensel horizon `DX`. -/
+theorem exact_incidence_capacity_inequality (r tcard : ℕ)
+    (ht : 632164 * r + 76720 + 1 ≤ tcard) :
+    (262144 - 76720 - 131071) * tcard >
+      (262144 - 131071) * ((2 * 131071 + 2) * r) := by
+  norm_num at ht ⊢
+  nlinarith
+
+/-- Parameterized form of `exact_incidence_capacity_inequality` for the
+degree-two BCHKS fibre weight. -/
+theorem exact_incidence_capacity_inequality_mul (dH d D tcard : ℕ)
+    (ht : 632164 * dH * d * D + 76720 + 1 ≤ tcard) :
+    (262144 - 76720 - 131071) * tcard >
+      (262144 - 131071) * ((2 * 131071 + 2) * dH * d * D) := by
+  have h := exact_incidence_capacity_inequality (dH * d * D) tcard (by
+    simpa [Nat.mul_assoc] using ht)
+  simpa [Nat.mul_assoc] using h
+
+/-- At the `76720` error target, exact incidence counting produces `k+1`
+coordinates whose fibres exceed the full coarse affine-root capacity. -/
+theorem exact_capacity_many_large_fibers
+    {ι ζ : Type} [Fintype ι] [DecidableEq ι] [DecidableEq ζ]
+    (T : Finset ζ) (A : ζ → Finset ι) (dH d D : ℕ)
+    (hn : Fintype.card ι = 262144)
+    (hrow : ∀ z ∈ T, 262144 - 76720 ≤ (A z).card)
+    (hT : 632164 * dH * d * D + 76720 + 1 ≤ T.card) :
+    131072 ≤ (Finset.univ.filter fun x : ι =>
+      (2 * 131071 + 2) * dH * d * D <
+        (T.filter fun z => x ∈ A z).card).card := by
+  apply many_large_fibers T A 262144 76720 131071
+    ((2 * 131071 + 2) * dH * d * D) hn hrow
+  exact exact_incidence_capacity_inequality_mul dH d D T.card hT
+
 end ProximityPrize.SubmissionLower
