@@ -22,9 +22,9 @@ theorem bchksLinearSelectedFinal
     (Q : F → F[X]) (Hlin : F → F → F[X])
     (hcardF : Fintype.card F = 262144)
     (hPdeg : ∀ z ∈ T, (P z).natDegree ≤ 131071)
-    (hrow : ∀ z ∈ T, 262144 - 76594 ≤ (Arow z).card)
-    (hsize : 2 * 33398999 * 1 * 1 * 63303 + 76594 + 1 ≤ T.card)
-    (hQdeg : ∀ x, (Q x).natDegree ≤ 63303)
+    (hrow : ∀ z ∈ T, 262144 - 76717 ≤ (Arow z).card)
+    (hsize : 2 * 104951682 * 1 * 1 * 453562 + 76717 + 1 ≤ T.card)
+    (hQdeg : ∀ x, (Q x).natDegree ≤ 453562)
     (hQzero : ∀ x z, z ∈ T → x ∈ Arow z → (Q x).eval z = 0)
     (hHdeg : ∀ z ∈ T, ∀ x, (Hlin z x).natDegree = 1)
     (hPzero : ∀ z ∈ T, ∀ x,
@@ -37,13 +37,13 @@ theorem bchksLinearSelectedFinal
           P z = p₀ + Polynomial.C z * p₁ := by
   classical
   let A : Finset F := Finset.univ.filter fun x =>
-    63303 < (T.filter fun z => x ∈ Arow z).card
+    453562 < (T.filter fun z => x ∈ Arow z).card
   have hAcard : 131072 ≤ A.card := by
-    simpa [A] using concrete_many_large_fibers T Arow 1 1 63303
+    simpa [A] using concrete_many_large_fibers T Arow 1 1 453562
       hcardF hrow hsize
   let Fib : {x // x ∈ A} → Finset F := fun x =>
     T.filter fun z => (x : F) ∈ Arow z
-  have hline := bchksLinearBranchFinal 131071 63303 T A P U₀ U₁ Q Hlin
+  have hline := bchksLinearBranchFinal 131071 453562 T A P U₀ U₁ Q Hlin
     hPdeg hAcard (by rw [hcardF]; omega) Fib
     (by intro x; exact Finset.filter_subset _ _)
     (by

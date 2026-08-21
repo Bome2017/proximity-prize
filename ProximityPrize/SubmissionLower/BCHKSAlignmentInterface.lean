@@ -17,13 +17,13 @@ def BCHKSPolynomialAlignment : Prop :=
     bchksNumerator < S.card →
     Q ≠ 0 →
     (∀ z : ↥S, (P z).natDegree ≤ 131071) →
-    (∀ z : ↥S, 185550 ≤ (A z.1).card) →
+    (∀ z : ↥S, 185427 ≤ (A z.1).card) →
     (∀ z : ↥S, ∀ i ∈ A z,
       Polynomial.eval (IRSProfile.domain i) (P z) = U 0 i + z.1 * U 1 i) →
     (∀ z : ↥S, triEval Q z.1 (P z) = 0) →
     (∀ j a, ((Q.coeff j).coeff a) ≠ 0 →
-      j < 255 ∧ a + 131071 * j < 33398999 ∧
-        ((Q.coeff j).coeff a).natDegree + j < 63302) →
+      j < 801 ∧ a + 131071 * j < 104951682 ∧
+        ((Q.coeff j).coeff a).natDegree + j < 453561) →
     ∃ p₀ p₁ : Polynomial IRSProfile.Field, ∃ T : Finset IRSProfile.Field,
       ∃ hTS : T ⊆ S, bchksErrors + 1 < T.card ∧
       p₀.natDegree ≤ 131071 ∧ p₁.natDegree ≤ 131071 ∧
@@ -48,7 +48,7 @@ theorem alignmentBound_of_polynomialAlignment
     AffineLineAlignmentBound IRSProfile.baseCode bchksErrors bchksNumerator := by
   classical
   intro U S A hS hA hcomb
-  have hA' : ∀ z ∈ S, 185550 ≤ (A z).card := by
+  have hA' : ∀ z ∈ S, 185427 ≤ (A z).card := by
     intro z hz
     have h := hA z hz
     norm_num [IRSProfile.Index, bchksErrors] at h

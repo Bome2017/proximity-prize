@@ -22,42 +22,42 @@ theorem exists_concrete_staged_pair_of_certificates
       (cert R).obstruction.natDegree + (factorXObstruction R).natDegree < Fintype.card F)
     (hfactorXDegree : ∀ (R : Polynomial (Polynomial (Polynomial F))) (x : F),
       (Polynomial.eval (Polynomial.C x) (factorXObstruction R)).natDegree ≤
-        2 * R.natDegree * 63302)
-    (hchar : 255 < ringChar F)
+        2 * R.natDegree * 453561)
+    (hchar : 801 < ringChar F)
     (hQ : Q ≠ 0)
     (hQeval : ∀ z ∈ S, triEval Q z (P z) = 0)
     (hQz : ∀ z ∈ S, triSpecializeZ Q z ≠ 0)
-    (hQY : Q.natDegree ≤ 255)
+    (hQY : Q.natDegree ≤ 801)
     (hQYZ : ∀ j a, ((Q.coeff j).coeff a) ≠ 0 →
-      ((Q.coeff j).coeff a).natDegree + j < 63302)
+      ((Q.coeff j).coeff a).natDegree + j < 453561)
     (hQweightedX : ∀ j a, ((Q.coeff j).coeff a) ≠ 0 →
-      a + 131071 * j < 33398999)
-    (hcard : 2 * 33398999 * 63302 * 255 ^ 2 +
-      (bchksErrors + 1) * 255 + 2 * 63302 * 255 < S.card) :
+      a + 131071 * j < 104951682)
+    (hcard : 2 * 104951682 * 453561 * 801 ^ 2 +
+      (bchksErrors + 1) * 801 + 2 * 453561 * 801 < S.card) :
     ∃ R H T x₀, ∃ Bad : Finset F,
       R ∈ UniqueFactorizationMonoid.normalizedFactors Q ∧ 0 < R.natDegree ∧
       H ∈ UniqueFactorizationMonoid.normalizedFactors (triSpecializeX R x₀) ∧
       0 < H.natDegree ∧ T ⊆ S ∧ (∀ z ∈ T, z ∉ Bad) ∧
       (∀ z ∈ T, triEval R z (P z) = 0 ∧
         biEval H (Polynomial.eval x₀ (P z)) z = 0) ∧
-      2 * 33398999 * 63302 * R.natDegree * H.natDegree +
+      2 * 104951682 * 453561 * R.natDegree * H.natDegree +
         (bchksErrors + 1) < T.card ∧
       Irreducible R ∧ Irreducible H ∧ H ∣ triSpecializeX R x₀ ∧
-      R.natDegree ≤ 255 ∧ H.natDegree ≤ 255 ∧
-      Polynomial.Bivariate.totalDegree H ≤ 63302 ∧
-      Polynomial.Bivariate.totalDegree (triSpecializeX R x₀) ≤ 63302 ∧
+      R.natDegree ≤ 801 ∧ H.natDegree ≤ 801 ∧
+      Polynomial.Bivariate.totalDegree H ≤ 453561 ∧
+      Polynomial.Bivariate.totalDegree (triSpecializeX R x₀) ≤ 453561 ∧
       (∀ j a, ((R.coeff j).coeff a) ≠ 0 →
-        a + 131071 * j < 33398999) ∧
+        a + 131071 * j < 104951682) ∧
       RationalFunctions.HenselNumerators.Hypotheses x₀ R H ∧
-      Bad.card ≤ 2 * R.natDegree * 63302 ∧
+      Bad.card ≤ 2 * R.natDegree * 453561 ∧
       (∀ z ∉ Bad, ∀ y,
         Polynomial.eval y (biSpecializeZ (triSpecializeX R x₀) z) = 0 →
         Polynomial.eval y (biSpecializeZ (triSpecializeX R.derivative x₀) z) ≠ 0) := by
   classical
   let good : ∀ R : Polynomial (Polynomial (Polynomial F)),
-      Irreducible R → 0 < R.natDegree → R.natDegree ≤ 255 →
+      Irreducible R → 0 < R.natDegree → R.natDegree ≤ 801 →
       ∃ x₀ : F, ∃ Bad : Finset F,
-        Bad.card ≤ 2 * R.natDegree * 63302 ∧
+        Bad.card ≤ 2 * R.natDegree * 453561 ∧
         (triSpecializeX R x₀).natDegree = R.natDegree ∧
         triSpecializeX R x₀ ≠ 0 ∧
         (triSpecializeX R x₀).IsPrimitive ∧
@@ -67,16 +67,16 @@ theorem exists_concrete_staged_pair_of_certificates
     intro R hR hp hd
     apply exists_single_factor_good R hR hp
       (lt_of_le_of_lt hd hchar) (cert R)
-      R.natDegree 63302 (hcertDegree R) (hfactorXDegree R)
+      R.natDegree 453561 (hcertDegree R) (hfactorXDegree R)
   let pick : Polynomial (Polynomial (Polynomial F)) → F × Finset F := fun R =>
-    if h : Irreducible R ∧ 0 < R.natDegree ∧ R.natDegree ≤ 255 then
+    if h : Irreducible R ∧ 0 < R.natDegree ∧ R.natDegree ≤ 801 then
       (Classical.choose (good R h.1 h.2.1 h.2.2),
         Classical.choose (Classical.choose_spec (good R h.1 h.2.1 h.2.2)))
     else (0, ∅)
   let x₀ := fun R => (pick R).1
   let Bad := fun R => (pick R).2
-  have hpick : ∀ R (hi : Irreducible R) (hp : 0 < R.natDegree) (hd : R.natDegree ≤ 255),
-      (Bad R).card ≤ 2 * R.natDegree * 63302 ∧
+  have hpick : ∀ R (hi : Irreducible R) (hp : 0 < R.natDegree) (hd : R.natDegree ≤ 801),
+      (Bad R).card ≤ 2 * R.natDegree * 453561 ∧
       (triSpecializeX R (x₀ R)).natDegree = R.natDegree ∧
       triSpecializeX R (x₀ R) ≠ 0 ∧
       (triSpecializeX R (x₀ R)).IsPrimitive ∧
@@ -87,18 +87,18 @@ theorem exists_concrete_staged_pair_of_certificates
     simpa [x₀, Bad, pick, hi, hp, hd] using
       Classical.choose_spec (Classical.choose_spec (good R hi hp hd))
   have hRdeg : ∀ R ∈ UniqueFactorizationMonoid.normalizedFactors Q,
-      R.natDegree ≤ 255 := by
+      R.natDegree ≤ 801 := by
     intro R hRQ
     calc
       R.natDegree ≤ ∑ A ∈ (UniqueFactorizationMonoid.normalizedFactors Q).toFinset,
           A.natDegree := Finset.single_le_sum (fun _ _ => Nat.zero_le _)
             (by simpa using hRQ)
       _ ≤ Q.natDegree := normalizedFactors_toFinset_sum_natDegree_le Q hQ
-      _ ≤ 255 := hQY
+      _ ≤ 801 := hQY
   let G : StagedGoodFamily Q S := {
     x₀ := x₀
     Bad := Bad
-    badCap := fun R => 2 * R.natDegree * 63302
+    badCap := fun R => 2 * R.natDegree * 453561
     specialize_ne_zero := by
       intro R hRQ hp
       exact (hpick R (UniqueFactorizationMonoid.prime_of_normalized_factor R hRQ).irreducible hp (hRdeg R hRQ)).2.2.1
@@ -148,43 +148,44 @@ theorem exists_concrete_staged_pair_of_effective_obstructions
       (hRQ : R ∈ UniqueFactorizationMonoid.normalizedFactors Q) (hp : 0 < R.natDegree)
       (x : F),
       (Polynomial.eval (Polynomial.C x) (factorXObstruction R)).natDegree ≤
-        2 * R.natDegree * 63302)
-    (hchar : 255 < ringChar F)
+        2 * R.natDegree * 453561)
+    (hchar : 801 < ringChar F)
     (hQ : Q ≠ 0)
     (hQeval : ∀ z ∈ S, triEval Q z (P z) = 0)
     (hQz : ∀ z ∈ S, triSpecializeZ Q z ≠ 0)
-    (hQY : Q.natDegree ≤ 255)
+    (hQY : Q.natDegree ≤ 801)
     (hQYZ : ∀ j a, ((Q.coeff j).coeff a) ≠ 0 →
-      ((Q.coeff j).coeff a).natDegree + j < 63302)
+      ((Q.coeff j).coeff a).natDegree + j < 453561)
     (hQweightedX : ∀ j a, ((Q.coeff j).coeff a) ≠ 0 →
-      a + 131071 * j < 33398999)
-    (hcard : 2 * 33398999 * 63302 * 255 ^ 2 +
-      (bchksErrors + 1) * 255 + 2 * 63302 * 255 < S.card) :
+      a + 131071 * j < 104951682)
+    (hcard : (2 * 104951682 * 453561) * 801 +
+      (634000 * 453561) * 801 ^ 2 +
+      (bchksErrors + 1) * 801 + 2 * 453561 * 801 < S.card) :
     ∃ R H T x₀, ∃ Bad : Finset F,
       R ∈ UniqueFactorizationMonoid.normalizedFactors Q ∧ 0 < R.natDegree ∧
       H ∈ UniqueFactorizationMonoid.normalizedFactors (triSpecializeX R x₀) ∧
       0 < H.natDegree ∧ T ⊆ S ∧ (∀ z ∈ T, z ∉ Bad) ∧
       (∀ z ∈ T, triEval R z (P z) = 0 ∧
         biEval H (Polynomial.eval x₀ (P z)) z = 0) ∧
-      2 * 33398999 * 63302 * R.natDegree * H.natDegree +
-        (bchksErrors + 1) < T.card ∧
+      (if R.natDegree = 1 then 2 * 104951682 * 453561 else 634000 * 453561) *
+        R.natDegree * H.natDegree + (bchksErrors + 1) < T.card ∧
       Irreducible R ∧ Irreducible H ∧ H ∣ triSpecializeX R x₀ ∧
-      R.natDegree ≤ 255 ∧ H.natDegree ≤ 255 ∧
-      Polynomial.Bivariate.totalDegree H ≤ 63302 ∧
-      Polynomial.Bivariate.totalDegree (triSpecializeX R x₀) ≤ 63302 ∧
+      R.natDegree ≤ 801 ∧ H.natDegree ≤ 801 ∧
+      Polynomial.Bivariate.totalDegree H ≤ 453561 ∧
+      Polynomial.Bivariate.totalDegree (triSpecializeX R x₀) ≤ 453561 ∧
       (∀ j a, ((R.coeff j).coeff a) ≠ 0 →
-        a + 131071 * j < 33398999) ∧
+        a + 131071 * j < 104951682) ∧
       RationalFunctions.HenselNumerators.Hypotheses x₀ R H ∧
-      Bad.card ≤ 2 * R.natDegree * 63302 ∧
+      Bad.card ≤ 2 * R.natDegree * 453561 ∧
       (∀ z ∉ Bad, ∀ y,
         Polynomial.eval y (biSpecializeZ (triSpecializeX R x₀) z) = 0 →
         Polynomial.eval y (biSpecializeZ (triSpecializeX R.derivative x₀) z) ≠ 0) := by
   classical
   let good : ∀ R : Polynomial (Polynomial (Polynomial F)),
       R ∈ UniqueFactorizationMonoid.normalizedFactors Q →
-      Irreducible R → 0 < R.natDegree → R.natDegree ≤ 255 →
+      Irreducible R → 0 < R.natDegree → R.natDegree ≤ 801 →
       ∃ x₀ : F, ∃ Bad : Finset F,
-        Bad.card ≤ 2 * R.natDegree * 63302 ∧
+        Bad.card ≤ 2 * R.natDegree * 453561 ∧
         (triSpecializeX R x₀).natDegree = R.natDegree ∧
         triSpecializeX R x₀ ≠ 0 ∧
         (triSpecializeX R x₀).IsPrimitive ∧
@@ -194,18 +195,18 @@ theorem exists_concrete_staged_pair_of_effective_obstructions
     intro R hRQ hR hp hd
     apply exists_single_factor_good_effective R hR hp
       (lt_of_le_of_lt hd hchar) (cert R hRQ hp)
-      R.natDegree 63302 (hcertDegree R hRQ hp) (hfactorXDegree R hRQ hp)
+      R.natDegree 453561 (hcertDegree R hRQ hp) (hfactorXDegree R hRQ hp)
   let pick : Polynomial (Polynomial (Polynomial F)) → F × Finset F := fun R =>
     if h : R ∈ UniqueFactorizationMonoid.normalizedFactors Q ∧
-        Irreducible R ∧ 0 < R.natDegree ∧ R.natDegree ≤ 255 then
+        Irreducible R ∧ 0 < R.natDegree ∧ R.natDegree ≤ 801 then
       (Classical.choose (good R h.1 h.2.1 h.2.2.1 h.2.2.2),
         Classical.choose (Classical.choose_spec (good R h.1 h.2.1 h.2.2.1 h.2.2.2)))
     else (0, ∅)
   let x₀ := fun R => (pick R).1
   let Bad := fun R => (pick R).2
   have hpick : ∀ R (hRQ : R ∈ UniqueFactorizationMonoid.normalizedFactors Q)
-      (hi : Irreducible R) (hp : 0 < R.natDegree) (hd : R.natDegree ≤ 255),
-      (Bad R).card ≤ 2 * R.natDegree * 63302 ∧
+      (hi : Irreducible R) (hp : 0 < R.natDegree) (hd : R.natDegree ≤ 801),
+      (Bad R).card ≤ 2 * R.natDegree * 453561 ∧
       (triSpecializeX R (x₀ R)).natDegree = R.natDegree ∧
       triSpecializeX R (x₀ R) ≠ 0 ∧
       (triSpecializeX R (x₀ R)).IsPrimitive ∧
@@ -216,18 +217,18 @@ theorem exists_concrete_staged_pair_of_effective_obstructions
     simpa [x₀, Bad, pick, hRQ, hi, hp, hd] using
       Classical.choose_spec (Classical.choose_spec (good R hRQ hi hp hd))
   have hRdeg : ∀ R ∈ UniqueFactorizationMonoid.normalizedFactors Q,
-      R.natDegree ≤ 255 := by
+      R.natDegree ≤ 801 := by
     intro R hRQ
     calc
       R.natDegree ≤ ∑ A ∈ (UniqueFactorizationMonoid.normalizedFactors Q).toFinset,
           A.natDegree := Finset.single_le_sum (fun _ _ => Nat.zero_le _)
             (by simpa using hRQ)
       _ ≤ Q.natDegree := normalizedFactors_toFinset_sum_natDegree_le Q hQ
-      _ ≤ 255 := hQY
+      _ ≤ 801 := hQY
   let G : StagedGoodFamily Q S := {
     x₀ := x₀
     Bad := Bad
-    badCap := fun R => 2 * R.natDegree * 63302
+    badCap := fun R => 2 * R.natDegree * 453561
     specialize_ne_zero := by
       intro R hRQ hp
       exact (hpick R hRQ (UniqueFactorizationMonoid.prime_of_normalized_factor R hRQ).irreducible hp (hRdeg R hRQ)).2.2.1
@@ -253,12 +254,26 @@ theorem exists_concrete_staged_pair_of_effective_obstructions
           congrArg Polynomial.derivative heq
       exact (hs (by rw [heq]; simp)) (by rw [hd]; simp)
   }
+  let A : Polynomial (Polynomial (Polynomial F)) → Nat := fun R =>
+    if R.natDegree = 1 then 2 * 104951682 * 453561 else 634000 * 453561
+  have hglobal :
+      (∑ R ∈ (UniqueFactorizationMonoid.normalizedFactors Q).toFinset.filter
+          (fun R => 0 < R.natDegree),
+        (A R * R.natDegree ^ 2 + (bchksErrors + 1) * R.natDegree +
+          G.badCap R)) < S.card := by
+    apply (positive_normalizedFactors_piecewise_cap_le Q hQ G.badCap
+      (2 * 104951682 * 453561) (634000 * 453561) (bchksErrors + 1) 453561 801
+      hQY ?_).trans_lt hcard
+    intro R hR
+    have hm := Finset.mem_filter.mp hR
+    exact G.bad_cap R (by simpa using hm.1) hm.2
   obtain ⟨R, H, T, hRQ, hp, hHR, hHp, hTS, hTbad, hvan, hmargin,
       hRi, hHi, hdiv, hRd, hHd, hHtot, hRXtot, hw, hHyp⟩ :=
-    exists_staged_pair_with_setup S P Q G hQ hQeval hQz hQY hQYZ
-      hQweightedX hcard
+    exists_staged_pair_with_setup_var S P Q G A hQ hQeval hQz hQY hQYZ
+      hQweightedX hglobal
   have hg := hpick R hRQ hRi hp hRd
-  exact ⟨R, H, T, x₀ R, Bad R, hRQ, hp, hHR, hHp, hTS, hTbad, hvan, hmargin,
+  exact ⟨R, H, T, x₀ R, Bad R, hRQ, hp, hHR, hHp, hTS, hTbad, hvan,
+    by simpa [A] using hmargin,
     hRi, hHi, hdiv, hRd, hHd, hHtot, hRXtot, hw, hHyp, hg.1, hg.2.2.2.2⟩
 
 end ProximityPrize.SubmissionLower
