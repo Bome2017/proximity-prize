@@ -83,9 +83,9 @@ theorem bchksLinearProtocolAdapter
     (hWeighted : ∀ j a, ((R.coeff j).coeff a) ≠ 0 →
       a + 131071 * j < 40872562)
     (hRdeg : R.natDegree = 1)
-    (hTmargin : (76358 + 1) + 2 * 40872562 * 32414 < T.card) :
+    (hTmargin : (76770 + 1) + 2 * 40872562 * 32414 < T.card) :
     ∃ Tgood : Finset IRSProfile.Field, Tgood ⊆ T ∧
-      76358 + 1 < Tgood.card ∧
+      76770 + 1 < Tgood.card ∧
       ∃ p₀ p₁ : IRSProfile.Field[X], p₀.natDegree ≤ 131071 ∧
         p₁.natDegree ≤ 131071 ∧ ∀ z ∈ Tgood,
           P z = p₀ + Polynomial.C z * p₁ := by
@@ -105,8 +105,8 @@ theorem bchksLinearProtocolAdapter
       (s := T) (p := fun z => z ∉ Bad)
   have hbadT : (T.filter fun z => z ∈ Bad).card ≤ Bad.card :=
     Finset.card_le_card (by intro z hz; exact (Finset.mem_filter.mp hz).2)
-  have hTgood : 76358 + 1 < Tgood.card := by omega
-  have hlarge : 2 * 40872562 + 76358 + 1 ≤ Tgood.card := by
+  have hTgood : 76770 + 1 < Tgood.card := by omega
+  have hlarge : 2 * 40872562 + 76770 + 1 ≤ Tgood.card := by
     have hsaved : 2 * 40872562 < 131071 * 32414 := by norm_num
     omega
   let PT : Tgood → IRSProfile.Field[X] := fun z => P z

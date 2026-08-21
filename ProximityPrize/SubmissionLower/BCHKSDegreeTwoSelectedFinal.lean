@@ -19,8 +19,8 @@ theorem exists_large_domain_fibers
     (A : IRSProfile.Field → Finset IRSProfile.Index)
     (P : T → Polynomial IRSProfile.Field)
     (dH d D : ℕ)
-    (hrow : ∀ z ∈ T, 262144 - 76358 ≤ (A z).card)
-    (hT : 2 * 40872562 * dH * d * D + 76358 + 1 ≤ T.card)
+    (hrow : ∀ z ∈ T, 262144 - 76770 ≤ (A z).card)
+    (hT : 2 * 40872562 * dH * d * D + 76770 + 1 ≤ T.card)
     (hagree : ∀ z : T, ∀ i ∈ A z,
       Polynomial.eval (IRSProfile.domain i) (P z) = U 0 i + (z : IRSProfile.Field) * U 1 i) :
     ∃ A' : Finset IRSProfile.Field, 131072 ≤ A'.card ∧
@@ -82,8 +82,8 @@ theorem degree_ge_two_selected_adapter
     (hcard : 2*DX*H.natDegree*d*D + e + 1 < T.card)
     (hkF : k < Fintype.card IRSProfile.Field)
     (Arow : IRSProfile.Field → Finset IRSProfile.Index)
-    (hrow : ∀ z ∈ T, 262144 - 76358 ≤ (Arow z).card)
-    (hT : 2 * 40872562 * H.natDegree * d * D + 76358 + 1 ≤ T.card)
+    (hrow : ∀ z ∈ T, 262144 - 76770 ≤ (Arow z).card)
+    (hT : 2 * 40872562 * H.natDegree * d * D + 76770 + 1 ≤ T.card)
     (hagree : ∀ z : T, ∀ i ∈ Arow z,
       Polynomial.eval (IRSProfile.domain i) (P z) =
         U 0 i + (z : IRSProfile.Field) * U 1 i)
@@ -144,7 +144,7 @@ theorem degree_two_selected_final
     (hsimple : ∀ z ∉ Bad, ∀ y,
       Polynomial.eval y (biSpecializeZ (triSpecializeX R x₀) z) = 0 →
       Polynomial.eval y (biSpecializeZ (triSpecializeX R.derivative x₀) z) ≠ 0)
-    (hrow : ∀ z ∈ T, 262144 - 76358 ≤ (Arow z).card)
+    (hrow : ∀ z ∈ T, 262144 - 76770 ≤ (Arow z).card)
     (hagree : ∀ z ∈ T, ∀ i ∈ Arow z,
       Polynomial.eval (IRSProfile.domain i) (P z) = U 0 i + z * U 1 i)
     (hRdeg : 2 ≤ R.natDegree) :
@@ -155,7 +155,7 @@ theorem degree_two_selected_final
   classical
   letI : Fact (Irreducible H) := ⟨hHi⟩
   letI : Fact (0 < H.natDegree) := ⟨hHpos⟩
-  have hT : 2 * 40872562 * H.natDegree * R.natDegree * 32414 + 76358 + 1 ≤ T.card := by
+  have hT : 2 * 40872562 * H.natDegree * R.natDegree * 32414 + 76770 + 1 ≤ T.card := by
     dsimp [bchksErrors] at hmargin
     ring_nf at hmargin ⊢
     omega

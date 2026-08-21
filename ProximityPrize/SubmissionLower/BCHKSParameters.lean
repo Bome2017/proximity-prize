@@ -6,14 +6,14 @@ open ProximityPrize.Benchmark
 open CoreDefinitions ProximityGap
 open scoped NNReal
 
-/-- Radius chosen for a 63.58-bit claim after the specialized BCHKS extraction. -/
-noncomputable def bchksRadius : ℝ≥0 := (305433 : ℝ≥0) / 1048576
+/-- Radius chosen for a 63.98-bit Johnson retarget of the specialized BCHKS extraction. -/
+noncomputable def bchksRadius : ℝ≥0 := (307080 : ℝ≥0) / 1048576
 
-def bchksErrors : ℕ := 76358
+def bchksErrors : ℕ := 76770
 
 def bchksNumerator : ℕ := 258000000000000000
 
-def bchksListBound : ℕ := 622
+def bchksListBound : ℕ := 30000
 
 /-- Slack reserved for bad specializations without changing the sharp multiplicity target. -/
 def bchksBadBudget : ℕ := 68000000000000
@@ -32,37 +32,37 @@ lemma bchks_budget_nat :
       (2130706433 : ℕ) ^ 6 := by
   norm_num [bchksNumerator, bchksListBound]
 
-/-- Rational lower approximation to `2^(42/100)`, used by the score certificate. -/
-theorem two_rpow_forty_two_hundred_ge :
-    (13379 : ℝ≥0) / 10000 ≤ (2 : ℝ≥0) ^ ((42 : ℝ) / 100) := by
+/-- Rational lower approximation to `2^(2/100)`, used by the 2-centibit score certificate. -/
+theorem two_rpow_two_hundred_ge :
+    (1010 : ℝ≥0) / 1000 ≤ (2 : ℝ≥0) ^ ((2 : ℝ) / 100) := by
   have hroot :
-      (13379 : ℝ≥0) / 10000 ≤
-        ((2 : ℝ≥0) ^ (42 : ℕ)) ^ ((100 : ℝ)⁻¹) := by
+      (1010 : ℝ≥0) / 1000 ≤
+        ((2 : ℝ≥0) ^ (2 : ℕ)) ^ ((100 : ℝ)⁻¹) := by
     rw [NNReal.le_rpow_inv_iff (by norm_num : (0 : ℝ) < 100)]
     norm_num [div_pow, div_le_iff₀]
   calc
-    (13379 : ℝ≥0) / 10000 ≤
-        ((2 : ℝ≥0) ^ (42 : ℕ)) ^ ((100 : ℝ)⁻¹) := hroot
-    _ = (2 : ℝ≥0) ^ ((42 : ℝ) / 100) := by
+    (1010 : ℝ≥0) / 1000 ≤
+        ((2 : ℝ≥0) ^ (2 : ℕ)) ^ ((100 : ℝ)⁻¹) := hroot
+    _ = (2 : ℝ≥0) ^ ((2 : ℝ) / 100) := by
       rw [← NNReal.rpow_natCast_mul]
       norm_num [div_eq_mul_inv]
 
-/-- Standalone score arithmetic for the intended `ProtocolClaim 6358`. -/
+/-- Standalone score arithmetic for the intended `ProtocolClaim 6398`. -/
 lemma bchksRadius_score :
     (1 - bchksRadius) ^ IRSProfile.repetitions ≤
-      ProximityPrize.Benchmark.claimedError 6358 := by
+      ProximityPrize.Benchmark.claimedError 6398 := by
   calc
     (1 - bchksRadius) ^ IRSProfile.repetitions ≤
-        ((1 : ℝ≥0) / 2 ^ (64 : ℕ)) * (13379 / 10000) := by
+        ((1 : ℝ≥0) / 2 ^ (64 : ℕ)) * (1010 / 1000) := by
       rw [← NNReal.coe_le_coe]
       norm_num [bchksRadius, IRSProfile.repetitions, div_le_iff₀]
     _ ≤ ((1 : ℝ≥0) / 2 ^ (64 : ℕ)) *
-          (2 : ℝ≥0) ^ ((42 : ℝ) / 100) := by
-      exact mul_le_mul_of_nonneg_left two_rpow_forty_two_hundred_ge (by positivity)
-    _ = ProximityPrize.Benchmark.claimedError 6358 := by
+          (2 : ℝ≥0) ^ ((2 : ℝ) / 100) := by
+      exact mul_le_mul_of_nonneg_left two_rpow_two_hundred_ge (by positivity)
+    _ = ProximityPrize.Benchmark.claimedError 6398 := by
       unfold ProximityPrize.Benchmark.claimedError
-      rw [show -((((6358 : ℕ) : ℝ) / 100)) =
-          -((64 : ℕ) : ℝ) + (42 : ℝ) / 100 by norm_num,
+      rw [show -((((6398 : ℕ) : ℝ) / 100)) =
+          -((64 : ℕ) : ℝ) + (2 : ℝ) / 100 by norm_num,
         NNReal.rpow_add (by norm_num : (2 : ℝ≥0) ≠ 0),
         NNReal.rpow_neg, NNReal.rpow_natCast]
       norm_num

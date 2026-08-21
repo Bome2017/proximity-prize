@@ -66,7 +66,7 @@ theorem bchksPolynomialAlignment_of_linear
     intro z hz
     have hzS : z ∈ S := hSgoodS (hTS hz)
     simpa [PE, hzS] using hPdeg ⟨z, hzS⟩
-  have hrow : ∀ z ∈ T, 262144 - 76358 ≤ (A z).card := by
+  have hrow : ∀ z ∈ T, 262144 - 76770 ≤ (A z).card := by
     intro z hz
     have hzS : z ∈ S := hSgoodS (hTS hz)
     norm_num

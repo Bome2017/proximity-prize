@@ -21,8 +21,8 @@ theorem exists_large_domain_fibers
     (A : IRSProfile.Field → Finset IRSProfile.Index)
     (P : T → Polynomial IRSProfile.Field)
     (dH d D : ℕ)
-    (hrow : ∀ z ∈ T, 262144 - 76358 ≤ (A z).card)
-    (hT : 2 * 40872562 * dH * d * D + 76358 + 1 ≤ T.card)
+    (hrow : ∀ z ∈ T, 262144 - 76770 ≤ (A z).card)
+    (hT : 2 * 40872562 * dH * d * D + 76770 + 1 ≤ T.card)
     (hagree : ∀ z : T, ∀ i ∈ A z,
       Polynomial.eval (IRSProfile.domain i) (P z) = U 0 i + (z : IRSProfile.Field) * U 1 i) :
     ∃ A' : Finset IRSProfile.Field, 131072 ≤ A'.card ∧
@@ -87,8 +87,8 @@ theorem degree_ge_two_outer_assembly
     (hcard : 2*DX*H.natDegree*d*D + e + 1 < T.card)
     (hkF : k < Fintype.card IRSProfile.Field)
     (Arow : IRSProfile.Field → Finset IRSProfile.Index)
-    (hrow : ∀ z ∈ T, 262144 - 76358 ≤ (Arow z).card)
-    (hT : 2 * 40872562 * H.natDegree * d * D + 76358 + 1 ≤ T.card)
+    (hrow : ∀ z ∈ T, 262144 - 76770 ≤ (Arow z).card)
+    (hT : 2 * 40872562 * H.natDegree * d * D + 76770 + 1 ≤ T.card)
     (hagree : ∀ z : T, ∀ i ∈ Arow z,
       Polynomial.eval (IRSProfile.domain i) (P z) =
         U 0 i + (z : IRSProfile.Field) * U 1 i)
