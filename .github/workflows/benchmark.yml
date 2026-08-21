@@ -68,6 +68,13 @@ jobs:
       - name: Write Yukon score
         run: python3 scripts/write-verifier-score.py "$PROFILE" verifier-result.json
 
+      - name: Show the verifier's own answer
+        # Only on failure, and only the service's response -- which already
+        # carries `failure.message`. Without this the job reports a bare
+        # stage/code and the reason has to be read out of the database.
+        if: failure() && hashFiles('verifier-result.json')
+        run: cat verifier-result.json
+
       - name: Upload score
         uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
         with:
