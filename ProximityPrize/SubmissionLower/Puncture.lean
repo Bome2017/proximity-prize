@@ -644,19 +644,20 @@ lemma no_five_close_words
     (C : Set (ι → A)) (y : ι → A) (c : Fin 5 → ι → A)
     (hc_mem : ∀ j, c j ∈ C) (hc_inj : Function.Injective c)
     (hmin : Code.minDist C = 131073) (hn : Fintype.card ι = 262144)
-    (hclose : ∀ j, Δ₀(y, c j) ≤ 65541) : False := by
+    (r : ℕ) (hclose : ∀ j, Δ₀(y, c j) ≤ r)
+    (hr : 30 * r + 2 * 262144 < 20 * 131073) : False := by
   classical
   let E : Fin 5 → Finset ι := fun j => Code.disagreementCols y (c j)
   let D : ι → Finset (Fin 5) := fun i =>
     Finset.univ.filter fun j => i ∈ E j
   let pairs := (Finset.univ : Finset (Fin 5)).offDiag
-  have hEcard (j : Fin 5) : (E j).card ≤ 65541 := by
+  have hEcard (j : Fin 5) : (E j).card ≤ r := by
     simpa [E, Code.hammingDist_eq_disagreementCols_card] using hclose j
-  have hcenter : (∑ j : Fin 5, (E j).card) ≤ 5 * 65541 := by
+  have hcenter : (∑ j : Fin 5, (E j).card) ≤ 5 * r := by
     calc
-      (∑ j : Fin 5, (E j).card) ≤ ∑ _j : Fin 5, 65541 :=
+      (∑ j : Fin 5, (E j).card) ≤ ∑ _j : Fin 5, r :=
         Finset.sum_le_sum fun j _ => hEcard j
-      _ = 5 * 65541 := by simp
+      _ = 5 * r := by simp
   have hsumED : (∑ j : Fin 5, (E j).card) = ∑ i : ι, (D i).card := by
     simpa [D] using sum_card_eq_sum_incidence E
   have hpair_min (p : Fin 5 × Fin 5) (hp : p ∈ pairs) :
@@ -705,17 +706,17 @@ lemma no_five_close_words
         rw [Finset.sum_add_distrib, ← Finset.mul_sum]
         simp
         ring
-  have hfinal : 20 * 131073 ≤ 30 * 65541 + 2 * 262144 := by
+  have hfinal : 20 * 131073 ≤ 30 * r + 2 * 262144 := by
     calc
       20 * 131073 ≤ ∑ p ∈ pairs, Δ₀(c p.1, c p.2) := hlower
       _ ≤ ∑ p ∈ pairs, ((E p.1) ∪ (E p.2)).card := hupper₁
       _ = ∑ i : ι, (pairs.filter fun p => i ∈ E p.1 ∨ i ∈ E p.2).card := hunion
       _ ≤ 6 * (∑ i : ι, (D i).card) + 2 * Fintype.card ι := hupper₂
       _ = 6 * (∑ j : Fin 5, (E j).card) + 2 * 262144 := by rw [← hsumED, hn]
-      _ ≤ 6 * (5 * 65541) + 2 * 262144 := Nat.add_le_add_right
+      _ ≤ 6 * (5 * r) + 2 * 262144 := Nat.add_le_add_right
         (Nat.mul_le_mul_left 6 hcenter) _
-      _ = 30 * 65541 + 2 * 262144 := by ring
-  norm_num at hfinal
+      _ = 30 * r + 2 * 262144 := by ring
+  omega
 
 noncomputable abbrev ImprovedSquaredCode :
     Set (IRSProfile.Index → Fin 2 → Fin IRSProfile.interleaving → IRSProfile.Field) :=
@@ -777,6 +778,7 @@ lemma improved_lambda_le_four :
   · intro j
     exact hammingDist_le_of_mem_close
       (hT (c j) (hBT (e j).2)) improvedRadius_floor_nnreal
+  · norm_num
 
 lemma mca_improved_le :
     mcaError (AffineLineGenerator IRSProfile.Field) IRSProfile.code
