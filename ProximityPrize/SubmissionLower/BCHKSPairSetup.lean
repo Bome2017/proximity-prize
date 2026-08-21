@@ -1,4 +1,4 @@
-import ProximityPrize.SubmissionLower.BCHKSFactorPigeon
+import ProximityPrize.SubmissionLower.BCHKSWeightedSelection
 import ProximityPrize.SubmissionLower.BCHKSHenselSetup
 
 namespace ProximityPrize.SubmissionLower
@@ -10,15 +10,16 @@ open RationalFunctions.HenselNumerators
 set_option maxRecDepth 1000000
 set_option maxHeartbeats 8000000
 
-/-- The concrete interpolation `YZ` support cap survives specializing `X=x₀`. -/
-theorem totalDegree_triSpecializeX_le
+/-- The strict concrete interpolation `YZ` support cap survives specializing `X=x₀`. -/
+theorem totalDegree_triSpecializeX_lt
     {F : Type*} [Field F]
     (Q : Polynomial (Polynomial (Polynomial F))) (x₀ : F) (D : Nat)
+    (hD : 0 < D)
     (hcap : ∀ j a, ((Q.coeff j).coeff a) ≠ 0 →
       ((Q.coeff j).coeff a).natDegree + j < D) :
-    Polynomial.Bivariate.totalDegree (triSpecializeX Q x₀) ≤ D := by
+    Polynomial.Bivariate.totalDegree (triSpecializeX Q x₀) < D := by
   unfold Polynomial.Bivariate.totalDegree
-  apply Finset.sup_le
+  rw [Finset.sup_lt_iff hD]
   intro j hj
   have hjne : (triSpecializeX Q x₀).coeff j ≠ 0 :=
     Polynomial.mem_support_iff.mp hj
@@ -56,6 +57,27 @@ theorem totalDegree_triSpecializeX_le
   rw [hcoeff]
   omega
 
+/-- Weak form retained for callers that only need a non-strict total-degree bound. -/
+theorem totalDegree_triSpecializeX_le
+    {F : Type*} [Field F]
+    (Q : Polynomial (Polynomial (Polynomial F))) (x₀ : F) (D : Nat)
+    (hcap : ∀ j a, ((Q.coeff j).coeff a) ≠ 0 →
+      ((Q.coeff j).coeff a).natDegree + j < D) :
+    Polynomial.Bivariate.totalDegree (triSpecializeX Q x₀) ≤ D := by
+  by_cases hD : 0 < D
+  · exact (totalDegree_triSpecializeX_lt Q x₀ D hD hcap).le
+  · have hDz : D = 0 := Nat.eq_zero_of_not_pos hD
+    have hQz : Q = 0 := by
+      apply Polynomial.ext
+      intro j
+      apply Polynomial.ext
+      intro a
+      by_contra ha
+      have := hcap j a ha
+      omega
+    subst D
+    simp [hQz, triSpecializeX, Polynomial.Bivariate.totalDegree]
+
 /-- Package the algebraic and degree facts needed after weighted selection.
 The weighted-`X` factor cap is explicit here; it is the remaining inheritance
 lemma from divisibility of a trivariate factor.  Separability is likewise an
@@ -68,19 +90,19 @@ theorem setup_selected_pair
     (hRQ : R ∈ UniqueFactorizationMonoid.normalizedFactors Q)
     (hHR : H ∈ UniqueFactorizationMonoid.normalizedFactors (triSpecializeX R x₀))
     (hHpos : 0 < H.natDegree)
-    (hQY : Q.natDegree ≤ 282)
+    (hQY : Q.natDegree ≤ 852)
     (hRYZ : ∀ j a, ((R.coeff j).coeff a) ≠ 0 →
-      ((R.coeff j).coeff a).natDegree + j < 55744)
+      ((R.coeff j).coeff a).natDegree + j < 519143)
     (hRweightedX : ∀ j a, ((R.coeff j).coeff a) ≠ 0 →
-      a + 131071 * j < 36923454)
+      a + 131071 * j < 111624646)
     (hprim : (Polynomial.Bivariate.evalX (Polynomial.C x₀) R).IsPrimitive) :
     Irreducible R ∧ Irreducible H ∧ 0 < H.natDegree ∧
     H ∣ triSpecializeX R x₀ ∧
-    R.natDegree ≤ 282 ∧ H.natDegree ≤ 282 ∧
-    Polynomial.Bivariate.totalDegree H ≤ 55744 ∧
-    Polynomial.Bivariate.totalDegree (triSpecializeX R x₀) ≤ 55744 ∧
+    R.natDegree ≤ 852 ∧ H.natDegree ≤ 852 ∧
+    Polynomial.Bivariate.totalDegree H ≤ 519142 ∧
+    Polynomial.Bivariate.totalDegree (triSpecializeX R x₀) ≤ 519142 ∧
     (∀ j a, ((R.coeff j).coeff a) ≠ 0 →
-      a + 131071 * j < 36923454) ∧
+      a + 131071 * j < 111624646) ∧
     RationalFunctions.HenselNumerators.Hypotheses x₀ R H := by
   have hRirr : Irreducible R :=
     (UniqueFactorizationMonoid.prime_of_normalized_factor R hRQ).irreducible
@@ -89,7 +111,7 @@ theorem setup_selected_pair
   have hRdvd : R ∣ Q := UniqueFactorizationMonoid.dvd_of_mem_normalizedFactors hRQ
   have hHd : H ∣ triSpecializeX R x₀ :=
     UniqueFactorizationMonoid.dvd_of_mem_normalizedFactors hHR
-  have hRdeg : R.natDegree ≤ 282 :=
+  have hRdeg : R.natDegree ≤ 852 :=
     (Polynomial.natDegree_le_of_dvd hRdvd hQ).trans hQY
   have hRXeq : triSpecializeX R x₀ =
       Polynomial.Bivariate.evalX (Polynomial.C x₀) R := by
@@ -97,11 +119,12 @@ theorem setup_selected_pair
   have hRX0 : triSpecializeX R x₀ ≠ 0 := by
     rw [hRXeq]
     exact hprim.ne_zero
-  have hHdeg : H.natDegree ≤ 282 :=
+  have hHdeg : H.natDegree ≤ 852 :=
     (Polynomial.natDegree_le_of_dvd hHd hRX0).trans
       ((triSpecializeX_natDegree_le R x₀).trans hRdeg)
-  have hRXtotal : Polynomial.Bivariate.totalDegree (triSpecializeX R x₀) ≤ 55744 :=
-    totalDegree_triSpecializeX_le R x₀ 55744 hRYZ
+  have hRXtotal : Polynomial.Bivariate.totalDegree (triSpecializeX R x₀) ≤ 519142 := by
+    have hlt := totalDegree_triSpecializeX_lt R x₀ 519143 (by norm_num) hRYZ
+    omega
   have totalDegree_le_of_dvd
       {A B : Polynomial (Polynomial F)} (hA : A ≠ 0) (hB : B ≠ 0) (hd : A ∣ B) :
       Polynomial.Bivariate.totalDegree A ≤ Polynomial.Bivariate.totalDegree B := by
@@ -110,7 +133,7 @@ theorem setup_selected_pair
     rw [Polynomial.Bivariate.totalDegree_mul hA hC]
     exact Nat.le_add_right _ _
   have hH0 : H ≠ 0 := Polynomial.ne_zero_of_natDegree_gt hHpos
-  have hHtotal : Polynomial.Bivariate.totalDegree H ≤ 55744 :=
+  have hHtotal : Polynomial.Bivariate.totalDegree H ≤ 519142 :=
     (totalDegree_le_of_dvd hH0 hRX0 hHd).trans hRXtotal
   have hHyp : RationalFunctions.HenselNumerators.Hypotheses x₀ R H := by
     refine ⟨?_, hprim.ne_zero, ?_⟩
