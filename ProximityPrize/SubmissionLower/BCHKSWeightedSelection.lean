@@ -16,8 +16,8 @@ theorem exists_bchks_weighted_factor_selection
     (Q : Polynomial (Polynomial (Polynomial IRSProfile.Field)))
     (hQ : Q ≠ 0)
     (hcaps : ∀ j a, ((Q.coeff j).coeff a) ≠ 0 →
-      j < 852 ∧ a + 131071 * j < 111624646 ∧
-        ((Q.coeff j).coeff a).natDegree + j < 519143)
+      j < 886 ∧ a + 131071 * j < 116073546 ∧
+        ((Q.coeff j).coeff a).natDegree + j < 549941)
     (hQeval : ∀ z : ↥S, triEval Q z.1 (P z) = 0)
     (hS : bchksNumerator < S.card)
     (hBad : (S ∩ Bad).card ≤ bchksBadBudget)
@@ -31,7 +31,7 @@ theorem exists_bchks_weighted_factor_selection
         R ∈ UniqueFactorizationMonoid.normalizedFactors Q ∧ 0 < R.natDegree ∧
         H ∈ UniqueFactorizationMonoid.normalizedFactors (triSpecializeX R x₀) ∧
           0 < H.natDegree ∧
-        632176 * 519143 * (R.natDegree * H.natDegree) +
+        632176 * 549941 * (R.natDegree * H.natDegree) +
             (bchksErrors + 1) < T.card ∧
         ∃ hTsub : T ⊆ S \ Bad,
           ∀ z, ∀ hz : z ∈ T,
@@ -41,14 +41,19 @@ theorem exists_bchks_weighted_factor_selection
   classical
   let Good := S \ Bad
   have hGoodLarge :
-      632176 * 519143 * 852 ^ 2 + (bchksErrors + 1) * 852 < Good.card := by
-    simpa [Good] using card_sdiff_large_for_bchks S Bad hS hBad
+      632176 * 549941 * 886 ^ 2 + (bchksErrors + 1) * 886 < Good.card := by
+    calc
+      632176 * 549941 * 886 ^ 2 + (bchksErrors + 1) * 886 ≤
+          632199 * 549941 * 886 ^ 2 + (bchksErrors + 1) * 886 := by
+        exact Nat.add_le_add_right (by norm_num) _
+      _ < Good.card := by
+        simpa [Good] using card_sdiff_large_for_bchks S Bad hS hBad
   have hGoodNonempty : Good.Nonempty := by
     apply Finset.card_pos.mp
     exact (by norm_num : 0 <
-      632176 * 519143 * 852 ^ 2 + (bchksErrors + 1) * 852).trans hGoodLarge
+      632176 * 549941 * 886 ^ 2 + (bchksErrors + 1) * 886).trans hGoodLarge
   obtain ⟨z₀, hz₀⟩ := hGoodNonempty
-  have hQdeg : Q.natDegree ≤ 852 := by
+  have hQdeg : Q.natDegree ≤ 886 := by
     have hlead : Q.coeff Q.natDegree ≠ 0 := by
       rw [Polynomial.coeff_natDegree]
       exact Polynomial.leadingCoeff_ne_zero.mpr hQ
@@ -67,20 +72,20 @@ theorem exists_bchks_weighted_factor_selection
     exact hsecond z₀ hz₀ R hR (by simp [hzero, biSpecializeZ])
   let Candidates := (positiveNormalizedFactorPairs Q x₀).filter
     fun RH => 0 < RH.1.natDegree
-  have hCandidates : Candidates.card ≤ 852 := by
+  have hCandidates : Candidates.card ≤ 886 := by
     exact (Finset.card_filter_le _ _).trans
-      (positiveNormalizedFactorPairs_card_le' Q hQ x₀ 852 hQdeg hx₀)
+      (positiveNormalizedFactorPairs_card_le' Q hQ x₀ 886 hQdeg hx₀)
   have hRXdeg : ∀ R ∈ UniqueFactorizationMonoid.normalizedFactors Q,
-      (triSpecializeX R x₀).natDegree ≤ 852 := by
+      (triSpecializeX R x₀).natDegree ≤ 886 := by
     intro R hR
     exact (triSpecializeX_natDegree_le R x₀).trans
       ((Polynomial.natDegree_le_of_dvd
         (UniqueFactorizationMonoid.dvd_of_mem_normalizedFactors hR) hQ).trans hQdeg)
   have hweighted :
-      (∑ RH ∈ Candidates, RH.1.natDegree * RH.2.natDegree) ≤ 852 ^ 2 := by
+      (∑ RH ∈ Candidates, RH.1.natDegree * RH.2.natDegree) ≤ 886 ^ 2 := by
     apply (Finset.sum_le_sum_of_subset_of_nonneg (Finset.filter_subset _ _) (by simp)).trans
     exact positiveNormalizedFactorPairs_sum_mul_natDegree_le_sq
-      Q hQ x₀ 852 hQdeg hx₀ hRXdeg
+      Q hQ x₀ 886 hQdeg hx₀ hRXdeg
   let Rel : ↥Good →
       (Polynomial (Polynomial (Polynomial IRSProfile.Field)) ×
         Polynomial (Polynomial IRSProfile.Field)) → Prop :=
@@ -108,16 +113,16 @@ theorem exists_bchks_weighted_factor_selection
       exact ⟨R, hRQ, H, ⟨hHR, hHpos⟩, rfl⟩
     exact ⟨(R, H), Finset.mem_filter.mpr ⟨hpair, hRpos⟩, hRzero, hHzero⟩
   have hCapacityLarge :
-      632176 * 519143 * 852 ^ 2 +
+      632176 * 549941 * 886 ^ 2 +
           (bchksErrors + 1) * Candidates.card < Good.attach.card := by
     rw [Finset.card_attach]
     exact (Nat.add_le_add_left
       (Nat.mul_le_mul_left (bchksErrors + 1) hCandidates)
-      (632176 * 519143 * 852 ^ 2)).trans_lt hGoodLarge
+      (632176 * 549941 * 886 ^ 2)).trans_lt hGoodLarge
   obtain ⟨RH, hRHcand, hRHlarge⟩ :=
     exists_pair_fiber_gt_BCHKS_capacity Good.attach Candidates Rel
       Polynomial.natDegree Polynomial.natDegree
-      316088 519143 852 bchksErrors hcover hweighted hCapacityLarge
+      316088 549941 886 bchksErrors hcover hweighted hCapacityLarge
   have hRposRH : 0 < RH.1.natDegree := (Finset.mem_filter.mp hRHcand).2
   have hmem := (Finset.mem_filter.mp hRHcand).1
   simp only [positiveNormalizedFactorPairs, Finset.mem_biUnion,

@@ -119,8 +119,8 @@ theorem many_large_fibers
 /-- The numerical BCHKS parameters turn the stated pair-fiber lower bound
 into the strict inequality required by `many_large_fibers`. -/
 theorem concrete_incidence_inequality (dH d D tcard : ℕ)
-    (ht : 2 * 111624646 * dH * d * D + 76721 + 1 ≤ tcard) :
-    (262144 - 76721 - 131071) * tcard >
+    (ht : 2 * 116073546 * dH * d * D + 76723 + 1 ≤ tcard) :
+    (262144 - 76723 - 131071) * tcard >
       (262144 - 131071) * ((2 * 131071 + 1) * dH * d * D) := by
   norm_num at ht ⊢
   nlinarith
@@ -131,12 +131,12 @@ theorem concrete_many_large_fibers
     {ι ζ : Type} [Fintype ι] [DecidableEq ι] [DecidableEq ζ]
     (T : Finset ζ) (A : ζ → Finset ι) (dH d D : ℕ)
     (hn : Fintype.card ι = 262144)
-    (hrow : ∀ z ∈ T, 262144 - 76721 ≤ (A z).card)
-    (hT : 2 * 111624646 * dH * d * D + 76721 + 1 ≤ T.card) :
+    (hrow : ∀ z ∈ T, 262144 - 76723 ≤ (A z).card)
+    (hT : 2 * 116073546 * dH * d * D + 76723 + 1 ≤ T.card) :
     131072 ≤ (Finset.univ.filter fun x : ι =>
       (2 * 131071 + 1) * dH * d * D <
         (T.filter fun z => x ∈ A z).card).card := by
-  apply many_large_fibers T A 262144 76721 131071
+  apply many_large_fibers T A 262144 76723 131071
     ((2 * 131071 + 1) * dH * d * D) hn hrow
   exact concrete_incidence_inequality dH d D T.card hT
 
@@ -252,8 +252,8 @@ theorem doubleCounting_exists_common_affine_set
 
 /-- The incidence arithmetic also absorbs the one-unit base-`Z` numerator overhead. -/
 theorem concrete_incidence_inequality_plus (dH d D tcard : ℕ)
-    (ht : 2 * 111624646 * dH * d * D + 76721 + 1 ≤ tcard) :
-    (262144 - 76721 - 131071) * tcard >
+    (ht : 2 * 116073546 * dH * d * D + 76723 + 1 ≤ tcard) :
+    (262144 - 76723 - 131071) * tcard >
       (262144 - 131071) * ((2 * 131071 + 2) * dH * d * D) := by
   norm_num at ht ⊢
   nlinarith
@@ -262,28 +262,28 @@ theorem concrete_many_large_fibers_plus
     {ι ζ : Type} [Fintype ι] [DecidableEq ι] [DecidableEq ζ]
     (T : Finset ζ) (A : ζ → Finset ι) (dH d D : ℕ)
     (hn : Fintype.card ι = 262144)
-    (hrow : ∀ z ∈ T, 262144 - 76721 ≤ (A z).card)
-    (hT : 2 * 111624646 * dH * d * D + 76721 + 1 ≤ T.card) :
+    (hrow : ∀ z ∈ T, 262144 - 76723 ≤ (A z).card)
+    (hT : 2 * 116073546 * dH * d * D + 76723 + 1 ≤ T.card) :
     131072 ≤ (Finset.univ.filter fun x : ι =>
       (2 * 131071 + 2) * dH * d * D <
         (T.filter fun z => x ∈ A z).card).card := by
-  apply many_large_fibers T A 262144 76721 131071
+  apply many_large_fibers T A 262144 76723 131071
     ((2 * 131071 + 2) * dH * d * D) hn hrow
   exact concrete_incidence_inequality_plus dH d D T.card hT
 
-/-- At the 63.94 error cell, `632176` is a sufficient row-to-fibre
+/-- At the 63.94 error cell, `632199` is a sufficient row-to-fibre
 conversion coefficient.  This is the exact incidence calculation and has no
 dependence on the Hensel lifting horizon. -/
 theorem incidence_6394_arithmetic (r tcard : Nat)
-    (ht : 632176 * r + 76721 + 1 ≤ tcard) :
-    (262144 - 76721 - 131071) * tcard >
+    (ht : 632199 * r + 76723 + 1 ≤ tcard) :
+    (262144 - 76723 - 131071) * tcard >
       (262144 - 131071) * ((2 * 131071 + 2) * r) := by
   norm_num at ht ⊢
   nlinarith
 
 theorem incidence_6394_arithmetic_mul (dH d D tcard : Nat)
-    (ht : 632176 * dH * d * D + 76721 + 1 ≤ tcard) :
-    (262144 - 76721 - 131071) * tcard >
+    (ht : 632199 * dH * d * D + 76723 + 1 ≤ tcard) :
+    (262144 - 76723 - 131071) * tcard >
       (262144 - 131071) * ((2 * 131071 + 2) * dH * d * D) := by
   simpa [Nat.mul_assoc] using
     incidence_6394_arithmetic (dH * d * D) tcard (by
@@ -294,13 +294,13 @@ theorem many_large_fibers_6394
     {ι ζ : Type} [Fintype ι] [DecidableEq ι] [DecidableEq ζ]
     (T : Finset ζ) (A : ζ → Finset ι) (dH d D : Nat)
     (hn : Fintype.card ι = 262144)
-    (hrow : ∀ z ∈ T, 262144 - 76721 ≤ (A z).card)
-    (hT : 632176 * dH * d * D + 76721 + 1 ≤ T.card) :
+    (hrow : ∀ z ∈ T, 262144 - 76723 ≤ (A z).card)
+    (hT : 632199 * dH * d * D + 76723 + 1 ≤ T.card) :
     131072 ≤ (Finset.univ.filter fun x : ι =>
       (2 * 131071 + 2) * dH * d * D <
         (T.filter fun z => x ∈ A z).card).card := by
   simpa only [Nat.reduceAdd] using
-    (many_large_fibers T A 262144 76721 131071
+    (many_large_fibers T A 262144 76723 131071
       ((2 * 131071 + 2) * dH * d * D) hn hrow
       (incidence_6394_arithmetic_mul dH d D T.card hT))
 

@@ -61,22 +61,22 @@ theorem sum_staged_R_capacities_le_of_sq_cap
 /-- The staged accounting, including one initial `Q`-bad-Z deletion and all
 tailored selected-factor obstruction budgets, fits the BCHKS numerator. -/
 theorem bchks_staged_capacity_budget :
-    632176 * 519142 * 851 ^ 2 +
-      (bchksErrors + 1) * 851 +
-      2 * 519143 * 851 + 519143 < bchksNumerator := by
+    632199 * 549940 * 885 ^ 2 +
+      (bchksErrors + 1) * 885 +
+      2 * 549941 * 885 + 549941 < bchksNumerator := by
   norm_num [bchksErrors, bchksNumerator]
 
 /-- Convenient consequence for a source set after deleting the one-time
 `Q`-bad set. -/
 theorem bchks_staged_card_after_Qbad
     {α : Type*} [DecidableEq α] (S QBad : Finset α)
-    (hS : bchksNumerator < S.card) (hQBad : (S ∩ QBad).card ≤ 519143) :
-    632176 * 519142 * 851 ^ 2 +
-      (bchksErrors + 1) * 851 + 2 * 519143 * 851 < (S \ QBad).card := by
+    (hS : bchksNumerator < S.card) (hQBad : (S ∩ QBad).card ≤ 549941) :
+    632199 * 549940 * 885 ^ 2 +
+      (bchksErrors + 1) * 885 + 2 * 549941 * 885 < (S \ QBad).card := by
   rw [Finset.card_sdiff]
   apply Nat.lt_sub_of_add_lt
   have hb := bchks_staged_capacity_budget
-  have hi : (QBad ∩ S).card ≤ 519143 := by simpa [Finset.inter_comm] using hQBad
+  have hi : (QBad ∩ S).card ≤ 549941 := by simpa [Finset.inter_comm] using hQBad
   exact (Nat.add_le_add_left hi _).trans_lt (hb.trans hS)
 
 
@@ -98,10 +98,10 @@ theorem bchks_staged_after_badZSpecializations
     {F : Type*} [Field F] [DecidableEq F]
     (Q : Polynomial (Polynomial (Polynomial F))) (S : Finset F)
     (j a : Nat) (hc : (Q.coeff j).coeff a ≠ 0)
-    (hdeg : ((Q.coeff j).coeff a).natDegree < 519143)
+    (hdeg : ((Q.coeff j).coeff a).natDegree < 549941)
     (hS : bchksNumerator < S.card) :
-    632176 * 519142 * 851 ^ 2 +
-      (bchksErrors + 1) * 851 + 2 * 519143 * 851 <
+    632199 * 549940 * 885 ^ 2 +
+      (bchksErrors + 1) * 885 + 2 * 549941 * 885 <
         (S \ badZSpecializations Q S).card := by
   apply bchks_staged_card_after_Qbad S (badZSpecializations Q S) hS
   have hb := badZSpecializations_card_le_519142 Q S j a hc hdeg

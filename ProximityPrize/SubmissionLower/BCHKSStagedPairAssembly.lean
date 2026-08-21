@@ -128,7 +128,7 @@ structure StagedGoodFamily
   bad_card : ∀ R ∈ UniqueFactorizationMonoid.normalizedFactors Q,
     0 < R.natDegree → (Bad R).card ≤ badCap R
   bad_cap : ∀ R ∈ UniqueFactorizationMonoid.normalizedFactors Q,
-    0 < R.natDegree → badCap R ≤ 2 * R.natDegree * 519143
+    0 < R.natDegree → badCap R ≤ 2 * R.natDegree * 549941
   second_ne_zero : ∀ R ∈ UniqueFactorizationMonoid.normalizedFactors Q,
     0 < R.natDegree → ∀ z ∈ S \ Bad R,
       biSpecializeZ (triSpecializeX R (x₀ R)) z ≠ 0
@@ -142,42 +142,42 @@ theorem exists_staged_pair_with_setup
     (hQ : Q ≠ 0)
     (hQeval : ∀ z ∈ S, triEval Q z (P z) = 0)
     (hQz : ∀ z ∈ S, triSpecializeZ Q z ≠ 0)
-    (hQY : Q.natDegree ≤ 851)
+    (hQY : Q.natDegree ≤ 885)
     (hQYZ : ∀ j a, ((Q.coeff j).coeff a) ≠ 0 →
-      ((Q.coeff j).coeff a).natDegree + j < 519143)
+      ((Q.coeff j).coeff a).natDegree + j < 549941)
     (hQweightedX : ∀ j a, ((Q.coeff j).coeff a) ≠ 0 →
-      a + 131071 * j < 111624646)
-    (hcard : 632176 * 519142 * 851 ^ 2 +
-      (bchksErrors + 1) * 851 + 2 * 519143 * 851 < S.card) :
+      a + 131071 * j < 116073546)
+    (hcard : 632199 * 549940 * 885 ^ 2 +
+      (bchksErrors + 1) * 885 + 2 * 549941 * 885 < S.card) :
     ∃ R H T,
       R ∈ UniqueFactorizationMonoid.normalizedFactors Q ∧ 0 < R.natDegree ∧
       H ∈ UniqueFactorizationMonoid.normalizedFactors (triSpecializeX R (G.x₀ R)) ∧
       0 < H.natDegree ∧ T ⊆ S ∧ (∀ z ∈ T, z ∉ G.Bad R) ∧
       (∀ z ∈ T, triEval R z (P z) = 0 ∧
         biEval H (Polynomial.eval (G.x₀ R) (P z)) z = 0) ∧
-      (if R.natDegree = 1 then 2 * 111624646 * 519142
-        else 632176 * 519142 * R.natDegree) * H.natDegree +
+      (if R.natDegree = 1 then 2 * 116073546 * 549940
+        else 632199 * 549940 * R.natDegree) * H.natDegree +
         (bchksErrors + 1) < T.card ∧
       Irreducible R ∧ Irreducible H ∧ H ∣ triSpecializeX R (G.x₀ R) ∧
-      R.natDegree ≤ 852 ∧ H.natDegree ≤ 852 ∧
-      Polynomial.Bivariate.totalDegree H ≤ 519142 ∧
-      Polynomial.Bivariate.totalDegree (triSpecializeX R (G.x₀ R)) ≤ 519142 ∧
+      R.natDegree ≤ 886 ∧ H.natDegree ≤ 886 ∧
+      Polynomial.Bivariate.totalDegree H ≤ 549940 ∧
+      Polynomial.Bivariate.totalDegree (triSpecializeX R (G.x₀ R)) ≤ 549940 ∧
       (∀ j a, ((R.coeff j).coeff a) ≠ 0 →
-        a + 131071 * j < 111624646) ∧
+        a + 131071 * j < 116073546) ∧
       RationalFunctions.HenselNumerators.Hypotheses (G.x₀ R) R H := by
   let pairCost : Polynomial (Polynomial (Polynomial F)) → Nat := fun R =>
-    if R.natDegree = 1 then 2 * 111624646 * 519142
-    else 632176 * 519142 * R.natDegree
+    if R.natDegree = 1 then 2 * 116073546 * 549940
+    else 632199 * 549940 * R.natDegree
   have hsum :
       (∑ R ∈ (UniqueFactorizationMonoid.normalizedFactors Q).toFinset.filter
           (fun R => 0 < R.natDegree),
         (pairCost R * R.natDegree +
           (bchksErrors + 1) * R.natDegree + G.badCap R)) ≤
-        632176 * 519142 * 851 ^ 2 +
-          (bchksErrors + 1) * 851 + 2 * 519143 * 851 := by
+        632199 * 549940 * 885 ^ 2 +
+          (bchksErrors + 1) * 885 + 2 * 549941 * 885 := by
     simpa [pairCost] using positive_normalizedFactors_mixed_cap_le
-      Q hQ G.badCap (2 * 111624646 * 519142) (632176 * 519142)
-      (bchksErrors + 1) 519143 851 hQY (by norm_num)
+      Q hQ G.badCap (2 * 116073546 * 549940) (632199 * 549940)
+      (bchksErrors + 1) 549941 885 hQY (by norm_num)
       (by
         intro R hR
         have hm := Finset.mem_filter.mp hR

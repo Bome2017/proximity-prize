@@ -36,14 +36,14 @@ local instance concreteGoodSpecChar :
     CharP ProximityPrize.Benchmark.IRSProfile.Field 2130706433 :=
   charP_of_injective_algebraMap' KoalaBear.Field 2130706433
 
-/-- A monic irreducible positive-`Y` factor with `Y`-degree below 852 has
+/-- A monic irreducible positive-`Y` factor with `Y`-degree below 886 has
 nonzero raw discriminant.  The cap hypotheses are explicit so the factor-cap
 API can discharge them directly. -/
 theorem concrete_monic_factor_discr_ne_zero
     (R : Polynomial (Polynomial (Polynomial
       ProximityPrize.Benchmark.IRSProfile.Field)))
     (hmonic : R.Monic) (hirr : Irreducible R)
-    (hpos : 0 < R.natDegree) (hdeg : R.natDegree < 852) : R.discr ≠ 0 := by
+    (hpos : 0 < R.natDegree) (hdeg : R.natDegree < 886) : R.discr ≠ 0 := by
   let A := Polynomial (Polynomial ProximityPrize.Benchmark.IRSProfile.Field)
   let K := FractionRing A
   have hirrK : Irreducible (R.map (algebraMap A K)) :=
@@ -58,7 +58,7 @@ theorem rawDiscrRat_ne_zero_and_natDegree
     (R : Polynomial (Polynomial (Polynomial
       ProximityPrize.Benchmark.IRSProfile.Field)))
     (hmonic : R.Monic) (hirr : Irreducible R)
-    (hpos : 0 < R.natDegree) (hdeg : R.natDegree < 852) :
+    (hpos : 0 < R.natDegree) (hdeg : R.natDegree < 886) :
     rawDiscrRat R ≠ 0 ∧ (rawDiscrRat R).natDegree = R.discr.natDegree := by
   let f : Polynomial ProximityPrize.Benchmark.IRSProfile.Field →+*
       RatFunc ProximityPrize.Benchmark.IRSProfile.Field :=
@@ -121,7 +121,7 @@ theorem exists_x0_raw_factor_discriminants
     (hmonic : ∀ r ∈ T, (R r).Monic)
     (hirr : ∀ r ∈ T, Irreducible (R r))
     (hpos : ∀ r ∈ T, 0 < (R r).natDegree)
-    (hY : ∀ r ∈ T, (R r).natDegree < 852)
+    (hY : ∀ r ∈ T, (R r).natDegree < 886)
     (hbudget : (∑ r ∈ T, (R r).discr.natDegree) ≤ bchksBadBudget) :
     ∃ x₀ : ProximityPrize.Benchmark.IRSProfile.Field,
       ∀ r ∈ T,
@@ -213,10 +213,10 @@ theorem inter_badRootUnion_card_le_budget
     ((badRootUnion_card_le_sum_natDegree T p hne).trans hdeg)
 
 /-- The very coarse all-factor accounting is already far below the reserved
-budget.  It allows 852 factors, one degree-519143 survival obstruction and one
-`(2·852-1)·519143` resultant/discriminant obstruction per factor. -/
+budget.  It allows 886 factors, one degree-549941 survival obstruction and one
+`(2·886-1)·549941` resultant/discriminant obstruction per factor. -/
 theorem crude_concrete_bad_degree_budget :
-    852 * (519143 + (2 * 852 - 1) * 519143) ≤ bchksBadBudget := by
+    886 * (549941 + (2 * 886 - 1) * 549941) ≤ bchksBadBudget := by
   norm_num [bchksBadBudget]
 
 
@@ -226,16 +226,16 @@ theorem rat_discriminants_sum_degree_le_badBudget
     (T : Finset ρ)
     (R : ρ → Polynomial (Polynomial (Polynomial
       ProximityPrize.Benchmark.IRSProfile.Field)))
-    (hcard : T.card ≤ 852)
+    (hcard : T.card ≤ 886)
     (hdeg : ∀ r ∈ T,
-      (ratDiscr (R r)).natDegree ≤ 519143 + (2 * 852 - 1) * 519143) :
+      (ratDiscr (R r)).natDegree ≤ 549941 + (2 * 886 - 1) * 549941) :
     (∑ r ∈ T, (ratDiscr (R r)).natDegree) ≤ bchksBadBudget := by
   calc
     (∑ r ∈ T, (ratDiscr (R r)).natDegree) ≤
-        ∑ _r ∈ T, (519143 + (2 * 852 - 1) * 519143) :=
+        ∑ _r ∈ T, (549941 + (2 * 886 - 1) * 549941) :=
       Finset.sum_le_sum hdeg
-    _ = T.card * (519143 + (2 * 852 - 1) * 519143) := by simp
-    _ ≤ 852 * (519143 + (2 * 852 - 1) * 519143) := by
+    _ = T.card * (549941 + (2 * 886 - 1) * 549941) := by simp
+    _ ≤ 886 * (549941 + (2 * 886 - 1) * 549941) := by
       exact Nat.mul_le_mul_right _ hcard
     _ ≤ bchksBadBudget := crude_concrete_bad_degree_budget
 
@@ -246,10 +246,10 @@ theorem exists_concrete_x0_of_factor_discriminant_bounds
     (T : Finset ρ)
     (R : ρ → Polynomial (Polynomial (Polynomial
       ProximityPrize.Benchmark.IRSProfile.Field)))
-    (hcard : T.card ≤ 852)
+    (hcard : T.card ≤ 886)
     (hne : ∀ r ∈ T, ratDiscr (R r) ≠ 0)
     (hdeg : ∀ r ∈ T,
-      (ratDiscr (R r)).natDegree ≤ 519143 + (2 * 852 - 1) * 519143) :
+      (ratDiscr (R r)).natDegree ≤ 549941 + (2 * 886 - 1) * 549941) :
     ∃ x₀ : ProximityPrize.Benchmark.IRSProfile.Field,
       ∀ r ∈ T,
         Polynomial.eval
@@ -399,7 +399,7 @@ theorem concrete_good_specialization_of_factor_caps
       ProximityPrize.Benchmark.IRSProfile.Field)))
     (hirr : ∀ r ∈ T, Irreducible (R r))
     (hpos : ∀ r ∈ T, 0 < (R r).natDegree)
-    (hY : ∀ r ∈ T, (R r).natDegree < 852)
+    (hY : ∀ r ∈ T, (R r).natDegree < 886)
     (jQ aQ : ℕ)
     (hcQ : (Q.coeff jQ).coeff aQ ≠ 0)
     (hxBudget : (∑ r ∈ T, (factorXObstruction (R r)).natDegree) ≤

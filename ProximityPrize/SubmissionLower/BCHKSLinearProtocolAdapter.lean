@@ -74,18 +74,18 @@ theorem bchksLinearProtocolAdapter
     (T : Finset IRSProfile.Field)
     (hPdeg : ∀ z ∈ T, (P z).natDegree ≤ 131071)
     (hvan : ∀ z ∈ T, triEval R z (P z) = 0)
-    (hrow : ∀ z ∈ T, 185423 ≤ (Arow z).card)
+    (hrow : ∀ z ∈ T, 185421 ≤ (Arow z).card)
     (hagree : ∀ z ∈ T, ∀ i ∈ Arow z,
       Polynomial.eval (IRSProfile.domain i) (P z) =
         U (0 : Fin 2) i + z * U (1 : Fin 2) i)
     (hRi : Irreducible R)
-    (hYZ : YZCap R 519142)
+    (hYZ : YZCap R 549940)
     (hWeighted : ∀ j a, ((R.coeff j).coeff a) ≠ 0 →
-      a + 131071 * j < 111624646)
+      a + 131071 * j < 116073546)
     (hRdeg : R.natDegree = 1)
-    (hTmargin : (76721 + 1) + 2 * 111624646 * 519142 < T.card) :
+    (hTmargin : (76723 + 1) + 2 * 116073546 * 549940 < T.card) :
     ∃ Tgood : Finset IRSProfile.Field, Tgood ⊆ T ∧
-      76721 + 1 < Tgood.card ∧
+      76723 + 1 < Tgood.card ∧
       ∃ p₀ p₁ : IRSProfile.Field[X], p₀.natDegree ≤ 131071 ∧
         p₁.natDegree ≤ 131071 ∧ ∀ z ∈ Tgood,
           P z = p₀ + Polynomial.C z * p₁ := by
@@ -94,7 +94,7 @@ theorem bchksLinearProtocolAdapter
     exists_linear_resultant_witness R hRi hRdeg hYZ hWeighted T P hvan
   let Bad : Finset IRSProfile.Field := Res.roots.toFinset
   let Tgood := T.filter fun z => z ∉ Bad
-  have hBad : Bad.card ≤ (2 * 111624646 - 131071) * 519142 := by
+  have hBad : Bad.card ≤ (2 * 116073546 - 131071) * 549940 := by
     calc
       Bad.card ≤ Res.roots.card := Multiset.toFinset_card_le _
       _ ≤ Res.natDegree := Polynomial.card_roots' Res
@@ -105,22 +105,51 @@ theorem bchksLinearProtocolAdapter
       (s := T) (p := fun z => z ∉ Bad)
   have hbadT : (T.filter fun z => z ∈ Bad).card ≤ Bad.card :=
     Finset.card_le_card (by intro z hz; exact (Finset.mem_filter.mp hz).2)
-  have hTgood : 76721 + 1 < Tgood.card := by omega
-  have hlarge : 2 * 111624646 + 76721 + 1 ≤ Tgood.card := by
-    have hsaved : 2 * 111624646 < 131071 * 519142 := by norm_num
-    omega
-  have hlargeExact : 632176 * 1 * 1 * 2 + 76721 + 1 ≤ Tgood.card := by
+  have hTgood : 76723 + 1 < Tgood.card := by omega
+  have hlarge : 2 * 116073546 + 76723 + 1 ≤ Tgood.card := by
+    have hsaved : 2 * 116073546 < 131071 * 549940 := by norm_num
     omega
   let PT : Tgood → IRSProfile.Field[X] := fun z => P z
-  obtain ⟨Afield, hAfield, Fib, hFib, hinc⟩ :=
-    exists_large_domain_fibers_6394 U Tgood Arow PT 1 1 2
-      (by intro z hz; exact hrow z (hsub hz)) hlargeExact
-      (by intro z i hi; exact hagree z (hsub z.property) i hi)
-  have hFibBig : ∀ x : Afield, 519142 < (Fib x).card := by
+  let G : Finset IRSProfile.Index := Finset.univ.filter fun i =>
+    549940 < (Tgood.filter fun z => i ∈ Arow z).card
+  have hG : 131072 ≤ G.card := by
+    apply many_large_fibers Tgood Arow 262144 76723 131071 549940
+    · norm_num [IRSProfile.Index]
+    · intro z hz
+      exact hrow z (hsub hz)
+    · norm_num at hlarge ⊢
+      omega
+  let Afield : Finset IRSProfile.Field := G.image IRSProfile.domain
+  have hAfieldCard : Afield.card = G.card :=
+    Finset.card_image_iff.mpr fun a _ b _ hab => IRSProfile.domain.injective hab
+  have hAfield : 131072 ≤ Afield.card := by simpa [hAfieldCard] using hG
+  let coordIdx : Afield → IRSProfile.Index := fun x =>
+    Classical.choose (Finset.mem_image.mp x.property)
+  have hcoordIdx (x : Afield) :
+      coordIdx x ∈ G ∧ IRSProfile.domain (coordIdx x) = (x : IRSProfile.Field) :=
+    Classical.choose_spec (Finset.mem_image.mp x.property)
+  let Fib : Afield → Finset Tgood := fun x =>
+    Tgood.attach.filter fun z => coordIdx x ∈ Arow z
+  have hFib : ∀ x : Afield, 549940 < (Fib x).card := by
     intro x
-    have := hFib x
-    norm_num at this ⊢
-    omega
+    have hx := (Finset.mem_filter.mp (hcoordIdx x).1).2
+    change 549940 <
+      (Tgood.attach.filter (fun z : Tgood => coordIdx x ∈ Arow (z : IRSProfile.Field))).card
+    rw [Finset.filter_attach (fun z : IRSProfile.Field => coordIdx x ∈ Arow z) Tgood,
+      Finset.card_map, Finset.card_attach]
+    exact hx
+  have hinc : ∀ x : Afield, ∀ z ∈ Fib x, ∃ i : IRSProfile.Index,
+      IRSProfile.domain i = (x : IRSProfile.Field) ∧
+      Polynomial.eval (x : IRSProfile.Field) (PT z) =
+        U 0 i + (z : IRSProfile.Field) * U 1 i := by
+    intro x z hz
+    have hzA : coordIdx x ∈ Arow (z : IRSProfile.Field) := by
+      simpa [Fib] using (Finset.mem_filter.mp hz).2
+    refine ⟨coordIdx x, (hcoordIdx x).2, ?_⟩
+    rw [← (hcoordIdx x).2]
+    exact hagree z (hsub z.property) (coordIdx x) hzA
+  have hFibBig : ∀ x : Afield, 549940 < (Fib x).card := by
+    exact hFib
   have hne : ∀ x : Afield, (Fib x).Nonempty := fun x =>
     Finset.card_pos.mp (Nat.zero_lt_of_lt (hFibBig x))
   let zpick : ∀ x : Afield, Tgood := fun x => Classical.choose (hne x)
@@ -140,7 +169,7 @@ theorem bchksLinearProtocolAdapter
     have hii : i = idx x := IRSProfile.domain.injective (hi.trans (hidx x).symm)
     subst i
     simpa [U₀f, U₁f, x.property] using he
-  have hQdeg : ∀ x, (linearQSpecialization R U₀f U₁f x).natDegree ≤ 519142 := by
+  have hQdeg : ∀ x, (linearQSpecialization R U₀f U₁f x).natDegree ≤ 549940 := by
     intro x
     exact (natDegree_eval_affine_le_totalDegree (triSpecializeX R x) (U₀f x) (U₁f x)).trans
       (by
@@ -148,12 +177,12 @@ theorem bchksLinearProtocolAdapter
         rw [← Polynomial.Bivariate.evalX_eq_map]
         exact evalX_totalDegree_le_of_yzCap x R hYZ)
   let Fibf : Afield → Finset IRSProfile.Field := fun x => (Fib x).image Subtype.val
-  have hFibfcard : ∀ x : Afield, 519142 < (Fibf x).card := by
+  have hFibfcard : ∀ x : Afield, 549940 < (Fibf x).card := by
     intro x
     rw [show (Fibf x).card = (Fib x).card by
       exact Finset.card_image_iff.mpr fun a _ b _ h => Subtype.ext h]
     exact hFibBig x
-  have hcore := bchksLinearSelectedCore 131071 519142 Tgood Afield P U₀f U₁f
+  have hcore := bchksLinearSelectedCore 131071 549940 Tgood Afield P U₀f U₁f
     (linearQSpecialization R U₀f U₁f) (linearHSpecialization R)
     (by intro z hz; exact hPdeg z (hsub hz)) hAfield Fibf hFibfcard
     (by intro x hx; exact hQdeg x)

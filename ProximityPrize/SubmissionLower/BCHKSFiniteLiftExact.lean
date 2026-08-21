@@ -40,29 +40,29 @@ theorem concreteFiniteAlpha_middle_vanish
     (hzeta : HenselNumerators.zeta R x₀ H ≠ 0)
     (D d e : ℕ) (hD : Bivariate.totalDegree H ≤ D)
     (C : ℕ → F[X])
-    (hembed : ∀ t, 131071 < t → t < 111624646 →
-      embeddingOf𝒪Into𝕃 H (concreteBetaUpTo x₀ R hHyp hzeta 111624646 t) =
-        finiteAlpha (R := R) (H := H) x₀ 111624646 t *
+    (hembed : ∀ t, 131071 < t → t < 116073546 →
+      embeddingOf𝒪Into𝕃 H (concreteBetaUpTo x₀ R hHyp hzeta 116073546 t) =
+        finiteAlpha (R := R) (H := H) x₀ 116073546 t *
           liftToFunctionField (H := H) (C t))
-    (hC : ∀ t, 131071 < t → t < 111624646 → C t ≠ 0)
-    (hweight : ∀ t, 131071 < t → t < 111624646 →
+    (hC : ∀ t, 131071 < t → t < 116073546 → C t ≠ 0)
+    (hweight : ∀ t, 131071 < t → t < 116073546 →
       regularWeight (Fact.out : 0 < H.natDegree)
-          (concreteBetaUpTo x₀ R hHyp hzeta 111624646 t) D ≤
+          (concreteBetaUpTo x₀ R hHyp hzeta 116073546 t) D ≤
         (WithBot.some ((2 * t + 1) * d * D) : WithBot ℕ))
     (T : Finset F)
     (root : ∀ z : T, rationalRoot (monicize H) (z : F))
-    (hden : ∀ t, 131071 < t → t < 111624646 →
+    (hden : ∀ t, 131071 < t → t < 116073546 →
       ∀ z : T, (C t).eval (z : F) ≠ 0)
-    (hspecialize : ∀ t, 131071 < t → t < 111624646 → ∀ z : T,
+    (hspecialize : ∀ t, 131071 < t → t < 116073546 → ∀ z : T,
       piZOfDiv (z : F) (root z)
-        (concreteBetaUpTo x₀ R hHyp hzeta 111624646 t) (C t) = 0)
-    (hcard : 2 * 111624646 * H.natDegree * d * D + e + 1 < T.card) :
-    ∀ t, 131071 < t → t < 111624646 →
-      finiteAlpha (R := R) (H := H) x₀ 111624646 t = 0 := by
+        (concreteBetaUpTo x₀ R hHyp hzeta 116073546 t) (C t) = 0)
+    (hcard : 2 * 116073546 * H.natDegree * d * D + e + 1 < T.card) :
+    ∀ t, 131071 < t → t < 116073546 →
+      finiteAlpha (R := R) (H := H) x₀ 116073546 t = 0 := by
   exact functionField_middle_coefficients_eq_zero_of_many_pair_roots
-    (Fact.out : 0 < H.natDegree) D d 131071 111624646 e hD
-    (finiteAlpha (R := R) (H := H) x₀ 111624646)
-    (concreteBetaUpTo x₀ R hHyp hzeta 111624646) C
+    (Fact.out : 0 < H.natDegree) D d 131071 116073546 e hD
+    (finiteAlpha (R := R) (H := H) x₀ 116073546)
+    (concreteBetaUpTo x₀ R hHyp hzeta 116073546) C
     hembed hC hweight T root hden hspecialize hcard
 
 /-- A polynomial of degree `< DX` is zero if its coefficients agree below
@@ -90,17 +90,17 @@ theorem concreteFiniteLift_trunc_exact
     (α : ℕ → 𝕃 H)
     (hres : FiniteHensel.VanishesThrough
       (FiniteHensel.residual (liftedR (R := R) (H := H))
-        (fieldTo𝕃 (H := H) x₀) α 111624646) 111624646)
-    (hmatch : ∀ n, n < 111624646 →
+        (fieldTo𝕃 (H := H) x₀) α 116073546) 116073546)
+    (hmatch : ∀ n, n < 116073546 →
       ((liftedR (R := R) (H := H)).eval
         (FiniteHensel.truncSeries α 131071)).coeff n =
       (FiniteHensel.residual (liftedR (R := R) (H := H))
-        (fieldTo𝕃 (H := H) x₀) α 111624646).coeff n)
+        (fieldTo𝕃 (H := H) x₀) α 116073546).coeff n)
     (hcap : ((liftedR (R := R) (H := H)).eval
-      (FiniteHensel.truncSeries α 131071)).natDegree < 111624646) :
+      (FiniteHensel.truncSeries α 131071)).natDegree < 116073546) :
     (liftedR (R := R) (H := H)).eval
       (FiniteHensel.truncSeries α 131071) = 0 := by
-  exact eval_truncSeries_eq_zero_of_residual_match_and_cap _ _ 111624646
+  exact eval_truncSeries_eq_zero_of_residual_match_and_cap _ _ 116073546
     hres hmatch hcap
 
 
@@ -112,22 +112,22 @@ theorem concreteFiniteAlpha_trunc_exact
     (hres : FiniteHensel.VanishesThrough
       (FiniteHensel.residual (liftedR (R := R) (H := H))
         (fieldTo𝕃 (H := H) x₀)
-        (finiteAlpha (R := R) (H := H) x₀ 111624646) 111624646) 111624646)
-    (hmatch : ∀ n, n < 111624646 →
+        (finiteAlpha (R := R) (H := H) x₀ 116073546) 116073546) 116073546)
+    (hmatch : ∀ n, n < 116073546 →
       ((liftedR (R := R) (H := H)).eval
         (FiniteHensel.truncSeries
-          (finiteAlpha (R := R) (H := H) x₀ 111624646) 131071)).coeff n =
+          (finiteAlpha (R := R) (H := H) x₀ 116073546) 131071)).coeff n =
       (FiniteHensel.residual (liftedR (R := R) (H := H))
         (fieldTo𝕃 (H := H) x₀)
-        (finiteAlpha (R := R) (H := H) x₀ 111624646) 111624646).coeff n)
+        (finiteAlpha (R := R) (H := H) x₀ 116073546) 116073546).coeff n)
     (hcap : ((liftedR (R := R) (H := H)).eval
       (FiniteHensel.truncSeries
-        (finiteAlpha (R := R) (H := H) x₀ 111624646) 131071)).natDegree < 111624646) :
+        (finiteAlpha (R := R) (H := H) x₀ 116073546) 131071)).natDegree < 116073546) :
     (liftedR (R := R) (H := H)).eval
       (FiniteHensel.truncSeries
-        (finiteAlpha (R := R) (H := H) x₀ 111624646) 131071) = 0 := by
+        (finiteAlpha (R := R) (H := H) x₀ 116073546) 131071) = 0 := by
   exact concreteFiniteLift_trunc_exact x₀ R
-    (finiteAlpha (R := R) (H := H) x₀ 111624646) hres hmatch hcap
+    (finiteAlpha (R := R) (H := H) x₀ 116073546) hres hmatch hcap
 
 /-- On a good specialization, finite-Hensel uniqueness identifies the
 specialized cleared lift with ordinary Taylor coefficients; truncating through
