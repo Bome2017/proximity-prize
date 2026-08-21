@@ -19,8 +19,8 @@ theorem exists_large_domain_fibers
     (A : IRSProfile.Field → Finset IRSProfile.Index)
     (P : T → Polynomial IRSProfile.Field)
     (dH d D : ℕ)
-    (hrow : ∀ z ∈ T, 262144 - 76358 ≤ (A z).card)
-    (hT : 2 * 40872562 * dH * d * D + 76358 + 1 ≤ T.card)
+    (hrow : ∀ z ∈ T, 262144 - 76368 ≤ (A z).card)
+    (hT : 2 * 40870720 * dH * d * D + 76368 + 1 ≤ T.card)
     (hagree : ∀ z : T, ∀ i ∈ A z,
       Polynomial.eval (IRSProfile.domain i) (P z) = U 0 i + (z : IRSProfile.Field) * U 1 i) :
     ∃ A' : Finset IRSProfile.Field, 131072 ≤ A'.card ∧
@@ -82,8 +82,8 @@ theorem degree_ge_two_selected_adapter
     (hcard : 2*DX*H.natDegree*d*D + e + 1 < T.card)
     (hkF : k < Fintype.card IRSProfile.Field)
     (Arow : IRSProfile.Field → Finset IRSProfile.Index)
-    (hrow : ∀ z ∈ T, 262144 - 76358 ≤ (Arow z).card)
-    (hT : 2 * 40872562 * H.natDegree * d * D + 76358 + 1 ≤ T.card)
+    (hrow : ∀ z ∈ T, 262144 - 76368 ≤ (Arow z).card)
+    (hT : 2 * 40870720 * H.natDegree * d * D + 76368 + 1 ≤ T.card)
     (hagree : ∀ z : T, ∀ i ∈ Arow z,
       Polynomial.eval (IRSProfile.domain i) (P z) =
         U 0 i + (z : IRSProfile.Field) * U 1 i)
@@ -135,7 +135,7 @@ theorem degree_two_selected_final
     (hPdeg : ∀ z ∈ T, (P z).natDegree ≤ 131071)
     (hvan : ∀ z ∈ T, triEval R z (P z) = 0 ∧ biEval H ((P z).eval x₀) z = 0)
     (hTbad : ∀ z ∈ T, z ∉ Bad)
-    (hmargin : 2 * 40872562 * 32414 * R.natDegree * H.natDegree +
+    (hmargin : 2 * 40870720 * 32414 * R.natDegree * H.natDegree +
       (bchksErrors + 1) < T.card)
     (hRi : Irreducible R) (hHi : Irreducible H) (hHpos : 0 < H.natDegree)
     (hHyp : Hypotheses x₀ R H)
@@ -144,7 +144,7 @@ theorem degree_two_selected_final
     (hsimple : ∀ z ∉ Bad, ∀ y,
       Polynomial.eval y (biSpecializeZ (triSpecializeX R x₀) z) = 0 →
       Polynomial.eval y (biSpecializeZ (triSpecializeX R.derivative x₀) z) ≠ 0)
-    (hrow : ∀ z ∈ T, 262144 - 76358 ≤ (Arow z).card)
+    (hrow : ∀ z ∈ T, 262144 - 76368 ≤ (Arow z).card)
     (hagree : ∀ z ∈ T, ∀ i ∈ Arow z,
       Polynomial.eval (IRSProfile.domain i) (P z) = U 0 i + z * U 1 i)
     (hRdeg : 2 ≤ R.natDegree) :
@@ -155,7 +155,7 @@ theorem degree_two_selected_final
   classical
   letI : Fact (Irreducible H) := ⟨hHi⟩
   letI : Fact (0 < H.natDegree) := ⟨hHpos⟩
-  have hT : 2 * 40872562 * H.natDegree * R.natDegree * 32414 + 76358 + 1 ≤ T.card := by
+  have hT : 2 * 40870720 * H.natDegree * R.natDegree * 32414 + 76368 + 1 ≤ T.card := by
     dsimp [bchksErrors] at hmargin
     ring_nf at hmargin ⊢
     omega
@@ -177,7 +177,7 @@ theorem degree_two_selected_final
   have hpart : Tgood.card + (T.filter fun z => H.leadingCoeff.eval z = 0).card = T.card := by
     simpa [Tgood] using Finset.filter_card_add_filter_neg_card_eq_card
       (s:=T) (p:=fun z => H.leadingCoeff.eval z ≠ 0)
-  have hprod : 32414 ≤ 2 * 40872562 * 32414 * R.natDegree * H.natDegree := by
+  have hprod : 32414 ≤ 2 * 40870720 * 32414 * R.natDegree * H.natDegree := by
     nlinarith
   have hTgood_card : bchksErrors + 1 < Tgood.card := by
     have hlarge : 32414 + (bchksErrors + 1) < T.card :=
@@ -321,12 +321,12 @@ theorem degree_two_selected_final
   have hRdegYle : Bivariate.natDegreeY R ≤ R.natDegree := by
     exact le_rfl
   let S := selectedHenselData_of_pair x₀ R hHyp hzeta 32414 R.natDegree 131071
-    40872562 Tgood PT hfactor hExact hsimp (hNP z₀).hsL
+    40870720 Tgood PT hfactor hExact hsimp (hNP z₀).hsL
     (fun z => (hNP z).hslope) (fun z => (Finset.mem_filter.mp z.property).2)
     (fun z => by simpa [root] using (hNP z).hxi)
     (fun _ _ _ z => by simpa [root] using (hNP z).hden _)
     hHtot hYZ hRdegY hRdegYle
-  have hcard : 2 * 40872562 * H.natDegree * R.natDegree * 32414 +
+  have hcard : 2 * 40870720 * H.natDegree * R.natDegree * 32414 +
       (bchksErrors - 32414) + 1 < Tgood.card := by
     dsimp [bchksErrors] at *
     ring_nf at hmargin ⊢
@@ -356,7 +356,7 @@ theorem degree_two_selected_final
     subst i
     simpa [PT, U₀, U₁, x.property] using he
   obtain ⟨_, p₀, p₁, hp₀, hp₁, hp⟩ := hensel_baseZ_alignment_final_exact_yz
-    x₀ R hHyp hzeta 32414 R.natDegree 131071 40872562 (bchksErrors - 32414)
+    x₀ R hHyp hzeta 32414 R.natDegree 131071 40870720 (bchksErrors - 32414)
     (by norm_num) hHtot hYZ hRdegY Tgood S.root PT hPdegT S.hx S.hy S.hsL
     S.hsimple S.hExact S.hslope S.hW S.hxi (fun t _ z => (hNP z).hden t)
     S.hweight hcard (by norm_num [IRSProfile.Field]) A (by simpa using hA) U₀ U₁

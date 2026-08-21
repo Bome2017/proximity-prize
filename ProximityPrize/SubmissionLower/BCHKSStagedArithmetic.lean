@@ -34,7 +34,7 @@ theorem sum_staged_R_capacities_le
 /-- The staged accounting, including one initial `Q`-bad-Z deletion and all
 tailored selected-factor obstruction budgets, fits the BCHKS numerator. -/
 theorem bchks_staged_capacity_budget :
-    2 * 40872562 * 32414 * 312 ^ 2 +
+    2 * 40870720 * 32414 * 312 ^ 2 +
       (bchksErrors + 1) * 312 +
       2 * 32414 * 312 + 32414 < bchksNumerator := by
   norm_num [bchksErrors, bchksNumerator]
@@ -44,7 +44,7 @@ theorem bchks_staged_capacity_budget :
 theorem bchks_staged_card_after_Qbad
     {α : Type*} [DecidableEq α] (S QBad : Finset α)
     (hS : bchksNumerator < S.card) (hQBad : (S ∩ QBad).card ≤ 32414) :
-    2 * 40872562 * 32414 * 312 ^ 2 +
+    2 * 40870720 * 32414 * 312 ^ 2 +
       (bchksErrors + 1) * 312 + 2 * 32414 * 312 < (S \ QBad).card := by
   rw [Finset.card_sdiff]
   apply Nat.lt_sub_of_add_lt
@@ -73,7 +73,7 @@ theorem bchks_staged_after_badZSpecializations
     (j a : Nat) (hc : (Q.coeff j).coeff a ≠ 0)
     (hdeg : ((Q.coeff j).coeff a).natDegree < 32414)
     (hS : bchksNumerator < S.card) :
-    2 * 40872562 * 32414 * 312 ^ 2 +
+    2 * 40870720 * 32414 * 312 ^ 2 +
       (bchksErrors + 1) * 312 + 2 * 32414 * 312 <
         (S \ badZSpecializations Q S).card := by
   apply bchks_staged_card_after_Qbad S (badZSpecializations Q S) hS

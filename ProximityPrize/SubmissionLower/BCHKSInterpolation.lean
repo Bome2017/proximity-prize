@@ -12,7 +12,7 @@ from caller-chosen close RS codewords. -/
 theorem exists_bchks_interpolant_vanishing
     (U : Fin 2 → IRSProfile.Index → IRSProfile.Field)
     (S : Finset IRSProfile.Field) (A : IRSProfile.Field → Finset IRSProfile.Index)
-    (hA : ∀ z ∈ S, 185786 ≤ (A z).card)
+    (hA : ∀ z ∈ S, 185776 ≤ (A z).card)
     (hcomb : ∀ z ∈ S,
       LinearCode.projectedWord (fun i => U 0 i + z * U 1 i) (A z) ∈
         LinearCode.projectedCodeSubmod IRSProfile.baseCode (A z)) :
@@ -24,7 +24,7 @@ theorem exists_bchks_interpolant_vanishing
         Polynomial.eval (IRSProfile.domain i) (P z) = U 0 i + z.1 * U 1 i) ∧
       (∀ z : ↥S, BCHKSSubstitutionVanish.triEval Q z.1 (P z) = 0) ∧
       (∀ j a, ((Q.coeff j).coeff a) ≠ 0 →
-        j < 312 ∧ a + 131071 * j < 40872562 ∧
+        j < 312 ∧ a + 131071 * j < 40870720 ∧
           ((Q.coeff j).coeff a).natDegree + j < 32414) := by
   classical
   have hw : ∀ z : ↥S, ∃ p : Polynomial IRSProfile.Field,
@@ -61,7 +61,7 @@ theorem exists_bchks_interpolant_vanishing
   apply triEval_eq_zero_of_many_shift_vanishing_of_weighted_X_cap
     Q z.1 (P z) IRSProfile.domain (A z.1)
     (fun i => Polynomial.C (U 0 i) + Polynomial.X * Polynomial.C (U 1 i))
-    220 131071 40872561
+    220 131071 40870719
   · intro i hi s t h hs
     have hz := congrArg (fun p : Polynomial IRSProfile.Field => p.coeff h)
       (hvan i s t hs)
