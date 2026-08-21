@@ -26,8 +26,8 @@ theorem bchksSquaredCode_minDistance :
 
 private lemma bchks_eta_pos :
     0 < (1 - Real.sqrt (1 / 2 : ℝ) - (bchksRadius : ℝ)) := by
-  have hs : Real.sqrt (1 / 2 : ℝ) < 708 / 1000 := by
-    rw [Real.sqrt_lt' (by norm_num : (0 : ℝ) < 708 / 1000)]
+  have hs : Real.sqrt (1 / 2 : ℝ) < 70710679 / 100000000 := by
+    rw [Real.sqrt_lt' (by norm_num : (0 : ℝ) < 70710679 / 100000000)]
     norm_num
   norm_num [bchksRadius] at hs ⊢
   linarith
@@ -47,10 +47,10 @@ lemma bchks_lambda_le :
   rw [hr] at hJ
   have hreal : (1 / (2 * η * (1 / 2 : ℝ))) ≤ bchksListBound := by
     dsimp [η, bchksListBound]
-    have hs : Real.sqrt (1 / 2 : ℝ) < 707107 / 1000000 := by
-      rw [Real.sqrt_lt' (by norm_num : (0 : ℝ) < 707107 / 1000000)]
+    have hs : Real.sqrt (1 / 2 : ℝ) < 70710679 / 100000000 := by
+      rw [Real.sqrt_lt' (by norm_num : (0 : ℝ) < 70710679 / 100000000)]
       norm_num
-    have heta : (1 : ℝ) / 660 < η := by
+    have heta : (1 : ℝ) / 1410 < η := by
       dsimp [η]
       norm_num [bchksRadius] at hs ⊢
       linarith
