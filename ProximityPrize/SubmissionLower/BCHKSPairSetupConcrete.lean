@@ -23,27 +23,27 @@ theorem bchks_pair_setup_of_selected_factors
     (hRQ : R ∈ UniqueFactorizationMonoid.normalizedFactors Q)
     (hHR : H ∈ UniqueFactorizationMonoid.normalizedFactors (triSpecializeX R x₀))
     (hHpos : 0 < H.natDegree)
-    (hQY : Q.natDegree ≤ 852)
+    (hQY : Q.natDegree ≤ 255)
     (hQYZ : ∀ j a, ((Q.coeff j).coeff a) ≠ 0 →
-      ((Q.coeff j).coeff a).natDegree + j < 519143)
+      ((Q.coeff j).coeff a).natDegree + j < 63302)
     (hQweightedX : ∀ j a, ((Q.coeff j).coeff a) ≠ 0 →
-      a + 131071 * j < 111624646)
+      a + 131071 * j < 33398999)
     (hprim : (Polynomial.Bivariate.evalX (Polynomial.C x₀) R).IsPrimitive) :
     Irreducible R ∧ Irreducible H ∧ 0 < H.natDegree ∧
     H ∣ triSpecializeX R x₀ ∧
-    R.natDegree ≤ 852 ∧ H.natDegree ≤ 852 ∧
-    Polynomial.Bivariate.totalDegree H ≤ 519142 ∧
-    Polynomial.Bivariate.totalDegree (triSpecializeX R x₀) ≤ 519142 ∧
+    R.natDegree ≤ 255 ∧ H.natDegree ≤ 255 ∧
+    Polynomial.Bivariate.totalDegree H ≤ 63302 ∧
+    Polynomial.Bivariate.totalDegree (triSpecializeX R x₀) ≤ 63302 ∧
     (∀ j a, ((R.coeff j).coeff a) ≠ 0 →
-      a + 131071 * j < 111624646) ∧
+      a + 131071 * j < 33398999) ∧
     RationalFunctions.HenselNumerators.Hypotheses x₀ R H := by
   have hRYZ : ∀ j a, ((R.coeff j).coeff a) ≠ 0 →
-      ((R.coeff j).coeff a).natDegree + j < 519143 :=
-    YZFactorCap.normalizedFactor_YZ_cap Q R 519143 hQ hRQ hQYZ
+      ((R.coeff j).coeff a).natDegree + j < 63302 :=
+    YZFactorCap.normalizedFactor_YZ_cap Q R 63302 hQ hRQ hQYZ
   have hRweightedX : ∀ j a, ((R.coeff j).coeff a) ≠ 0 →
-      a + 131071 * j < 111624646 :=
+      a + 131071 * j < 33398999 :=
     WeightedFactorCaps.normalizedFactor_weightedX_cap
-      Q R 131071 111624646 hQ hRQ hQweightedX
+      Q R 131071 33398999 hQ hRQ hQweightedX
   exact setup_selected_pair Q R H x₀ hQ hRQ hHR hHpos hQY hRYZ
     hRweightedX hprim
 

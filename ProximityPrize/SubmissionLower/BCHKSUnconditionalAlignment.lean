@@ -25,14 +25,14 @@ theorem bchksPolynomialAlignment_of_linear
       (R : Polynomial (Polynomial (Polynomial IRSProfile.Field))) (T : Finset IRSProfile.Field),
       (∀ z ∈ T, (P z).natDegree ≤ 131071) →
       (∀ z ∈ T, triEval R z (P z) = 0) →
-      (∀ z ∈ T, 185423 ≤ (Arow z).card) →
+      (∀ z ∈ T, 185414 ≤ (Arow z).card) →
       (∀ z ∈ T, ∀ i ∈ Arow z,
         Polynomial.eval (IRSProfile.domain i) (P z) = U (0 : Fin 2) i + z * U (1 : Fin 2) i) →
-      Irreducible R → YZCap R 519142 →
+      Irreducible R → YZCap R 63302 →
       (∀ j a, ((R.coeff j).coeff a) ≠ 0 →
-        a + 131071 * j < 111624646) →
+        a + 131071 * j < 33398999) →
       R.natDegree = 1 →
-      (bchksErrors + 1) + 2 * 111624646 * 519142 < T.card →
+      (bchksErrors + 1) + 2 * 33398999 * 63302 < T.card →
       ∃ Tgood : Finset IRSProfile.Field, Tgood ⊆ T ∧ bchksErrors + 1 < Tgood.card ∧
         ∃ p₀ p₁ : IRSProfile.Field[X], p₀.natDegree ≤ 131071 ∧
           p₁.natDegree ≤ 131071 ∧ ∀ z ∈ Tgood,
@@ -42,7 +42,7 @@ theorem bchksPolynomialAlignment_of_linear
   intro U S A P Q hScard hQ hPdeg hAcard hagree hQeval hcaps
   let PE : IRSProfile.Field → IRSProfile.Field[X] := fun z =>
     if hz : z ∈ S then P ⟨z, hz⟩ else 0
-  have hQY : Q.natDegree ≤ 851 := by
+  have hQY : Q.natDegree ≤ 255 := by
     have hlc : Q.leadingCoeff ≠ 0 := Polynomial.leadingCoeff_ne_zero.mpr hQ
     obtain ⟨a, ha⟩ := Polynomial.support_nonempty.mpr hlc
     have hca : (Q.coeff Q.natDegree).coeff a ≠ 0 := by
@@ -66,7 +66,7 @@ theorem bchksPolynomialAlignment_of_linear
     intro z hz
     have hzS : z ∈ S := hSgoodS (hTS hz)
     simpa [PE, hzS] using hPdeg ⟨z, hzS⟩
-  have hrow : ∀ z ∈ T, 262144 - 76721 ≤ (A z).card := by
+  have hrow : ∀ z ∈ T, 262144 - 76730 ≤ (A z).card := by
     intro z hz
     have hzS : z ∈ S := hSgoodS (hTS hz)
     norm_num
@@ -76,9 +76,9 @@ theorem bchksPolynomialAlignment_of_linear
     intro z hz i hi
     have hzS : z ∈ S := hSgoodS (hTS hz)
     simpa [PE, hzS] using hagree ⟨z, hzS⟩ i hi
-  have hYZ : RationalFunctions.HenselNumerators.ConcreteFiniteNumerators.YZCap R 519142 := by
+  have hYZ : RationalFunctions.HenselNumerators.ConcreteFiniteNumerators.YZCap R 63302 := by
     intro j a ha
-    have hh := YZFactorCap.normalizedFactor_YZ_cap Q R 519143 hQ hRQ
+    have hh := YZFactorCap.normalizedFactor_YZ_cap Q R 63302 hQ hRQ
       (fun j a ha => (hcaps j a ha).2.2) j a ha
     omega
   by_cases hdeg : R.natDegree = 1
@@ -87,13 +87,13 @@ theorem bchksPolynomialAlignment_of_linear
         (by intro z hz; exact hAcard ⟨z, hSgoodS (hTS hz)⟩)
         hagreeT hRi hYZ hRweighted hdeg (by
           have hHp : 1 ≤ H.natDegree := hHpos
-          have hm : 2 * 111624646 * 519142 ≤
-              2 * 111624646 * 519142 * R.natDegree * H.natDegree := by
+          have hm : 2 * 33398999 * 63302 ≤
+              2 * 33398999 * 63302 * R.natDegree * H.natDegree := by
             rw [hdeg]
             nlinarith
           have hmargin' : (bchksErrors + 1) +
-              2 * 111624646 * 519142 * R.natDegree * H.natDegree < T.card := by
-            simpa [hdeg, Nat.add_comm] using hmargin
+              2 * 33398999 * 63302 * R.natDegree * H.natDegree < T.card := by
+            simpa [Nat.add_comm] using hmargin
           exact lt_of_le_of_lt (Nat.add_le_add_left hm _) hmargin')
     refine ⟨p₀, p₁, Tgood, ?_, hgoodcard, hp₀, hp₁, ?_⟩
     · exact hgoodT.trans (hTS.trans hSgoodS)
@@ -102,8 +102,7 @@ theorem bchksPolynomialAlignment_of_linear
       simpa [PE, hzS] using halign z hz
   · have hdeg2 : 2 ≤ R.natDegree := by omega
     obtain ⟨Tgood, hgoodT, hgoodcard, p₀, p₁, hp₀, hp₁, halign⟩ :=
-      degree_two_selected_final U PE A R H T x₀ Bad hPT hvan hTbad
-        (by simpa [hdeg] using hmargin)
+      degree_two_selected_final U PE A R H T x₀ Bad hPT hvan hTbad hmargin
         hRi hHi hHpos hHyp hHtot hYZ hsimple hrow hagreeT hdeg2
     refine ⟨p₀, p₁, Tgood, ?_, hgoodcard, hp₀, hp₁, ?_⟩
     · exact hgoodT.trans (hTS.trans hSgoodS)

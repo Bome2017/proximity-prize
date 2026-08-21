@@ -24,10 +24,10 @@ open ToyProblem
 open scoped NNReal
 
 /-- Conditional final claim: every obligation except `BCHKSPolynomialAlignment`
-is compiled with the optimized score `63.94`. -/
-theorem protocolClaim6394_of_polynomialAlignment
+is compiled with the optimized score `63.95`. -/
+theorem protocolClaim6395_of_polynomialAlignment
     (halg : ProximityPrize.SubmissionLower.BCHKSPolynomialAlignment) :
-    ProtocolClaim 6394 306887 1048576 where
+    ProtocolClaim 6395 306921 1048576 where
   admissible := by
     constructor <;>
       norm_num [claimedRadius, IRSProfile.minRelativeDistance]
@@ -36,7 +36,7 @@ theorem protocolClaim6394_of_polynomialAlignment
         ProximityPrize.SubmissionLower.bchksRadius ≤ reductionTarget :=
       (ProximityPrize.SubmissionLower.certifiedGammaError_bchks_le_of_polynomialAlignment halg).trans (by
         norm_num [reductionTarget, ProximityGap.prizeThreshold, div_le_iff₀])
-    have hr : claimedRadius 306887 1048576 =
+    have hr : claimedRadius 306921 1048576 =
         ProximityPrize.SubmissionLower.bchksRadius := by
       norm_num [claimedRadius, ProximityPrize.SubmissionLower.bchksRadius]
     have hc :
@@ -46,7 +46,7 @@ theorem protocolClaim6394_of_polynomialAlignment
     rw [ToyProblem.Impl.IRS.certifiedGammaError, hr, hc]
     exact h
   score := by
-    have hr : claimedRadius 306887 1048576 =
+    have hr : claimedRadius 306921 1048576 =
         ProximityPrize.SubmissionLower.bchksRadius := by
       norm_num [claimedRadius, ProximityPrize.SubmissionLower.bchksRadius]
     rw [hr]
