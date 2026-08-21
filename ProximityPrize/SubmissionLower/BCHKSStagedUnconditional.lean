@@ -23,29 +23,30 @@ theorem bchks_staged_unconditional
     (hQ : Q ≠ 0)
     (hQeval : ∀ z ∈ S, triEval Q z (P z) = 0)
     (hQz : ∀ z ∈ S, triSpecializeZ Q z ≠ 0)
-    (hQY : Q.natDegree ≤ 282)
+    (hQY : Q.natDegree ≤ 842)
     (hQYZ : ∀ j a, ((Q.coeff j).coeff a) ≠ 0 →
-      ((Q.coeff j).coeff a).natDegree + j < 55744)
+      ((Q.coeff j).coeff a).natDegree + j < 497543)
     (hQweightedX : ∀ j a, ((Q.coeff j).coeff a) ≠ 0 →
-      a + 131071 * j < 36923454)
-    (hS : bchksLinearCapacity * 282 + bchksNonlinearCapacity * 282 ^ 2 +
-      (bchksErrors + 1) * 282 + 2 * 55744 * 282 < S.card) :
+      a + 131071 * j < 110327280)
+    (hS : (632164 * 497543) * 842 ^ 2 +
+      (bchksErrors + 1) * 842 + 2 * 497543 * 842 < S.card) :
     ∃ R H T x₀, ∃ Bad : Finset ProximityPrize.Benchmark.IRSProfile.Field,
       R ∈ UniqueFactorizationMonoid.normalizedFactors Q ∧ 0 < R.natDegree ∧
       H ∈ UniqueFactorizationMonoid.normalizedFactors (triSpecializeX R x₀) ∧
       0 < H.natDegree ∧ T ⊆ S ∧ (∀ z ∈ T, z ∉ Bad) ∧
       (∀ z ∈ T, triEval R z (P z) = 0 ∧
         biEval H (Polynomial.eval x₀ (P z)) z = 0) ∧
-      bchksFactorCapacity R.natDegree * R.natDegree * H.natDegree +
-        (bchksErrors + 1) < T.card ∧
+      (if R.natDegree = 1 then 2 * 110327280 * 497543
+        else 632164 * 497543 * R.natDegree) * H.natDegree +
+          (bchksErrors + 1) < T.card ∧
       Irreducible R ∧ Irreducible H ∧ H ∣ triSpecializeX R x₀ ∧
-      R.natDegree ≤ 282 ∧ H.natDegree ≤ 282 ∧
-      Polynomial.Bivariate.totalDegree H ≤ 55744 ∧
-      Polynomial.Bivariate.totalDegree (triSpecializeX R x₀) ≤ 55744 ∧
+      R.natDegree ≤ 842 ∧ H.natDegree ≤ 842 ∧
+      Polynomial.Bivariate.totalDegree H ≤ 497543 ∧
+      Polynomial.Bivariate.totalDegree (triSpecializeX R x₀) ≤ 497543 ∧
       (∀ j a, ((R.coeff j).coeff a) ≠ 0 →
-        a + 131071 * j < 36923454) ∧
+        a + 131071 * j < 110327280) ∧
       RationalFunctions.HenselNumerators.Hypotheses x₀ R H ∧
-      Bad.card ≤ 2 * R.natDegree * 55744 ∧
+      Bad.card ≤ 2 * R.natDegree * 497543 ∧
       (∀ z ∉ Bad, ∀ y,
         Polynomial.eval y (biSpecializeZ (triSpecializeX R x₀) z) = 0 →
         Polynomial.eval y (biSpecializeZ (triSpecializeX R.derivative x₀) z) ≠ 0) := by
@@ -55,8 +56,8 @@ theorem bchks_staged_unconditional
       R ∈ UniqueFactorizationMonoid.normalizedFactors Q → 0 < R.natDegree →
       EffectivePrimitiveObstruction ProximityPrize.Benchmark.IRSProfile.Field R := by
     intro R hRQ hp
-    have hRYZ := YZFactorCap.normalizedFactor_YZ_cap Q R 55744 hQ hRQ hQYZ
-    have hRW := WeightedFactorCaps.coeff_cap_of_dvd Q R 131071 36923454 hQ
+    have hRYZ := YZFactorCap.normalizedFactor_YZ_cap Q R 497543 hQ hRQ hQYZ
+    have hRW := WeightedFactorCaps.coeff_cap_of_dvd Q R 131071 110327280 hQ
       (UniqueFactorizationMonoid.dvd_of_mem_normalizedFactors hRQ) hQweightedX
     have hZ : ∀ j, (Polynomial.Bivariate.swap (R.coeff j)).natDegree ≤
         BCHKSConcreteGS.DZ := by
@@ -98,7 +99,7 @@ theorem bchks_staged_unconditional
         (UniqueFactorizationMonoid.prime_of_normalized_factor R hRQ).irreducible hp
         (by
           intro j
-          have hcap := YZFactorCap.normalizedFactor_YZ_cap Q R 55744 hQ hRQ hQYZ
+          have hcap := YZFactorCap.normalizedFactor_YZ_cap Q R 497543 hQ hRQ hQYZ
           rw [show (Polynomial.Bivariate.swap (R.coeff j)).natDegree =
             Polynomial.Bivariate.natDegreeY (Polynomial.Bivariate.swap (R.coeff j)) from rfl,
             Polynomial.Bivariate.natDegreeY_swap]
@@ -114,7 +115,7 @@ theorem bchks_staged_unconditional
           change (R.coeff j).natDegree ≤ BCHKSConcreteGS.DX
           by_cases hz : R.coeff j = 0
           · simp [hz]
-          · have hcap := WeightedFactorCaps.coeff_cap_of_dvd Q R 131071 36923454 hQ
+          · have hcap := WeightedFactorCaps.coeff_cap_of_dvd Q R 131071 110327280 hQ
               (UniqueFactorizationMonoid.dvd_of_mem_normalizedFactors hRQ) hQweightedX
             have := hcap j (R.coeff j).natDegree (by
               rw [Polynomial.coeff_natDegree]
@@ -123,12 +124,12 @@ theorem bchks_staged_unconditional
             omega))
   apply exists_concrete_staged_pair_of_effective_obstructions S P Q cert
   · intro R hRQ hp
-    have hRd : R.natDegree ≤ 282 := by
+    have hRd : R.natDegree ≤ 842 := by
       calc
         R.natDegree ≤ ∑ A ∈ (UniqueFactorizationMonoid.normalizedFactors Q).toFinset,
             A.natDegree := Finset.single_le_sum (fun _ _ => Nat.zero_le _) (by simpa using hRQ)
         _ ≤ Q.natDegree := normalizedFactors_toFinset_sum_natDegree_le Q hQ
-        _ ≤ 282 := hQY
+        _ ≤ 842 := hQY
     have hfx : (factorXObstruction R).natDegree ≤
         (2 * R.natDegree + 2) * BCHKSConcreteGS.DX := by
       apply factorXObstruction_natDegree_le R BCHKSConcreteGS.DX
@@ -137,7 +138,7 @@ theorem bchks_staged_unconditional
         intro j hj
         simp only [mapZToRatFunc, Polynomial.coeff_map]
         exact Polynomial.natDegree_map_le.trans (by
-          have hc := WeightedFactorCaps.coeff_cap_of_dvd Q R 131071 36923454 hQ
+          have hc := WeightedFactorCaps.coeff_cap_of_dvd Q R 131071 110327280 hQ
             (UniqueFactorizationMonoid.dvd_of_mem_normalizedFactors hRQ) hQweightedX
           by_cases hz : R.coeff j = 0
           · simp [hz]
@@ -146,7 +147,7 @@ theorem bchks_staged_unconditional
             omega)
       · by_cases hz : R.leadingCoeff = 0
         · simp [hz]
-        · have hc := WeightedFactorCaps.coeff_cap_of_dvd Q R 131071 36923454 hQ
+        · have hc := WeightedFactorCaps.coeff_cap_of_dvd Q R 131071 110327280 hQ
             (UniqueFactorizationMonoid.dvd_of_mem_normalizedFactors hRQ) hQweightedX
           have := hc R.natDegree R.leadingCoeff.natDegree (by
             rw [Polynomial.coeff_natDegree]
@@ -157,14 +158,14 @@ theorem bchks_staged_unconditional
     calc
       (cert R hRQ hp).obstruction.natDegree + (factorXObstruction R).natDegree ≤
           2 * (BCHKSConcreteGS.DZ + 1) * BCHKSConcreteGS.DX +
-            (2 * 282 + 2) * BCHKSConcreteGS.DX := by
+            (2 * 842 + 2) * BCHKSConcreteGS.DX := by
         exact Nat.add_le_add hb (hfx.trans (Nat.mul_le_mul_right BCHKSConcreteGS.DX (by omega)))
       _ < Fintype.card ProximityPrize.Benchmark.IRSProfile.Field := by
         rw [CompPoly.Extension.Ext.card_ext]
         norm_num [BCHKSConcreteGS.DZ, BCHKSConcreteGS.DX, KoalaBear.fieldSize]
   · intro R hRQ hp x
-    have hRYZ := YZFactorCap.normalizedFactor_YZ_cap Q R 55744 hQ hRQ hQYZ
-    have hcoeffCap : ∀ j, Polynomial.Bivariate.degreeX (R.coeff j) ≤ 55744 := by
+    have hRYZ := YZFactorCap.normalizedFactor_YZ_cap Q R 497543 hQ hRQ hQYZ
+    have hcoeffCap : ∀ j, Polynomial.Bivariate.degreeX (R.coeff j) ≤ 497543 := by
       intro j
       unfold Polynomial.Bivariate.degreeX
       apply Finset.sup_le
@@ -173,8 +174,8 @@ theorem bchks_staged_unconditional
       omega
     have hevalCap : ∀ p : Polynomial (Polynomial
         ProximityPrize.Benchmark.IRSProfile.Field),
-        Polynomial.Bivariate.degreeX p ≤ 55744 →
-        (Polynomial.eval (Polynomial.C x) p).natDegree ≤ 55744 := by
+        Polynomial.Bivariate.degreeX p ≤ 497543 →
+        (Polynomial.eval (Polynomial.C x) p).natDegree ≤ 497543 := by
       intro p hpdeg
       have heq : (Polynomial.Bivariate.swap p).map
           (Polynomial.evalRingHom x) = Polynomial.eval (Polynomial.C x) p := by
@@ -186,7 +187,7 @@ theorem bchks_staged_unconditional
           Polynomial.Bivariate.natDegreeY (Polynomial.Bivariate.swap p) from rfl,
           Polynomial.Bivariate.natDegreeY_swap]
         exact hpdeg)
-    apply factorXObstruction_eval_natDegree_le R x R.natDegree 55744 hp (le_refl _)
+    apply factorXObstruction_eval_natDegree_le R x R.natDegree 497543 hp (le_refl _)
     · unfold Polynomial.Bivariate.degreeX
       apply Finset.sup_le
       intro j hj
@@ -200,7 +201,7 @@ theorem bchks_staged_unconditional
     have hinj := FaithfulSMul.algebraMap_injective K E
     have hne := CharP.ringChar_ne_zero_of_finite E
     by_contra hn
-    have hle : ringChar E ≤ 282 := Nat.le_of_not_gt hn
+    have hle : ringChar E ≤ 842 := Nat.le_of_not_gt hn
     have hzE : ((ringChar E : ℕ) : E) = 0 := CharP.cast_eq_zero E _
     have hzK : ((ringChar E : ℕ) : K) = 0 := by
       apply hinj

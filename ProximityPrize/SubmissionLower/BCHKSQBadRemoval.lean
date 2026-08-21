@@ -4,7 +4,7 @@ namespace ProximityPrize.SubmissionLower
 
 /-- Delete the points where the entire `Z`-specialization of the BCHKS
 interpolant vanishes.  A single nonzero coefficient controls this deletion;
-the interpolation `YZ` cap makes its size at most `55743` (and hence also the
+the interpolation `YZ` cap makes its size at most `63301` (and hence also the
 coarser staged bound). -/
 theorem exists_bchks_Qbad_removal
     {F : Type*} [Field F] [DecidableEq F]
@@ -13,20 +13,20 @@ theorem exists_bchks_Qbad_removal
     (hS : bchksNumerator < S.card)
     (hQ : Q ≠ 0)
     (hQeval : ∀ z ∈ S, triEval Q z (P z) = 0)
-    (hQY : Q.natDegree ≤ 282)
+    (hQY : Q.natDegree ≤ 842)
     (hQYZ : ∀ j a, ((Q.coeff j).coeff a) ≠ 0 →
-      ((Q.coeff j).coeff a).natDegree + j < 55744)
+      ((Q.coeff j).coeff a).natDegree + j < 497543)
     (hQweightedX : ∀ j a, ((Q.coeff j).coeff a) ≠ 0 →
-      a + 131071 * j < 36923454) :
+      a + 131071 * j < 110327280) :
     ∃ Sgood : Finset F,
       Sgood = S.filter (fun z => triSpecializeZ Q z ≠ 0) ∧
       Sgood ⊆ S ∧
       (∀ z ∈ Sgood, triSpecializeZ Q z ≠ 0) ∧
       (∀ z ∈ Sgood, triEval Q z (P z) = 0) ∧
       (S.filter (fun z => triSpecializeZ Q z = 0)).card ≤
-        2 * 55744 * 282 ∧
-      bchksLinearCapacity * 282 + bchksNonlinearCapacity * 282 ^ 2 +
-          (bchksErrors + 1) * 282 + 2 * 55744 * 282 < Sgood.card := by
+        2 * 497543 * 842 ∧
+      632164 * 497543 * 842 ^ 2 +
+          (bchksErrors + 1) * 842 + 2 * 497543 * 842 < Sgood.card := by
   classical
   -- Keep the cap hypotheses in the interface used by the staged-pair theorem.
   clear hQY hQweightedX
@@ -34,13 +34,12 @@ theorem exists_bchks_Qbad_removal
   have hj0 : Q.coeff j ≠ 0 := Polynomial.mem_support_iff.mp hj
   obtain ⟨a, ha⟩ := Polynomial.support_nonempty.mpr hj0
   have ha0 : (Q.coeff j).coeff a ≠ 0 := Polynomial.mem_support_iff.mp ha
-  have hdeg : ((Q.coeff j).coeff a).natDegree < 55744 := by
+  have hdeg : ((Q.coeff j).coeff a).natDegree < 497543 := by
     have := hQYZ j a ha0
     omega
   let Sgood := S.filter (fun z => triSpecializeZ Q z ≠ 0)
-  have hbad : (badZSpecializations Q S).card ≤ 55743 := by
-    have := badZSpecializations_card_lt Q S j a 55744 ha0 hdeg
-    omega
+  have hbad : (badZSpecializations Q S).card ≤ 497542 :=
+    badZSpecializations_card_le_497542 Q S j a ha0 hdeg
   have hSstrict : bchksNumerator < S.card := hS
   have hcard := bchks_staged_after_badZSpecializations Q S j a ha0 hdeg hSstrict
   refine ⟨Sgood, rfl, ?_, ?_, ?_, ?_, ?_⟩
@@ -50,7 +49,7 @@ theorem exists_bchks_Qbad_removal
   · intro z hz
     exact hQeval z (Finset.mem_filter.mp hz).1
   · simpa [badZSpecializations] using
-      hbad.trans (by norm_num : 55743 ≤ 2 * 55744 * 282)
+      hbad.trans (by norm_num : 497542 ≤ 2 * 497543 * 842)
   · have heq : Sgood = S \ badZSpecializations Q S := by
       ext z
       constructor

@@ -12,10 +12,10 @@ set_option maxHeartbeats 4000000
 
 def n : ℕ := 262144
 def k : ℕ := 131071
-def m : ℕ := 199
-def DX : ℕ := 36923454
-def DY : ℕ := 282
-def DZ : ℕ := 55744
+def m : ℕ := 595
+def DX : ℕ := 110327280
+def DY : ℕ := 842
+def DZ : ℕ := 497543
 
 /-- Coefficients of `X^a Y^j Z^h`. -/
 abbrev VarIndex := Σ j : Fin DY, Fin (DX - k * (j : ℕ)) × Fin (DZ - (j : ℕ))
@@ -114,16 +114,102 @@ theorem polyMap_ne_zero {F : Type} [Field F] (c : VarIndex → F) (hc : c ≠ 0)
   simpa using h.symm
 
 open scoped BigOperators in
-theorem card_var : Fintype.card VarIndex = 290453508111605 := by
-  rw [Fintype.card_sigma]
-  simp only [Fintype.card_prod, Fintype.card_fin, Finset.sum_fin_eq_sum_range]
-  norm_num (config := { maxSteps := 10000000 }) [DX, DY, DZ, k, Finset.sum_range_succ]
+private theorem sum_sq_six (N : ℕ) :
+    6 * (∑ i ∈ Finset.range N, i ^ 2) = N * (N - 1) * (2 * N - 1) := by
+  induction N with
+  | zero => simp
+  | succ N ih =>
+      rw [Finset.sum_range_succ]
+      cases N with
+      | zero => simp
+      | succ M =>
+          rw [show M + 1 - 1 = M by omega,
+            show 2 * (M + 1) - 1 = 2 * M + 1 by omega] at ih
+          rw [show M + 1 + 1 - 1 = M + 1 by omega,
+            show 2 * (M + 1 + 1) - 1 = 2 * M + 3 by omega]
+          rw [Nat.mul_add, ih]
+          ring
+
+private theorem sub_mul_expand {A B c j : ℕ} (hc : c * j ≤ A) (hj : j ≤ B) :
+    (A - c * j) * (B - j) + A * j + c * B * j = A * B + c * j ^ 2 := by
+  obtain ⟨a, rfl⟩ := Nat.le.dest hc
+  obtain ⟨b, rfl⟩ := Nat.le.dest hj
+  simp only [Nat.add_sub_cancel_left]
+  ring
 
 open scoped BigOperators in
-theorem card_con : Fintype.card ConIndex = 290453507276800 := by
+theorem card_var : Fintype.card VarIndex = 23116969928836558 := by
+  rw [Fintype.card_sigma]
+  simp only [Fintype.card_prod, Fintype.card_fin, Finset.sum_fin_eq_sum_range]
+  simp only [DX, DY, DZ, k]
+  have hclean :
+      (∑ j ∈ Finset.range 842,
+        if _h : j < 842 then (110327280 - 131071 * j) * (497543 - j) else 0) =
+      ∑ j ∈ Finset.range 842, (110327280 - 131071 * j) * (497543 - j) := by
+    apply Finset.sum_congr rfl
+    intro j hj
+    simp [Finset.mem_range.mp hj]
+  rw [hclean]
+  have hsum :
+      (∑ j ∈ Finset.range 842,
+        ((110327280 - 131071 * j) * (497543 - j) + 110327280 * j +
+          131071 * 497543 * j)) =
+      ∑ j ∈ Finset.range 842, (110327280 * 497543 + 131071 * j ^ 2) :=
+    Finset.sum_congr rfl (fun j hj =>
+      sub_mul_expand
+        (A := 110327280) (B := 497543) (c := 131071) (j := j)
+        (by have := Finset.mem_range.mp hj; omega)
+        (by have := Finset.mem_range.mp hj; omega))
+  simp only [Finset.sum_add_distrib] at hsum
+  have hs1 : (∑ x ∈ Finset.range 842, 110327280 * x) =
+      110327280 * ∑ x ∈ Finset.range 842, x :=
+    (Finset.mul_sum (Finset.range 842) (fun x : ℕ => x) 110327280).symm
+  have hs2 : (∑ x ∈ Finset.range 842, 131071 * 497543 * x) =
+      (131071 * 497543) * ∑ x ∈ Finset.range 842, x :=
+    (Finset.mul_sum (Finset.range 842) (fun x : ℕ => x) (131071 * 497543)).symm
+  have hs3 : (∑ x ∈ Finset.range 842, 131071 * x ^ 2) =
+      131071 * ∑ x ∈ Finset.range 842, x ^ 2 :=
+    (Finset.mul_sum (Finset.range 842) (fun x : ℕ => x ^ 2) 131071).symm
+  rw [hs1, hs2, hs3] at hsum
+  simp only [Finset.sum_const, Finset.card_range, nsmul_eq_mul] at hsum
+  have h1 := Finset.sum_range_id_mul_two 842
+  have h2 := sum_sq_six 842
+  omega
+
+open scoped BigOperators in
+theorem card_con : Fintype.card ConIndex = 23116969921740800 := by
   rw [Fintype.card_prod, Fintype.card_sigma]
   simp only [Fintype.card_prod, Fintype.card_fin, Finset.sum_fin_eq_sum_range]
-  norm_num (config := { maxSteps := 10000000 }) [n, m, DZ, Finset.sum_range_succ]
+  simp only [n, m, DZ]
+  have hclean :
+      (∑ t ∈ Finset.range 595,
+        if _h : t < 595 then (595 - t) * (497543 - t) else 0) =
+      ∑ t ∈ Finset.range 595, (595 - t) * (497543 - t) := by
+    apply Finset.sum_congr rfl
+    intro t ht
+    simp [Finset.mem_range.mp ht]
+  rw [hclean]
+  have hsum :
+      (∑ t ∈ Finset.range 595,
+        ((595 - t) * (497543 - t) + 595 * t + 497543 * t)) =
+      ∑ t ∈ Finset.range 595, (595 * 497543 + t ^ 2) :=
+    Finset.sum_congr rfl (fun t ht => by
+      simpa using (sub_mul_expand
+        (A := 595) (B := 497543) (c := 1) (j := t)
+        (by have := Finset.mem_range.mp ht; omega)
+        (by have := Finset.mem_range.mp ht; omega)))
+  simp only [Finset.sum_add_distrib] at hsum
+  have hs1 : (∑ x ∈ Finset.range 595, 595 * x) =
+      595 * ∑ x ∈ Finset.range 595, x :=
+    (Finset.mul_sum (Finset.range 595) (fun x : ℕ => x) 595).symm
+  have hs2 : (∑ x ∈ Finset.range 595, 497543 * x) =
+      497543 * ∑ x ∈ Finset.range 595, x :=
+    (Finset.mul_sum (Finset.range 595) (fun x : ℕ => x) 497543).symm
+  rw [hs1, hs2] at hsum
+  simp only [Finset.sum_const, Finset.card_range, nsmul_eq_mul] at hsum
+  have h1 := Finset.sum_range_id_mul_two 595
+  have h2 := sum_sq_six 595
+  omega
 
 theorem card_con_lt_var : Fintype.card ConIndex < Fintype.card VarIndex := by
   rw [card_con, card_var]
