@@ -12,13 +12,13 @@ theorem exists_staged_weighted_selection
     {σ ρ η : Type*} [DecidableEq σ] [DecidableEq ρ] [DecidableEq η]
     (S : Finset σ) (Rs : Finset ρ) (Hs : ρ → Finset η)
     (degR : ρ → Nat) (degH : η → Nat) (bad : ρ → Nat)
-    (A e : Nat)
+    (A : ρ → Nat) (e : Nat)
     (RelR : σ → ρ → Prop) [DecidableRel RelR]
     (RelH : σ → ρ → η → Prop) [∀ r, DecidableRel (fun z h => RelH z r h)]
     (Bad : ρ → Finset σ)
     (hRcover : ∀ z ∈ S, ∃ r ∈ Rs, RelR z r)
     (hglobal :
-      (∑ r ∈ Rs, (A * degR r ^ 2 + e * degR r + bad r)) < S.card)
+      (∑ r ∈ Rs, (A r * degR r ^ 2 + e * degR r + bad r)) < S.card)
     (hBad : ∀ r ∈ Rs, ((S.filter fun z => RelR z r) ∩ Bad r).card ≤ bad r)
     (hHpos : ∀ r ∈ Rs, ∀ h ∈ Hs r, 0 < degH h)
     (hHsum : ∀ r ∈ Rs, (∑ h ∈ Hs r, degH h) ≤ degR r)
@@ -28,18 +28,18 @@ theorem exists_staged_weighted_selection
       T ⊆ S ∧
       (∀ z ∈ T, z ∉ Bad r) ∧
       (∀ z ∈ T, RelR z r ∧ RelH z r h) ∧
-      A * degR r * degH h + e < T.card := by
+      A r * degR r * degH h + e < T.card := by
   classical
-  let capR : ρ → Nat := fun r => A * degR r ^ 2 + e * degR r + bad r
+  let capR : ρ → Nat := fun r => A r * degR r ^ 2 + e * degR r + bad r
   obtain ⟨r, hr, hrfiber⟩ :=
     exists_rel_fiber_gt_capacity S Rs RelR capR hRcover (by simpa [capR] using hglobal)
   let U := S.filter fun z => RelR z r
   have hbadU : (U ∩ Bad r).card ≤ bad r := by simpa [U] using hBad r hr
-  have hUgood : A * degR r ^ 2 + e * degR r < (U \ Bad r).card := by
+  have hUgood : A r * degR r ^ 2 + e * degR r < (U \ Bad r).card := by
     rw [Finset.card_sdiff]
     apply Nat.lt_sub_of_add_lt
-    have hbadd : A * degR r ^ 2 + e * degR r + (Bad r ∩ U).card ≤
-        A * degR r ^ 2 + e * degR r + bad r := by
+    have hbadd : A r * degR r ^ 2 + e * degR r + (Bad r ∩ U).card ≤
+        A r * degR r ^ 2 + e * degR r + bad r := by
       apply Nat.add_le_add_left
       simpa [Finset.inter_comm] using hbadU
     exact hbadd.trans_lt (by simpa [capR, U] using hrfiber)
@@ -49,19 +49,19 @@ theorem exists_staged_weighted_selection
       _ ≤ ∑ h ∈ Hs r, degH h := by
         exact Finset.sum_le_sum fun h hh => hHpos r hr h hh
       _ ≤ degR r := hHsum r hr
-  let capH : η → Nat := fun h => A * degR r * degH h + e
-  have hcapHsum : (∑ h ∈ Hs r, capH h) ≤ A * degR r ^ 2 + e * degR r := by
+  let capH : η → Nat := fun h => A r * degR r * degH h + e
+  have hcapHsum : (∑ h ∈ Hs r, capH h) ≤ A r * degR r ^ 2 + e * degR r := by
     dsimp [capH]
-    change (∑ h ∈ Hs r, ((A * degR r) * degH h + e)) ≤ _
+    change (∑ h ∈ Hs r, ((A r * degR r) * degH h + e)) ≤ _
     rw [Finset.sum_add_distrib, ← Finset.mul_sum]
     simp only [Finset.sum_const, nsmul_eq_mul]
     calc
-      A * degR r * (∑ h ∈ Hs r, degH h) + (Hs r).card * e ≤
-          A * degR r * degR r + degR r * e := by
+      A r * degR r * (∑ h ∈ Hs r, degH h) + (Hs r).card * e ≤
+          A r * degR r * degR r + degR r * e := by
         exact Nat.add_le_add
-          (Nat.mul_le_mul_left (A * degR r) (hHsum r hr))
+          (Nat.mul_le_mul_left (A r * degR r) (hHsum r hr))
           (Nat.mul_le_mul_right e hHcard)
-      _ = A * degR r ^ 2 + e * degR r := by ring
+      _ = A r * degR r ^ 2 + e * degR r := by ring
   have hsecondLarge : (∑ h ∈ Hs r, capH h) < (U \ Bad r).card :=
     hcapHsum.trans_lt hUgood
   obtain ⟨h, hh, hhfiber⟩ :=

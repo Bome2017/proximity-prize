@@ -50,7 +50,7 @@ lemma bchks_lambda_le :
     have hs : Real.sqrt (1 / 2 : ℝ) < 70710679 / 100000000 := by
       rw [Real.sqrt_lt' (by norm_num : (0 : ℝ) < 70710679 / 100000000)]
       norm_num
-    have heta : (1 : ℝ) / 1410 < η := by
+    have heta : (1 : ℝ) / 1453 < η := by
       dsimp [η]
       norm_num [bchksRadius] at hs ⊢
       linarith

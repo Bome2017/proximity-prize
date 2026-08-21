@@ -31,25 +31,64 @@ theorem sum_staged_R_capacities_le
         (Nat.add_le_add (Nat.mul_le_mul_left A hdsq) (Nat.mul_le_mul_left e hdsum))
         (Nat.mul_le_mul_left (2 * DZ) hdsum)
 
+/-- Branch-sensitive version: linear factors pay the large resultant budget
+only linearly in their total degree, while nonlinear factors pay the smaller
+incidence budget quadratically. -/
+theorem sum_branch_staged_R_capacities_le
+    {ρ : Type*} [DecidableEq ρ] (Rs : Finset ρ)
+    (d bad cap : ρ → Nat) (linear nonlinear e DZ DY : Nat)
+    (hcap : ∀ r ∈ Rs, cap r * d r ^ 2 ≤
+      linear * d r + nonlinear * d r ^ 2)
+    (hdsq : (∑ r ∈ Rs, d r ^ 2) ≤ DY ^ 2)
+    (hdsum : (∑ r ∈ Rs, d r) ≤ DY)
+    (hbad : ∀ r ∈ Rs, bad r ≤ 2 * d r * DZ) :
+    (∑ r ∈ Rs, (cap r * d r ^ 2 + e * d r + bad r)) ≤
+      linear * DY + nonlinear * DY ^ 2 + e * DY + 2 * DZ * DY := by
+  have hpoint : ∀ r ∈ Rs,
+      cap r * d r ^ 2 + e * d r + bad r ≤
+        linear * d r + nonlinear * d r ^ 2 + e * d r + 2 * DZ * d r := by
+    intro r hr
+    have hb : bad r ≤ 2 * DZ * d r := by
+      calc
+        bad r ≤ 2 * d r * DZ := hbad r hr
+        _ = 2 * DZ * d r := by ring
+    exact Nat.add_le_add (Nat.add_le_add (hcap r hr) (Nat.le_refl _)) hb
+  calc
+    (∑ r ∈ Rs, (cap r * d r ^ 2 + e * d r + bad r)) ≤
+        ∑ r ∈ Rs,
+          (linear * d r + nonlinear * d r ^ 2 + e * d r + 2 * DZ * d r) :=
+      Finset.sum_le_sum hpoint
+    _ = linear * (∑ r ∈ Rs, d r) + nonlinear * (∑ r ∈ Rs, d r ^ 2) +
+          e * (∑ r ∈ Rs, d r) + 2 * DZ * (∑ r ∈ Rs, d r) := by
+      simp only [Finset.sum_add_distrib, ← Finset.mul_sum]
+    _ ≤ linear * DY + nonlinear * DY ^ 2 + e * DY + 2 * DZ * DY := by
+      exact Nat.add_le_add
+        (Nat.add_le_add
+          (Nat.add_le_add (Nat.mul_le_mul_left linear hdsum)
+            (Nat.mul_le_mul_left nonlinear hdsq))
+          (Nat.mul_le_mul_left e hdsum))
+        (Nat.mul_le_mul_left (2 * DZ) hdsum)
+
 /-- The staged accounting, including one initial `Q`-bad-Z deletion and all
 tailored selected-factor obstruction budgets, fits the BCHKS numerator. -/
 theorem bchks_staged_capacity_budget :
-    2 * 33398999 * 63302 * 255 ^ 2 +
-      (bchksErrors + 1) * 255 +
-      2 * 63302 * 255 + 63302 < bchksNumerator := by
-  norm_num [bchksErrors, bchksNumerator]
+    bchksLinearCapacity * 282 + bchksNonlinearCapacity * 282 ^ 2 +
+      (bchksErrors + 1) * 282 +
+      2 * 55744 * 282 + 55744 < bchksNumerator := by
+  norm_num [bchksErrors, bchksNumerator, bchksLinearCapacity,
+    bchksNonlinearCapacity]
 
 /-- Convenient consequence for a source set after deleting the one-time
 `Q`-bad set. -/
 theorem bchks_staged_card_after_Qbad
     {α : Type*} [DecidableEq α] (S QBad : Finset α)
-    (hS : bchksNumerator < S.card) (hQBad : (S ∩ QBad).card ≤ 63302) :
-    2 * 33398999 * 63302 * 255 ^ 2 +
-      (bchksErrors + 1) * 255 + 2 * 63302 * 255 < (S \ QBad).card := by
+    (hS : bchksNumerator < S.card) (hQBad : (S ∩ QBad).card ≤ 55744) :
+    bchksLinearCapacity * 282 + bchksNonlinearCapacity * 282 ^ 2 +
+      (bchksErrors + 1) * 282 + 2 * 55744 * 282 < (S \ QBad).card := by
   rw [Finset.card_sdiff]
   apply Nat.lt_sub_of_add_lt
   have hb := bchks_staged_capacity_budget
-  have hi : (QBad ∩ S).card ≤ 63302 := by simpa [Finset.inter_comm] using hQBad
+  have hi : (QBad ∩ S).card ≤ 55744 := by simpa [Finset.inter_comm] using hQBad
   exact (Nat.add_le_add_left hi _).trans_lt (hb.trans hS)
 
 
@@ -71,14 +110,64 @@ theorem bchks_staged_after_badZSpecializations
     {F : Type*} [Field F] [DecidableEq F]
     (Q : Polynomial (Polynomial (Polynomial F))) (S : Finset F)
     (j a : Nat) (hc : (Q.coeff j).coeff a ≠ 0)
-    (hdeg : ((Q.coeff j).coeff a).natDegree < 63302)
+    (hdeg : ((Q.coeff j).coeff a).natDegree < 55744)
     (hS : bchksNumerator < S.card) :
-    2 * 33398999 * 63302 * 255 ^ 2 +
-      (bchksErrors + 1) * 255 + 2 * 63302 * 255 <
+    bchksLinearCapacity * 282 + bchksNonlinearCapacity * 282 ^ 2 +
+      (bchksErrors + 1) * 282 + 2 * 55744 * 282 <
         (S \ badZSpecializations Q S).card := by
   apply bchks_staged_card_after_Qbad S (badZSpecializations Q S) hS
-  have hb := badZSpecializations_card_le_63301 Q S j a hc hdeg
-  exact (Finset.card_le_card Finset.inter_subset_right).trans (hb.trans (by omega))
+  have hb := badZSpecializations_card_lt Q S j a 55744 hc hdeg
+  exact (Finset.card_le_card Finset.inter_subset_right).trans (by omega)
+
+/-- Direct normalized-factor instantiation of the branch-sensitive staged
+capacity sum. -/
+theorem positive_normalizedFactors_branch_cap_le
+    {F : Type*} [Field F] [DecidableEq F] [NormalizationMonoid F]
+    (Q : Polynomial (Polynomial (Polynomial F))) (hQ : Q ≠ 0)
+    (bad : Polynomial (Polynomial (Polynomial F)) → Nat)
+    (e DZ DY : Nat) (hQdeg : Q.natDegree ≤ DY)
+    (hbad : ∀ R ∈ (UniqueFactorizationMonoid.normalizedFactors Q).toFinset.filter
+        (fun R => 0 < R.natDegree), bad R ≤ 2 * R.natDegree * DZ) :
+    (∑ R ∈ (UniqueFactorizationMonoid.normalizedFactors Q).toFinset.filter
+        (fun R => 0 < R.natDegree),
+      (bchksFactorCapacity R.natDegree * R.natDegree ^ 2 +
+        e * R.natDegree + bad R)) ≤
+      bchksLinearCapacity * DY + bchksNonlinearCapacity * DY ^ 2 +
+        e * DY + 2 * DZ * DY := by
+  let Rs := (UniqueFactorizationMonoid.normalizedFactors Q).toFinset.filter
+    fun R => 0 < R.natDegree
+  have hsum : (∑ R ∈ Rs, R.natDegree) ≤ DY := by
+    calc
+      (∑ R ∈ Rs, R.natDegree) ≤
+          ∑ R ∈ (UniqueFactorizationMonoid.normalizedFactors Q).toFinset,
+            R.natDegree := by
+        exact Finset.sum_le_sum_of_subset_of_nonneg (Finset.filter_subset _ _) (by simp)
+      _ ≤ Q.natDegree := normalizedFactors_toFinset_sum_natDegree_le Q hQ
+      _ ≤ DY := hQdeg
+  have hsq : (∑ R ∈ Rs, R.natDegree ^ 2) ≤ DY ^ 2 := by
+    have hpoint : ∀ R ∈ Rs, R.natDegree ^ 2 ≤
+        R.natDegree * (∑ R ∈ Rs, R.natDegree) := by
+      intro R hR
+      have hle : R.natDegree ≤ ∑ x ∈ Rs, x.natDegree :=
+        Finset.single_le_sum (fun _ _ => Nat.zero_le _) hR
+      simpa [pow_two] using Nat.mul_le_mul_left R.natDegree hle
+    calc
+      (∑ R ∈ Rs, R.natDegree ^ 2) ≤
+          ∑ R ∈ Rs, R.natDegree * (∑ R ∈ Rs, R.natDegree) :=
+        Finset.sum_le_sum hpoint
+      _ = (∑ R ∈ Rs, R.natDegree) ^ 2 := by rw [← Finset.sum_mul]; ring
+      _ ≤ DY ^ 2 := Nat.pow_le_pow_left hsum 2
+  apply sum_branch_staged_R_capacities_le Rs Polynomial.natDegree bad
+    (fun R => bchksFactorCapacity R.natDegree)
+    bchksLinearCapacity bchksNonlinearCapacity e DZ DY
+  · intro R hR
+    by_cases h : R.natDegree = 1
+    · simp [bchksFactorCapacity, h]
+    · simp [bchksFactorCapacity, h]
+  · exact hsq
+  · exact hsum
+  · intro R hR
+    exact hbad R (by simpa [Rs] using hR)
 
 
 
