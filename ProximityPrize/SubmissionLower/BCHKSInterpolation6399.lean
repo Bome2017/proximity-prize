@@ -9,7 +9,7 @@ open BCHKSSubstitutionVanish
 
 /-- Concrete GS interpolation plus the multiplicity/root-counting step, starting
 from caller-chosen close RS codewords. -/
-theorem exists_bchks_interpolant_vanishing6399
+theorem exists_bchks_interpolant_vanishing_6399
     (U : Fin 2 → IRSProfile.Index → IRSProfile.Field)
     (S : Finset IRSProfile.Field) (A : IRSProfile.Field → Finset IRSProfile.Index)
     (hA : ∀ z ∈ S, 185374 ≤ (A z).card)

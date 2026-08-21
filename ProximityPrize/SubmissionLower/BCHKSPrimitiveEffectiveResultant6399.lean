@@ -1,6 +1,6 @@
 import ProximityPrize.SubmissionLower.BCHKSPrimitiveSpanLift
 import ProximityPrize.SubmissionLower.BCHKSPrimitiveEffective
-import ProximityPrize.SubmissionLower.BCHKSParameters6399
+import ProximityPrize.SubmissionLower.BCHKSConcreteGS6399
 
 namespace ProximityPrize.SubmissionLower
 open Polynomial
@@ -67,18 +67,18 @@ private theorem span_map_dvd
       exact dvd_mul_of_dvd_right ih _
 
 
-theorem effectivePrimitiveObstruction_of_irreducible6399
+theorem effectivePrimitiveObstruction_of_irreducible_6399
     (R : Polynomial (Polynomial (Polynomial
       ProximityPrize.Benchmark.IRSProfile.Field)))
     (hR : Irreducible R) (hpos : 0 < R.natDegree)
     (hZ : ∀ j, (Polynomial.Bivariate.swap (R.coeff j)).natDegree ≤
-      bchksZCap6399)
+      BCHKSConcreteGS6399.DZ)
     (hX : ∀ j, Polynomial.Bivariate.degreeX
-      (Polynomial.Bivariate.swap (R.coeff j)) ≤ bchksXCap6399) :
+      (Polynomial.Bivariate.swap (R.coeff j)) ≤ BCHKSConcreteGS6399.DX) :
     ∃ w : EffectivePrimitiveObstruction
         ProximityPrize.Benchmark.IRSProfile.Field R,
       w.obstruction.natDegree ≤
-        2 * (bchksZCap6399 + 1) * bchksXCap6399 := by
+        2 * (BCHKSConcreteGS6399.DZ + 1) * BCHKSConcreteGS6399.DX := by
   classical
   let c₀ : ℕ → Polynomial (Polynomial F) := fun j =>
     Polynomial.Bivariate.swap (R.coeff j)
@@ -110,13 +110,13 @@ theorem effectivePrimitiveObstruction_of_irreducible6399
     exact span_range_coeff_eq_top_of_isPrimitive (hi.isPrimitive (by
       omega))
   obtain ⟨hraw, hhraw, hcopraw⟩ := exists_primitive_localized_selection
-    c j₀ (bchksZCap6399 + 1) hf htop
+    c j₀ (BCHKSConcreteGS6399.DZ + 1) hf htop
     (lt_of_le_of_lt (by
       rw [show (c j₀).natDegree = (c₀ j₀).natDegree by
         exact Polynomial.natDegree_map_eq_of_injective
           (IsFractionRing.injective F[X] (RatFunc F)) (c₀ j₀)]
       exact hZ j₀) (Nat.lt_succ_self _))
-    (by norm_num [bchksZCap6399, F,
+    (by norm_num [BCHKSConcreteGS6399.DZ, F,
       ProximityPrize.Benchmark.IRSProfile.Field])
   let h := if hraw = 0 then c j₀ else hraw
   have hhspan : h ∈ Submodule.span F (Set.range c) := by
@@ -139,10 +139,10 @@ theorem effectivePrimitiveObstruction_of_irreducible6399
   have hccomp : c = L ∘ c₀ := rfl
   obtain ⟨h₀, hh₀, hmaph⟩ := exists_span_lift L c₀ c hccomp hhspan
   let f₀ := c₀ j₀
-  have hfcaps := span_caps c₀ bchksZCap6399 bchksXCap6399
+  have hfcaps := span_caps c₀ BCHKSConcreteGS6399.DZ BCHKSConcreteGS6399.DX
     (by simpa [c₀] using hZ) (by simpa [c₀] using hX)
     (Submodule.subset_span (Set.mem_range_self j₀))
-  have hhcaps := span_caps c₀ bchksZCap6399 bchksXCap6399
+  have hhcaps := span_caps c₀ BCHKSConcreteGS6399.DZ BCHKSConcreteGS6399.DX
     (by simpa [c₀] using hZ) (by simpa [c₀] using hX) hh₀
   let P : Polynomial F := f₀.leadingCoeff * h₀.leadingCoeff *
     Polynomial.resultant f₀ h₀
@@ -255,16 +255,16 @@ theorem effectivePrimitiveObstruction_of_irreducible6399
   }
   refine ⟨w, ?_⟩
   change P.natDegree ≤ _
-  have hlfcap : f₀.leadingCoeff.natDegree ≤ bchksXCap6399 := by
+  have hlfcap : f₀.leadingCoeff.natDegree ≤ BCHKSConcreteGS6399.DX := by
     rw [← Polynomial.coeff_natDegree]
     exact (Polynomial.Bivariate.coeff_natDegree_le_degreeX f₀ f₀.natDegree).trans
       hfcaps.2
-  have hlhcap : h₀.leadingCoeff.natDegree ≤ bchksXCap6399 := by
+  have hlhcap : h₀.leadingCoeff.natDegree ≤ BCHKSConcreteGS6399.DX := by
     rw [← Polynomial.coeff_natDegree]
     exact (Polynomial.Bivariate.coeff_natDegree_le_degreeX h₀ h₀.natDegree).trans
       hhcaps.2
-  have hfzcaps : f₀.natDegree ≤ bchksZCap6399 ∧
-      Polynomial.Bivariate.degreeX f₀ ≤ bchksXCap6399 := by
+  have hfzcaps : f₀.natDegree ≤ BCHKSConcreteGS6399.DZ ∧
+      Polynomial.Bivariate.degreeX f₀ ≤ BCHKSConcreteGS6399.DX := by
     simpa [f₀] using hfcaps
   have hrCap := bivariate_resultant_natDegree_le
     f₀ h₀ f₀.natDegree h₀.natDegree

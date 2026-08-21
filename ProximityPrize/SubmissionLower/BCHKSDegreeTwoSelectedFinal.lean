@@ -375,11 +375,10 @@ theorem degree_two_selected_final
     (fun z => by simpa [root] using (hNP z).hxi)
     (fun _ _ _ z => by simpa [root] using (hNP z).hden _)
     hHtot hYZ hRdegY hRdegYle
-  have hcard : 2 * 131072 * H.natDegree * R.natDegree * 519142 +
-      (bchksErrors - 519142) + 1 < Tgood.card := by
-    dsimp [bchksErrors] at *
-    ring_nf at hmargin ⊢
-    omega
+  have hcardShort : 1 < Tgood.card := by
+    exact (by norm_num [bchksErrors] at hTgood_card ⊢; omega)
+  have hcardZero : 2 * 131072 * H.natDegree * 0 * 519142 + 0 + 1 < Tgood.card := by
+    simpa using hcardShort
   have hPdegT : ∀ z : Tgood, (PT z).natDegree ≤ 131071 := by
     intro z
     exact hPdeg z (Finset.mem_filter.mp z.property).1
@@ -404,11 +403,20 @@ theorem degree_two_selected_final
     have hii : i = idx x := IRSProfile.domain.injective (hi.trans (hidx x).symm)
     subst i
     simpa [PT, U₀, U₁, x.property] using he
+  have hNoMiddle (t : Nat) (hkt : 131071 < t) (htk : t < 131072) : False := by
+    omega
+  have hweightShort : ∀ t, 131071 < t → t < 131072 →
+      regularWeight (Fact.out : 0 < H.natDegree)
+        (concreteBetaUpTo x₀ R hHyp hzeta 131072 t) 519142 ≤
+          (WithBot.some ((2 * t + 1) * 0 * 519142) : WithBot Nat) := by
+    intro t hkt htk
+    exact (hNoMiddle t hkt htk).elim
   obtain ⟨_, p₀, p₁, hp₀, hp₁, hp⟩ := hensel_baseZ_alignment_final_exact_yz
-    x₀ R hHyp hzeta 519142 R.natDegree 131071 131072 (bchksErrors - 519142)
+    x₀ R hHyp hzeta 519142 0 131071 131072 0
     (by norm_num) hHtot hYZ hRdegY Tgood S.root PT hPdegT S.hx S.hy S.hsL
     S.hsimple S.hExact S.hslope S.hW S.hxi (fun t _ z => (hNP z).hden t)
-    S.hweight hcard (by norm_num [IRSProfile.Field]) A (by simpa using hA) U₀ U₁
+    hweightShort hcardZero (by norm_num [IRSProfile.Field])
+    A (by simpa using hA) U₀ U₁
     Fibgood hFibgood halign
   exact ⟨Tgood, Finset.filter_subset _ _, hTgood_card, p₀, p₁, hp₀, hp₁,
     fun z hz => hp ⟨z, hz⟩⟩
