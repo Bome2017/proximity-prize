@@ -13,7 +13,7 @@ def bchksErrors6399 : ℕ := 76770
 
 def bchksNumerator6399 : ℕ := 100000000000000000
 
-def bchksListBound6399 : ℕ := 30000
+def bchksListBound6399 : ℕ := 3519
 
 def bchksMultiplicity6399 : ℕ := 3733
 def bchksXCap6399 : ℕ := 692001142

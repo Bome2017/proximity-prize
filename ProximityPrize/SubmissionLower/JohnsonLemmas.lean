@@ -5,6 +5,7 @@ Authors: Ilia Vlasov, František Silváši
 -/
 import ProximityPrize.Benchmark.TargetLower
 import ProximityPrize.SubmissionLower.JohnsonExpectations
+import ProximityPrize.SubmissionLower.JohnsonIntegral
 
 /-! # Johnson Bound Lemmas -/
 
@@ -657,6 +658,225 @@ lemma johnson_d_le_n {n : ℕ} {F : Type*} [DecidableEq F]
       (mul_pos (Nat.cast_pos.mpr (by linarith))
         (sub_pos.mpr (Nat.one_lt_cast.mpr (by linarith))))
       zero_lt_two
+
+
+/-- The ordered pairs taking the centre symbol are bounded by all agreeing pairs. -/
+private lemma sum_selected_pairs_le (v : Fin n → F) :
+    ((∑ i : Fin n, K B i (v i) * (K B i (v i) - 1) : ℕ) : ℚ) ≤
+      2 * ∑ i : Fin n, sum_choose_K_i B i := by
+  push_cast
+  rw [mul_sum]
+  apply sum_le_sum
+  intro i hi
+  have hs : choose_2 (K B i (v i) : ℚ) ≤
+      ∑ a : F, choose_2 (K B i a : ℚ) := by
+    exact Finset.single_le_sum (s := (univ : Finset F)) (f := fun a =>
+      choose_2 (K B i a : ℚ)) (a := v i) (by
+      intro a ha
+      rcases Nat.eq_zero_or_pos (K B i a) with h | h
+      · simp [h, choose_2]
+      · have h1 : (1 : ℚ) ≤ K B i a := by exact_mod_cast h
+        simp only [choose_2]
+        nlinarith
+      ) (mem_univ _)
+  by_cases hk0 : K B i (v i) = 0
+  · simpa [hk0, choose_2] using hs
+  have hk1 : 1 ≤ K B i (v i) := Nat.one_le_iff_ne_zero.mpr hk0
+  rw [Nat.cast_sub hk1]
+  simp only [sum_choose_K_i, choose_2] at hs ⊢
+  nlinarith
+
+
+set_option maxHeartbeats 2000000 in
+set_option maxRecDepth 100000 in
+/-- The exact integral Johnson obstruction at the BCHKS parameters. -/
+lemma lambda_eq_floor_div_card {ι F : Type*} [Fintype ι] [Nonempty ι]
+    (C : Set (ι → F)) {δ : ℝ} (hδ : 0 ≤ δ) :
+    Code.Lambda C δ =
+      Code.Lambda C ((⌊δ * Fintype.card ι⌋₊ : ℝ) / Fintype.card ι) := by
+  have hn : (0 : ℝ) < Fintype.card ι := by exact_mod_cast Fintype.card_pos (α := ι)
+  have hset : ∀ y : ι → F,
+      Code.closeCodewordsRel C y δ =
+        Code.closeCodewordsRel C y ((⌊δ * Fintype.card ι⌋₊ : ℝ) / Fintype.card ι) := by
+    intro y
+    ext c
+    simp only [Code.closeCodewordsRel, Code.relHammingBall, Set.mem_setOf_eq,
+      and_congr_right_iff, Code.relHammingDist]
+    intro _
+    push_cast
+    rw [div_le_iff₀ hn, div_le_iff₀ hn, div_mul_cancel₀ _ hn.ne', Nat.cast_le,
+      ← Nat.le_floor_iff (by positivity)]
+  unfold Code.Lambda
+  congr 1
+  funext y
+  rw [hset y]
+
+private lemma hammingDist_reindex {ι ι' α : Type*} [Fintype ι] [Fintype ι'] [DecidableEq α]
+    (e : ι' ≃ ι) (x y : ι → α) :
+    hammingDist (x ∘ e) (y ∘ e) = hammingDist x y := by
+  unfold hammingDist
+  apply Finset.card_nbij' (fun i' => e i') (fun i => e.symm i)
+  · intro i' hi'; simpa using hi'
+  · intro i hi; simpa using hi
+  · intro i' hi'; simp
+  · intro i hi; simp
+
+/-- Parameterized exact integral Johnson obstruction.  The final hypothesis is the
+integer gap left after applying the universal tangent at `q`. -/
+theorem integral_impossible
+    {n M e d q : ℕ} {B : Finset (Fin n → F)} {v : Fin n → F}
+    (hcard : B.card = M)
+    (hradius : ∀ x ∈ B, hammingDist v x ≤ e)
+    (hd : (d : ℚ) ≤ JohnsonBound.d B)
+    (hM : 2 ≤ M)
+    (hdn : d ≤ n)
+    (hgap : M * (M - 1) * (n - d) + q * (q + 1) * n <
+      2 * q * (M * (n - e))) : False := by
+  let inc : ℕ := ∑ i : Fin n, K B i (v i)
+  let pairs : ℕ := ∑ i : Fin n, K B i (v i) * (K B i (v i) - 1)
+  have hinc_eq : inc = ∑ x ∈ B, (n - hammingDist v x) := by
+    dsimp [inc]
+    simp_rw [K_eq_sum]
+    rw [sum_comm, univ_eq_attach]
+    rw [← sum_attach B (fun x => n - hammingDist v x)]
+    apply Finset.sum_congr rfl
+    intro x hx
+    rw [hamming_dist_eq_sum]
+    apply Nat.eq_sub_of_add_eq
+    rw [← sum_add_distrib]
+    have heach (i : Fin n) :
+        (if (x : Fin n → F) i = v i then 1 else 0) +
+          (if v i = (x : Fin n → F) i then 0 else 1) = 1 := by
+      by_cases h : (x : Fin n → F) i = v i
+      · rw [if_pos h, if_pos h.symm]
+      · have h' : v i ≠ (x : Fin n → F) i := fun z => h z.symm
+        rw [if_neg h, if_neg h']
+    simp_rw [heach]
+    simp
+  have hinc : M * (n - e) ≤ inc := by
+    rw [hinc_eq]
+    calc
+      M * (n - e) = ∑ _x ∈ B, (n - e) := by simp [hcard]
+      _ ≤ ∑ x ∈ B, (n - hammingDist v x) := by
+        exact sum_le_sum (fun x hx => Nat.sub_le_sub_left (hradius x hx) n)
+  have htangent : 2 * q * inc ≤ pairs + q * (q + 1) * n := by
+    have h := sum_le_sum (s := (univ : Finset (Fin n)))
+      (fun i _ => ProximityPrize.SubmissionLower.integral_tangent q (K B i (v i)))
+    rw [← mul_sum] at h
+    simp only [sum_add_distrib, sum_const, Finset.card_fin, nsmul_eq_mul] at h
+    simpa [inc, pairs, mul_assoc, mul_comm, mul_left_comm] using h
+  have hpairs : pairs ≤ M * (M - 1) * (n - d) := by
+    have hB2 : 2 ≤ B.card := by simpa [hcard] using hM
+    have hid := sum_sum_K_i_eq_n_sub_d (B := B) hB2
+    have hsub : (n : ℚ) - JohnsonBound.d B ≤ ((n - d : ℕ) : ℚ) := by
+      rw [Nat.cast_sub hdn]
+      push_cast
+      linarith
+    have hselected : (pairs : ℚ) ≤
+        2 * ∑ i : Fin n, sum_choose_K_i B i :=
+      sum_selected_pairs_le (B := B) v
+    rw [hid] at hselected
+    have hmulnonneg : (0 : ℚ) ≤ 2 * choose_2 (B.card : ℚ) := by
+      simp only [choose_2]
+      have : (1 : ℚ) ≤ B.card := by exact_mod_cast (le_trans (by omega : 1 ≤ 2) hB2)
+      positivity
+    have hscale := mul_le_mul_of_nonneg_left hsub hmulnonneg
+    have hselected' : (pairs : ℚ) ≤ (M * (M - 1) * (n - d) : ℕ) := by
+      apply hselected.trans
+      calc
+        2 * (choose_2 (B.card : ℚ) * ((n : ℚ) - JohnsonBound.d B)) =
+            2 * choose_2 (B.card : ℚ) * ((n : ℚ) - JohnsonBound.d B) := by ring
+        _ ≤ 2 * choose_2 (B.card : ℚ) * ((n - d : ℕ) : ℚ) := hscale
+        _ = (M * (M - 1) * (n - d) : ℕ) := by
+          rw [hcard]
+          push_cast
+          rw [Nat.cast_sub (by omega : 1 ≤ M)]
+          simp only [choose_2]
+          ring
+    exact_mod_cast hselected'
+  exact ProximityPrize.SubmissionLower.integral_counting_contradiction
+    inc pairs M (n - e) (2 * q) (q * (q + 1)) n (n - d)
+    hinc htangent hpairs (by simpa [mul_assoc] using hgap)
+
+/-- Exact integral Johnson obstruction at the active BCHKS parameters. -/
+theorem integral_3520_impossible
+    {B : Finset (Fin 262144 → F)} {v : Fin 262144 → F}
+    (hcard : B.card = 3520)
+    (hradius : ∀ x ∈ B, hammingDist v x ≤ 76770)
+    (hd : (131073 : ℚ) ≤ JohnsonBound.d B) : False := by
+  apply integral_impossible (M := 3520) (e := 76770) (d := 131073) (q := 2489)
+    hcard hradius hd (by norm_num) (by norm_num)
+  norm_num
+
+
+
+theorem lambda_le_3519_of_minDist
+    {ι : Type*} [Fintype ι] [Nonempty ι]
+    {F : Type*} [Fintype F] [DecidableEq F]
+    (C : Set (ι → F)) (hn : Fintype.card ι = 262144)
+    (hmin : Code.minDist C = 131073) :
+    Code.Lambda C (76770 / 262144 : ℝ) ≤ (3519 : ℕ∞) := by
+  let oldDec : DecidableEq F := inferInstance
+  letI : DecidableEq F := Classical.decEq F
+  have hmin' : Code.minDist C = 131073 := by
+    change @Code.minDist ι _ F (Classical.decEq F) C = 131073
+    rw [show (Classical.decEq F) = oldDec from Subsingleton.elim _ _]
+    exact hmin
+  apply Code.Lambda_le_of_forall_finset_card_le
+  intro v T hT
+  by_contra hcard
+  have hlt : 3519 < T.card := Nat.lt_of_not_ge hcard
+  have h3520 : 3520 ≤ T.card := by omega
+  obtain ⟨S, hST, hScard⟩ := Finset.exists_subset_card_eq h3520
+  set e : ι ≃ Fin 262144 :=
+    (Fintype.equivOfCardEq (by simpa [hn] : Fintype.card ι = Fintype.card (Fin 262144)))
+  set reIdx : (ι → F) → (Fin 262144 → F) := fun x => x ∘ e.symm
+  have hreIdx_inj : Function.Injective reIdx := by
+    intro x y h
+    funext i
+    simpa [reIdx] using congrFun h (e i)
+  set B : Finset (Fin 262144 → F) := S.image reIdx
+  set w : Fin 262144 → F := reIdx v
+  have hBcard : B.card = 3520 := by
+    simp [B, Finset.card_image_of_injective _ hreIdx_inj, hScard]
+  have hradius : ∀ x ∈ B, hammingDist w x ≤ 76770 := by
+    intro x hx
+    simp only [B, Finset.mem_image] at hx
+    obtain ⟨c, hcS, rfl⟩ := hx
+    have hc := hT c (hST hcS)
+    simp only [Code.closeCodewordsRel, Code.relHammingBall, Set.mem_setOf_eq] at hc
+    have hrel := hc.2
+    unfold Code.relHammingDist at hrel
+    have hdistR : (hammingDist v c : ℝ) ≤ 76770 := by
+      rw [hn] at hrel
+      push_cast at hrel
+      have hh := (div_le_iff₀ (by norm_num : (0 : ℝ) < 262144)).mp hrel
+      norm_num at hh ⊢
+      exact hh
+    have hdist : hammingDist v c ≤ 76770 := by exact_mod_cast hdistR
+    simpa [w, reIdx, hammingDist_reindex] using hdist
+  have hB2 : 2 ≤ B.card := by omega
+  have hd : (131073 : ℚ) ≤ JohnsonBound.d B := by
+    have havg : sInf { d | ∃ u ∈ B, ∃ z ∈ B, u ≠ z ∧ hammingDist u z = d }
+          ≤ JohnsonBound.d B := min_dist_le_d hB2
+    have hminB : Code.minDist C ≤
+        sInf { d | ∃ u ∈ B, ∃ z ∈ B, u ≠ z ∧ hammingDist u z = d } := by
+      apply le_csInf
+      · obtain ⟨u, hu, z, hz, huz⟩ := Finset.one_lt_card.mp hB2
+        exact ⟨hammingDist u z, u, hu, z, hz, huz, rfl⟩
+      · rintro m ⟨u, hu, z, hz, huz, rfl⟩
+        simp only [B, Finset.mem_image] at hu hz
+        obtain ⟨c₁, hc₁, rfl⟩ := hu
+        obtain ⟨c₂, hc₂, rfl⟩ := hz
+        have hcne : c₁ ≠ c₂ := fun h => huz (congrArg reIdx h)
+        rw [show hammingDist (reIdx c₁) (reIdx c₂) = hammingDist c₁ c₂ from
+          hammingDist_reindex e.symm c₁ c₂]
+        apply Nat.sInf_le
+        exact ⟨c₁, (hT c₁ (hST hc₁)).1, c₂, (hT c₂ (hST hc₂)).1, hcne, rfl⟩
+    have hminB' : 131073 ≤ sInf { d | ∃ u ∈ B, ∃ z ∈ B, u ≠ z ∧ hammingDist u z = d } :=
+      hmin' ▸ hminB
+    exact le_trans (by exact_mod_cast hminB') havg
+  exact integral_3520_impossible hBcard hradius hd
 
 end
 
