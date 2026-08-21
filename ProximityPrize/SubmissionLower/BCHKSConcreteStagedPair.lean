@@ -31,8 +31,8 @@ theorem exists_concrete_staged_pair_of_certificates
     (hQYZ : ∀ j a, ((Q.coeff j).coeff a) ≠ 0 →
       ((Q.coeff j).coeff a).natDegree + j < 32414)
     (hQweightedX : ∀ j a, ((Q.coeff j).coeff a) ≠ 0 →
-      a + 131071 * j < 40868520)
-    (hcard : 2 * 40868520 * 32414 * 312 ^ 2 +
+      a + 131071 * j < 40866320)
+    (hcard : 2 * 40866320 * 32414 * 312 ^ 2 +
       (bchksErrors + 1) * 312 + 2 * 32414 * 312 < S.card) :
     ∃ R H T x₀, ∃ Bad : Finset F,
       R ∈ UniqueFactorizationMonoid.normalizedFactors Q ∧ 0 < R.natDegree ∧
@@ -40,14 +40,14 @@ theorem exists_concrete_staged_pair_of_certificates
       0 < H.natDegree ∧ T ⊆ S ∧ (∀ z ∈ T, z ∉ Bad) ∧
       (∀ z ∈ T, triEval R z (P z) = 0 ∧
         biEval H (Polynomial.eval x₀ (P z)) z = 0) ∧
-      2 * 40868520 * 32414 * R.natDegree * H.natDegree +
+      2 * 40866320 * 32414 * R.natDegree * H.natDegree +
         (bchksErrors + 1) < T.card ∧
       Irreducible R ∧ Irreducible H ∧ H ∣ triSpecializeX R x₀ ∧
       R.natDegree ≤ 312 ∧ H.natDegree ≤ 312 ∧
       Polynomial.Bivariate.totalDegree H ≤ 32414 ∧
       Polynomial.Bivariate.totalDegree (triSpecializeX R x₀) ≤ 32414 ∧
       (∀ j a, ((R.coeff j).coeff a) ≠ 0 →
-        a + 131071 * j < 40868520) ∧
+        a + 131071 * j < 40866320) ∧
       RationalFunctions.HenselNumerators.Hypotheses x₀ R H ∧
       Bad.card ≤ 2 * R.natDegree * 32414 ∧
       (∀ z ∉ Bad, ∀ y,
@@ -157,8 +157,8 @@ theorem exists_concrete_staged_pair_of_effective_obstructions
     (hQYZ : ∀ j a, ((Q.coeff j).coeff a) ≠ 0 →
       ((Q.coeff j).coeff a).natDegree + j < 32414)
     (hQweightedX : ∀ j a, ((Q.coeff j).coeff a) ≠ 0 →
-      a + 131071 * j < 40868520)
-    (hcard : 2 * 40868520 * 32414 * 312 ^ 2 +
+      a + 131071 * j < 40866320)
+    (hcard : 2 * 40866320 * 32414 * 312 ^ 2 +
       (bchksErrors + 1) * 312 + 2 * 32414 * 312 < S.card) :
     ∃ R H T x₀, ∃ Bad : Finset F,
       R ∈ UniqueFactorizationMonoid.normalizedFactors Q ∧ 0 < R.natDegree ∧
@@ -166,14 +166,14 @@ theorem exists_concrete_staged_pair_of_effective_obstructions
       0 < H.natDegree ∧ T ⊆ S ∧ (∀ z ∈ T, z ∉ Bad) ∧
       (∀ z ∈ T, triEval R z (P z) = 0 ∧
         biEval H (Polynomial.eval x₀ (P z)) z = 0) ∧
-      2 * 40868520 * 32414 * R.natDegree * H.natDegree +
+      2 * 40866320 * 32414 * R.natDegree * H.natDegree +
         (bchksErrors + 1) < T.card ∧
       Irreducible R ∧ Irreducible H ∧ H ∣ triSpecializeX R x₀ ∧
       R.natDegree ≤ 312 ∧ H.natDegree ≤ 312 ∧
       Polynomial.Bivariate.totalDegree H ≤ 32414 ∧
       Polynomial.Bivariate.totalDegree (triSpecializeX R x₀) ≤ 32414 ∧
       (∀ j a, ((R.coeff j).coeff a) ≠ 0 →
-        a + 131071 * j < 40868520) ∧
+        a + 131071 * j < 40866320) ∧
       RationalFunctions.HenselNumerators.Hypotheses x₀ R H ∧
       Bad.card ≤ 2 * R.natDegree * 32414 ∧
       (∀ z ∉ Bad, ∀ y,

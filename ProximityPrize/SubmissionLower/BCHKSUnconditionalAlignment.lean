@@ -25,14 +25,14 @@ theorem bchksPolynomialAlignment_of_linear
       (R : Polynomial (Polynomial (Polynomial IRSProfile.Field))) (T : Finset IRSProfile.Field),
       (∀ z ∈ T, (P z).natDegree ≤ 131071) →
       (∀ z ∈ T, triEval R z (P z) = 0) →
-      (∀ z ∈ T, 185766 ≤ (Arow z).card) →
+      (∀ z ∈ T, 185756 ≤ (Arow z).card) →
       (∀ z ∈ T, ∀ i ∈ Arow z,
         Polynomial.eval (IRSProfile.domain i) (P z) = U (0 : Fin 2) i + z * U (1 : Fin 2) i) →
       Irreducible R → YZCap R 32414 →
       (∀ j a, ((R.coeff j).coeff a) ≠ 0 →
-        a + 131071 * j < 40868520) →
+        a + 131071 * j < 40866320) →
       R.natDegree = 1 →
-      (bchksErrors + 1) + 2 * 40868520 * 32414 < T.card →
+      (bchksErrors + 1) + 2 * 40866320 * 32414 < T.card →
       ∃ Tgood : Finset IRSProfile.Field, Tgood ⊆ T ∧ bchksErrors + 1 < Tgood.card ∧
         ∃ p₀ p₁ : IRSProfile.Field[X], p₀.natDegree ≤ 131071 ∧
           p₁.natDegree ≤ 131071 ∧ ∀ z ∈ Tgood,
@@ -66,7 +66,7 @@ theorem bchksPolynomialAlignment_of_linear
     intro z hz
     have hzS : z ∈ S := hSgoodS (hTS hz)
     simpa [PE, hzS] using hPdeg ⟨z, hzS⟩
-  have hrow : ∀ z ∈ T, 262144 - 76378 ≤ (A z).card := by
+  have hrow : ∀ z ∈ T, 262144 - 76388 ≤ (A z).card := by
     intro z hz
     have hzS : z ∈ S := hSgoodS (hTS hz)
     norm_num
@@ -87,12 +87,12 @@ theorem bchksPolynomialAlignment_of_linear
         (by intro z hz; exact hAcard ⟨z, hSgoodS (hTS hz)⟩)
         hagreeT hRi hYZ hRweighted hdeg (by
           have hHp : 1 ≤ H.natDegree := hHpos
-          have hm : 2 * 40868520 * 32414 ≤
-              2 * 40868520 * 32414 * R.natDegree * H.natDegree := by
+          have hm : 2 * 40866320 * 32414 ≤
+              2 * 40866320 * 32414 * R.natDegree * H.natDegree := by
             rw [hdeg]
             nlinarith
           have hmargin' : (bchksErrors + 1) +
-              2 * 40868520 * 32414 * R.natDegree * H.natDegree < T.card := by
+              2 * 40866320 * 32414 * R.natDegree * H.natDegree < T.card := by
             simpa [Nat.add_comm] using hmargin
           exact lt_of_le_of_lt (Nat.add_le_add_left hm _) hmargin')
     refine ⟨p₀, p₁, Tgood, ?_, hgoodcard, hp₀, hp₁, ?_⟩

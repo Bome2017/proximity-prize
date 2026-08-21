@@ -72,7 +72,7 @@ theorem setup_selected_pair
     (hRYZ : ∀ j a, ((R.coeff j).coeff a) ≠ 0 →
       ((R.coeff j).coeff a).natDegree + j < 32414)
     (hRweightedX : ∀ j a, ((R.coeff j).coeff a) ≠ 0 →
-      a + 131071 * j < 40868520)
+      a + 131071 * j < 40866320)
     (hprim : (Polynomial.Bivariate.evalX (Polynomial.C x₀) R).IsPrimitive) :
     Irreducible R ∧ Irreducible H ∧ 0 < H.natDegree ∧
     H ∣ triSpecializeX R x₀ ∧
@@ -80,7 +80,7 @@ theorem setup_selected_pair
     Polynomial.Bivariate.totalDegree H ≤ 32414 ∧
     Polynomial.Bivariate.totalDegree (triSpecializeX R x₀) ≤ 32414 ∧
     (∀ j a, ((R.coeff j).coeff a) ≠ 0 →
-      a + 131071 * j < 40868520) ∧
+      a + 131071 * j < 40866320) ∧
     RationalFunctions.HenselNumerators.Hypotheses x₀ R H := by
   have hRirr : Irreducible R :=
     (UniqueFactorizationMonoid.prime_of_normalized_factor R hRQ).irreducible

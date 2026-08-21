@@ -27,7 +27,7 @@ theorem bchks_pair_setup_of_selected_factors
     (hQYZ : ∀ j a, ((Q.coeff j).coeff a) ≠ 0 →
       ((Q.coeff j).coeff a).natDegree + j < 32414)
     (hQweightedX : ∀ j a, ((Q.coeff j).coeff a) ≠ 0 →
-      a + 131071 * j < 40868520)
+      a + 131071 * j < 40866320)
     (hprim : (Polynomial.Bivariate.evalX (Polynomial.C x₀) R).IsPrimitive) :
     Irreducible R ∧ Irreducible H ∧ 0 < H.natDegree ∧
     H ∣ triSpecializeX R x₀ ∧
@@ -35,15 +35,15 @@ theorem bchks_pair_setup_of_selected_factors
     Polynomial.Bivariate.totalDegree H ≤ 32414 ∧
     Polynomial.Bivariate.totalDegree (triSpecializeX R x₀) ≤ 32414 ∧
     (∀ j a, ((R.coeff j).coeff a) ≠ 0 →
-      a + 131071 * j < 40868520) ∧
+      a + 131071 * j < 40866320) ∧
     RationalFunctions.HenselNumerators.Hypotheses x₀ R H := by
   have hRYZ : ∀ j a, ((R.coeff j).coeff a) ≠ 0 →
       ((R.coeff j).coeff a).natDegree + j < 32414 :=
     YZFactorCap.normalizedFactor_YZ_cap Q R 32414 hQ hRQ hQYZ
   have hRweightedX : ∀ j a, ((R.coeff j).coeff a) ≠ 0 →
-      a + 131071 * j < 40868520 :=
+      a + 131071 * j < 40866320 :=
     WeightedFactorCaps.normalizedFactor_weightedX_cap
-      Q R 131071 40868520 hQ hRQ hQweightedX
+      Q R 131071 40866320 hQ hRQ hQweightedX
   exact setup_selected_pair Q R H x₀ hQ hRQ hHR hHpos hQY hRYZ
     hRweightedX hprim
 

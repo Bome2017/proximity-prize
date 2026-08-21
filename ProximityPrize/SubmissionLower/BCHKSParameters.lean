@@ -7,13 +7,13 @@ open CoreDefinitions ProximityGap
 open scoped NNReal
 
 /-- Radius chosen for a 63.58-bit claim after the specialized BCHKS extraction. -/
-noncomputable def bchksRadius : ℝ≥0 := (305515 : ℝ≥0) / 1048576
+noncomputable def bchksRadius : ℝ≥0 := (305555 : ℝ≥0) / 1048576
 
-def bchksErrors : ℕ := 76378
+def bchksErrors : ℕ := 76388
 
 def bchksNumerator : ℕ := 258000000000000000
 
-def bchksListBound : ℕ := 660
+def bchksListBound : ℕ := 670
 
 /-- Slack reserved for bad specializations without changing the sharp multiplicity target. -/
 def bchksBadBudget : ℕ := 68000000000000
@@ -32,37 +32,37 @@ lemma bchks_budget_nat :
       (2130706433 : ℕ) ^ 6 := by
   norm_num [bchksNumerator, bchksListBound]
 
-/-- Rational lower approximation to `2^(40/100)`, used by the 63.60 score certificate. -/
-theorem two_rpow_forty_hundred_ge :
-    (2639 : ℝ≥0) / 2000 ≤ (2 : ℝ≥0) ^ ((40 : ℝ) / 100) := by
+/-- Rational lower approximation to `2^(39/100)`, used by the 63.61 score certificate. -/
+theorem two_rpow_thirty_nine_hundred_ge :
+    (131 : ℝ≥0) / 100 ≤ (2 : ℝ≥0) ^ ((39 : ℝ) / 100) := by
   have hroot :
-      (2639 : ℝ≥0) / 2000 ≤
-        ((2 : ℝ≥0) ^ (40 : ℕ)) ^ ((100 : ℝ)⁻¹) := by
+      (131 : ℝ≥0) / 100 ≤
+        ((2 : ℝ≥0) ^ (39 : ℕ)) ^ ((100 : ℝ)⁻¹) := by
     rw [NNReal.le_rpow_inv_iff (by norm_num : (0 : ℝ) < 100)]
     norm_num [div_pow, div_le_iff₀]
   calc
-    (2639 : ℝ≥0) / 2000 ≤
-        ((2 : ℝ≥0) ^ (40 : ℕ)) ^ ((100 : ℝ)⁻¹) := hroot
-    _ = (2 : ℝ≥0) ^ ((40 : ℝ) / 100) := by
+    (131 : ℝ≥0) / 100 ≤
+        ((2 : ℝ≥0) ^ (39 : ℕ)) ^ ((100 : ℝ)⁻¹) := hroot
+    _ = (2 : ℝ≥0) ^ ((39 : ℝ) / 100) := by
       rw [← NNReal.rpow_natCast_mul]
       norm_num [div_eq_mul_inv]
 
-/-- Standalone score arithmetic for the intended `ProtocolClaim 6360`. -/
+/-- Standalone score arithmetic for the intended `ProtocolClaim 6361`. -/
 lemma bchksRadius_score :
     (1 - bchksRadius) ^ IRSProfile.repetitions ≤
-      ProximityPrize.Benchmark.claimedError 6360 := by
+      ProximityPrize.Benchmark.claimedError 6361 := by
   calc
     (1 - bchksRadius) ^ IRSProfile.repetitions ≤
-        ((1 : ℝ≥0) / 2 ^ (64 : ℕ)) * (2639 / 2000) := by
+        ((1 : ℝ≥0) / 2 ^ (64 : ℕ)) * (131 / 100) := by
       rw [← NNReal.coe_le_coe]
       norm_num [bchksRadius, IRSProfile.repetitions, div_le_iff₀]
     _ ≤ ((1 : ℝ≥0) / 2 ^ (64 : ℕ)) *
-          (2 : ℝ≥0) ^ ((40 : ℝ) / 100) := by
-      exact mul_le_mul_of_nonneg_left two_rpow_forty_hundred_ge (by positivity)
-    _ = ProximityPrize.Benchmark.claimedError 6360 := by
+          (2 : ℝ≥0) ^ ((39 : ℝ) / 100) := by
+      exact mul_le_mul_of_nonneg_left two_rpow_thirty_nine_hundred_ge (by positivity)
+    _ = ProximityPrize.Benchmark.claimedError 6361 := by
       unfold ProximityPrize.Benchmark.claimedError
-      rw [show -((((6360 : ℕ) : ℝ) / 100)) =
-          -((64 : ℕ) : ℝ) + (40 : ℝ) / 100 by norm_num,
+      rw [show -((((6361 : ℕ) : ℝ) / 100)) =
+          -((64 : ℕ) : ℝ) + (39 : ℝ) / 100 by norm_num,
         NNReal.rpow_add (by norm_num : (2 : ℝ≥0) ≠ 0),
         NNReal.rpow_neg, NNReal.rpow_natCast]
       norm_num
@@ -73,7 +73,7 @@ lemma bchksRadius_score :
 `2*DX*DZ*deg(R)*deg(H)` bounds costs only `DY²`, rather than a worst-case
 extra factor of `DY`. -/
 lemma bchks_all_factor_budget :
-    2 * 40868520 * 32414 * 312 ^ 2 + (bchksErrors + 1) * 312 <
+    2 * 40866320 * 32414 * 312 ^ 2 + (bchksErrors + 1) * 312 <
       bchksNumerator := by
   norm_num [bchksErrors, bchksNumerator]
 
@@ -95,17 +95,17 @@ lemma bchksBadBudget_lt_field :
   exact hb.trans_le hp
 
 lemma bchks_all_factor_budget_with_bad :
-    2 * 40868520 * 32414 * 312 ^ 2 + (bchksErrors + 1) * 312 +
+    2 * 40866320 * 32414 * 312 ^ 2 + (bchksErrors + 1) * 312 +
       bchksBadBudget < bchksNumerator := by
   norm_num [bchksErrors, bchksBadBudget, bchksNumerator]
 
 lemma card_sdiff_large_for_bchks {α : Type*} [DecidableEq α]
     (S Bad : Finset α) (hS : bchksNumerator < S.card)
     (hBad : (S ∩ Bad).card ≤ bchksBadBudget) :
-    2 * 40868520 * 32414 * 312 ^ 2 + (bchksErrors + 1) * 312 <
+    2 * 40866320 * 32414 * 312 ^ 2 + (bchksErrors + 1) * 312 <
       (S \ Bad).card := by
   rw [Finset.card_sdiff]
-  let M : ℕ := 2 * 40868520 * 32414 * 312 ^ 2 + (bchksErrors + 1) * 312
+  let M : ℕ := 2 * 40866320 * 32414 * 312 ^ 2 + (bchksErrors + 1) * 312
   let B : ℕ := bchksBadBudget
   let N : ℕ := bchksNumerator
   have hbudget : M + B < N := by
@@ -120,7 +120,7 @@ lemma card_sdiff_large_for_bchks {α : Type*} [DecidableEq α]
 /-- A pair-specific BCHKS fiber above its `2*DX` weight budget has enough
 incidences to provide `k+1` coordinates above the Claim-5.10 threshold. -/
 lemma bchks_top_points_arithmetic (r T : ℕ)
-    (hT : 2 * 40868520 * r + (bchksErrors + 1) < T) :
+    (hT : 2 * 40866320 * r + (bchksErrors + 1) < T) :
     (262144 - bchksErrors - 131072) * T >
       (262144 - 131072) * ((2 * 131071 + 1) * r) := by
   norm_num [bchksErrors] at hT ⊢
