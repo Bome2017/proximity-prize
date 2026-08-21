@@ -13,7 +13,7 @@ set_option maxHeartbeats 4000000
 def n : ℕ := 262144
 def k : ℕ := 131071
 def m : ℕ := 220
-def DX : ℕ := 40868520
+def DX : ℕ := 40826205
 def DY : ℕ := 312
 def DZ : ℕ := 32414
 
@@ -114,7 +114,7 @@ theorem polyMap_ne_zero {F : Type} [Field F] (c : VarIndex → F) (hc : c ≠ 0)
   simpa using h.symm
 
 open scoped BigOperators in
-theorem card_var : Fintype.card VarIndex = 206526049151812 := by
+theorem card_var : Fintype.card VarIndex = 206100163402432 := by
   rw [Fintype.card_sigma]
   simp only [Fintype.card_prod, Fintype.card_fin, Finset.sum_fin_eq_sum_range]
   norm_num (config := { maxSteps := 10000000 }) [DX, DY, DZ, k, Finset.sum_range_succ]
