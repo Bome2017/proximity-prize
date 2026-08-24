@@ -7,9 +7,9 @@ open CoreDefinitions ProximityGap
 open scoped NNReal
 
 /-- Radius for the universal-numerator BCHKS certificate at 63.99 bits. -/
-noncomputable def bchksRadius6399 : ℝ≥0 := (307083 : ℝ≥0) / 1048576
+noncomputable def bchksRadius6399 : ℝ≥0 := (307085 : ℝ≥0) / 1048576
 
-def bchksErrors6399 : ℕ := 76770
+def bchksErrors6399 : ℕ := 76771
 
 def bchksNumerator6399 : ℕ := 100000000000000000
 
@@ -22,7 +22,7 @@ def bchksZCap6399 : ℕ := 13141403
 def bchksFactorMass6399 : ℕ := 5279
 def bchksFactorZMass6399 : ℕ := 13141402
 def bchksUniversalExponent6399 : ℕ := 262141
-def bchksIncidenceCoefficient6399 : ℕ := 1265478
+def bchksIncidenceCoefficient6399 : ℕ := 1265501
 
 lemma bchksRadius6399_floor :
     ⌊(bchksRadius6399 : ℝ) * (Fintype.card IRSProfile.Index : ℝ)⌋₊ =
@@ -78,7 +78,7 @@ lemma bchksRadius6399_score :
 
 /-- The exact global seed ledger for the universal numerator/resultant route. -/
 lemma bchks6399_universal_seed_budget :
-    1265478 * (5280 - 1) * (13141403 - 1) +
+    1265501 * (5280 - 1) * (13141403 - 1) +
       (bchksErrors6399 + 1) * (5280 - 1) +
       2 * 13141403 * (5280 - 1) + 13141403 <
         bchksNumerator6399 := by
@@ -87,7 +87,7 @@ lemma bchks6399_universal_seed_budget :
 /-- The fused incidence coefficient is valid at the new agreement radius. -/
 lemma bchks6399_incidence_rounding :
     (262144 - 131071) * (2 * (2 * 131071 - 1)) ≤
-      1265478 * (262144 - bchksErrors6399 - 131071) := by
+      1265501 * (262144 - bchksErrors6399 - 131071) := by
   norm_num [bchksErrors6399]
 
 /-- Aggregate ordinary-resultant degree after summing all positive factors. -/
