@@ -1,10 +1,15 @@
 import ProximityPrize.Benchmark.TargetLower
-import ProximityPrize.SubmissionLower.BCHKSFinal6399
 
-namespace ProximityPrize.Benchmark
+/-!
+This is intentionally a reference-only Yukon candidate, not a score claim.
+`ResearchReferenceArchive.lean` contains a lossless base64 encoding of the
+complete lower research tree.  Validation is expected to fail after Yukon has
+recorded the candidate commit because this file deliberately exports no
+`ProtocolClaim`.
+-/
 
-/-- Unconditional universal-resultant BCHKS lower-track certificate. -/
-theorem candidate : ProtocolClaim 6399 307083 1048576 :=
-  protocolClaim6399
+namespace ProximityPrize.SubmissionLower
 
-end ProximityPrize.Benchmark
+theorem researchReferenceArchive_only : True := trivial
+
+end ProximityPrize.SubmissionLower
