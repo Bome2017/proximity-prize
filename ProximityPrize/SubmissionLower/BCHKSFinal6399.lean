@@ -122,7 +122,7 @@ open scoped NNReal
 extractor closes every obligation of the 63.99 certificate. -/
 theorem protocolClaim6399_of_polynomialAlignment
     (halg : ProximityPrize.SubmissionLower.BCHKSPolynomialAlignment6399) :
-    ProtocolClaim 6399 307083 1048576 where
+    ProtocolClaim 6399 307085 1048576 where
   admissible := by
     constructor <;>
       norm_num [claimedRadius, IRSProfile.minRelativeDistance]
@@ -132,7 +132,7 @@ theorem protocolClaim6399_of_polynomialAlignment
       (ProximityPrize.SubmissionLower.certifiedGammaError_bchks6399_le_of_polynomialAlignment
         halg).trans (by
           norm_num [reductionTarget, ProximityGap.prizeThreshold, div_le_iff₀])
-    have hr : claimedRadius 307083 1048576 =
+    have hr : claimedRadius 307085 1048576 =
         ProximityPrize.SubmissionLower.bchksRadius6399 := by
       norm_num [claimedRadius, ProximityPrize.SubmissionLower.bchksRadius6399]
     have hc :
@@ -143,7 +143,7 @@ theorem protocolClaim6399_of_polynomialAlignment
     rw [ToyProblem.Impl.IRS.certifiedGammaError, hr, hc]
     exact h
   score := by
-    have hr : claimedRadius 307083 1048576 =
+    have hr : claimedRadius 307085 1048576 =
         ProximityPrize.SubmissionLower.bchksRadius6399 := by
       norm_num [claimedRadius, ProximityPrize.SubmissionLower.bchksRadius6399]
     rw [hr]
@@ -151,7 +151,7 @@ theorem protocolClaim6399_of_polynomialAlignment
 
 /-- Unconditional public endpoint supplied by the universal-resultant
 alignment extractor. -/
-theorem protocolClaim6399 : ProtocolClaim 6399 307083 1048576 :=
+theorem protocolClaim6399 : ProtocolClaim 6399 307085 1048576 :=
   protocolClaim6399_of_polynomialAlignment
     ProximityPrize.SubmissionLower.bchksPolynomialAlignment6399
 
