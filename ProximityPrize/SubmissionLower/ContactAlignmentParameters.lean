@@ -24,12 +24,12 @@ set_option maxHeartbeats 4000000
 
 def n : ℕ := 262144
 def w : ℕ := 131071
-def agreements : ℕ := 185354
+def agreements : ℕ := 185128
 def prime : ℕ := 2130706433
 def errors : ℕ := n - agreements
 def alignmentBudget : ℕ := 100000000000000000
 def multiplicity : ℕ := 13
-def seedTotalCap : ℕ := 169
+def seedTotalCap : ℕ := 217
 def slopeCap : ℕ := 3
 def weightedCap : ℕ := multiplicity * agreements
 def yCap : ℕ := (weightedCap - 1) / w
@@ -104,16 +104,16 @@ def singularNumerator : ℕ :=
 def totalNumerator : ℕ := regularNumerator + gap * singularNumerator
 
 theorem parameter_values :
-    weightedCap = 2409602 ∧ yCap = 18 ∧ gap = 54283 ∧
-    errors = 76790 ∧ algebraicCap = 845 := by
+    weightedCap = 2406664 ∧ yCap = 18 ∧ gap = 54057 ∧
+    errors = 77016 ∧ algebraicCap = 1085 := by
   norm_num [weightedCap, multiplicity, agreements, yCap, w, gap, errors,
     n, algebraicCap, slopeCap, seedTotalCap]
 
-theorem coefficient_count_exact : coefficientCount = 13096794720 := by
+theorem coefficient_count_exact : coefficientCount = 16871774960 := by
   norm_num [coefficientCount, seedTotalCap, slopeCap, weightedCap,
     multiplicity, agreements, w, Finset.sum_range_succ]
 
-theorem contact_rank_exact : localContactRank = 49960 := by
+theorem contact_rank_exact : localContactRank = 64360 := by
   norm_num [localContactRank, contactExponent, multiplicity, seedTotalCap,
     slopeCap, Finset.sum_range_succ]
 
@@ -136,19 +136,19 @@ theorem branch_dominance :
     multiplicity, agreements, w, gap, n, errors, slopeCap, seedTotalCap]
 
 theorem ledger_numerator_exact :
-    totalNumerator = 228788847483348849235588882 := by
+    totalNumerator = 291300855426635923808505252 := by
   norm_num [totalNumerator, regularNumerator, singularNumerator,
     wholeNumerator, cutNumerator, unitY, unitR, unitZ, mixed,
     firstTail, lastTail, tailVector, agreementVector, yCap, weightedCap,
     multiplicity, agreements, w, gap, n, errors, slopeCap, seedTotalCap,
     algebraicCap]
 
-theorem denominator_exact : gap ^ 2 = 2946644089 := by
+theorem denominator_exact : gap ^ 2 = 2922159249 := by
   norm_num [gap, agreements, w]
 
 theorem division_certificate :
-    totalNumerator = 77643868948215160 * gap ^ 2 + 921399642 ∧
-    921399642 < gap ^ 2 := by
+    totalNumerator = 99686851606846127 * gap ^ 2 + 2075626629 ∧
+    2075626629 < gap ^ 2 := by
   rw [ledger_numerator_exact, denominator_exact]
   norm_num
 
