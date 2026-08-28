@@ -19,16 +19,16 @@ open ContactAlignmentParameters
 def surfaceVector : DegreeVector := ⟨yCap, slopeCap, seedTotalCap⟩
 
 theorem first_cut_projection_values :
-    mixed surfaceVector firstTail unitY = 870580224 ∧
-    mixed surfaceVector firstTail unitR = 4256170230 ∧
-    mixed surfaceVector firstTail unitZ = 116785159 := by
+    mixed surfaceVector firstTail unitY = 868220928 ∧
+    mixed surfaceVector firstTail unitR = 4529848608 ∧
+    mixed surfaceVector firstTail unitZ = 90439686 := by
   norm_num [mixed, surfaceVector, firstTail, tailVector, unitY, unitR, unitZ,
     yCap, weightedCap, ContactAlignmentParameters.multiplicity, agreements, w, slopeCap, seedTotalCap]
 
 theorem agreement_cut_projection_values :
-    mixed surfaceVector agreementVector unitY = 870573589 ∧
-    mixed surfaceVector agreementVector unitR = 4223894325 ∧
-    mixed surfaceVector agreementVector unitZ = 115866771 := by
+    mixed surfaceVector agreementVector unitY = 868214310 ∧
+    mixed surfaceVector agreementVector unitR = 4492065630 ∧
+    mixed surfaceVector agreementVector unitZ = 89652570 := by
   norm_num [mixed, surfaceVector, agreementVector, unitY, unitR, unitZ,
     yCap, weightedCap, ContactAlignmentParameters.multiplicity, agreements, w, slopeCap, seedTotalCap]
 
@@ -42,7 +42,7 @@ def agreementSparseRCap : ℕ :=
   sparseRCap yCap seedTotalCap agreementVector.y (1 + 2 * w * seedTotalCap)
 
 theorem sparse_projection_values :
-    firstSparseRCap = 3970695414 ∧ agreementSparseRCap = 3942746997 := by
+    firstSparseRCap = 4293919008 ∧ agreementSparseRCap = 4260069930 := by
   norm_num [firstSparseRCap, agreementSparseRCap, sparseRCap, firstTail, tailVector,
     agreementVector, yCap, weightedCap, ContactAlignmentParameters.multiplicity,
     agreements, w, seedTotalCap]

@@ -40,7 +40,7 @@ theorem selected_no_large_pencil_bound6401 : SelectedNoLargePencilBound6401 :=
 /-- The exact unmodified stock alignment predicate, with no remaining
 counting, interpolation, or geometric hypothesis. -/
 theorem alignment6401 :
-    AffineLineAlignmentBound IRSProfile.baseCode 78366 137490364055697543 :=
+    AffineLineAlignmentBound IRSProfile.baseCode 78386 137490364055697543 :=
   alignment_of_interpolant_count interpolant_selected_count6401
 
 #print axioms interpolant_selected_count6401

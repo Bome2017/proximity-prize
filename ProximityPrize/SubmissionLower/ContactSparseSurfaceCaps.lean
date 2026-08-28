@@ -201,8 +201,8 @@ theorem fixed_factorialAgreementSurface_joint_seed_cap
     (fixed_original_joint_seed_cap F hbox) x u₀ u₁
 
 theorem fixed_joint_seed_cap_values :
-    1 + 2 * (w + 1) * seedTotalCap = 64487425 ∧
-      1 + 2 * w * seedTotalCap = 64486933 := by
+    1 + 2 * (w + 1) * seedTotalCap = 75497473 ∧
+      1 + 2 * w * seedTotalCap = 75496897 := by
   norm_num [w, seedTotalCap]
 
 end

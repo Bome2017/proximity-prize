@@ -37,7 +37,7 @@ local instance : DecidableEq IRSProfile.Field := Classical.decEq _
 /-- The new selected-family bound uses the actual domain and the exact
 77665-error, 10^17-seed parameters. -/
 def SelectedNoLargePencilBound6401 : Prop :=
-  SelectedNoLargePencilBound IRSProfile.domain 131071 78366 137490364055697543
+  SelectedNoLargePencilBound IRSProfile.domain 131071 78386 137490364055697543
 
 /-- The precise actual-interpolant count supplied by the global counting
 module; it is an explicit input to this frontend, never a new axiom. -/
@@ -63,7 +63,7 @@ theorem challenge_field_characteristic :
 theorem original_support_card
     (A : IRSProfile.Field → Finset IRSProfile.Index)
     (seeds : Finset IRSProfile.Field)
-    (hcard : ∀ γ ∈ seeds, Fintype.card IRSProfile.Index - 78366 ≤ (A γ).card) :
+    (hcard : ∀ γ ∈ seeds, Fintype.card IRSProfile.Index - 78386 ≤ (A γ).card) :
     ∀ γ ∈ seeds, agreements ≤ (A γ).card := by
   intro γ hγ
   have hh := hcard γ hγ
@@ -108,10 +108,10 @@ theorem selected_count_of_interpolant_count
 /-- Use the generic stock-code bridge at the new error and seed budget. -/
 theorem alignment_of_interpolant_count
     (hcount : InterpolantSelectedCount6401) :
-    AffineLineAlignmentBound IRSProfile.baseCode 78366 137490364055697543 := by
+    AffineLineAlignmentBound IRSProfile.baseCode 78386 137490364055697543 := by
   change AffineLineAlignmentBound (ReedSolomon.code IRSProfile.domain (131071 + 1))
-    78366 137490364055697543
-  exact alignmentBound_of_selected_count IRSProfile.domain 131071 78366
+    78386 137490364055697543
+  exact alignmentBound_of_selected_count IRSProfile.domain 131071 78386
     137490364055697543 (selected_count_of_interpolant_count hcount)
 
 #print axioms challenge_field_characteristic

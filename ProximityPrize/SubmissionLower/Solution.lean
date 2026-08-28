@@ -10,7 +10,7 @@ full compilation, independent benchmark and submission remain distinct.
 
 namespace ProximityPrize.Benchmark
 
-theorem candidate : ProtocolClaim 6558 313467 1048576 :=
+theorem candidate : ProtocolClaim 6560 313547 1048576 :=
   ProximityPrize.SubmissionLower.ContactProtocol6401.protocolClaim6401
 
 end ProximityPrize.Benchmark
