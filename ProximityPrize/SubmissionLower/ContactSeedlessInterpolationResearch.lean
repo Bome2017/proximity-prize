@@ -360,31 +360,28 @@ theorem translation_reconstruct_coeff (D w L s : ℕ) (x u : K)
         seedlessBox K (min r L) L s) : LocalPoly K)
   simp [boundedBlockEntry]
 
-/-! ## Frozen 66.75 fixed-centre row -/
+/-! ## Frozen 66.96 fixed-centre row -/
 
 def n : ℕ := 262144
-def errors : ℕ := 79520
+def errors : ℕ := 79730
 def agreements : ℕ := n - errors
 def w : ℕ := 131071
-def multiplicity : ℕ := 29
-def yTotalCap : ℕ := 40
-def slopeCap : ℕ := 7
+def multiplicity : ℕ := 34
+def yTotalCap : ℕ := 47
+def slopeCap : ℕ := 8
 def weightedCap : ℕ := multiplicity * agreements
 
 theorem parameter_values :
-    agreements = 182624 ∧ weightedCap = 5296096 := by
+    agreements = 182414 ∧ weightedCap = 6202076 := by
   norm_num [agreements, weightedCap, multiplicity, n, errors]
 
 theorem coefficient_count_exact :
-    coefficientCount weightedCap w yTotalCap slopeCap = 736344024 := by
-  norm_num [coefficientCount, weightedCap, multiplicity, agreements, n,
-    errors, w, yTotalCap, slopeCap, Finset.sum_range_succ]
+    coefficientCount weightedCap w yTotalCap slopeCap = 1136400792 := by
+  rfl
 
 theorem local_rank_exact :
-    localRankBound multiplicity yTotalCap slopeCap = 2808 := by
-  norm_num [localRankBound, seedlessContactRankBound,
-    seedlessKernelLowerBound, seedlessInputCount, multiplicity, yTotalCap,
-    slopeCap, Finset.sum_range_succ]
+    localRankBound multiplicity yTotalCap slopeCap = 4335 := by
+  rfl
 
 theorem interpolation_gate :
     n * localRankBound multiplicity yTotalCap slopeCap <
