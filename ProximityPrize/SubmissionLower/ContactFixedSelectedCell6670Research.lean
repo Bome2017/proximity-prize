@@ -1,6 +1,6 @@
 import ProximityPrize.Benchmark.TargetLower
 import ProximityPrize.SubmissionLower.ContactFixedMeetProfile6670Research
-import ProximityPrize.SubmissionLower.ContactSharpTaylorYZFactorProviderResearch
+import ProximityPrize.SubmissionLower.ContactReducedTaylorYZFactorProviderResearch
 import ProximityPrize.SubmissionLower.ContactProfileFixedSelectedCombinerResearch
 import ProximityPrize.SubmissionLower.ContactRegularFactorResidualStage6600Research
 
@@ -32,6 +32,7 @@ open ContactFlagBezout6543Research
 open ContactRobustFixedMeet6656Research
 open ContactSharpTaylorFixedMeet6656Research
 open ContactSharpTaylorYZFactorProviderResearch
+open ContactReducedTaylorYZFactorProviderResearch
 open ContactProfileYZFactorLedgerResearch
 open ContactProfileFixedSelectedCombinerResearch
 open ContactFixedMeetProfile6670Research
@@ -55,29 +56,29 @@ theorem fixedSupport_of_mem_box
       fixedProfile.seedTotalCap fixedProfile.slopeCap) :
     ResidualSupportData fixedSupport F := by
   refine ⟨?_, ?_, ?_⟩
-  · apply (weightedTotalDegree_le_iff residualSWeights F 8).mpr
+  · apply (weightedTotalDegree_le_iff residualSWeights F 9).mpr
     intro d hd
-    have hb : d 1 + d 3 ≤ 925 ∧ d 2 ≤ 8 ∧
-        d 0 + 131071 * d 1 + (131071 - 1) * d 2 < 5654834 := hbox hd
+    have hb : d 1 + d 3 ≤ 943 ∧ d 2 ≤ 9 ∧
+        d 0 + 131071 * d 1 + (131071 - 1) * d 2 < 5654369 := hbox hd
     rw [ContactFactorCaps.weight_fin4]
-    change d 0 * 0 + d 1 * 0 + d 2 * 1 + d 3 * 0 ≤ 8
+    change d 0 * 0 + d 1 * 0 + d 2 * 1 + d 3 * 0 ≤ 9
     norm_num
     exact hb.2.1
   · apply (weightedTotalDegree_le_iff residualYSWeights F 43).mpr
     intro d hd
-    have hb : d 1 + d 3 ≤ 925 ∧ d 2 ≤ 8 ∧
-        d 0 + 131071 * d 1 + (131071 - 1) * d 2 < 5654834 := hbox hd
+    have hb : d 1 + d 3 ≤ 943 ∧ d 2 ≤ 9 ∧
+        d 0 + 131071 * d 1 + (131071 - 1) * d 2 < 5654369 := hbox hd
     rw [ContactFactorCaps.weight_fin4]
     change d 0 * 0 + d 1 * 1 + d 2 * 1 + d 3 * 0 ≤ 43
     norm_num
     norm_num at hb
     omega
-  · apply (weightedTotalDegree_le_iff residualTotalWeights F 933).mpr
+  · apply (weightedTotalDegree_le_iff residualTotalWeights F 952).mpr
     intro d hd
-    have hb : d 1 + d 3 ≤ 925 ∧ d 2 ≤ 8 ∧
-        d 0 + 131071 * d 1 + (131071 - 1) * d 2 < 5654834 := hbox hd
+    have hb : d 1 + d 3 ≤ 943 ∧ d 2 ≤ 9 ∧
+        d 0 + 131071 * d 1 + (131071 - 1) * d 2 < 5654369 := hbox hd
     rw [ContactFactorCaps.weight_fin4]
-    change d 0 * 0 + d 1 * 1 + d 2 * 1 + d 3 * 1 ≤ 933
+    change d 0 * 0 + d 1 * 1 + d 2 * 1 + d 3 * 1 ≤ 952
     norm_num
     norm_num at hb
     omega
@@ -232,34 +233,33 @@ theorem regular_factor_seed_bound
     simpa only [geometricFlag, regularFlag,
       show Fin.succ (1 : Fin 3) = (2 : Fin 4) by decide] using
       geometricFactor_degree_le K R.1 hRne g (1 : Fin 3)
-  have hflagY : (geometricFlag K g).yz + (geometricFlag K g).all ≤ 51 := by
+  have hflagY : (geometricFlag K g).yz + (geometricFlag K g).all ≤ 52 := by
     calc
       _ ≤ fixedProfile.yCap + fixedProfile.slopeCap :=
         Nat.add_le_add (hgY.trans hRY) (hgS.trans hRS)
-      _ = 51 := by norm_num [fixedProfile, Profile.yCap]
-  have hflagS : (geometricFlag K g).all ≤ 8 := by
+      _ = 52 := by norm_num [fixedProfile, Profile.yCap]
+  have hflagS : (geometricFlag K g).all ≤ 9 := by
     exact (hgS.trans hRS).trans_eq (by norm_num [fixedProfile])
   have hflagZ : (geometricFlag K g).zOnly + (geometricFlag K g).yz +
-      (geometricFlag K g).all ≤ 976 := by
+      (geometricFlag K g).all ≤ 995 := by
     calc
       _ ≤ fixedProfile.seedTotalCap + fixedProfile.yCap +
           fixedProfile.slopeCap :=
         Nat.add_le_add
           (Nat.add_le_add (hgZ.trans hRZ) (hgY.trans hRY))
           (hgS.trans hRS)
-      _ = 976 := by norm_num [fixedProfile, Profile.yCap]
-  have hprojection : TerminalAdaptiveProjectionFamiliesSharpYZ fixedSupport S :=
-    terminalAdaptiveProjectionFamiliesSharpYZ_of_active_yz_caps
-      fixedSupport (by norm_num [fixedSupport]) S
-      51 8 976 11009965 1966065
+      _ = 995 := by norm_num [fixedProfile, Profile.yCap]
+  have hprojection : TerminalAdaptiveProjectionFamiliesReducedYZ fixedSupport S :=
+    terminalAdaptiveProjectionFamiliesReducedYZ_of_active_yz_caps
+      fixedSupport S 52 9 995 11009965 2097136
       hflagY hflagS hflagZ
       (by norm_num [fixedProfile, fixedSupport])
       (by norm_num [fixedProfile, fixedSupport])
       ⟨by norm_num [prime], by norm_num [prime], by norm_num [prime]⟩
       (by norm_num [prime])
-  exact recursive_scaled_factorSharpYZ_of_adaptive_projection_families
+  exact recursive_scaled_factorReducedYZ_of_adaptive_projection_families
     (polynomialEmbedding_injective K) fixedProfile fixedSupport
-    (by norm_num [fixedSupport]) S hnodesS hagreementS
+    S hnodesS hagreementS
     fixed_characteristic_gates.2.2.2.2.1
     fixed_characteristic_gates.2.2.2.2.2.1
     fixed_degree_part_bound fixed_unit_part_bound hprojection
@@ -309,7 +309,7 @@ theorem fixed_selected_count_le_exact_cap
         (selected gamma).eval (x i) = u0 i + gamma * u1 i)).card)
     (hnoPencil : NoLargeSelectedPencil selected Gamma fixedProfile.w
       fixedProfile.errors) :
-    Gamma.card ≤ 247648344661646309 := by
+    Gamma.card ≤ 274196218114040356 := by
   have hA : FixedParameterAlignment fixedProfile fixedTightProfile :=
     ⟨rfl, rfl, rfl, rfl, rfl, rfl⟩
   have h := global_count_le_regular_div_add_tight_countCap

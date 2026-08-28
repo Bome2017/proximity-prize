@@ -61,9 +61,9 @@ attribute [local simp]
 theorem firstResidualCell_count_lt
     (QA QB QC : StackedPoly) (hQA : QA ≠ 0) (hQB : QB ≠ 0)
     (hboxA : QA ∈ globalCoefficientBox IRSProfile.Field
-      (31 * agreements) w 21207 9)
+      (60 * agreements) w 943 18)
     (hboxB : QB ∈ globalCoefficientBox IRSProfile.Field
-      (60 * agreements) w 925 18)
+      (35 * agreements) w 3393 9)
     (selected : IRSProfile.Field → Polynomial IRSProfile.Field)
     (Gamma : Finset IRSProfile.Field)
     (u0 u1 : IRSProfile.Index → IRSProfile.Field)
@@ -76,7 +76,7 @@ theorem firstResidualCell_count_lt
           u0 i + gamma * u1 i)).card)
     (hnoPencil : NoLargeSelectedPencil selected Gamma w errors) :
     (firstResidualSeeds selected Gamma QA QB).card <
-      64331733997583 + 189926330250373 := by
+      11353501499948 + 95920251130234 := by
   let Delta := firstResidualSeeds selected Gamma QA QB
   let Q := quotientB QA QB
   let T := quotientA QA QB
@@ -94,7 +94,7 @@ theorem firstResidualCell_count_lt
     ContactStackedResidualCells6656Research.quotientB_ne_zero QA QB hQB
   have hQbox := quotientB_mem_parent_box QA QB hQB hboxB
   have hTbox := quotientA_mem_parent_box QA QB hQA hboxA
-  have hTcaps := degree_bounds_of_mem_box T (31 * agreements) w 21207 9
+  have hTcaps := degree_bounds_of_mem_box T (60 * agreements) w 943 18
     (by norm_num [w]) hTbox
   have hrel : IsRelPrime Q T :=
     (firstQuotients_isRelPrime hQA).symm
@@ -170,7 +170,7 @@ theorem firstResidualCell_count_lt
         (by simpa [stageOne, pivotB, UnequalParameters.errors,
           TightParameters.errors] using hnoPencilDelta))
   have hceil : stageOne.regularCountCap + pivotB.countCap + 1 =
-      64331733997583 + 189926330250373 := by
+      11353501499948 + 95920251130234 := by
     simpa only [stageOne, pivotB,
       ContactRecursiveResidualStages6670Research.firstResidualSingularCeiling] using
       ContactRecursiveResidualStages6670Research.residual_stage_ceilings.1
@@ -180,11 +180,11 @@ theorem firstResidualCell_count_lt
 theorem secondResidualCell_count_lt
     (QA QB QC : StackedPoly) (hQA : QA ≠ 0) (hQB : QB ≠ 0) (hQC : QC ≠ 0)
     (hboxA : QA ∈ globalCoefficientBox IRSProfile.Field
-      (31 * agreements) w 21207 9)
+      (60 * agreements) w 943 18)
     (hboxB : QB ∈ globalCoefficientBox IRSProfile.Field
-      (60 * agreements) w 925 18)
+      (35 * agreements) w 3393 9)
     (hboxC : QC ∈ globalCoefficientBox IRSProfile.Field
-      (34 * agreements) w 801717 8)
+      (31 * agreements) w 216672 9)
     (selected : IRSProfile.Field → Polynomial IRSProfile.Field)
     (Gamma : Finset IRSProfile.Field)
     (u0 u1 : IRSProfile.Index → IRSProfile.Field)
@@ -197,7 +197,7 @@ theorem secondResidualCell_count_lt
           u0 i + gamma * u1 i)).card)
     (hnoPencil : NoLargeSelectedPencil selected Gamma w errors) :
     (secondResidualSeeds selected Gamma QA QB QC).card <
-      835044267066492 + 23141679224390 := by
+      241130680395014 + 26657361521245 := by
   let Delta := secondResidualSeeds selected Gamma QA QB QC
   let Q := middleQuotient QA QB QC
   let T := quotientC QA QB QC
@@ -216,7 +216,7 @@ theorem secondResidualCell_count_lt
     ContactStackedResidualCells6656Research.middleQuotient_ne_zero QA QB QC hQA
   have hQbox := middleQuotient_mem_parent_box QA QB QC hQA hbox12
   have hTbox := quotientC_mem_parent_box QA QB QC hQC hboxC
-  have hTcaps := degree_bounds_of_mem_box T (34 * agreements) w 801717 8
+  have hTcaps := degree_bounds_of_mem_box T (31 * agreements) w 216672 9
     (by norm_num [w]) hTbox
   have hrel : IsRelPrime Q T := secondQuotients_isRelPrime hQA
   have hdegreeDelta : ∀ gamma ∈ Delta,
@@ -291,7 +291,7 @@ theorem secondResidualCell_count_lt
         (by simpa [stageTwo, pivotGcd12, UnequalParameters.errors,
           TightParameters.errors] using hnoPencilDelta))
   have hceil : stageTwo.regularCountCap + pivotGcd12.countCap + 1 =
-      835044267066492 + 23141679224390 := by
+      241130680395014 + 26657361521245 := by
     simpa only [stageTwo, pivotGcd12,
       ContactRecursiveResidualStages6670Research.secondResidualSingularCeiling] using
       ContactRecursiveResidualStages6670Research.residual_stage_ceilings.2

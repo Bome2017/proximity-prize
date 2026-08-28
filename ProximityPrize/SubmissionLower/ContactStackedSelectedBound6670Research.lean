@@ -43,7 +43,7 @@ polynomial and the selected cell on which it specializes to zero; the three
 parent interpolants and recursive cover are deliberately absent. -/
 def FixedCellCountProvider6670 : Prop :=
   ∀ (Q : GlobalPoly), Q ≠ 0 →
-    Q ∈ globalCoefficientBox IRSProfile.Field (31 * agreements) w 925 8 →
+    Q ∈ globalCoefficientBox IRSProfile.Field (31 * agreements) w 943 9 →
     ∀ (selected : IRSProfile.Field → Polynomial IRSProfile.Field)
       (Delta : Finset IRSProfile.Field)
       (u0 u1 : IRSProfile.Index → IRSProfile.Field),
@@ -143,11 +143,11 @@ theorem fixedSeeds_card_le_of_provider
     (hfixedProvider : FixedCellCountProvider6670)
     (QA QB QC : GlobalPoly) (hQA : QA ≠ 0) (hQB : QB ≠ 0) (hQC : QC ≠ 0)
     (hboxA : QA ∈ globalCoefficientBox IRSProfile.Field
-      (31 * agreements) w 21207 9)
+      (60 * agreements) w 943 18)
     (hboxB : QB ∈ globalCoefficientBox IRSProfile.Field
-      (60 * agreements) w 925 18)
+      (35 * agreements) w 3393 9)
     (hboxC : QC ∈ globalCoefficientBox IRSProfile.Field
-      (34 * agreements) w 801717 8)
+      (31 * agreements) w 216672 9)
     (selected : IRSProfile.Field → Polynomial IRSProfile.Field)
     (Gamma : Finset IRSProfile.Field)
     (u0 u1 : IRSProfile.Index → IRSProfile.Field)
@@ -168,7 +168,7 @@ theorem fixedSeeds_card_le_of_provider
     ContactStackedBoxTransport6670Research.gcd12_mem_meet_box
       QA QB hQA hQB hboxA hboxB
   have hQbox : Q ∈ globalCoefficientBox IRSProfile.Field
-      (31 * agreements) w 925 8 := by
+      (31 * agreements) w 943 9 := by
     simpa [Q] using
       ContactStackedBoxTransport6670Research.gcd123_mem_meet_box
         QA QB QC hQA hQC hbox12 hboxC
@@ -197,7 +197,7 @@ provider. -/
 theorem selectedNoLargePencilBound_of_fixedCellCountProvider6670
     (hfixedProvider : FixedCellCountProvider6670) :
     SelectedNoLargePencilBound IRSProfile.domain
-      131071 79730 274980727611395087 := by
+      131071 79745 274980727601395087 := by
   intro U seeds A selected hdegreeRaw hcardRaw hvalues hnoRaw
   have hdegree : ∀ gamma ∈ seeds,
       (selected gamma).natDegree ≤ w := by

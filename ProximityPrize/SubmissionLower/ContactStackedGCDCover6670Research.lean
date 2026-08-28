@@ -56,13 +56,13 @@ theorem exists_stacked_interpolants_with_recursive_cover
     ∃ QA QB QC : GlobalPoly,
       QA ≠ 0 ∧
       QA ∈ globalCoefficientBox IRSProfile.Field
-        (31 * agreements) w 21207 9 ∧
+        (60 * agreements) w 943 18 ∧
       QB ≠ 0 ∧
       QB ∈ globalCoefficientBox IRSProfile.Field
-        (60 * agreements) w 925 18 ∧
+        (35 * agreements) w 3393 9 ∧
       QC ≠ 0 ∧
       QC ∈ globalCoefficientBox IRSProfile.Field
-        (34 * agreements) w 801717 8 ∧
+        (31 * agreements) w 216672 9 ∧
       ∀ (gamma : IRSProfile.Field) (P : Polynomial IRSProfile.Field)
         (support : Finset IRSProfile.Index),
         P.natDegree ≤ w → agreements ≤ support.card →

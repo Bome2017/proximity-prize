@@ -26,33 +26,33 @@ def prime : ℕ := 2130706433
 /-- First residual pair, oriented with profile B as the singular pivot and
 profile A as the external proper cut. -/
 def residualStageOne : UnequalParameters :=
-  ⟨262144, 131071, 182414, 83, 18, 925, 43, 9, 21207⟩
+  ⟨262144, 131071, 182399, 48, 9, 3393, 83, 18, 943⟩
 
 /-- Second residual pair, oriented with the A/B GCD box as singular pivot and
 profile C as the external proper cut. -/
 def residualStageTwo : UnequalParameters :=
-  ⟨262144, 131071, 182414, 43, 9, 925, 47, 8, 801717⟩
+  ⟨262144, 131071, 182399, 48, 9, 943, 43, 9, 216672⟩
 
 /-- Tight singular ledger for the profile-B pivot. -/
 def pivotB : TightParameters :=
-  ⟨262144, 131071, 182414, 10944840, 925, 18⟩
+  ⟨262144, 131071, 182399, 6383965, 3393, 9⟩
 
 /-- Tight singular ledger for the A/B GCD pivot. -/
 def pivotGcd12 : TightParameters :=
-  ⟨262144, 131071, 182414, 5654834, 925, 9⟩
+  ⟨262144, 131071, 182399, 6383965, 943, 9⟩
 
-def firstResidualSingularCeiling : ℕ := 189926330250373
-def secondResidualSingularCeiling : ℕ := 23141679224390
+def firstResidualSingularCeiling : ℕ := 95920251130234
+def secondResidualSingularCeiling : ℕ := 26657361521245
 
 theorem residual_stage_values :
-    residualStageOne.agreement = ⟨21757787, 4587485, 5559245395⟩ ∧
-      residualStageOne.mixedCost = ⟨390051, 1799956, 1521⟩ ∧
-      residualStageOne.regularNumerator = 3302984218637927109 ∧
-      residualStageOne.regularCountCap = 64331733997583 ∧
-      residualStageTwo.agreement = ⟨12320675, 2228207, 210163697815⟩ ∧
-      residualStageTwo.mixedCost = ⟨7222853, 34517306, 767⟩ ∧
-      residualStageTwo.regularNumerator = 42873677803994916417 ∧
-      residualStageTwo.regularCountCap = 835044267066492 := by
+    residualStageOne.agreement = ⟨21757787, 4587485, 889447807⟩ ∧
+      residualStageOne.mixedCost = ⟨69561, 326883, 1611⟩ ∧
+      residualStageOne.regularNumerator = 582752524989381615 ∧
+      residualStageOne.regularCountCap = 11353501499948 ∧
+      residualStageTwo.agreement = ⟨12582817, 2228207, 56798831425⟩ ∧
+      residualStageTwo.mixedCost = ⟨1958535, 10440805, 819⟩ ∧
+      residualStageTwo.regularNumerator = 12376755563315283237 ∧
+      residualStageTwo.regularCountCap = 241130680395014 := by
   norm_num [residualStageOne, residualStageTwo,
     UnequalParameters.agreement, UnequalParameters.leftAgreement,
     UnequalParameters.rightAgreement, UnequalParameters.mixedCost,
@@ -60,16 +60,16 @@ theorem residual_stage_values :
     UnequalParameters.errors, UnequalParameters.gap, dot]
 
 theorem pivot_implicit_values :
-    pivotB.kappa = 35 ∧
-      pivotB.implicitYCap = 2922 ∧
-      pivotB.algebraicCap = 32375 ∧
-      pivotB.tightNumerator = 9751387574044885757 ∧
-      pivotB.countCap = 189926330250372 ∧
+    pivotB.kappa = 17 ∧
+      pivotB.implicitYCap = 828 ∧
+      pivotB.algebraicCap = 57681 ∧
+      pivotB.tightNumerator = 4923394650012616101 ∧
+      pivotB.countCap = 95920251130233 ∧
       pivotGcd12.kappa = 17 ∧
-      pivotGcd12.implicitYCap = 733 ∧
-      pivotGcd12.algebraicCap = 15725 ∧
-      pivotGcd12.tightNumerator = 1188163236417854123 ∧
-      pivotGcd12.countCap = 23141679224389 := by
+      pivotGcd12.implicitYCap = 828 ∧
+      pivotGcd12.algebraicCap = 16031 ∧
+      pivotGcd12.tightNumerator = 1368269052162429251 ∧
+      pivotGcd12.countCap = 26657361521244 := by
   norm_num [pivotB, pivotGcd12, TightParameters.countCap,
     TightParameters.tightNumerator, TightParameters.coreNumerator,
     TightParameters.aggregateCost, TightParameters.agreement,
@@ -152,9 +152,9 @@ theorem residual_projection_characteristic_gates :
 
 theorem residual_stage_ceilings :
     residualStageOne.regularCountCap + pivotB.countCap + 1 =
-        64331733997583 + firstResidualSingularCeiling ∧
+        11353501499948 + firstResidualSingularCeiling ∧
       residualStageTwo.regularCountCap + pivotGcd12.countCap + 1 =
-        835044267066492 + secondResidualSingularCeiling := by
+        241130680395014 + secondResidualSingularCeiling := by
   rw [residual_stage_values.2.2.2.1,
     residual_stage_values.2.2.2.2.2.2.2,
     pivot_implicit_values.2.2.2.2.1,
@@ -177,7 +177,7 @@ theorem residual_stage_one_count_lt
       (pivotB.n - pivotB.w) * dot pivotB.agreement (cost i) +
         (pivotB.errors + 1) * pivotB.gap * (cost i).z)
     (hexceptions : exceptions ≤ 2 * pivotB.algebraicCap ^ 2) :
-    total < 64331733997583 + firstResidualSingularCeiling := by
+    total < 11353501499948 + firstResidualSingularCeiling := by
   have h :=
     ContactRecursiveResidualStages6656Research.complete_stage_count_lt
       residualStageOne pivotB
@@ -201,7 +201,7 @@ theorem residual_stage_two_count_lt
       (pivotGcd12.n - pivotGcd12.w) * dot pivotGcd12.agreement (cost i) +
         (pivotGcd12.errors + 1) * pivotGcd12.gap * (cost i).z)
     (hexceptions : exceptions ≤ 2 * pivotGcd12.algebraicCap ^ 2) :
-    total < 835044267066492 + secondResidualSingularCeiling := by
+    total < 241130680395014 + secondResidualSingularCeiling := by
   have h :=
     ContactRecursiveResidualStages6656Research.complete_stage_count_lt
       residualStageTwo pivotGcd12
