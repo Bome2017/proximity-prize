@@ -19,48 +19,34 @@ open ContactAlignmentParameters
 def surfaceVector : DegreeVector := ⟨yCap, slopeCap, seedTotalCap⟩
 
 theorem first_cut_projection_values :
-    mixed surfaceVector firstTail unitY = 494403584 ∧
-    mixed surfaceVector firstTail unitR = 2321547428 ∧
-    mixed surfaceVector firstTail unitZ = 81395718 := by
+    mixed surfaceVector firstTail unitY = 438304768 ∧
+    mixed surfaceVector firstTail unitR = 2283798704 ∧
+    mixed surfaceVector firstTail unitZ = 61603845 := by
   norm_num [mixed, surfaceVector, firstTail, tailVector, unitY, unitR, unitZ,
     yCap, weightedCap, ContactAlignmentParameters.multiplicity, agreements, w, slopeCap, seedTotalCap]
 
 theorem agreement_cut_projection_values :
-    mixed surfaceVector agreementVector unitY = 494399818 ∧
-    mixed surfaceVector agreementVector unitR = 2321529743 ∧
-    mixed surfaceVector agreementVector unitZ = 81395097 := by
+    mixed surfaceVector agreementVector unitY = 438301429 ∧
+    mixed surfaceVector agreementVector unitR = 2283781305 ∧
+    mixed surfaceVector agreementVector unitZ = 61603375 := by
   norm_num [mixed, surfaceVector, agreementVector, unitY, unitR, unitZ,
     yCap, weightedCap, ContactAlignmentParameters.multiplicity, agreements, w, slopeCap, seedTotalCap]
 
-def sparseRCap (surfaceY surfaceJoint cutY cutJoint : ℕ) : ℕ :=
-  surfaceY * cutJoint + cutY * surfaceJoint - surfaceY * cutY
-
-def firstSparseRCap : ℕ :=
-  sparseRCap yCap seedTotalCap firstTail.y (1 + 2 * (w + 1) * seedTotalCap)
-
-def agreementSparseRCap : ℕ :=
-  sparseRCap yCap seedTotalCap agreementVector.y (1 + 2 * w * seedTotalCap)
-
-theorem sparse_projection_values :
-    firstSparseRCap = 2130444452 ∧ agreementSparseRCap = 2130428198 := by
-  norm_num [firstSparseRCap, agreementSparseRCap, sparseRCap, firstTail, tailVector,
-    agreementVector, yCap, weightedCap, ContactAlignmentParameters.multiplicity,
-    agreements, w, seedTotalCap]
-
-/-- The whole-only regular branch needs only the agreement cut.  Its two
-unaffected rectangle gates and replacement sparse base-R gate are strict. -/
-theorem agreement_projection_caps_below_characteristic :
+/-! The rectangular R bounds above exceed the characteristic.  The production
+proof replaces only that coordinate with the joint trapezoid resultant bound;
+these are the four remaining rectangular gates. -/
+theorem non_R_projection_caps_below_characteristic :
+    mixed surfaceVector firstTail unitY < prime ∧
+    mixed surfaceVector firstTail unitZ < prime ∧
     mixed surfaceVector agreementVector unitY < prime ∧
-    mixed surfaceVector agreementVector unitZ < prime ∧
-    agreementSparseRCap < prime := by
-  rcases agreement_cut_projection_values with ⟨h4, _, h6⟩
-  have h8 := sparse_projection_values.2
-  rw [h4, h6, h8]
+    mixed surfaceVector agreementVector unitZ < prime := by
+  rcases first_cut_projection_values with ⟨h1, h2, h3⟩
+  rcases agreement_cut_projection_values with ⟨h4, h5, h6⟩
+  rw [h1, h3, h4, h6]
   norm_num [prime]
 
 end ProximityPrize.SubmissionLower.ContactProjectionParameters
 
 #print axioms ProximityPrize.SubmissionLower.ContactProjectionParameters.first_cut_projection_values
 #print axioms ProximityPrize.SubmissionLower.ContactProjectionParameters.agreement_cut_projection_values
-#print axioms ProximityPrize.SubmissionLower.ContactProjectionParameters.sparse_projection_values
-#print axioms ProximityPrize.SubmissionLower.ContactProjectionParameters.agreement_projection_caps_below_characteristic
+#print axioms ProximityPrize.SubmissionLower.ContactProjectionParameters.non_R_projection_caps_below_characteristic

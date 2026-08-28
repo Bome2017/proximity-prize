@@ -1,29 +1,22 @@
 import ProximityPrize.Benchmark.TargetLower
 import ProximityPrize.SubmissionLower.ContactSelectedSeedDecomposition
-import ProximityPrize.SubmissionLower.ContactCountingLedger
+import ProximityPrize.SubmissionLower.ContactShearLedger6533
 
 /-!
-# Constructed selected-seed families and the global finite-cover ledger
+# Constructed selected-seed families for the 65.33 global-shear row
 
-Model label: gpt-5.
-
-The families are actual filters of the supplied selected seeds, indexed
-by the actual factor and implicit-pair sets. Their cover, exceptional
-count, and summed degree budgets follow from the verified algebraic
-decomposition. Overlap is harmless and no disjoint partition is assumed.
-
-The final theorem in THIS helper still states per-branch estimates as
-explicit inputs. ContactGlobalSelectedCount will discharge those inputs
-using the separate actual regular-factor and implicit-pair theorems.
+This is the isolated 65.33 retarget of the finite-cover layer.  The family
+definitions and algebraic decomposition are unchanged.  The regular branch
+is exposed with the common-shear numerator, while the implicit branch keeps
+the proper-cut estimate used by `ContactShearLedger6533.final_family_ledger`.
 -/
 
-namespace ProximityPrize.SubmissionLower.ContactGlobalSelectedFamilies
+namespace ProximityPrize.SubmissionLower.ContactGlobalSelectedFamilies6533
 
-open ContactAlignmentParameters ContactImplicitLiftParameters ContactCountingLedger
+open ContactParameters6533 ContactShearLedger6533
 open ContactSelectedSeedDecomposition ContactImplicitPairBudgets ContactImplicitContactLift
 open ContactExceptionalSeedAuxiliary ContactSingularAuxiliary ContactSingularDegreeBounds
 open ContactInterpolation ContactTranslation ContactFactorCaps
-open ContactFactorCover
 open scoped BigOperators
 
 noncomputable section
@@ -32,7 +25,8 @@ variable {K : Type} [Field K]
 
 abbrev RegularIndex (Q : MvPolynomial (Fin 4) K) := ↥(positiveRFactors Q)
 
-abbrev ImplicitIndex (Q : MvPolynomial (Fin 4) K) := ↥(implicitPairSet (singularAuxiliary Q))
+abbrev ImplicitIndex (Q : MvPolynomial (Fin 4) K) :=
+  ↥(implicitPairSet (singularAuxiliary Q))
 
 def regularSeeds (Q : MvPolynomial (Fin 4) K) (selected : K → Polynomial K)
     (Γ : Finset K) (F : RegularIndex Q) : Finset K := by
@@ -98,33 +92,27 @@ theorem card_le_two_family_sums_plus_exception
       (Nat.add_le_add Finset.card_biUnion_le Finset.card_biUnion_le) _
 
 theorem regularVector_budgets (Q : MvPolynomial (Fin 4) K) (hQ : Q ≠ 0)
-    (hY : Q.degreeOf (1 : Fin 4) ≤ yCap)
     (hbox : Q ∈ globalCoefficientBox K weightedCap w seedTotalCap slopeCap) :
-    (∑ F : RegularIndex Q, (regularVector Q F).y) ≤ 27 ∧
-      (∑ F : RegularIndex Q, (regularVector Q F).r) ≤ 6 ∧
-      (∑ F : RegularIndex Q, (regularVector Q F).z) ≤ 164 := by
+    (∑ F : RegularIndex Q, (regularVector Q F).y) ≤ yCap ∧
+      (∑ F : RegularIndex Q, (regularVector Q F).r) ≤ slopeCap ∧
+      (∑ F : RegularIndex Q, (regularVector Q F).z) ≤ seedTotalCap := by
   classical
-  have hb := directFactor_input_budgets Q hQ weightedCap w seedTotalCap slopeCap (by decide) hbox
-  have hy : (∑ F ∈ positiveRFactors Q, F.degreeOf (1 : Fin 4)) ≤ 27 := by
-    have hh := sum_degreeOf_le_of_prod_dvd (positiveRFactors Q) id Q hQ
-      (positiveRFactors_product_dvd Q hQ) (1 : Fin 4)
-    exact hh.trans (hY.trans_eq (by norm_num [yCap]))
-  refine ⟨?_, ?_, ?_⟩
-  · simpa only [regularVector, Finset.sum_coe_sort] using hy
-  · simpa only [regularVector, Finset.sum_coe_sort, slopeCap] using hb.2.1
-  · simpa only [regularVector, Finset.sum_coe_sort, seedTotalCap] using hb.2.2
+  have hb := directFactor_input_budgets Q hQ weightedCap w seedTotalCap slopeCap
+    (by norm_num [w]) hbox
+  simpa only [regularVector, Finset.sum_coe_sort, yCap] using hb
 
 theorem implicitVector_budgets (Q : MvPolynomial (Fin 4) K) (hQ : Q ≠ 0)
     [CharP K prime]
     (hbox : Q ∈ globalCoefficientBox K weightedCap w seedTotalCap slopeCap) :
     (∑ q : ImplicitIndex Q, (implicitVector Q q).y) ≤ algebraicCap ∧
-      (∑ q : ImplicitIndex Q, (implicitVector Q q).r) ≤ 2 * implicitYCap * algebraicCap ∧
+      (∑ q : ImplicitIndex Q, (implicitVector Q q).r) ≤
+        2 * implicitYCap * algebraicCap ∧
       (∑ q : ImplicitIndex Q, (implicitVector Q q).z) ≤ implicitYCap := by
   classical
   obtain ⟨hJ, hJbox⟩ := singularAuxiliary_nonzero_mem_box Q weightedCap w seedTotalCap
-    slopeCap prime hQ (by decide) characteristic_gates.2.2.2 hbox
+    slopeCap prime hQ (by norm_num [slopeCap]) implicit_characteristic_gates.2.2.2 hbox
   have hb := implicitPair_input_budgets (singularAuxiliary Q) hJ implicitWeightedCap w
-    algebraicCap (by decide) hJbox
+    algebraicCap (by norm_num [w]) hJbox
   simpa only [implicitVector, Finset.sum_coe_sort, implicitYCap] using hb
 
 theorem constructed_family_cover (Q : MvPolynomial (Fin 4) K) (hQ : Q ≠ 0)
@@ -138,9 +126,12 @@ theorem constructed_family_cover (Q : MvPolynomial (Fin 4) K) (hQ : Q ≠ 0)
       (exceptionalSeeds (singularAuxiliary Q) Γ selected).card ≤ 2 * algebraicCap ^ 2 := by
   classical
   have hd := selected_seed_decomposition Q hQ weightedCap w seedTotalCap slopeCap prime
-    (by decide) characteristic_gates.2.2.2 (by decide)
-    (by norm_num [w, slopeCap, weightedCap, ContactAlignmentParameters.multiplicity, agreements])
-    (by decide) characteristic_gates.2.2.1 hbox Γ selected hsolution
+    (by norm_num [slopeCap]) implicit_characteristic_gates.2.2.2
+    (by norm_num [w])
+    (by norm_num [w, implicitWeightedCap, weightedCap, slopeCap,
+      ContactParameters6533.multiplicity, agreements, n, errors])
+    (by norm_num [algebraicCap, slopeCap, seedTotalCap])
+    implicit_characteristic_gates.2.2.1 hbox Γ selected hsolution
   refine ⟨?_, hd.1⟩
   apply card_le_two_family_sums_plus_exception
   intro γ hγ
@@ -150,21 +141,22 @@ theorem constructed_family_cover (Q : MvPolynomial (Fin 4) K) (hQ : Q ≠ 0)
     · exact Or.inr (Or.inl ⟨⟨F, hF⟩, Finset.mem_filter.mpr ⟨hγ, hreg⟩⟩)
     · exact Or.inr (Or.inr ⟨⟨q, hq⟩, Finset.mem_filter.mpr ⟨hγ, himp⟩⟩)
 
-/-- Helper interface only: branch estimates remain explicit HERE and are
-discharged by the final ContactGlobalSelectedCount module. -/
+/-- The exact finite-cover consumer for 65.33.  Geometry remains explicit in
+the two branch hypotheses and is supplied by the regular-shear and implicit
+proper-cut modules. -/
 theorem global_count_of_actual_branch_estimates
     (Q : MvPolynomial (Fin 4) K) (hQ : Q ≠ 0) [CharP K prime]
     (hbox : Q ∈ globalCoefficientBox K weightedCap w seedTotalCap slopeCap)
-    (hY : Q.degreeOf (1 : Fin 4) ≤ yCap)
     (selected : K → Polynomial K) (Γ : Finset K)
     (hsolution : ∀ γ ∈ Γ, specialization K (selected γ) γ Q = 0)
     (hregular : ∀ F : RegularIndex Q,
-      (regularSeeds Q selected Γ F).card * gap ^ 2 ≤ wholeNumerator (regularVector Q F))
+      (regularSeeds Q selected Γ F).card * gap ^ 2 ≤
+        shearedWholeNumerator (regularVector Q F))
     (himplicit : ∀ q : ImplicitIndex Q,
       (implicitSeeds Q selected Γ q).card * gap ≤
         (n - w) * dot liftedAgreement (implicitVector Q q) +
           (errors + 1) * gap * (implicitVector Q q).z) : Γ.card < alignmentBudget := by
-  have hregCaps := regularVector_budgets Q hQ hY hbox
+  have hregCaps := regularVector_budgets Q hQ hbox
   have himpCaps := implicitVector_budgets Q hQ hbox
   have hcover := constructed_family_cover Q hQ hbox selected Γ hsolution
   exact final_family_ledger
@@ -174,13 +166,10 @@ theorem global_count_of_actual_branch_estimates
     hregCaps.1 hregCaps.2.1 hregCaps.2.2 hregular
     himpCaps.1 himpCaps.2.1 himpCaps.2.2 himplicit hcover.2 hcover.1
 
-#print axioms regularSeeds_solution
-#print axioms implicitSeeds_solution
-#print axioms card_le_two_family_sums_plus_exception
-#print axioms regularVector_budgets
-#print axioms implicitVector_budgets
-#print axioms constructed_family_cover
-#print axioms global_count_of_actual_branch_estimates
-
 end
-end ProximityPrize.SubmissionLower.ContactGlobalSelectedFamilies
+end ProximityPrize.SubmissionLower.ContactGlobalSelectedFamilies6533
+
+#print axioms ProximityPrize.SubmissionLower.ContactGlobalSelectedFamilies6533.regularVector_budgets
+#print axioms ProximityPrize.SubmissionLower.ContactGlobalSelectedFamilies6533.implicitVector_budgets
+#print axioms ProximityPrize.SubmissionLower.ContactGlobalSelectedFamilies6533.constructed_family_cover
+#print axioms ProximityPrize.SubmissionLower.ContactGlobalSelectedFamilies6533.global_count_of_actual_branch_estimates
