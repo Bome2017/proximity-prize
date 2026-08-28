@@ -16,14 +16,14 @@ three-cell partition once those bounds have been supplied.
 
 namespace ProximityPrize.SubmissionLower.ContactStackedPromotedArithmetic6670Research
 
-def promotedBudget : ℕ := 274980727601395087
+def promotedBudget : ℕ := 274980727591395087
 
-def fixedRegularCost : ℕ := 274172619207243710
-def fixedSingularCost : ℕ := 23598906796648
-def firstResidualRegularCost : ℕ := 11353501499948
-def firstResidualSingularCeiling : ℕ := 95920251130234
-def secondResidualRegularCost : ℕ := 241130680395014
-def secondResidualSingularCeiling : ℕ := 26657361521245
+def fixedRegularCost : ℕ := 265902663562142419
+def fixedSingularCost : ℕ := 25047497285157
+def firstResidualRegularCost : ℕ := 19299948215263
+def firstResidualSingularCeiling : ℕ := 74957505479198
+def secondResidualRegularCost : ℕ := 6010054003621
+def secondResidualSingularCeiling : ℕ := 39275958777619
 
 def fixedCost : ℕ := fixedRegularCost + fixedSingularCost
 def firstResidualCeiling : ℕ :=
@@ -34,8 +34,8 @@ def secondResidualCeiling : ℕ :=
 def totalCost : ℕ := fixedCost + firstResidualCeiling + secondResidualCeiling
 
 theorem total_and_slack_exact :
-    totalCost = 274571279908586799 ∧
-      promotedBudget - totalCost = 409447692808288 := by
+    totalCost = 266067254525903277 ∧
+      promotedBudget - totalCost = 8913473065491810 := by
   norm_num [totalCost, fixedCost, firstResidualCeiling,
     secondResidualCeiling, fixedRegularCost, fixedSingularCost,
     firstResidualRegularCost, firstResidualSingularCeiling,

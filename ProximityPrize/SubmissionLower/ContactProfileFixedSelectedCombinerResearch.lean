@@ -149,14 +149,15 @@ theorem global_count_le_regular_div_add_tight_countCap
       p.agreements ≤ (nodes.filter (fun i ↦
         (selected gamma).eval (x i) = u0 i + gamma * u1 i)).card)
     (hnoPencil : NoLargeSelectedPencil selected Gamma p.w p.errors)
+    (factorFlag : RegularIndex Q → FlagDegree)
     (regularLedger : FlagDegree → ℕ)
     (hregularAggregate :
       ∀ count : RegularIndex Q → ℕ,
-        (∀ F, count F * p.gap ^ 2 ≤ regularLedger (regularFlag Q F)) →
+        (∀ F, count F * p.gap ^ 2 ≤ regularLedger (factorFlag F)) →
         (∑ F, count F) * p.gap ^ 2 ≤ regularNumerator)
     (hregular : ∀ F : RegularIndex Q,
       (regularSeeds Q selected Gamma F).card * p.gap ^ 2 ≤
-        regularLedger (regularFlag Q F)) :
+      regularLedger (factorFlag F)) :
     Gamma.card ≤ regularNumerator / p.gap ^ 2 + t.countCap := by
   have hcover := card_le_regular_sum_add_singular p Q hQ hbox
     hs hsSmall hw hDw hj hjSmall selected Gamma hsolution

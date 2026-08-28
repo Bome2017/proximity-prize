@@ -1,6 +1,7 @@
 import ProximityPrize.SubmissionLower.ContactSharpTaylorFixedMeet6656Research
 import ProximityPrize.SubmissionLower.ContactProfileYZFactorLedgerResearch
 import ProximityPrize.SubmissionLower.ContactReducedTaylorProfileResearch
+import ProximityPrize.SubmissionLower.ContactNestedWeightedFlagResearch
 
 /-!
 # Fixed-meet arithmetic at agreement 182414
@@ -20,6 +21,7 @@ open ContactResidualSupportParametersResearch.ResidualSupportParameters
 open ContactRobustFixedMeet6656Research
 open ContactSharpTaylorFixedMeet6656Research
 open ContactReducedTaylorProfileResearch
+open ContactNestedWeightedFlagResearch
 open ContactSingularLedger6600Research
 open ContactTightSingularLedgerResearch
 
@@ -33,16 +35,16 @@ def prime : ℕ := 2130706433
 def fixedProfile : Profile where
   n := 262144
   w := 131071
-  agreements := 182399
-  weightedCap := 5654369
-  seedTotalCap := 943
+  agreements := 182376
+  weightedCap := 5836032
+  seedTotalCap := 970
   slopeCap := 9
 
 /-- Residual support preserved by the target fixed-meet recursion. -/
 def fixedSupport : ResidualSupportParameters where
   s := 9
-  ys := 43
-  total := 952
+  ys := 44
+  total := 979
   one_le_s := by norm_num
   s_le_ys := by norm_num
   ys_le_total := by norm_num
@@ -52,18 +54,22 @@ def fixedSupport : ResidualSupportParameters where
 def fixedTightProfile : TightParameters where
   n := 262144
   w := 131071
-  a := 182399
-  D := 5654369
-  L := 943
+  a := 182376
+  D := 5836032
+  L := 970
   s := 9
 
 /-- The sharp equal-weight direction paired with the accepted YZ tail. -/
 def fixedSharpDirection : FlagDegree := reducedAgreementDirection fixedSupport
 
+def fixedNestedSurfaceFlag : FlagDegree :=
+  ⟨fixedSupport.total - fixedSupport.ys,
+    fixedSupport.ys - fixedSupport.s, fixedSupport.s⟩
+
 /-- Unnormalized sharp-YZ regular-factor ledger. -/
 def fixedSharpYZRegularNumerator : ℕ :=
   factorRegularLedgerYZForDirection fixedProfile fixedSharpDirection
-    fixedProfile.rectangularSurfaceFlag
+    fixedNestedSurfaceFlag
 
 /-- Strict regular-factor count ceiling. -/
 def fixedSharpYZRegularCeiling : ℕ :=
@@ -77,14 +83,14 @@ def fixedCountCeiling : ℕ :=
   fixedSharpYZRegularCeiling + fixedTightSingularCeiling
 
 theorem fixed_profile_values :
-    fixedProfile.errors = 79745 ∧
-      fixedProfile.gap = 51328 ∧
-      fixedProfile.yCap = 43 ∧
-      fixedProfile.degreeIncidence = 9668930179 ∧
+    fixedProfile.errors = 79768 ∧
+      fixedProfile.gap = 51305 ∧
+      fixedProfile.yCap = 44 ∧
+      fixedProfile.degreeIncidence = 9665816378 ∧
       fixedProfile.unitIncidence = 131073 ∧
-      fixedProfile.surfaceFlag = ⟨909, 34, 9⟩ ∧
-      fixedProfile.agreementDirection = ⟨1818, 68, 17⟩ ∧
-      fixedProfile.rectangularSurfaceFlag = ⟨943, 43, 9⟩ := by
+      fixedProfile.surfaceFlag = ⟨935, 35, 9⟩ ∧
+      fixedProfile.agreementDirection = ⟨1870, 70, 17⟩ ∧
+      fixedProfile.rectangularSurfaceFlag = ⟨970, 44, 9⟩ := by
   norm_num [fixedProfile, Profile.errors, Profile.gap, Profile.yCap,
     Profile.degreeIncidence, Profile.unitIncidence, Profile.surfaceFlag,
     Profile.derivativeFlag, Profile.agreementDirection,
@@ -92,34 +98,37 @@ theorem fixed_profile_values :
   rfl
 
 theorem fixed_support_values :
-    fixedSupport.agreementDirection = ⟨1818, 68, 17⟩ ∧
-      fixedSharpDirection = ⟨1818, 68, 16⟩ := by
+    fixedSupport.agreementDirection = ⟨1870, 70, 17⟩ ∧
+      fixedSharpDirection = ⟨1870, 70, 16⟩ ∧
+      fixedNestedSurfaceFlag = ⟨935, 35, 9⟩ := by
   norm_num [fixedSupport, fixedSharpDirection,
-    ResidualSupportParameters.agreementDirection, reducedAgreementDirection]
+    fixedNestedSurfaceFlag, ResidualSupportParameters.agreementDirection,
+    reducedAgreementDirection]
 
 theorem fixed_sharp_yz_regular_numerator_exact :
-    fixedSharpYZRegularNumerator = 722325198293303226440384605 := by
+    fixedSharpYZRegularNumerator = 699909795383828550156462079 := by
   norm_num [fixedSharpYZRegularNumerator, fixedSharpDirection,
     factorRegularLedgerYZForDirection, factorPrimaryForDirection,
     factorZTailForDirection, factorYZTailForDirection, fixedProfile,
-    fixedSupport, reducedAgreementDirection, Profile.rectangularSurfaceFlag,
+    fixedSupport, fixedNestedSurfaceFlag, reducedAgreementDirection,
+    Profile.rectangularSurfaceFlag,
     Profile.yCap, Profile.degreeIncidence, Profile.unitIncidence,
     Profile.errors, Profile.gap, flagMixed, unitZFlag, unitYZFlag]
 
 theorem fixed_sharp_yz_regular_ceiling_exact :
-    fixedSharpYZRegularCeiling = 274172619207243710 := by
+    fixedSharpYZRegularCeiling = 265902663562142419 := by
   rw [fixedSharpYZRegularCeiling, fixed_sharp_yz_regular_numerator_exact]
   norm_num [fixedProfile, Profile.gap]
 
 theorem fixed_tight_values :
     fixedTightProfile.kappa = 17 ∧
-      fixedTightProfile.implicitYCap = 733 ∧
-      fixedTightProfile.algebraicCap = 16031 ∧
-      fixedTightProfile.agreement = ⟨192150087, 131071, 4202398403⟩ ∧
-      fixedTightProfile.aggregateCost = ⟨16031, 23501446, 733⟩ ∧
-      fixedTightProfile.coreNumerator = 1211258306188893930 ∧
-      fixedTightProfile.tightNumerator = 1211284688058298346 ∧
-      fixedTightProfile.countCap = 23598906796647 := by
+      fixedTightProfile.implicitYCap = 756 ∧
+      fixedTightProfile.algebraicCap = 16490 ∧
+      fixedTightProfile.agreement = ⟨198179353, 131071, 4322721581⟩ ∧
+      fixedTightProfile.aggregateCost = ⟨16490, 24932880, 756⟩ ∧
+      fixedTightProfile.coreNumerator = 1285033946493496098 ∧
+      fixedTightProfile.tightNumerator = 1285061848214957098 ∧
+      fixedTightProfile.countCap = 25047497285156 := by
   norm_num [fixedTightProfile, TightParameters.kappa,
     TightParameters.implicitYCap, TightParameters.algebraicCap,
     TightParameters.agreement, TightParameters.aggregateCost,
@@ -128,7 +137,7 @@ theorem fixed_tight_values :
     dot]
 
 theorem fixed_tight_singular_ceiling_exact :
-    fixedTightSingularCeiling = 23598906796648 := by
+    fixedTightSingularCeiling = 25047497285157 := by
   norm_num [fixedTightSingularCeiling, fixedTightProfile,
     TightParameters.countCap, TightParameters.tightNumerator,
     TightParameters.coreNumerator, TightParameters.aggregateCost,
@@ -137,10 +146,10 @@ theorem fixed_tight_singular_ceiling_exact :
     TightParameters.errors, TightParameters.gap, dot]
 
 theorem fixed_tight_singular_count_cap_exact :
-    fixedTightProfile.countCap = 23598906796647 := fixed_tight_values.2.2.2.2.2.2.2
+    fixedTightProfile.countCap = 25047497285156 := fixed_tight_values.2.2.2.2.2.2.2
 
 theorem fixed_count_ceiling_exact :
-    fixedCountCeiling = 274196218114040358 := by
+    fixedCountCeiling = 265927711059427576 := by
   rw [fixedCountCeiling, fixed_sharp_yz_regular_ceiling_exact,
     fixed_tight_singular_ceiling_exact]
 
@@ -150,12 +159,12 @@ theorem fixed_count_ceiling_exact :
 terminal projection constructor. -/
 theorem fixed_active_yz_caps :
     fixedProfile.rectangularSurfaceFlag.yz +
-        fixedProfile.rectangularSurfaceFlag.all = 52 ∧
+        fixedProfile.rectangularSurfaceFlag.all = 53 ∧
       fixedProfile.rectangularSurfaceFlag.all = 9 ∧
       fixedProfile.rectangularSurfaceFlag.zOnly +
           fixedProfile.rectangularSurfaceFlag.yz +
-          fixedProfile.rectangularSurfaceFlag.all = 995 ∧
-      1 + fixedProfile.w * (2 * fixedSupport.ys - 2) = 11009965 ∧
+          fixedProfile.rectangularSurfaceFlag.all = 1023 ∧
+      1 + fixedProfile.w * (2 * fixedSupport.ys - 2) = 11272107 ∧
       (2 * fixedSupport.s - 2) * fixedProfile.w = 2097136 := by
   norm_num [fixedProfile, fixedSupport, Profile.rectangularSurfaceFlag,
     Profile.yCap]
@@ -164,10 +173,25 @@ theorem fixed_active_yz_caps :
 the active-YZ projection family at the target caps. -/
 theorem fixed_active_yz_characteristic_gates :
     fixedSupport.s < fixedSupport.ys ∧
-      52 < prime ∧ 9 < prime ∧ 995 < prime ∧
-      11009965 * 9 + 52 * 2097136 = 208140757 ∧
-      11009965 * 9 + 52 * 2097136 < prime := by
+      53 < prime ∧ 9 < prime ∧ 1023 < prime ∧
+      11272107 * 9 + 53 * 2097136 = 212597171 ∧
+      11272107 * 9 + 53 * 2097136 < prime := by
   norm_num [fixedSupport, prime]
+
+theorem fixed_ledger_unit_monotone :
+    factorRegularLedgerYZForDirection fixedProfile fixedSharpDirection
+        unitZFlag ≤
+      factorRegularLedgerYZForDirection fixedProfile fixedSharpDirection
+        unitYZFlag ∧
+    factorRegularLedgerYZForDirection fixedProfile fixedSharpDirection
+        unitYZFlag ≤
+      factorRegularLedgerYZForDirection fixedProfile fixedSharpDirection
+        unitAllFlag := by
+  norm_num [factorRegularLedgerYZForDirection, factorPrimaryForDirection,
+    factorZTailForDirection, factorYZTailForDirection, fixedProfile,
+    fixedSharpDirection, fixedSupport, reducedAgreementDirection,
+    Profile.degreeIncidence, Profile.unitIncidence, Profile.errors,
+    Profile.gap, flagMixed, unitZFlag, unitYZFlag, unitAllFlag]
 
 /-- Characteristic gates for the profile and tight singular-pair ledger. -/
 theorem fixed_characteristic_gates :

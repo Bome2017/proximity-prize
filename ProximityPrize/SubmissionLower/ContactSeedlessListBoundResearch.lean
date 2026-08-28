@@ -49,12 +49,12 @@ def regularListNumerator : ℕ :=
   (n - w) * (capY * slopeCap + capR * yTotalCap)
 def singularListCap : ℕ := (2 * slopeCap - 1) * yTotalCap
 def listNumerator : ℕ := regularListNumerator + singularListCap * gap
-def listBudget : ℕ := 510000000
+def listBudget : ℕ := 520000000
 
 theorem numeric_values :
-    gap = 51328 ∧ capY = 11272107 ∧ capR = 2228207 ∧
-      regularListNumerator = 25855704300072 ∧
-      singularListCap = 731 ∧ listNumerator = 25855741820840 := by
+    gap = 51305 ∧ capY = 11534249 ∧ capR = 2228207 ∧
+      regularListNumerator = 26456999721477 ∧
+      singularListCap = 748 ∧ listNumerator = 26457038097617 := by
   norm_num [gap, capY, capR, regularListNumerator, singularListCap,
     listNumerator, agreements, n, errors, w, yTotalCap, slopeCap]
 

@@ -3,6 +3,7 @@ import ProximityPrize.SubmissionLower.ContactOriginalRegularSeedCount
 import ProximityPrize.SubmissionLower.ContactRegularFactorFlag6600Research
 import ProximityPrize.SubmissionLower.ContactIdentityResidualIterationResearch
 import ProximityPrize.SubmissionLower.ContactNearPencil6600FactorLedgerResearch
+import ProximityPrize.SubmissionLower.ContactNestedWeightedFlagResearch
 
 /-!
 # Initial residual stages for actual score-66 regular factors
@@ -30,6 +31,7 @@ open ContactResidualSupportParametersResearch
 open ContactPost6464MinkowskiRecurrenceResearch
 open ContactFlagBezout6543Research
 open ContactNearPencil6600FactorLedgerResearch
+open ContactNestedWeightedFlagResearch
 
 noncomputable section
 
@@ -45,20 +47,11 @@ local instance : DecidableEq (GenericField K) := Classical.decEq (GenericField K
 `(Z,Y,R)` degree order. -/
 def geometricFlag {F : MvPolynomial (Fin 4) K}
     (g : GeometricFactor K F) : FlagDegree :=
-  ⟨g.1.degreeOf (2 : Fin 3), g.1.degreeOf (0 : Fin 3),
-    g.1.degreeOf (1 : Fin 3)⟩
+  curveNestedFlag g.1
 
 theorem polynomialIn_geometricFlag {F : MvPolynomial (Fin 4) K}
-    (g : GeometricFactor K F) : PolynomialInFlag (geometricFlag K g) g.1 := by
-  intro d hd
-  have h0 := MvPolynomial.monomial_le_degreeOf (0 : Fin 3) hd
-  have h1 := MvPolynomial.monomial_le_degreeOf (1 : Fin 3) hd
-  have h2 := MvPolynomial.monomial_le_degreeOf (2 : Fin 3) hd
-  change d 1 ≤ g.1.degreeOf 1 ∧
-    d 0 + d 1 ≤ g.1.degreeOf 0 + g.1.degreeOf 1 ∧
-    d 0 + d 1 + d 2 ≤
-      g.1.degreeOf 2 + g.1.degreeOf 0 + g.1.degreeOf 1
-  omega
+    (g : GeometricFactor K F) : PolynomialInFlag (geometricFlag K g) g.1 :=
+  polynomialIn_curveNestedFlag g.1
 
 /-- The interpolation box supplies exactly the three global support values
 preserved by residualization. -/
@@ -216,9 +209,63 @@ theorem geometricFlag_budgets
         F.degreeOf (1 : Fin 4) ∧
       (∑ g : GeometricFactor K F, (geometricFlag K g).all) ≤
         F.degreeOf (2 : Fin 4) := by
-  exact ⟨geometricFactor_sum_degree_le K F hF 2,
-    geometricFactor_sum_degree_le K F hF 0,
-    geometricFactor_sum_degree_le K F hF 1⟩
+  refine ⟨?_, ?_, ?_⟩
+  · calc
+      (∑ g : GeometricFactor K F, (geometricFlag K g).zOnly) ≤
+          ∑ g : GeometricFactor K F, g.1.degreeOf (2 : Fin 3) :=
+        Finset.sum_le_sum (fun g _ ↦ curveNestedFlag_z_le_degree g.1)
+      _ ≤ F.degreeOf (3 : Fin 4) := geometricFactor_sum_degree_le K F hF 2
+  · calc
+      (∑ g : GeometricFactor K F, (geometricFlag K g).yz) ≤
+          ∑ g : GeometricFactor K F, g.1.degreeOf (0 : Fin 3) :=
+        Finset.sum_le_sum (fun g _ ↦ curveNestedFlag_yz_le_degree g.1)
+      _ ≤ F.degreeOf (1 : Fin 4) := geometricFactor_sum_degree_le K F hF 0
+  · simpa only [geometricFlag, curveNestedFlag_all_eq_degree,
+      show Fin.succ (1 : Fin 3) = (2 : Fin 4) by decide] using
+      geometricFactor_sum_degree_le K F hF 1
+
+theorem geometricFactor_sum_curveWt_le
+    (weights : Fin 3 → ℕ) (weights4 : Fin 4 → ℕ)
+    (hw : weights4 0 = 0 ∧ weights4 1 = weights 0 ∧
+      weights4 2 = weights 1 ∧ weights4 3 = weights 2)
+    (F : MvPolynomial (Fin 4) K) (hF : F ≠ 0) :
+    (∑ g : GeometricFactor K F, curveWt weights g.1) ≤
+      MvPolynomial.weightedTotalDegree weights4 F := by
+  classical
+  have hs : surfaceMap (polynomialEmbedding K) F ≠ 0 :=
+    surfaceMap_ne_zero (polynomialEmbedding K) (polynomialEmbedding_injective K)
+      F hF
+  have hb := sum_curveWt_le_of_prod_dvd weights
+    (surfaceFactors (polynomialEmbedding K) F) (fun g ↦ g)
+    (surfaceMap (polynomialEmbedding K) F) hs
+    (normalizedFactorSet_product_dvd _ hs)
+  have hm := surfaceMap_curveWt_le (polynomialEmbedding K) weights weights4
+    hw F
+  rw [← Finset.sum_attach (surfaceFactors (polynomialEmbedding K) F)
+    (fun g ↦ curveWt weights g)] at hb
+  simpa only [Finset.attach_eq_univ] using hb.trans hm
+
+theorem geometricFlag_nested_budgets
+    (F : MvPolynomial (Fin 4) K) (hF : F ≠ 0) :
+    (∑ g : GeometricFactor K F, (geometricFlag K g).all) ≤
+        MvPolynomial.weightedTotalDegree residualSWeights F ∧
+      (∑ g : GeometricFactor K F,
+        ((geometricFlag K g).yz + (geometricFlag K g).all)) ≤
+        MvPolynomial.weightedTotalDegree residualYSWeights F ∧
+      (∑ g : GeometricFactor K F,
+        ((geometricFlag K g).zOnly + (geometricFlag K g).yz +
+          (geometricFlag K g).all)) ≤
+        MvPolynomial.weightedTotalDegree residualTotalWeights F := by
+  refine ⟨?_, ?_, ?_⟩
+  · simpa only [geometricFlag, curveNestedFlag_all] using
+      geometricFactor_sum_curveWt_le K curveRWeights residualSWeights
+        ⟨rfl, rfl, rfl, rfl⟩ F hF
+  · simpa only [geometricFlag, curveNestedFlag_yr] using
+      geometricFactor_sum_curveWt_le K curveYRWeights residualYSWeights
+        ⟨rfl, rfl, rfl, rfl⟩ F hF
+  · simpa only [geometricFlag, curveNestedFlag_total] using
+      geometricFactor_sum_curveWt_le K curveTotalWeights residualTotalWeights
+        ⟨rfl, rfl, rfl, rfl⟩ F hF
 
 /-- Once every geometric factor has its recursive factor-ledger bound, the
 actual original regular family has exactly the bound expected by the global
