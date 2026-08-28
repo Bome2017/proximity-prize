@@ -69,7 +69,7 @@ theorem proper_cut_seed_bound_of_explicit_projection_data
     (hbudget : ∀ i,
       (∑ C : RegularComponent Ω G T (regularitySurface φ F),
         actualCoordinateDegree Ω C.1 i) ≤ budget i) :
-    Γ.card * (a - w) ≤ nodes.card * (∑ i, cap i * budget i) +
+    Γ.card * (a - w) ≤ (nodes.card - w) * (∑ i, cap i * budget i) +
       (e + 1) * (a - w) * budget 2 := by
   classical
   let H := regularitySurface φ F
@@ -83,7 +83,7 @@ theorem proper_cut_seed_bound_of_explicit_projection_data
     fun C i => actualCoordinateDegree Ω C.1 i
   have hcomponent : ∀ C : RegularComponent Ω G T H,
       (componentSeeds Ω G T H Γ (selectedPoint φ selected) C).card * (a - w) ≤
-        nodes.card * (∑ i, cap i * degree C i) +
+        (nodes.card - w) * (∑ i, cap i * degree C i) +
           (e + 1) * (a - w) * degree C 2 := by
     intro C
     have hsub := componentSeeds_subset Ω G T H Γ (selectedPoint φ selected) C
@@ -91,7 +91,7 @@ theorem proper_cut_seed_bound_of_explicit_projection_data
     have hFmem : surfaceMap φ F ∈ C.1 :=
       ((Ideal.span_singleton_le_iff_mem (I := C.1)).mpr hgmem)
         (Ideal.mem_span_singleton.mpr hdiv)
-    exact prime_seed_incidence φ C.1 (hproj C)
+    exact prime_seed_incidence_sharp φ C.1 (hproj C)
       (regularComponent_ne_point Ω G T H C) F hFmem
       (regularComponent_H_not_mem Ω G T H C) selected
       (componentSeeds Ω G T H Γ (selectedPoint φ selected) C)
@@ -104,7 +104,8 @@ theorem proper_cut_seed_bound_of_explicit_projection_data
       (fun γ hγ => hagreement γ (hsub hγ))
       (noLargeSelectedPencil_mono selected Γ _ w e hsub hnoPencil) cap hcap
   exact aggregate_component_incidence Ω G T H Γ (selectedPoint φ selected)
-    hGpoint hTpoint hHp (a - w) nodes.card (e + 1) cap budget degree hcomponent hbudget
+    hGpoint hTpoint hHp (a - w) (nodes.card - w) (e + 1)
+    cap budget degree hcomponent hbudget
 
 /-- The sparse projection theorem certifies the base-`R` component degrees,
 while the summed budget is still the old rectangular mixed degree.  The
@@ -179,7 +180,7 @@ theorem proper_cut_seed_bound_sparse_rBase
     (hcap : ∀ i ∈ nodes, ∀ j,
       (agreementPolynomial φ F w (x i) (u₀ i) (u₁ i)).degreeOf j ≤ cap j) :
     Γ.card * (a - w) ≤
-      nodes.card * (∑ i, cap i * coordinateMixedDegree Ω G T i) +
+      (nodes.card - w) * (∑ i, cap i * coordinateMixedDegree Ω G T i) +
         (e + 1) * (a - w) * coordinateMixedDegree Ω G T 2 := by
   apply proper_cut_seed_bound_of_explicit_projection_data φ F G T hG hdiv hproper
     selected Γ nodes x u₀ u₁ hinj p w a e hw hchar hwa han
@@ -292,8 +293,8 @@ theorem whole_surface_seed_bound_fixed_sparse
       mixed ContactProjectionParameters.surfaceVector agreementVector (unitAt j) :=
     coordinateMixedDegree_le_caps G T ContactProjectionParameters.surfaceVector
       agreementVector hGcaps hTcaps j
-  rcases ContactProjectionParameters.projection_caps_below_characteristic with
-    ⟨_, _, hrect0, hrect2, _, hsparse⟩
+  rcases ContactProjectionParameters.agreement_projection_caps_below_characteristic with
+    ⟨hrect0, hrect2, hsparse⟩
   have hmixed0 : coordinateMixedDegree Ω G T 0 < prime :=
     (hδfixed 0).trans_lt hrect0
   have hmixed2 : coordinateMixedDegree Ω G T 2 < prime :=

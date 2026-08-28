@@ -184,8 +184,8 @@ theorem fixed_agreement_characteristic_gates (G T : MvPolynomial (Fin 3) Ω)
     (∀ j, G.degreeOf j < prime) ∧
       ∀ j k : Fin 3, j ≠ k →
         T.degreeOf j * G.degreeOf k + G.degreeOf j * T.degreeOf k < prime := by
-  rcases ContactProjectionParameters.projection_caps_below_characteristic with
-    ⟨_, _, hY, hZ, _, _⟩
+  rcases ContactProjectionParameters.agreement_projection_caps_below_characteristic with
+    ⟨hY, hZ, _⟩
   exact actual_characteristic_gates G T _ _ prime hG hT
     fixed_surface_caps_below_characteristic hY hRgate hZ
 

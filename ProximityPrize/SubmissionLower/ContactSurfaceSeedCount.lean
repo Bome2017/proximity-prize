@@ -59,7 +59,7 @@ theorem mixed_cap_sum (g t e : DegreeVector) :
   ring
 
 def fiberNumerator (n w a e : ℕ) (g E : DegreeVector) : ℕ :=
-  n * mixed g E E + (e + 1) * (a - w) * mixed g E unitZ
+  (n - w) * mixed g E E + (e + 1) * (a - w) * mixed g E unitZ
 
 /-- The integer floor in a scaled fiber bound introduces no loss in the
 cross-multiplied sharp-incidence conclusion. -/
