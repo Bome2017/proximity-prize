@@ -2,10 +2,10 @@ import ProximityPrize.SubmissionLower.AlignmentProtocol6401Conditional
 import ProximityPrize.SubmissionLower.ContactScore6533
 
 /-!
-# Conditional protocol certificate at 65.33 bits
+# Conditional protocol certificate at 65.56 bits
 
 This adapter isolates the final reduction from the one remaining mathematical
-input: an alignment bound at 78117 errors with list budget `10^17`.  The code,
+input: an alignment bound at 78343 errors with the maximal field-safe list budget.  The code,
 alphabet, interleaving, MCA transfer, list transfer, and field-capacity
 calculation are unchanged from the verified 64.64 assembly; only the decoding
 radius and its exact score certificate change.
@@ -21,17 +21,30 @@ noncomputable section
 
 def radius6533 : ℝ≥0 := ContactScore6533.radius6533
 def errors6533 : ℕ := ContactScore6533.errors6533
-def budget6533 : ℕ := 100000000000000000
+def budget6533 : ℕ := 137490364055697543
 
-theorem budget6533_eq_budget6401 :
-    budget6533 = AlignmentProtocol6401Conditional.budget6401 := rfl
+theorem budget6533_lt_field : budget6533 < Fintype.card IRSProfile.Field := by
+  rw [AlignmentProtocol6401Conditional.field_cardinality]
+  norm_num [budget6533]
+
+theorem sixteen_row_separation_gate6533 :
+    15 * (budget6533 + 1).choose 2 < Fintype.card IRSProfile.Field := by
+  rw [AlignmentProtocol6401Conditional.field_cardinality,
+    Nat.choose_eq_descFactorial_div_factorial]
+  norm_num [budget6533, Nat.descFactorial_succ, Nat.factorial_succ]
+
+theorem doubled_budget6533_nat :
+    2 ^ (128 : ℕ) * (budget6533 + budget6533) ≤
+      Fintype.card IRSProfile.Field := by
+  rw [AlignmentProtocol6401Conditional.field_cardinality]
+  norm_num [budget6533]
 
 theorem radius6533_floor :
     ⌊(radius6533 : ℝ) * (Fintype.card IRSProfile.Index : ℝ)⌋₊ = errors6533 := by
   simpa [radius6533, errors6533] using ContactScore6533.radius6533_floor
 
 theorem radius6533_cell_cross :
-    312471 * Fintype.card IRSProfile.Index < (errors6533 + 1) * 1048576 := by
+    313375 * Fintype.card IRSProfile.Index < (errors6533 + 1) * 1048576 := by
   simpa [errors6533] using ContactScore6533.radius6533_cell_cross
 
 theorem radius6533_gap :
@@ -92,14 +105,9 @@ theorem lambda6533_le_of_alignment
           IRSProfile.Field))
       (radius6533 : ℝ) ≤ (budget6533 : ℕ∞) := by
   exact AlignmentInterleavedLambda.irs_squared_claimedRadius_lambda_le
-    312471 1048576 errors6533 budget6533 (by norm_num)
+    313375 1048576 errors6533 budget6533 (by norm_num)
     radius6533_cell_cross radius6533_gap halign
-    (by
-      rw [budget6533_eq_budget6401]
-      exact AlignmentProtocol6401Conditional.budget6401_lt_field)
-    (by
-      rw [budget6533_eq_budget6401]
-      exact AlignmentProtocol6401Conditional.sixteen_row_separation_gate)
+    budget6533_lt_field sixteen_row_separation_gate6533
 
 theorem certifiedGammaError6533_le_of_alignment
     (halign : AffineLineAlignmentBound IRSProfile.baseCode errors6533 budget6533) :
@@ -133,13 +141,12 @@ theorem certifiedGammaError6533_le_of_alignment
     _ ≤ (1 : ENNReal) / 2 ^ (128 : ℕ) := by
       apply AlignmentProtocol6401Conditional.nat_div_le_inv_pow
       · norm_num [budget6533]
-      · rw [Nat.mul_comm, budget6533_eq_budget6401]
-        exact AlignmentProtocol6401Conditional.doubled_budget6401_nat
+      · simpa only [Nat.mul_comm] using doubled_budget6533_nat
 
 theorem protocolClaim6533_of_alignment
     (halign : AffineLineAlignmentBound IRSProfile.baseCode
       errors6533 budget6533) :
-    ProtocolClaim 6533 312471 1048576 where
+    ProtocolClaim 6556 313375 1048576 where
   admissible := ContactScore6533.radius6533_admissible
   reduction := by
     change certifiedGammaError IRSProfile.code radius6533 ≤ reductionTarget

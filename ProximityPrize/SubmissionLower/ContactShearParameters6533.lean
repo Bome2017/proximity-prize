@@ -1,7 +1,7 @@
 import ProximityPrize.SubmissionLower.ContactParameters6533
 
 /-!
-# Exact arithmetic for the conservative 65.33-bit separable-shear ledger
+# Exact arithmetic for the conservative 65.56-bit separable-shear ledger
 
 This research module combines the proved sharp `Y` recurrence cap with the
 full conservative cost of replacing a bad `R` projection by the sheared
@@ -93,8 +93,8 @@ def shearedLedgerCeiling : ℕ :=
   (shearedTotalNumerator + gapSquared - 1) / gapSquared
 
 theorem sharp_vector_values :
-    sharpFirstTail = ⟨6684673, 1179648, 85196800⟩ ∧
-      sharpAgreement = ⟨6684622, 1179639, 85196151⟩ := by
+    sharpFirstTail = ⟨7471105, 1179648, 104595456⟩ ∧
+      sharpAgreement = ⟨7471048, 1179639, 104594659⟩ := by
   norm_num [sharpFirstTail, sharpTailVector, sharpAgreement, yCap,
     ContactParameters6533.weightedCap, ContactParameters6533.multiplicity,
     ContactParameters6533.agreements, ContactParameters6533.n,
@@ -102,10 +102,10 @@ theorem sharp_vector_values :
     ContactParameters6533.slopeCap, ContactParameters6533.seedTotalCap]
 
 theorem sharp_projection_values :
-    sharpRefinedFirstProjection = 4213834053 ∧
-      sharpRefinedAgreementProjection = 4213801904 ∧
-      sharpAgreementZProjection = 64093724 ∧
-      sharpAgreementSProjection = 4277895628 := by
+    sharpRefinedFirstProjection = 5797577103 ∧
+      sharpRefinedAgreementProjection = 5797532871 ∧
+      sharpAgreementZProjection = 71564771 ∧
+      sharpAgreementSProjection = 5869097642 := by
   norm_num [sharpRefinedFirstProjection, sharpRefinedAgreementProjection,
     sharpAgreementZProjection, sharpAgreementSProjection, sharpFirstTail,
     sharpTailVector, sharpAgreement, firstTailSeedTotal,
@@ -117,8 +117,8 @@ theorem sharp_projection_values :
     ContactParameters6533.seedTotalCap]
 
 theorem transverse_projection_values :
-    sharpAgreementYProjection = 809363430 ∧
-      sharpAgreementZProjection = 64093724 := by
+    sharpAgreementYProjection = 993649256 ∧
+      sharpAgreementZProjection = 71564771 := by
   norm_num [sharpAgreementYProjection, sharpAgreementZProjection,
     surfaceVector, sharpAgreement, unitY, unitZ, mixed, yCap,
     ContactParameters6533.weightedCap,
@@ -137,7 +137,7 @@ theorem transverse_projection_budgets_below_characteristic :
   norm_num [prime]
 
 theorem sharp_y_whole_exact :
-    sharpYWholeNumerator = 275717684031719166046342908 := by
+    sharpYWholeNumerator = 378061272418177601723497746 := by
   norm_num [sharpYWholeNumerator, surfaceVector, sharpAgreement, unitZ,
     mixed, yCap, ContactParameters6533.weightedCap,
     ContactParameters6533.multiplicity, ContactParameters6533.agreements,
@@ -146,7 +146,7 @@ theorem sharp_y_whole_exact :
     ContactParameters6533.seedTotalCap]
 
 theorem sharp_y_total_exact :
-    sharpYTotalNumerator = 276093219370398920375595048 := by
+    sharpYTotalNumerator = 378617935056849171941877686 := by
   rw [show sharpYTotalNumerator =
       sharpYWholeNumerator + gap * sharpSingularNumerator by rfl,
     sharp_y_whole_exact, ContactParameters6533.sharp_singular_exact]
@@ -154,18 +154,18 @@ theorem sharp_y_total_exact :
     ContactParameters6533.errors, ContactParameters6533.w]
 
 theorem sharp_y_ledger_ceiling_exact :
-    sharpYLedgerCeiling = 98452192878083621 := by
+    sharpYLedgerCeiling = 136171317650030746 := by
   norm_num [sharpYLedgerCeiling, sharp_y_total_exact,
     ContactParameters6533.gap_squared_exact]
 
 theorem sharp_y_budget_slack :
-    alignmentBudget - sharpYLedgerCeiling = 1547807121916379 := by
+    alignmentBudget - sharpYLedgerCeiling = 1319046405666797 := by
   rw [sharp_y_ledger_ceiling_exact]
   norm_num [alignmentBudget]
 
 theorem shear_penalty_values :
-    shearMixedPenalty = 151214912971272 ∧
-      shearWholePenalty = 2597892063749758564180488 := by
+    shearMixedPenalty = 168841189795338 ∧
+      shearWholePenalty = 2900713814428521471944202 := by
   norm_num [shearMixedPenalty, shearWholePenalty, sharpAgreement,
     sharpAgreementZProjection, surfaceVector, unitZ, mixed, yCap,
     ContactParameters6533.weightedCap, ContactParameters6533.multiplicity,
@@ -174,22 +174,22 @@ theorem shear_penalty_values :
     ContactParameters6533.slopeCap, ContactParameters6533.seedTotalCap]
 
 theorem sheared_total_exact :
-    shearedTotalNumerator = 278691111434148678939775536 := by
+    shearedTotalNumerator = 381518648871277693413821888 := by
   rw [show shearedTotalNumerator = sharpYTotalNumerator + shearWholePenalty by rfl,
     sharp_y_total_exact, shear_penalty_values.2]
 
 theorem sheared_ledger_ceiling_exact :
-    shearedLedgerCeiling = 99378576260913471 := by
+    shearedLedgerCeiling = 137214569925380752 := by
   norm_num [shearedLedgerCeiling, sheared_total_exact,
     ContactParameters6533.gap_squared_exact]
 
 theorem sheared_budget_slack :
-    alignmentBudget - shearedLedgerCeiling = 621423739086529 := by
+    alignmentBudget - shearedLedgerCeiling = 275794130316791 := by
   rw [sheared_ledger_ceiling_exact]
   norm_num [alignmentBudget]
 
 /-- The conservative full shear correction still fits strictly below the
-65.33-bit alignment budget. -/
+65.56-bit alignment budget. -/
 theorem sheared_strict_budget :
     shearedTotalNumerator < alignmentBudget * gapSquared := by
   rw [sheared_total_exact, ContactParameters6533.gap_squared_exact]

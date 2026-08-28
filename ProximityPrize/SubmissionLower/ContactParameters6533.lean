@@ -1,9 +1,9 @@
 import ProximityPrize.Benchmark.TargetLower
 
 /-!
-# Exact arithmetic for the 65.33-bit direct-contact candidate
+# Exact arithmetic for the 65.56-bit direct-contact candidate
 
-This module records the `e = 78117`, `m = 19`, `L = 325`, `s = 5` row of
+This module records the `e = 78343`, `m = 21`, `L = 399`, `s = 5` row of
 the sharp-incidence, no-projection-gate structural audit.  It proves only
 closed arithmetic facts.  In particular, `projection_gate_fails` makes
 explicit that this row cannot be integrated through the existing coordinate
@@ -23,12 +23,12 @@ set_option maxHeartbeats 4000000
 def n : ℕ := 262144
 def w : ℕ := 131071
 def prime : ℕ := 2130706433
-def alignmentBudget : ℕ := 100000000000000000
+def alignmentBudget : ℕ := 137490364055697543
 
-def errors : ℕ := 78117
+def errors : ℕ := 78343
 def agreements : ℕ := n - errors
-def multiplicity : ℕ := 19
-def seedTotalCap : ℕ := 325
+def multiplicity : ℕ := 21
+def seedTotalCap : ℕ := 399
 def slopeCap : ℕ := 5
 def weightedCap : ℕ := multiplicity * agreements
 def yCap : ℕ := (weightedCap - 1) / w
@@ -152,27 +152,27 @@ def sharpLedgerCeiling : ℕ :=
   (sharpTotalNumerator + gapSquared - 1) / gapSquared
 
 theorem parameter_values :
-    agreements = 184027 ∧ weightedCap = 3496513 ∧ yCap = 26 ∧
-    gap = 52956 ∧ algebraicCap = 2925 ∧
-    implicitWeightedCap = 31468617 ∧ implicitYCap = 240 := by
+    agreements = 183801 ∧ weightedCap = 3859821 ∧ yCap = 29 ∧
+    gap = 52730 ∧ algebraicCap = 3591 ∧
+    implicitWeightedCap = 34738389 ∧ implicitYCap = 265 := by
   norm_num [agreements, n, errors, weightedCap, multiplicity, yCap, w,
     gap, algebraicCap, slopeCap, seedTotalCap, implicitWeightedCap,
     implicitYCap]
 
-theorem coefficient_count_exact : coefficientCount = 76548187338 := by
+theorem coefficient_count_exact : coefficientCount = 116363699530 := by
   norm_num [coefficientCount, seedTotalCap, slopeCap, weightedCap,
     multiplicity, agreements, n, errors, w, Finset.sum_range_succ]
 
-theorem local_contact_rank_exact : localContactRank = 292005 := by
+theorem local_contact_rank_exact : localContactRank = 443890 := by
   norm_num [localContactRank, contactExponent, multiplicity, seedTotalCap,
     slopeCap, Finset.sum_range_succ]
 
-theorem total_contact_rank_exact : totalContactRank = 76547358720 := by
+theorem total_contact_rank_exact : totalContactRank = 116363100160 := by
   rw [show totalContactRank = n * localContactRank by rfl,
     local_contact_rank_exact]
   norm_num [n]
 
-theorem rank_margin_exact : rankMargin = 828618 := by
+theorem rank_margin_exact : rankMargin = 599370 := by
   rw [show rankMargin = coefficientCount - totalContactRank by rfl,
     coefficient_count_exact, total_contact_rank_exact]
 
@@ -181,9 +181,9 @@ theorem interpolation_gate : totalContactRank < coefficientCount := by
   norm_num
 
 theorem projection_values :
-    projectionMax = 4430233925 ∧
-    refinedProjectionMax = 4253024581 ∧
-    implicitProjectionMax = 1404000 := by
+    projectionMax = 6066536847 ∧
+    refinedProjectionMax = 5846073743 ∧
+    implicitProjectionMax = 1903230 := by
   norm_num [projectionMax, refinedProjectionMax, refinedFirstProjection,
     refinedAgreementProjection, surfaceVector, firstTail, tailVector,
     agreementVector, firstTailSeedTotal, agreementSeedTotal, unitY, unitR,
@@ -204,46 +204,46 @@ theorem implicit_characteristic_gates :
   norm_num [prime, algebraicCap, slopeCap, seedTotalCap]
 
 theorem sharp_whole_exact :
-    sharpWholeNumerator = 279363116032635977989204968 := by
+    sharpWholeNumerator = 382536659835498487964034354 := by
   norm_num [sharpWholeNumerator, surfaceVector, agreementVector, unitZ, mixed,
     yCap, weightedCap, multiplicity, slopeCap, seedTotalCap, w, n, errors,
     gap, agreements]
 
 theorem sharp_singular_exact :
-    sharpSingularNumerator = 7091459677463447565 := by
+    sharpSingularNumerator = 10556848827452497978 := by
   norm_num [sharpSingularNumerator, liftedSurface, implicitCut, liftedLast,
     liftedAgreement, unitZ, mixed, implicitYCap, implicitWeightedCap,
     algebraicCap, yCap, weightedCap, multiplicity, agreements, n, errors, w,
     gap, slopeCap, seedTotalCap]
 
 theorem sharp_total_exact :
-    sharpTotalNumerator = 279738651371315732318457108 := by
+    sharpTotalNumerator = 383093322474170058182414294 := by
   rw [show sharpTotalNumerator =
       sharpWholeNumerator + gap * sharpSingularNumerator by rfl,
     sharp_whole_exact, sharp_singular_exact]
   norm_num [gap, agreements, n, errors, w]
 
-theorem gap_squared_exact : gapSquared = 2804337936 := by
+theorem gap_squared_exact : gapSquared = 2780452900 := by
   norm_num [gapSquared, gap, agreements, n, errors, w]
 
 theorem sharp_division_certificate :
     sharpTotalNumerator =
-        99752118951228897 * gapSquared + 2641920516 ∧
-      2641920516 < gapSquared := by
+        137780907014885977 * gapSquared + 263430994 ∧
+      263430994 < gapSquared := by
   rw [sharp_total_exact, gap_squared_exact]
   norm_num
 
 theorem sharp_ledger_ceiling_exact :
-    sharpLedgerCeiling = 99752118951228898 := by
+    sharpLedgerCeiling = 137780907014885978 := by
   norm_num [sharpLedgerCeiling, sharp_total_exact, gap_squared_exact]
 
-theorem sharp_ledger_budget_slack :
-    alignmentBudget - sharpLedgerCeiling = 247881048771102 := by
+theorem legacy_sharp_ledger_excess :
+    sharpLedgerCeiling - alignmentBudget = 290542959188435 := by
   rw [sharp_ledger_ceiling_exact]
   norm_num [alignmentBudget]
 
-theorem sharp_strict_budget :
-    sharpTotalNumerator < alignmentBudget * gapSquared := by
+theorem legacy_sharp_exceeds_budget :
+    alignmentBudget * gapSquared < sharpTotalNumerator := by
   rw [sharp_total_exact, gap_squared_exact]
   norm_num [alignmentBudget]
 
@@ -255,4 +255,4 @@ end ProximityPrize.SubmissionLower.ContactParameters6533
 #print axioms ProximityPrize.SubmissionLower.ContactParameters6533.projection_gate_fails
 #print axioms ProximityPrize.SubmissionLower.ContactParameters6533.sharp_total_exact
 #print axioms ProximityPrize.SubmissionLower.ContactParameters6533.sharp_division_certificate
-#print axioms ProximityPrize.SubmissionLower.ContactParameters6533.sharp_strict_budget
+#print axioms ProximityPrize.SubmissionLower.ContactParameters6533.legacy_sharp_exceeds_budget

@@ -4,9 +4,9 @@ import ProximityPrize.SubmissionLower.ContactPrimeSeedIncidence
 import ProximityPrize.SubmissionLower.ContactTranslation6533
 
 /-!
-# The 65.33 interpolation frontend and stock alignment interface
+# The 65.56 interpolation frontend and stock alignment interface
 
-This is the isolated order-19 analogue of the verified 64.64 frontend.  Its
+This is the isolated order-21 analogue of the verified 64.64 frontend.  Its
 only remaining mathematical premise is the selected-polynomial count for the
 actual new coefficient box.
 -/

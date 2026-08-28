@@ -3,9 +3,9 @@ import ProximityPrize.SubmissionLower.ContactGlobalSelectedCount6533
 import ProximityPrize.SubmissionLower.ContactFrozenAlignment6533
 
 /-!
-# Unconditional alignment at 78,117 errors with seed budget 10^17
+# Unconditional alignment at 78,343 errors with the maximal field-safe seed budget
 
-The constructed order-19 interpolant and the unconditional characteristic-free
+The constructed order-21 interpolant and the unconditional characteristic-free
 global-shear selected-count theorem are connected here to the unchanged stock
 alignment interface.  No geometric, counting, or alignment premise remains.
 -/
@@ -30,7 +30,7 @@ theorem interpolant_selected_count6533 : InterpolantSelectedCount6533 := by
     IRSProfile.domain.injective.injOn
     (by norm_num [IRSProfile.Index, n]) hdegree hsolution hagreement hnoPencil
 
-/-- The exact stock-code alignment predicate at the 65.33 radius. -/
+/-- The exact stock-code alignment predicate at the 65.56 radius. -/
 theorem alignment6533 :
     AffineLineAlignmentBound IRSProfile.baseCode errors alignmentBudget :=
   alignment_of_interpolant_count6533 interpolant_selected_count6533
