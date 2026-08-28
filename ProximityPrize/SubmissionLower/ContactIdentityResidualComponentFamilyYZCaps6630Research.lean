@@ -37,6 +37,7 @@ open ContactNearPencil6630FlagResearch
 open ContactIdentityResidualComponentFamily6600Research
 open ContactConstantSeedCoordinateResearch
 open ActualCurveCoordinateField
+open ContactCongruentCuts6643Research
 
 noncomputable section
 
@@ -61,10 +62,10 @@ def regularComponentCurveStage6630
     (p e d : ℕ) [CharP Omega p] (surfaceFlag cutFlag : FlagDegree)
     (hdiv : G ∣ surfaceMap phi F)
     (hGflag : PolynomialInFlag surfaceFlag G)
-    (hTflag : PolynomialInFlag cutFlag T)
+    (hTflag : PolynomialInFlagMod (Ideal.span {G}) cutFlag T)
     (hFs : wt residualSWeights F ≤ 10)
     (hFys : wt residualYSWeights F ≤ 48)
-    (hFtotal : wt residualTotalWeights F ≤ 814)
+    (hFtotal : wt residualTotalWeights F ≤ 825)
     (hinj : Set.InjOn x nodes)
     (hdegree : ∀ gamma ∈ Gamma, (selected gamma).natDegree ≤ d)
     (hsolution : ∀ gamma ∈ Gamma,
@@ -86,6 +87,16 @@ def regularComponentCurveStage6630
     (selectedPoint phi selected) C
   have hsub : GammaC ⊆ Gamma := componentSeeds_subset Omega G T
     (regularitySurface phi F) Gamma (selectedPoint phi selected) C
+  let Tred := hTflag.choose
+  have hTredFlag : PolynomialInFlag cutFlag Tred := hTflag.choose_spec.1
+  have hcongr : T - Tred ∈ C.1 := by
+    have hspan : Ideal.span {G} ≤ C.1 := by
+      apply Ideal.span_le.mpr
+      intro A hA
+      change A ∈ C.1
+      rw [Set.mem_singleton_iff.mp hA]
+      exact regularComponent_G_mem Omega G T (regularitySurface phi F) C
+    exact hspan hTflag.choose_spec.2
   exact {
     nodes := nodes
     u0 := u0
@@ -93,12 +104,13 @@ def regularComponentCurveStage6630
     selected := selected
     F := F
     G := G
-    T := T
+    T := Tred
     primeData := {
       ideal := C.1
       isPrime := inferInstance
       G_mem := regularComponent_G_mem Omega G T (regularitySurface phi F) C
-      T_mem := regularComponent_T_mem Omega G T (regularitySurface phi F) C
+      T_mem := (mem_iff_of_sub_mem C.1 hcongr).mp
+        (regularComponent_T_mem Omega G T (regularitySurface phi F) C)
       H_not_mem := regularComponent_H_not_mem Omega G T
         (regularitySurface phi F) C
       ne_point := regularComponent_ne_point Omega G T
@@ -106,7 +118,7 @@ def regularComponentCurveStage6630
     }
     G_dvd_surface := hdiv
     G_flag_support := hGflag
-    T_flag_support := hTflag
+    T_flag_support := hTredFlag
     surface_s_weight := hFs
     surface_ys_weight := hFys
     surface_total_weight := hFtotal
@@ -134,10 +146,10 @@ theorem proper_cut_seed_bound_of_recursive_prime_flag_budget_z_yz
     (surfaceFlag cutFlag : FlagDegree)
     (hdiv : G ∣ surfaceMap phi F)
     (hGflag : PolynomialInFlag surfaceFlag G)
-    (hTflag : PolynomialInFlag cutFlag T)
+    (hTflag : PolynomialInFlagMod (Ideal.span {G}) cutFlag T)
     (hFs : wt residualSWeights F ≤ 10)
     (hFys : wt residualYSWeights F ≤ 48)
-    (hFtotal : wt residualTotalWeights F ≤ 814)
+    (hFtotal : wt residualTotalWeights F ≤ 825)
     (hinj : Set.InjOn x nodes)
     (hdegreeSelected : ∀ gamma ∈ Gamma,
       (selected gamma).natDegree ≤ d)
