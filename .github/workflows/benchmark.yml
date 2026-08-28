@@ -27,7 +27,7 @@ jobs:
   benchmark:
     name: benchmark (IRS reduction threshold — ${{ inputs.profile }})
     runs-on: ubuntu-24.04
-    timeout-minutes: 60
+    timeout-minutes: 180
     env:
       BASE: https://proximity-prize.zksecurity.xyz
       PROFILE: ${{ inputs.profile }}
