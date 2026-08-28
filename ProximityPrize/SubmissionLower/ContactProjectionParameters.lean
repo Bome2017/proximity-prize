@@ -6,12 +6,10 @@ import ProximityPrize.SubmissionLower.ContactAlignmentParameters
 
 Model label: gpt-5.
 
-The frozen contact witness's own coordinate-degree vector.  The strict
-characteristic comparisons that used to live here are gone: the planar
-bidegree bound is now proved from resultant multiplicity
-(`PlaneNoSeparableDegree`, `PlaneNoSeparableFamily`) rather than from an
-embedding count, so no projection degree has to stay below the
-characteristic.
+These are exact inequalities for the frozen contact witness, not a proof of
+the geometric degree bounds. Once actual projection degrees are bounded by
+the corresponding mixed expressions, every one is below characteristic.
+This does not assert separability of arbitrary test functions.
 -/
 
 namespace ProximityPrize.SubmissionLower.ContactProjectionParameters
@@ -20,4 +18,35 @@ open ContactAlignmentParameters
 
 def surfaceVector : DegreeVector := ⟨yCap, slopeCap, seedTotalCap⟩
 
+theorem first_cut_projection_values :
+    mixed surfaceVector firstTail unitY = 438304768 ∧
+    mixed surfaceVector firstTail unitR = 2283798704 ∧
+    mixed surfaceVector firstTail unitZ = 61603845 := by
+  norm_num [mixed, surfaceVector, firstTail, tailVector, unitY, unitR, unitZ,
+    yCap, weightedCap, ContactAlignmentParameters.multiplicity, agreements, w, slopeCap, seedTotalCap]
+
+theorem agreement_cut_projection_values :
+    mixed surfaceVector agreementVector unitY = 438301429 ∧
+    mixed surfaceVector agreementVector unitR = 2283781305 ∧
+    mixed surfaceVector agreementVector unitZ = 61603375 := by
+  norm_num [mixed, surfaceVector, agreementVector, unitY, unitR, unitZ,
+    yCap, weightedCap, ContactAlignmentParameters.multiplicity, agreements, w, slopeCap, seedTotalCap]
+
+/-! The rectangular R bounds above exceed the characteristic.  The production
+proof replaces only that coordinate with the joint trapezoid resultant bound;
+these are the four remaining rectangular gates. -/
+theorem non_R_projection_caps_below_characteristic :
+    mixed surfaceVector firstTail unitY < prime ∧
+    mixed surfaceVector firstTail unitZ < prime ∧
+    mixed surfaceVector agreementVector unitY < prime ∧
+    mixed surfaceVector agreementVector unitZ < prime := by
+  rcases first_cut_projection_values with ⟨h1, h2, h3⟩
+  rcases agreement_cut_projection_values with ⟨h4, h5, h6⟩
+  rw [h1, h3, h4, h6]
+  norm_num [prime]
+
 end ProximityPrize.SubmissionLower.ContactProjectionParameters
+
+#print axioms ProximityPrize.SubmissionLower.ContactProjectionParameters.first_cut_projection_values
+#print axioms ProximityPrize.SubmissionLower.ContactProjectionParameters.agreement_cut_projection_values
+#print axioms ProximityPrize.SubmissionLower.ContactProjectionParameters.non_R_projection_caps_below_characteristic

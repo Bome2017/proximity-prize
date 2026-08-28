@@ -141,7 +141,7 @@ theorem implicit_pair_seed_bound_fixed
     (hagreement : ∀ γ ∈ Γ,
       agreements ≤ (nodes.filter (fun i => (selected γ).eval (x i) = u₀ i + γ * u₁ i)).card)
     (hnoPencil : NoLargeSelectedPencil selected Γ w errors) :
-    Γ.card * gap ≤ n * dot liftedAgreement (pairCost A G) +
+    Γ.card * gap ≤ (n - w) * dot liftedAgreement (pairCost A G) +
       (errors + 1) * gap * pairZCost ⟨A, G⟩ := by
   classical
   let φ := polynomialEmbedding K
@@ -177,7 +177,8 @@ theorem implicit_pair_seed_bound_fixed
     (Finset.card_le_card hcover).trans Finset.card_biUnion_le
   have hsingle (g : MvPolynomial (Fin 3) (GenericField K)) (hg : g ∈ factors) :
       (seedsFor g).card * gap ≤
-        n * (∑ i : Fin 3, capAt liftedAgreement i * capAt (geometricPairCost A g) i) +
+        (n - w) * (∑ i : Fin 3,
+          capAt liftedAgreement i * capAt (geometricPairCost A g) i) +
           (errors + 1) * gap * capAt (geometricPairCost A g) 2 := by
     obtain ⟨hgi, hdiv⟩ := surfaceFactors_spec φ G g hg
     have hfacdegree (i : Fin 3) : g.degreeOf i ≤ G.degreeOf i.succ :=
@@ -190,6 +191,7 @@ theorem implicit_pair_seed_bound_fixed
       · exact (hfacdegree 0).trans hGGcaps.1
       · exact (hfacdegree 1).trans hGGcaps.2.1
       · exact (hfacdegree 2).trans hGGcaps.2.2
+    have hgates := fixed_implicit_characteristic_gates g (surfaceMap φ A) hgcaps hAcaps
     have hreg : ∀ γ ∈ seedsFor g, MvPolynomial.eval₂Hom (φ.comp Polynomial.C)
         (ContactPolynomialSolutions.polynomialPoint (φ.comp Polynomial.C)
           (selected γ) γ (φ Polynomial.X)) (MvPolynomial.pderiv (2 : Fin 4) G) ≠ 0 := by
@@ -202,7 +204,7 @@ theorem implicit_pair_seed_bound_fixed
       (geometric_factor_proper_cut A G hG hGR hproper g hg) selected (seedsFor g)
       nodes x u₀ u₁ hinj prime w agreements errors
       (by norm_num [w]) (by norm_num [w, prime]) (by norm_num [w, agreements])
-      (by rw [hnodes]; norm_num [agreements, n])
+      (by rw [hnodes]; norm_num [agreements, n]) hgates.1 hgates.2
       (fun γ hγ => hdegree γ (hsub g hγ))
       (fun γ hγ => hsolutionG γ (hsub g hγ)) hreg
       (fun γ hγ => (Finset.mem_filter.mp hγ).2)
@@ -213,7 +215,7 @@ theorem implicit_pair_seed_bound_fixed
     rw [hnodes] at hcount
     have hδ (i : Fin 3) := coordinateMixedDegree_le_geometricPairCost φ A hAR g i
     exact hcount.trans (Nat.add_le_add
-      (Nat.mul_le_mul (Nat.sub_le n w) (Finset.sum_le_sum
+      (Nat.mul_le_mul_left (n - w) (Finset.sum_le_sum
         (fun i _ => Nat.mul_le_mul_left (capAt liftedAgreement i) (hδ i))))
       (Nat.mul_le_mul_left ((errors + 1) * gap) (hδ 2)))
   have hbudget (i : Fin 3) :
@@ -230,20 +232,22 @@ theorem implicit_pair_seed_bound_fixed
   calc
     Γ.card * gap ≤ (∑ g ∈ factors, (seedsFor g).card) * gap := Nat.mul_le_mul_right gap hcard
     _ = ∑ g ∈ factors, (seedsFor g).card * gap := by rw [Finset.sum_mul]
-    _ ≤ ∑ g ∈ factors, (n * (∑ i : Fin 3,
+    _ ≤ ∑ g ∈ factors, ((n - w) * (∑ i : Fin 3,
         capAt liftedAgreement i * capAt (geometricPairCost A g) i) +
           (errors + 1) * gap * capAt (geometricPairCost A g) 2) :=
       Finset.sum_le_sum (fun g hg => hsingle g hg)
-    _ = n * (∑ i : Fin 3, capAt liftedAgreement i *
+    _ = (n - w) * (∑ i : Fin 3, capAt liftedAgreement i *
         (∑ g ∈ factors, capAt (geometricPairCost A g) i)) +
           (errors + 1) * gap * (∑ g ∈ factors, capAt (geometricPairCost A g) 2) := by
       rw [Finset.sum_add_distrib, ← Finset.mul_sum, ← Finset.mul_sum, hfubini]
-    _ ≤ n * (∑ i : Fin 3, capAt liftedAgreement i * capAt (pairCost A G) i) +
+    _ ≤ (n - w) *
+        (∑ i : Fin 3, capAt liftedAgreement i * capAt (pairCost A G) i) +
         (errors + 1) * gap * capAt (pairCost A G) 2 :=
-      Nat.add_le_add (Nat.mul_le_mul_left n (Finset.sum_le_sum
+      Nat.add_le_add (Nat.mul_le_mul_left (n - w) (Finset.sum_le_sum
         (fun i _ => Nat.mul_le_mul_left (capAt liftedAgreement i) (hbudget i))))
         (Nat.mul_le_mul_left ((errors + 1) * gap) (hbudget 2))
-    _ = n * dot liftedAgreement (pairCost A G) + (errors + 1) * gap * pairZCost ⟨A, G⟩ := by
+    _ = (n - w) * dot liftedAgreement (pairCost A G) +
+        (errors + 1) * gap * pairZCost ⟨A, G⟩ := by
       rw [capAt_dot]
       rfl
 

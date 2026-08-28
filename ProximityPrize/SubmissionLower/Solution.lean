@@ -1,17 +1,16 @@
 import ProximityPrize.Benchmark.TargetLower
-import ProximityPrize.SubmissionLower.ContactProtocol6401
+import ProximityPrize.SubmissionLower.ContactProtocol6600Research
 
 /-!
-Model label: gpt-5.
-Exact lower-track entrypoint for the isolated 65.69 full-triangle assembly.
-Source-policy, full compilation, independent benchmark and submission
-remain distinct checks.
+Exact lower-track entrypoint for the unconditional adaptive-projection score-66
+assembly. Source-policy, kernel compilation, and Yukon validation remain
+distinct checks.
 -/
 
 namespace ProximityPrize.Benchmark
 
-theorem candidate : ProtocolClaim 6569 313895 1048576 :=
-  ProximityPrize.SubmissionLower.ContactProtocol6401.protocolClaim6401
+theorem candidate : ProtocolClaim 6600 315111 1048576 :=
+  ProximityPrize.SubmissionLower.ContactProtocol6600Research.protocolClaim6600
 
 end ProximityPrize.Benchmark
 
