@@ -1,6 +1,8 @@
 import ProximityPrize.Benchmark.TargetLower
 import ProximityPrize.SubmissionLower.ContactStackedBoxTransport6656Research
 import ProximityPrize.SubmissionLower.ContactStackedParameters6670Research
+import ProximityPrize.SubmissionLower.ContactFixedMeetProfile6670Research
+import ProximityPrize.SubmissionLower.ContactFlagInterpolation6641Research
 
 /-!
 # Meet and quotient box transport for the stacked 66.70 construction
@@ -16,6 +18,9 @@ open ProximityPrize.Benchmark
 open ContactInterpolation ContactFactorCaps
 open ContactRecursiveGCDResearch
 open ContactStackedParameters6670Research
+open ContactResidualSupportParametersResearch
+open ContactIdentityResidualGlobalFlagResearch
+open ContactPost6464MinkowskiRecurrenceResearch
 
 noncomputable section
 
@@ -29,15 +34,15 @@ B. -/
 theorem gcd12_mem_meet_box
     (A B : GlobalPoly) (hA : A ≠ 0) (hB : B ≠ 0)
     (hboxA : A ∈ globalCoefficientBox IRSProfile.Field
-      (32 * agreements) w 12659 9)
+      (34 * agreements) w 20000 10)
     (hboxB : B ∈ globalCoefficientBox IRSProfile.Field
-      (40 * agreements) w 1521 11) :
+      (68 * agreements) w 900 21) :
     gcd12 A B ∈ globalCoefficientBox IRSProfile.Field
-      (32 * agreements) w 1521 9 := by
+      (34 * agreements) w 900 10 := by
   have hfromA := mem_globalCoefficientBox_of_dvd (gcd12 A B) A
-    (32 * agreements) w 12659 9 hA (gcd_dvd_left A B) hboxA
+    (34 * agreements) w 20000 10 hA (gcd_dvd_left A B) hboxA
   have hfromB := mem_globalCoefficientBox_of_dvd (gcd12 A B) B
-    (40 * agreements) w 1521 11 hB (gcd_dvd_right A B) hboxB
+    (68 * agreements) w 900 21 hB (gcd_dvd_right A B) hboxB
   intro d hd
   exact ⟨(hfromB hd).1, (hfromA hd).2.1, (hfromA hd).2.2⟩
 
@@ -46,51 +51,51 @@ slope cap from C. -/
 theorem gcd123_mem_meet_box
     (A B C : GlobalPoly) (hA : A ≠ 0) (hC : C ≠ 0)
     (hbox12 : gcd12 A B ∈ globalCoefficientBox IRSProfile.Field
-      (32 * agreements) w 1521 9)
+      (34 * agreements) w 900 10)
     (hboxC : C ∈ globalCoefficientBox IRSProfile.Field
-      (63 * agreements) w 970 19) :
+      (37 * agreements) w 42000 9) :
     gcd123 A B C ∈ globalCoefficientBox IRSProfile.Field
-      (32 * agreements) w 970 9 := by
+      (34 * agreements) w 900 9 := by
   have h12 :=
     ContactStackedBoxTransport6656Research.gcd12_ne_zero (B := B) hA
   have hfrom12 := mem_globalCoefficientBox_of_dvd
     (gcd123 A B C) (gcd12 A B)
-    (32 * agreements) w 1521 9 h12
+    (34 * agreements) w 900 10 h12
     (gcd_dvd_left (gcd12 A B) C) hbox12
   have hfromC := mem_globalCoefficientBox_of_dvd (gcd123 A B C) C
-    (63 * agreements) w 970 19 hC
+    (37 * agreements) w 42000 9 hC
     (gcd_dvd_right (gcd12 A B) C) hboxC
   intro d hd
-  exact ⟨(hfromC hd).1, (hfrom12 hd).2.1, (hfrom12 hd).2.2⟩
+  exact ⟨(hfrom12 hd).1, (hfromC hd).2.1, (hfrom12 hd).2.2⟩
 
 theorem quotientA_mem_parent_box
     (A B : GlobalPoly) (hA : A ≠ 0)
     (hboxA : A ∈ globalCoefficientBox IRSProfile.Field
-      (32 * agreements) w 12659 9) :
+      (34 * agreements) w 20000 10) :
     quotientA A B ∈ globalCoefficientBox IRSProfile.Field
-      (32 * agreements) w 12659 9 :=
+      (34 * agreements) w 20000 10 :=
   mem_globalCoefficientBox_of_dvd (quotientA A B) A
-    (32 * agreements) w 12659 9 hA
+    (34 * agreements) w 20000 10 hA
     (ContactStackedBoxTransport6656Research.quotientA_dvd_left A B) hboxA
 
 theorem quotientB_mem_parent_box
     (A B : GlobalPoly) (hB : B ≠ 0)
     (hboxB : B ∈ globalCoefficientBox IRSProfile.Field
-      (40 * agreements) w 1521 11) :
+      (68 * agreements) w 900 21) :
     quotientB A B ∈ globalCoefficientBox IRSProfile.Field
-      (40 * agreements) w 1521 11 :=
+      (68 * agreements) w 900 21 :=
   mem_globalCoefficientBox_of_dvd (quotientB A B) B
-    (40 * agreements) w 1521 11 hB
+    (68 * agreements) w 900 21 hB
     (ContactStackedBoxTransport6656Research.quotientB_dvd_right A B) hboxB
 
 theorem middleQuotient_mem_parent_box
     (A B C : GlobalPoly) (hA : A ≠ 0)
     (hbox12 : gcd12 A B ∈ globalCoefficientBox IRSProfile.Field
-      (32 * agreements) w 1521 9) :
+      (34 * agreements) w 900 10) :
     middleQuotient A B C ∈ globalCoefficientBox IRSProfile.Field
-      (32 * agreements) w 1521 9 :=
+      (34 * agreements) w 900 10 :=
   mem_globalCoefficientBox_of_dvd (middleQuotient A B C) (gcd12 A B)
-    (32 * agreements) w 1521 9
+    (34 * agreements) w 900 10
     (ContactStackedBoxTransport6656Research.gcd12_ne_zero (B := B) hA)
     (ContactStackedBoxTransport6656Research.middleQuotient_dvd_gcd12 A B C)
     hbox12
@@ -98,12 +103,54 @@ theorem middleQuotient_mem_parent_box
 theorem quotientC_mem_parent_box
     (A B C : GlobalPoly) (hC : C ≠ 0)
     (hboxC : C ∈ globalCoefficientBox IRSProfile.Field
-      (63 * agreements) w 970 19) :
+      (37 * agreements) w 42000 9) :
     quotientC A B C ∈ globalCoefficientBox IRSProfile.Field
-      (63 * agreements) w 970 19 :=
+      (37 * agreements) w 42000 9 :=
   mem_globalCoefficientBox_of_dvd (quotientC A B C) C
-    (63 * agreements) w 970 19 hC
+    (37 * agreements) w 42000 9 hC
     (ContactStackedBoxTransport6656Research.quotientC_dvd_right A B C) hboxC
+
+/-- The joint total cap is inherited from B, not inferred from a rectangle. -/
+theorem gcd123_support_of_flagB
+    (A B C : GlobalPoly) (hA : A ≠ 0) (hB : B ≠ 0) (hC : C ≠ 0)
+    (hboxA : A ∈ globalCoefficientBox IRSProfile.Field
+      (34 * agreements) w 20000 10)
+    (hboxB : B ∈ globalCoefficientBox IRSProfile.Field
+      (68 * agreements) w 900 21)
+    (hboxC : C ∈ globalCoefficientBox IRSProfile.Field
+      (37 * agreements) w 42000 9)
+    (hflagB : B ∈ ContactFlagInterpolation6641Research.globalCoefficientBox
+      IRSProfile.Field (68 * agreements) w 900 21) :
+    ResidualSupportData ContactFixedMeetProfile6670Research.fixedSupport
+      (gcd123 A B C) := by
+  have hbox := gcd123_mem_meet_box A B C hA hC
+    (gcd12_mem_meet_box A B hA hB hboxA hboxB) hboxC
+  refine ⟨?_, ?_, ?_⟩
+  · apply (weightedTotalDegree_le_iff residualSWeights (gcd123 A B C) 9).mpr
+    intro d hd
+    have hb := hbox hd
+    rw [ContactFactorCaps.weight_fin4]
+    change d 0 * 0 + d 1 * 0 + d 2 * 1 + d 3 * 0 ≤ 9
+    simpa using hb.2.1
+  · apply (weightedTotalDegree_le_iff residualYSWeights (gcd123 A B C) 47).mpr
+    intro d hd
+    have hb : d 1 + d 3 ≤ 900 ∧ d 2 ≤ 9 ∧
+        d 0 + 131071 * d 1 + 131070 * d 2 < 6197452 := hbox hd
+    rw [ContactFactorCaps.weight_fin4]
+    change d 0 * 0 + d 1 * 1 + d 2 * 1 + d 3 * 0 ≤ 47
+    norm_num [agreements, w] at hb ⊢
+    omega
+  · have hBtotal : wt residualTotalWeights B ≤ 900 := by
+      apply (weightedTotalDegree_le_iff residualTotalWeights B 900).mpr
+      intro d hd
+      have hb := hflagB hd
+      rw [ContactFactorCaps.weight_fin4]
+      change d 0 * 0 + d 1 * 1 + d 2 * 1 + d 3 * 1 ≤ 900
+      simpa using hb.1
+    have hdiv : gcd123 A B C ∣ B :=
+      (gcd_dvd_left (gcd12 A B) C).trans (gcd_dvd_right A B)
+    exact (weightedTotalDegree_le_of_dvd residualTotalWeights
+      (gcd123 A B C) B hdiv hB).trans hBtotal
 
 end
 

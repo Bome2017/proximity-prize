@@ -9,7 +9,7 @@ import ProximityPrize.SubmissionLower.ContactExceptionalSeedCount
 import ProximityPrize.SubmissionLower.ContactSelectedSeedDecomposition
 
 /-!
-# Fixed-centre scalar list bound at the 66.96 radius
+# Fixed-centre scalar list bound at the 67.10 radius
 
 The seedless interpolant is factored exactly as in the affine alignment
 argument.  Positive-`R` factors are counted on the plane curve `Z=0` using
@@ -49,16 +49,24 @@ def regularListNumerator : ℕ :=
   (n - w) * (capY * slopeCap + capR * yTotalCap)
 def singularListCap : ℕ := (2 * slopeCap - 1) * yTotalCap
 def listNumerator : ℕ := regularListNumerator + singularListCap * gap
-def listBudget : ℕ := 520000000
+def listBudget : ℕ := 600000000
 
 theorem numeric_values :
-    gap = 51305 ∧ capY = 11534249 ∧ capR = 2228207 ∧
-      regularListNumerator = 26456999721477 ∧
-      singularListCap = 748 ∧ listNumerator = 26457038097617 := by
+    gap = 51207 ∧ capY = 13369243 ∧ capR = 2228207 ∧
+      regularListNumerator = 30666067671312 ∧
+      singularListCap = 867 ∧ listNumerator = 30666112067781 := by
   norm_num [gap, capY, capR, regularListNumerator, singularListCap,
     listNumerator, agreements, n, errors, w, yTotalCap, slopeCap]
 
 theorem list_numerator_fits : listNumerator < listBudget * gap := by
+  norm_num [listNumerator, regularListNumerator, singularListCap, listBudget,
+    gap, capY, capR, agreements, n, errors, w, yTotalCap, slopeCap]
+
+/-- Exact strict integer ceiling before rounding the protocol reserve up. -/
+theorem list_strict_ceiling_exact :
+    listNumerator / gap + 1 = 598865626 ∧
+      listNumerator < 598865626 * gap ∧
+      598865626 < listBudget := by
   norm_num [listNumerator, regularListNumerator, singularListCap, listBudget,
     gap, capY, capR, agreements, n, errors, w, yTotalCap, slopeCap]
 

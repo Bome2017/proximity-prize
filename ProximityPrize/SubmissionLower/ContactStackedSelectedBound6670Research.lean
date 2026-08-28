@@ -27,6 +27,7 @@ open ContactStackedGCDCover6670Research
 open ContactStackedSeedPartition6670Research
 open ContactStackedResidualCells6670Research
 open ContactStackedPromotedArithmetic6670Research
+open ContactResidualSupportParametersResearch
 
 noncomputable section
 
@@ -43,7 +44,8 @@ polynomial and the selected cell on which it specializes to zero; the three
 parent interpolants and recursive cover are deliberately absent. -/
 def FixedCellCountProvider6670 : Prop :=
   ∀ (Q : GlobalPoly), Q ≠ 0 →
-    Q ∈ globalCoefficientBox IRSProfile.Field (32 * agreements) w 970 9 →
+    Q ∈ globalCoefficientBox IRSProfile.Field (34 * agreements) w 900 9 →
+    ResidualSupportData ContactFixedMeetProfile6670Research.fixedSupport Q →
     ∀ (selected : IRSProfile.Field → Polynomial IRSProfile.Field)
       (Delta : Finset IRSProfile.Field)
       (u0 u1 : IRSProfile.Index → IRSProfile.Field),
@@ -143,11 +145,13 @@ theorem fixedSeeds_card_le_of_provider
     (hfixedProvider : FixedCellCountProvider6670)
     (QA QB QC : GlobalPoly) (hQA : QA ≠ 0) (hQB : QB ≠ 0) (hQC : QC ≠ 0)
     (hboxA : QA ∈ globalCoefficientBox IRSProfile.Field
-      (32 * agreements) w 12659 9)
+      (34 * agreements) w 20000 10)
     (hboxB : QB ∈ globalCoefficientBox IRSProfile.Field
-      (40 * agreements) w 1521 11)
+      (68 * agreements) w 900 21)
     (hboxC : QC ∈ globalCoefficientBox IRSProfile.Field
-      (63 * agreements) w 970 19)
+      (37 * agreements) w 42000 9)
+    (hflagB : QB ∈ ContactFlagInterpolation6641Research.globalCoefficientBox
+      IRSProfile.Field (68 * agreements) w 900 21)
     (selected : IRSProfile.Field → Polynomial IRSProfile.Field)
     (Gamma : Finset IRSProfile.Field)
     (u0 u1 : IRSProfile.Index → IRSProfile.Field)
@@ -168,10 +172,12 @@ theorem fixedSeeds_card_le_of_provider
     ContactStackedBoxTransport6670Research.gcd12_mem_meet_box
       QA QB hQA hQB hboxA hboxB
   have hQbox : Q ∈ globalCoefficientBox IRSProfile.Field
-      (32 * agreements) w 970 9 := by
+      (34 * agreements) w 900 9 := by
     simpa [Q] using
       ContactStackedBoxTransport6670Research.gcd123_mem_meet_box
         QA QB QC hQA hQC hbox12 hboxC
+  have hQsupport := ContactStackedBoxTransport6670Research.gcd123_support_of_flagB
+    QA QB QC hQA hQB hQC hboxA hboxB hboxC hflagB
   have hsub : Delta ⊆ Gamma := by
     simpa [Delta] using fixedSeeds_subset selected Gamma QA QB QC
   have hsolution : ∀ gamma ∈ Delta,
@@ -189,7 +195,7 @@ theorem fixedSeeds_card_le_of_provider
     exact hagreement gamma (hsub hgamma)
   have hnoPencilDelta : NoLargeSelectedPencil selected Delta w errors :=
     noLargeSelectedPencil_mono selected Gamma Delta w errors hsub hnoPencil
-  simpa [Delta] using hfixedProvider Q hQ hQbox selected Delta u0 u1
+  simpa [Delta] using hfixedProvider Q hQ hQbox hQsupport selected Delta u0 u1
     hsolution hdegreeDelta hagreementDelta hnoPencilDelta
 
 /-- Complete selected-family bound, conditional only on the fixed-cell
@@ -197,7 +203,7 @@ provider. -/
 theorem selectedNoLargePencilBound_of_fixedCellCountProvider6670
     (hfixedProvider : FixedCellCountProvider6670) :
     SelectedNoLargePencilBound IRSProfile.domain
-      131071 79768 274980727591395087 := by
+      131071 79866 274980727511395087 := by
   intro U seeds A selected hdegreeRaw hcardRaw hvalues hnoRaw
   have hdegree : ∀ gamma ∈ seeds,
       (selected gamma).natDegree ≤ w := by
@@ -216,7 +222,7 @@ theorem selectedNoLargePencilBound_of_fixedCellCountProvider6670
       ext gamma
       simp [pencilSeeds]
     · norm_num [errors, n, agreements]
-  obtain ⟨QA, QB, QC, hQA, hboxA, hQB, hboxB, hQC, hboxC,
+  obtain ⟨QA, QB, QC, hQA, hboxA, hQB, hboxB, hQC, hboxC, hflagB,
       huniversal⟩ :=
     exists_stacked_interpolants_with_recursive_cover (U 0) (U 1)
   have hcover := selected_recursive_cover U seeds A selected QA QB QC
@@ -234,7 +240,7 @@ theorem selectedNoLargePencilBound_of_fixedCellCountProvider6670
     simpa [secondResidualCeiling, secondResidualRegularCost,
       secondResidualSingularCeiling] using hsecondRaw
   have hfixed := fixedSeeds_card_le_of_provider hfixedProvider
-    QA QB QC hQA hQB hQC hboxA hboxB hboxC selected seeds
+    QA QB QC hQA hQB hQC hboxA hboxB hboxC hflagB selected seeds
     (U 0) (U 1) hdegree hagreement hno
   simpa [promotedBudget] using
     selected_card_le_promotedBudget_of_cell_bounds selected seeds QA QB QC

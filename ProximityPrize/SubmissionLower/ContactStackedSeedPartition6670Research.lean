@@ -3,11 +3,11 @@ import ProximityPrize.SubmissionLower.ContactStackedGCDCover6670Research
 import ProximityPrize.SubmissionLower.ContactStackedSeedPartition6656Research
 
 /-!
-# Exact selected-seed partition for the 66.70 recursive GCD cover
+# Exact selected-seed partition for the 67.10 recursive GCD cover
 
 The predicates and Finset partition are algebraically independent of the
 target profile, so this module aliases the accepted partition construction
-and transports only the new 66.70 recursive-branch hypothesis.
+and transports only the new 67.10 recursive-branch hypothesis.
 -/
 
 namespace ProximityPrize.SubmissionLower.ContactStackedSeedPartition6670Research

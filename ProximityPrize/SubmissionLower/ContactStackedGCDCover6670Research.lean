@@ -56,22 +56,24 @@ theorem exists_stacked_interpolants_with_recursive_cover
     ∃ QA QB QC : GlobalPoly,
       QA ≠ 0 ∧
       QA ∈ globalCoefficientBox IRSProfile.Field
-        (32 * agreements) w 12659 9 ∧
+        (34 * agreements) w 20000 10 ∧
       QB ≠ 0 ∧
       QB ∈ globalCoefficientBox IRSProfile.Field
-        (40 * agreements) w 1521 11 ∧
+        (68 * agreements) w 900 21 ∧
       QC ≠ 0 ∧
       QC ∈ globalCoefficientBox IRSProfile.Field
-        (63 * agreements) w 970 19 ∧
+        (37 * agreements) w 42000 9 ∧
+      QB ∈ ContactFlagInterpolation6641Research.globalCoefficientBox IRSProfile.Field
+        (68 * agreements) w 900 21 ∧
       ∀ (gamma : IRSProfile.Field) (P : Polynomial IRSProfile.Field)
         (support : Finset IRSProfile.Index),
         P.natDegree ≤ w → agreements ≤ support.card →
         (∀ i ∈ support,
           P.eval (IRSProfile.domain i) = u0 i + gamma * u1 i) →
         RecursiveSpecializationBranch P gamma QA QB QC := by
-  obtain ⟨QA, QB, QC, hQA, hboxA, hQB, hboxB, hQC, hboxC, huniversal⟩ :=
+  obtain ⟨QA, QB, QC, hQA, hboxA, hQB, hboxB, hQC, hboxC, hflagB, huniversal⟩ :=
     exists_stacked_universal_vanishing_interpolants u0 u1
-  refine ⟨QA, QB, QC, hQA, hboxA, hQB, hboxB, hQC, hboxC, ?_⟩
+  refine ⟨QA, QB, QC, hQA, hboxA, hQB, hboxB, hQC, hboxC, hflagB, ?_⟩
   intro gamma P support hP hcard hvalues
   obtain ⟨hA, hB, hC⟩ := huniversal gamma P support hP hcard hvalues
   exact recursive_branch_of_three_vanishings P gamma QA QB QC hA hB hC

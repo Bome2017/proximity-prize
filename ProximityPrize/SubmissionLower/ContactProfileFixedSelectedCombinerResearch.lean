@@ -7,9 +7,10 @@ import ProximityPrize.SubmissionLower.ContactSingularBranchParameterizedResearch
 # Profile-generic fixed selected-family combiner
 
 This module separates the actual selected-solution cover and tight singular
-provider from any particular regular-factor ledger.  A caller supplies a
-factorwise regular bound and its finite aggregation theorem; rectangular,
-sharp Taylor, and active-YZ ledgers therefore share the same final join.
+provider from any particular regular-factor ledger. A caller supplies the
+flags of the actual regular factors, a factorwise regular bound, and its
+finite aggregation theorem; rectangular and cumulative sharp-YZ ledgers
+therefore share the same final join.
 -/
 
 namespace ProximityPrize.SubmissionLower.ContactProfileFixedSelectedCombinerResearch
@@ -149,15 +150,15 @@ theorem global_count_le_regular_div_add_tight_countCap
       p.agreements ≤ (nodes.filter (fun i ↦
         (selected gamma).eval (x i) = u0 i + gamma * u1 i)).card)
     (hnoPencil : NoLargeSelectedPencil selected Gamma p.w p.errors)
-    (factorFlag : RegularIndex Q → FlagDegree)
+    (regularFlagFor : RegularIndex Q → FlagDegree)
     (regularLedger : FlagDegree → ℕ)
     (hregularAggregate :
       ∀ count : RegularIndex Q → ℕ,
-        (∀ F, count F * p.gap ^ 2 ≤ regularLedger (factorFlag F)) →
+        (∀ F, count F * p.gap ^ 2 ≤ regularLedger (regularFlagFor F)) →
         (∑ F, count F) * p.gap ^ 2 ≤ regularNumerator)
     (hregular : ∀ F : RegularIndex Q,
       (regularSeeds Q selected Gamma F).card * p.gap ^ 2 ≤
-      regularLedger (factorFlag F)) :
+        regularLedger (regularFlagFor F)) :
     Gamma.card ≤ regularNumerator / p.gap ^ 2 + t.countCap := by
   have hcover := card_le_regular_sum_add_singular p Q hQ hbox
     hs hsSmall hw hDw hj hjSmall selected Gamma hsolution

@@ -4,7 +4,7 @@ import ProximityPrize.SubmissionLower.ContactStackedBoxTransport6670Research
 import ProximityPrize.SubmissionLower.ContactRecursiveResidualStages6670Research
 
 /-!
-# Actual recursive-GCD residual cells at score 66.96
+# Actual recursive-GCD residual cells at score 67.10
 
 The first cell uses the profile-B quotient as singular pivot and the profile-A
 quotient as external proper cut.  The second uses the A/B-GCD quotient as
@@ -61,9 +61,9 @@ attribute [local simp]
 theorem firstResidualCell_count_lt
     (QA QB QC : StackedPoly) (hQA : QA ≠ 0) (hQB : QB ≠ 0)
     (hboxA : QA ∈ globalCoefficientBox IRSProfile.Field
-      (32 * agreements) w 12659 9)
+      (34 * agreements) w 20000 10)
     (hboxB : QB ∈ globalCoefficientBox IRSProfile.Field
-      (40 * agreements) w 1521 11)
+      (68 * agreements) w 900 21)
     (selected : IRSProfile.Field → Polynomial IRSProfile.Field)
     (Gamma : Finset IRSProfile.Field)
     (u0 u1 : IRSProfile.Index → IRSProfile.Field)
@@ -76,7 +76,7 @@ theorem firstResidualCell_count_lt
           u0 i + gamma * u1 i)).card)
     (hnoPencil : NoLargeSelectedPencil selected Gamma w errors) :
     (firstResidualSeeds selected Gamma QA QB).card <
-      19299948215263 + 74957505479198 := by
+      79361072258730 + 287984100301317 := by
   let Delta := firstResidualSeeds selected Gamma QA QB
   let Q := quotientB QA QB
   let T := quotientA QA QB
@@ -94,7 +94,7 @@ theorem firstResidualCell_count_lt
     ContactStackedResidualCells6656Research.quotientB_ne_zero QA QB hQB
   have hQbox := quotientB_mem_parent_box QA QB hQB hboxB
   have hTbox := quotientA_mem_parent_box QA QB hQA hboxA
-  have hTcaps := degree_bounds_of_mem_box T (32 * agreements) w 12659 9
+  have hTcaps := degree_bounds_of_mem_box T (34 * agreements) w 20000 10
     (by norm_num [w]) hTbox
   have hrel : IsRelPrime Q T :=
     (firstQuotients_isRelPrime hQA).symm
@@ -170,7 +170,7 @@ theorem firstResidualCell_count_lt
         (by simpa [stageOne, pivotB, UnequalParameters.errors,
           TightParameters.errors] using hnoPencilDelta))
   have hceil : stageOne.regularCountCap + pivotB.countCap + 1 =
-      19299948215263 + 74957505479198 := by
+      79361072258730 + 287984100301317 := by
     simpa only [stageOne, pivotB,
       ContactRecursiveResidualStages6670Research.firstResidualSingularCeiling] using
       ContactRecursiveResidualStages6670Research.residual_stage_ceilings.1
@@ -180,11 +180,11 @@ theorem firstResidualCell_count_lt
 theorem secondResidualCell_count_lt
     (QA QB QC : StackedPoly) (hQA : QA ≠ 0) (hQB : QB ≠ 0) (hQC : QC ≠ 0)
     (hboxA : QA ∈ globalCoefficientBox IRSProfile.Field
-      (32 * agreements) w 12659 9)
+      (34 * agreements) w 20000 10)
     (hboxB : QB ∈ globalCoefficientBox IRSProfile.Field
-      (40 * agreements) w 1521 11)
+      (68 * agreements) w 900 21)
     (hboxC : QC ∈ globalCoefficientBox IRSProfile.Field
-      (63 * agreements) w 970 19)
+      (37 * agreements) w 42000 9)
     (selected : IRSProfile.Field → Polynomial IRSProfile.Field)
     (Gamma : Finset IRSProfile.Field)
     (u0 u1 : IRSProfile.Index → IRSProfile.Field)
@@ -197,7 +197,7 @@ theorem secondResidualCell_count_lt
           u0 i + gamma * u1 i)).card)
     (hnoPencil : NoLargeSelectedPencil selected Gamma w errors) :
     (secondResidualSeeds selected Gamma QA QB QC).card <
-      6010054003621 + 39275958777619 := by
+      53819495787524 + 30911739274586 := by
   let Delta := secondResidualSeeds selected Gamma QA QB QC
   let Q := middleQuotient QA QB QC
   let T := quotientC QA QB QC
@@ -216,7 +216,7 @@ theorem secondResidualCell_count_lt
     ContactStackedResidualCells6656Research.middleQuotient_ne_zero QA QB QC hQA
   have hQbox := middleQuotient_mem_parent_box QA QB QC hQA hbox12
   have hTbox := quotientC_mem_parent_box QA QB QC hQC hboxC
-  have hTcaps := degree_bounds_of_mem_box T (63 * agreements) w 970 19
+  have hTcaps := degree_bounds_of_mem_box T (37 * agreements) w 42000 9
     (by norm_num [w]) hTbox
   have hrel : IsRelPrime Q T := secondQuotients_isRelPrime hQA
   have hdegreeDelta : ∀ gamma ∈ Delta,
@@ -291,7 +291,7 @@ theorem secondResidualCell_count_lt
         (by simpa [stageTwo, pivotGcd12, UnequalParameters.errors,
           TightParameters.errors] using hnoPencilDelta))
   have hceil : stageTwo.regularCountCap + pivotGcd12.countCap + 1 =
-      6010054003621 + 39275958777619 := by
+      53819495787524 + 30911739274586 := by
     simpa only [stageTwo, pivotGcd12,
       ContactRecursiveResidualStages6670Research.secondResidualSingularCeiling] using
       ContactRecursiveResidualStages6670Research.residual_stage_ceilings.2

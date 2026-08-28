@@ -1,11 +1,12 @@
 import ProximityPrize.Benchmark.TargetLower
 
 /-!
-# Exact split-budget arithmetic for the stacked score-66.96 target
+# Exact split-budget arithmetic for the stacked score-67.10 target
 
 This file freezes only the six independently rounded components of the
-`a = 182414` recursive-GCD ledger.  The fixed regular component uses the
-accepted active-YZ tail and equal-weight Taylor direction; the fixed singular
+`a = 182278` recursive-GCD ledger.  The fixed regular component uses the
+cumulative fixed-cell surface, active-YZ tail, and sharp Taylor direction;
+the fixed singular
 component and both residual singular components use the tight
 implicit-core-plus-exceptions ledger.
 
@@ -16,14 +17,14 @@ three-cell partition once those bounds have been supplied.
 
 namespace ProximityPrize.SubmissionLower.ContactStackedPromotedArithmetic6670Research
 
-def promotedBudget : ℕ := 274980727591395087
+def promotedBudget : ℕ := 274980727511395087
 
-def fixedRegularCost : ℕ := 265902663562142419
-def fixedSingularCost : ℕ := 25047497285157
-def firstResidualRegularCost : ℕ := 19299948215263
-def firstResidualSingularCeiling : ℕ := 74957505479198
-def secondResidualRegularCost : ℕ := 6010054003621
-def secondResidualSingularCeiling : ℕ := 39275958777619
+def fixedRegularCost : ℕ := 271784225129196331
+def fixedSingularCost : ℕ := 24731934873070
+def firstResidualRegularCost : ℕ := 79361072258730
+def firstResidualSingularCeiling : ℕ := 287984100301317
+def secondResidualRegularCost : ℕ := 53819495787524
+def secondResidualSingularCeiling : ℕ := 30911739274586
 
 def fixedCost : ℕ := fixedRegularCost + fixedSingularCost
 def firstResidualCeiling : ℕ :=
@@ -34,8 +35,8 @@ def secondResidualCeiling : ℕ :=
 def totalCost : ℕ := fixedCost + firstResidualCeiling + secondResidualCeiling
 
 theorem total_and_slack_exact :
-    totalCost = 266067254525903277 ∧
-      promotedBudget - totalCost = 8913473065491810 := by
+    totalCost = 272261033471691558 ∧
+      promotedBudget - totalCost = 2719694039703529 := by
   norm_num [totalCost, fixedCost, firstResidualCeiling,
     secondResidualCeiling, fixedRegularCost, fixedSingularCost,
     firstResidualRegularCost, firstResidualSingularCeiling,
