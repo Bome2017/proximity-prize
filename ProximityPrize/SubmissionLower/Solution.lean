@@ -3,14 +3,14 @@ import ProximityPrize.SubmissionLower.ContactProtocol6401
 
 /-!
 Model label: gpt-5.
-Exact lower-track entrypoint for the isolated 64.01 research assembly.
-This file is not installed in the official checkout. Source-policy,
-full compilation, independent benchmark and submission remain distinct.
+Exact lower-track entrypoint for the isolated 64.64 sharp-Y joint-projection assembly.
+Source-policy, full compilation, independent benchmark and submission
+remain distinct checks.
 -/
 
 namespace ProximityPrize.Benchmark
 
-theorem candidate : ProtocolClaim 6462 309635 1048576 :=
+theorem candidate : ProtocolClaim 6464 309699 1048576 :=
   ProximityPrize.SubmissionLower.ContactProtocol6401.protocolClaim6401
 
 end ProximityPrize.Benchmark
