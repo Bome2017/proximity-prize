@@ -100,7 +100,7 @@ theorem regularVector_budgets (Q : MvPolynomial (Fin 4) K) (hQ : Q ≠ 0)
     (hbox : Q ∈ globalCoefficientBox K weightedCap w seedTotalCap slopeCap) :
     (∑ F : RegularIndex Q, (regularVector Q F).y) ≤ 25 ∧
       (∑ F : RegularIndex Q, (regularVector Q F).r) ≤ 5 ∧
-      (∑ F : RegularIndex Q, (regularVector Q F).z) ≤ 176 := by
+      (∑ F : RegularIndex Q, (regularVector Q F).z) ≤ 174 := by
   classical
   have hb := directFactor_input_budgets Q hQ weightedCap w seedTotalCap slopeCap (by decide) hbox
   have hy : (∑ F ∈ positiveRFactors Q, F.degreeOf (1 : Fin 4)) ≤ 25 := by
@@ -159,7 +159,7 @@ theorem global_count_of_actual_branch_estimates
       (regularSeeds Q selected Γ F).card * gap ^ 2 ≤ wholeNumerator (regularVector Q F))
     (himplicit : ∀ q : ImplicitIndex Q,
       (implicitSeeds Q selected Γ q).card * gap ≤
-        (n - w) * dot liftedAgreement (implicitVector Q q) +
+        n * dot liftedAgreement (implicitVector Q q) +
           (errors + 1) * gap * (implicitVector Q q).z) : Γ.card < alignmentBudget := by
   have hregCaps := regularVector_budgets Q hQ hbox
   have himpCaps := implicitVector_budgets Q hQ hbox
