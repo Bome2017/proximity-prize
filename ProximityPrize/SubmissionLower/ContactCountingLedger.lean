@@ -170,7 +170,8 @@ theorem sum_regular_max_bound {I : Type} [Fintype I]
     _ ≤ ∑ i, dot (v i) wholeCoefficients := by
       apply Finset.sum_le_sum
       intro i _
-      exact (hcount i).trans (le_of_eq (whole_eq_dot (v i)))
+      rw [← whole_eq_dot]
+      exact hcount i
     _ = dot (sumVector v) wholeCoefficients := (dot_sum_left _ _).symm
     _ ≤ dot regularSurface wholeCoefficients := dot_mono_left _ ⟨hy, hr, hz⟩
     _ = regularNumerator := rfl
@@ -181,12 +182,13 @@ theorem sum_regular_branch_bound {I : Type} [Fintype I]
     (hz : (∑ i, (v i).z) ≤ seedTotalCap)
     (hcount : ∀ i, count i * gap ^ 2 ≤ wholeNumerator (v i)) :
     (∑ i, count i) * gap ^ 2 ≤ regularNumerator := by
-  exact sum_regular_max_bound count v hy hr hz hcount
+  apply sum_regular_max_bound count v hy hr hz
+  exact hcount
 
 theorem sum_regular_numeric_caps {I : Type} [Fintype I]
     (count : I → ℕ) (v : I → DegreeVector)
     (hy : (∑ i, (v i).y) ≤ 30) (hr : (∑ i, (v i).r) ≤ 6)
-    (hz : (∑ i, (v i).z) ≤ 288)
+    (hz : (∑ i, (v i).z) ≤ 318)
     (hcount : ∀ i, count i * gap ^ 2 ≤ wholeNumerator (v i)) :
     (∑ i, count i) * gap ^ 2 ≤ regularNumerator := by
   exact sum_regular_branch_bound count v
@@ -285,7 +287,7 @@ theorem final_family_ledger {I J : Type} [Fintype I] [Fintype J]
     (regularCount : I → ℕ) (v : I → DegreeVector)
     (implicitCount : J → ℕ) (cost : J → DegreeVector) (exceptions cardinality : ℕ)
     (hregularY : (∑ i, (v i).y) ≤ 30) (hregularR : (∑ i, (v i).r) ≤ 6)
-    (hregularZ : (∑ i, (v i).z) ≤ 288)
+    (hregularZ : (∑ i, (v i).z) ≤ 318)
     (hregular : ∀ i, regularCount i * gap ^ 2 ≤ wholeNumerator (v i))
     (hcostY : (∑ i, (cost i).y) ≤ algebraicCap)
     (hcostR : (∑ i, (cost i).r) ≤ 2 * implicitYCap * algebraicCap)
