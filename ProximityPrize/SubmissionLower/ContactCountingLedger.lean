@@ -170,8 +170,7 @@ theorem sum_regular_max_bound {I : Type} [Fintype I]
     _ ≤ ∑ i, dot (v i) wholeCoefficients := by
       apply Finset.sum_le_sum
       intro i _
-      rw [← whole_eq_dot]
-      exact hcount i
+      exact (hcount i).trans (le_of_eq (whole_eq_dot (v i)))
     _ = dot (sumVector v) wholeCoefficients := (dot_sum_left _ _).symm
     _ ≤ dot regularSurface wholeCoefficients := dot_mono_left _ ⟨hy, hr, hz⟩
     _ = regularNumerator := rfl
@@ -182,13 +181,12 @@ theorem sum_regular_branch_bound {I : Type} [Fintype I]
     (hz : (∑ i, (v i).z) ≤ seedTotalCap)
     (hcount : ∀ i, count i * gap ^ 2 ≤ wholeNumerator (v i)) :
     (∑ i, count i) * gap ^ 2 ≤ regularNumerator := by
-  apply sum_regular_max_bound count v hy hr hz
-  exact hcount
+  exact sum_regular_max_bound count v hy hr hz hcount
 
 theorem sum_regular_numeric_caps {I : Type} [Fintype I]
     (count : I → ℕ) (v : I → DegreeVector)
-    (hy : (∑ i, (v i).y) ≤ 25) (hr : (∑ i, (v i).r) ≤ 5)
-    (hz : (∑ i, (v i).z) ≤ 176)
+    (hy : (∑ i, (v i).y) ≤ 33) (hr : (∑ i, (v i).r) ≤ 7)
+    (hz : (∑ i, (v i).z) ≤ 246)
     (hcount : ∀ i, count i * gap ^ 2 ≤ wholeNumerator (v i)) :
     (∑ i, count i) * gap ^ 2 ≤ regularNumerator := by
   exact sum_regular_branch_bound count v
@@ -200,16 +198,15 @@ def implicitAggregateCost : DegreeVector :=
   ⟨algebraicCap, 2 * implicitYCap * algebraicCap, implicitYCap⟩
 
 def implicitCoefficients : DegreeVector :=
-  ⟨(n - w) * liftedAgreement.y, (n - w) * liftedAgreement.r,
-    (n - w) * liftedAgreement.z + (errors + 1) * gap⟩
+  ⟨n * liftedAgreement.y, n * liftedAgreement.r,
+    n * liftedAgreement.z + (errors + 1) * gap⟩
 
 def implicitCoreNumerator : ℕ :=
-  (n - w) * mixed liftedSurface implicitCut liftedAgreement +
+  n * mixed liftedSurface implicitCut liftedAgreement +
     (errors + 1) * gap * mixed liftedSurface implicitCut unitZ
 
 theorem implicit_bound_eq_dot (v : DegreeVector) :
-    (n - w) * dot liftedAgreement v + (errors + 1) * gap * v.z =
-      dot v implicitCoefficients := by
+    n * dot liftedAgreement v + (errors + 1) * gap * v.z = dot v implicitCoefficients := by
   simp only [implicitCoefficients, dot]
   ring
 
@@ -227,8 +224,7 @@ theorem sum_implicit_counts_bound {I : Type} [Fintype I]
     (hr : (∑ i, (cost i).r) ≤ 2 * implicitYCap * algebraicCap)
     (hz : (∑ i, (cost i).z) ≤ implicitYCap)
     (hcount : ∀ i, count i * gap ≤
-      (n - w) * dot liftedAgreement (cost i) +
-        (errors + 1) * gap * (cost i).z) :
+      n * dot liftedAgreement (cost i) + (errors + 1) * gap * (cost i).z) :
     (∑ i, count i) * gap ≤ implicitCoreNumerator := by
   calc
     _ = ∑ i, count i * gap := Finset.sum_mul _ _ _
@@ -255,8 +251,7 @@ theorem implicit_with_exceptions_bound {I : Type} [Fintype I]
     (hr : (∑ i, (cost i).r) ≤ 2 * implicitYCap * algebraicCap)
     (hz : (∑ i, (cost i).z) ≤ implicitYCap)
     (hcount : ∀ i, count i * gap ≤
-      (n - w) * dot liftedAgreement (cost i) +
-        (errors + 1) * gap * (cost i).z)
+      n * dot liftedAgreement (cost i) + (errors + 1) * gap * (cost i).z)
     (hexceptions : exceptions ≤ 2 * algebraicCap ^ 2) :
     ((∑ i, count i) + exceptions) * gap ≤ liftedSingularNumerator := by
   have hmain := sum_implicit_counts_bound count cost hy hr hz hcount
@@ -289,15 +284,14 @@ cover hypotheses remain explicit and must come from the geometric proof. -/
 theorem final_family_ledger {I J : Type} [Fintype I] [Fintype J]
     (regularCount : I → ℕ) (v : I → DegreeVector)
     (implicitCount : J → ℕ) (cost : J → DegreeVector) (exceptions cardinality : ℕ)
-    (hregularY : (∑ i, (v i).y) ≤ 25) (hregularR : (∑ i, (v i).r) ≤ 5)
-    (hregularZ : (∑ i, (v i).z) ≤ 176)
+    (hregularY : (∑ i, (v i).y) ≤ 33) (hregularR : (∑ i, (v i).r) ≤ 7)
+    (hregularZ : (∑ i, (v i).z) ≤ 246)
     (hregular : ∀ i, regularCount i * gap ^ 2 ≤ wholeNumerator (v i))
     (hcostY : (∑ i, (cost i).y) ≤ algebraicCap)
     (hcostR : (∑ i, (cost i).r) ≤ 2 * implicitYCap * algebraicCap)
     (hcostZ : (∑ i, (cost i).z) ≤ implicitYCap)
     (himplicit : ∀ i, implicitCount i * gap ≤
-      (n - w) * dot liftedAgreement (cost i) +
-        (errors + 1) * gap * (cost i).z)
+      n * dot liftedAgreement (cost i) + (errors + 1) * gap * (cost i).z)
     (hexceptions : exceptions ≤ 2 * algebraicCap ^ 2)
     (hcover : cardinality ≤ (∑ i, regularCount i) + (∑ i, implicitCount i) + exceptions) :
     cardinality < alignmentBudget := by

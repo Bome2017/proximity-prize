@@ -43,7 +43,7 @@ def localMonomial (f j z : ℕ) : Poly K :=
     (Finsupp.single 0 f + Finsupp.single 1 j + Finsupp.single 2 z) 1
 
 theorem localMonomial_mem (f j z : ℕ) :
-    localMonomial K f j z ∈ coefficientBox K f (f + z) j := by
+    localMonomial K f j z ∈ coefficientBox K f (f + j + z) j := by
   apply (MvPolynomial.monomial_mem_restrictSupport (R := K)).mpr
   left
   simp [boxExponents]
@@ -76,11 +76,12 @@ theorem seedAffine_pow_mem (u₀ u₁ : K) (t : ℕ) :
       simpa only [pow_succ, Nat.zero_add] using
         coefficientBox_mul K ih (seedAffine_mem K u₀ u₁)
 
-/-- Distinct weighted monomial labels. Empty X ranges implement a strict
-weighted cap without allocating any columns. The order is i,j,z,e. -/
+/-- Distinct weighted monomial labels in the combined `Y+R+Z` triangle.
+Empty X ranges implement a strict weighted cap without allocating any
+columns. The order is i,j,z,e. -/
 abbrev CoefficientIndex (D w L s : ℕ) :=
   (i : Fin (L + 1)) × (j : Fin (s + 1)) ×
-    (Fin (L + 1 - i.val) × Fin (D - w * i.val - (w - 1) * j.val))
+    (Fin (L + 1 - i.val - j.val) × Fin (D - w * i.val - (w - 1) * j.val))
 
 /-- Global variables 0,1,2,3 denote X,Y,R,Z. -/
 def columnExponent {D w L s : ℕ} (c : CoefficientIndex D w L s) : Fin 4 →₀ ℕ :=
@@ -189,7 +190,7 @@ theorem reconstruct_support_caps (D w L s : ℕ)
 def coefficientCount (D w L s : ℕ) : ℕ :=
   ∑ i ∈ Finset.range (L + 1),
     ∑ j ∈ Finset.range (s + 1),
-      (L + 1 - i) * (D - w * i - (w - 1) * j)
+      (L + 1 - i - j) * (D - w * i - (w - 1) * j)
 
 theorem coefficient_index_card (D w L s : ℕ) :
     Fintype.card (CoefficientIndex D w L s) = coefficientCount D w L s := by
@@ -226,7 +227,7 @@ theorem blockEntry_mem (D w L s : ℕ) (x u₀ u₁ : K)
       (seedAffine_pow_mem K u₀ u₁ (c.1.val - f.val))
       (localMonomial_mem K f.val c.2.1.val c.2.2.1.val)
     apply coefficientBox_mono K (show 0 + f.val ≤ min r L by omega)
-      (show c.1.val - f.val + (f.val + c.2.2.1.val) ≤ L by omega)
+      (show c.1.val - f.val + (f.val + c.2.1.val + c.2.2.1.val) ≤ L by omega)
       (show 0 + c.2.1.val ≤ s by omega)
     exact hmul
   · exact (coefficientBox K (min r L) L s).zero_mem
@@ -361,19 +362,19 @@ theorem all_blocks_divisible_of_equations
   · have hm : m - r = 0 := by omega
     simp only [hm, pow_zero, one_dvd]
 
-abbrev FrozenCoefficientIndex := CoefficientIndex 3324960 131071 176 5
+abbrev FrozenCoefficientIndex := CoefficientIndex 4410672 131071 246 7
 
-/-- The actual frozen-domain array has 36,400,718,089 coefficient labels and
-at most 36,400,529,408 independent contact equations. This theorem evaluates
+/-- The actual frozen-domain array has 33,470,909,075 coefficient labels and
+at most 33,470,808,064 independent contact equations. This theorem evaluates
 neither its columns nor the field-valued constraint matrix. -/
 theorem exists_frozen_nonzero_contact_array
     (u₀ u₁ : IRSProfile.Index → IRSProfile.Field) :
     ∃ θ : FrozenCoefficientIndex → IRSProfile.Field, θ ≠ 0 ∧
-      ∀ (i : IRSProfile.Index) (r : Fin 18),
-        contactJet IRSProfile.Field (18 - r.val)
-          ((extractBlock IRSProfile.Field 3324960 131071 176 5
+      ∀ (i : IRSProfile.Index) (r : Fin 24),
+        contactJet IRSProfile.Field (24 - r.val)
+          ((extractBlock IRSProfile.Field 4410672 131071 246 7
             (IRSProfile.domain i) (u₀ i) (u₁ i) r.val θ) : Poly IRSProfile.Field) = 0 := by
-  apply exists_nonzero_block_equations IRSProfile.Field 3324960 131071 176 5 18
+  apply exists_nonzero_block_equations IRSProfile.Field 4410672 131071 246 7 24
     (fun i : IRSProfile.Index => IRSProfile.domain i) u₀ u₁
   rw [show Fintype.card IRSProfile.Index = 262144 by norm_num [IRSProfile.Index]]
   exact ContactAlignmentParameters.interpolation_gate
@@ -387,16 +388,16 @@ theorem exists_frozen_nonzero_polynomial_and_equations
     ∃ (Q : MvPolynomial (Fin 4) IRSProfile.Field)
       (θ : FrozenCoefficientIndex → IRSProfile.Field),
       Q ≠ 0 ∧
-      Q ∈ globalCoefficientBox IRSProfile.Field 3324960 131071 176 5 ∧
-      Q = reconstruct IRSProfile.Field 3324960 131071 176 5 θ ∧
-      ∀ (i : IRSProfile.Index) (r : Fin 18),
-        contactJet IRSProfile.Field (18 - r.val)
-          ((extractBlock IRSProfile.Field 3324960 131071 176 5
+      Q ∈ globalCoefficientBox IRSProfile.Field 4410672 131071 246 7 ∧
+      Q = reconstruct IRSProfile.Field 4410672 131071 246 7 θ ∧
+      ∀ (i : IRSProfile.Index) (r : Fin 24),
+        contactJet IRSProfile.Field (24 - r.val)
+          ((extractBlock IRSProfile.Field 4410672 131071 246 7
             (IRSProfile.domain i) (u₀ i) (u₁ i) r.val θ) : Poly IRSProfile.Field) = 0 := by
   obtain ⟨θ, hθ, hconstraints⟩ := exists_frozen_nonzero_contact_array u₀ u₁
-  exact ⟨reconstruct IRSProfile.Field 3324960 131071 176 5 θ, θ,
-    reconstruct_ne_zero IRSProfile.Field 3324960 131071 176 5 θ hθ,
-    reconstruct_mem_globalCoefficientBox IRSProfile.Field 3324960 131071 176 5 θ,
+  exact ⟨reconstruct IRSProfile.Field 4410672 131071 246 7 θ, θ,
+    reconstruct_ne_zero IRSProfile.Field 4410672 131071 246 7 θ hθ,
+    reconstruct_mem_globalCoefficientBox IRSProfile.Field 4410672 131071 246 7 θ,
     rfl, hconstraints⟩
 
 end
