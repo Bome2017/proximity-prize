@@ -8,39 +8,9 @@ import ProximityPrize.Benchmark.TargetLower
 import ProximityPrize.SubmissionLower.LocalMathlibPortLicense
 import ProximityPrize.SubmissionLower.LocalMathlib_FieldTheory_RatFunc_Degree
 
-/-!
-Permitted flat proof port of Mathlib.FieldTheory.RatFunc.Valuation.
-Model label: gpt-5.
-Original Mathlib revision: 905b95818eb32af7874a58b427f50c1711a5e96c.
-Original source SHA256: 1580890ba57e72c72afcf6d3731c317ad46561ba1ec408172d0292691e2f043d.
-Original copyright and author notices are retained above.
-Modifications: module/public visibility packaging is removed; imports
-are replaced by the trusted target and the necessary flat proof ports.
-All mathematical declarations and proof bodies are retained, except
-any explicitly documented ordinary-term expansion below.
-The full Apache 2.0 license is in LocalMathlibPortLicense.lean.
--/
+/-! . -/
 
-/-! .
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- -/
+/-! . -/
 
 section ProximityFlatProofPort
 
@@ -59,9 +29,7 @@ open Multiplicative WithZero Polynomial
 
 variable [DecidableEq (RatFunc F)]
 
-/-- .
-
- -/
+/-- . -/
 def inftyValuationDef (r : RatFunc F) : ℤᵐ⁰ :=
   if r = 0 then 0 else exp r.intDegree
 
@@ -116,8 +84,8 @@ lemma inftyValuation.X_zpow (m : ℤ) : inftyValuation F (RatFunc.X ^ m) = exp m
 theorem inftyValuation.X_inv : inftyValuation F (1 / RatFunc.X) = exp (-1) := by
   rw [one_div, ← zpow_neg_one, inftyValuation.X_zpow]
 
---
---
+
+
 theorem inftyValuation.polynomial {p : F[X]} (hp : p ≠ 0) :
     inftyValuationDef F (algebraMap F[X] (RatFunc F) p) = exp (p.natDegree : ℤ) := by
   rw [inftyValuationDef, if_neg (by simpa), RatFunc.intDegree_polynomial]
@@ -138,12 +106,10 @@ theorem inftyValued.def {x : RatFunc F} :
 
 namespace CompletionAtInfty
 
-/- 
--/
+
 attribute [-instance] RatFunc.valuedRatFunc
 
-/- 
--/
+
 /-- . -/
 scoped instance : UniformSpace (RatFunc F) := (inftyValued F).toUniformSpace
 

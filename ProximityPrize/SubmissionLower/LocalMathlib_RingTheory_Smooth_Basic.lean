@@ -11,61 +11,11 @@ import ProximityPrize.SubmissionLower.LocalMathlib_RingTheory_Localization_Away_
 import ProximityPrize.SubmissionLower.LocalMathlib_RingTheory_Smooth_Kaehler
 import ProximityPrize.SubmissionLower.LocalMathlib_RingTheory_Unramified_Basic
 
-/-!
-Permitted flat proof port of Mathlib.RingTheory.Smooth.Basic.
-Model label: gpt-5.
-Original Mathlib revision: 905b95818eb32af7874a58b427f50c1711a5e96c.
-Original source SHA256: a2053a584ecbda2e9fe1322e1f1a5eaab61846f0dc64d924f45e23c31579ef03.
-Original copyright and author notices are retained above.
-Modifications: module/public visibility packaging is removed; imports
-are replaced by the trusted target and the necessary flat proof ports.
-All mathematical declarations and proof bodies are retained, except
-any explicitly documented ordinary-term expansion below.
-The full Apache 2.0 license is in LocalMathlibPortLicense.lean.
--/
+/-! . -/
 
-/-!
-Ordinary elaboration repair after WMI 229471, model gpt-5:
-write the two diagnosed split-injection compositions as LinearMap.comp.
-The mathematical declarations, hypotheses, proof arguments, and imports are
-unchanged. Copyright and Apache license are retained. No kernel setting or
-protected source is changed.
--/
+/-! . -/
 
-/-! .
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- -/
+/-! . -/
 
 section ProximityFlatProofPort
 
@@ -82,11 +32,7 @@ namespace Algebra
 section
 
 variable (R A) in
-/-- .
-
-
-
- -/
+/-- . -/
 @[stacks 00TI "Also see 031J (6) for the equivalence with the definition given here.", mk_iff]
 class FormallySmooth : Prop where
   projective_kaehlerDifferential : Module.Projective A Ω[A⁄R]
@@ -167,8 +113,7 @@ theorem exists_lift
       rw [← AlgHom.comp_assoc, AlgEquiv.comp_symm, AlgHom.id_comp]
     exact ⟨g', e⟩
 
-/-- .
- -/
+/-- . -/
 noncomputable def lift [FormallySmooth R A] (I : Ideal B) (hI : IsNilpotent I)
     (g : A →ₐ[R] B ⧸ I) : A →ₐ[R] B :=
   (FormallySmooth.exists_lift I hI g).choose
@@ -185,8 +130,7 @@ theorem mk_lift [FormallySmooth R A] (I : Ideal B) (hI : IsNilpotent I)
 
 variable {C : Type*} [CommRing C] [Algebra R C]
 
-/-- .
- -/
+/-- . -/
 noncomputable def liftOfSurjective [FormallySmooth R A] (f : A →ₐ[R] C)
     (g : B →ₐ[R] C) (hg : Function.Surjective g) (hg' : IsNilpotent <| RingHom.ker (g : B →+* C)) :
     A →ₐ[R] B :=
@@ -218,10 +162,7 @@ end FormallySmooth
 namespace Extension
 
 set_option backward.isDefEq.respectTransparency false in
-/-- .
-
-
- -/
+/-- . -/
 noncomputable
 def homInfinitesimal (P₁ P₂ : Extension R A) [FormallySmooth R P₁.Ring] :
     P₁.infinitesimal.Hom P₂.infinitesimal :=
@@ -304,13 +245,7 @@ lemma kerCotangentToTensor_injective_iff
   have : Algebra.FormallySmooth R P'.Ring := ‹_›
   P'.cotangentComplex_injective_iff
 
-/-- .
-
-
-
-
-
- -/
+/-- . -/
 @[stacks 031I]
 theorem iff_split_injection
     [Algebra P A] [IsScalarTower R P A] (hf : Function.Surjective (algebraMap P A)) :
@@ -326,11 +261,7 @@ theorem iff_split_injection
     simp [LinearMap.ext_iff]
   · rw [and_iff_right (by exact mapBaseChange_surjective R P A hf)]
 
-/-- .
-
-
-
- -/
+/-- . -/
 @[stacks 031I]
 theorem _root_.Algebra.Extension.formallySmooth_iff_split_injection
     (P : Algebra.Extension.{w} R A) [FormallySmooth R P.Ring] :
@@ -346,11 +277,7 @@ theorem _root_.Algebra.Extension.formallySmooth_iff_split_injection
     exact ⟨e.symm.toLinearMap ∘ₗ l.restrictScalars P.Ring,
       LinearMap.ext (DFunLike.congr_fun hl : _)⟩
 
-/-- .
-
-
-
- -/
+/-- . -/
 theorem iff_split_surjection (f : P →ₐ[R] A) (hf : Function.Surjective f) :
     FormallySmooth R A ↔ ∃ g, f.kerSquareLift.comp g = AlgHom.id R A := by
   letI := f.toAlgebra
@@ -386,11 +313,7 @@ theorem of_comp_surjective
     AlgHom.coe_id, id_eq]
   simp only [Ideal.quotientKerAlgEquivOfSurjective_apply]
 
-/-- .
-
-
-
- -/
+/-- . -/
 theorem iff_comp_surjective :
    FormallySmooth R A ↔ ∀ ⦃B : Type max u v⦄ [CommRing B] [Algebra R B] (I : Ideal B), I ^ 2 = ⊥ →
       Function.Surjective ((Ideal.Quotient.mkₐ R I).comp : (A →ₐ[R] B) → A →ₐ[R] B ⧸ I) :=
@@ -599,5 +522,3 @@ end Comp
 end Smooth
 
 end Algebra
-
--- Transitive kernel dependency audits for this ordinary proof-port repair.

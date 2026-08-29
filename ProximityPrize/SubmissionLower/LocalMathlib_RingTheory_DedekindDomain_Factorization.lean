@@ -9,64 +9,9 @@ import ProximityPrize.SubmissionLower.LocalMathlibPortLicense
 import ProximityPrize.SubmissionLower.LocalMathlib_RingTheory_RamificationInertia_Basic
 import ProximityPrize.SubmissionLower.LocalMathlib_RingTheory_UniqueFactorizationDomain_Finsupp
 
-/-!
-Permitted flat proof port of Mathlib.RingTheory.DedekindDomain.Factorization.
-Model label: gpt-5.
-Original Mathlib revision: 905b95818eb32af7874a58b427f50c1711a5e96c.
-Original source SHA256: 31d734be51fe2d27048e5701662ec0d80a07d8dae77d56710f2c911fdc5b0724.
-Original copyright and author notices are retained above.
-Modifications: module/public visibility packaging is removed; imports
-are replaced by the trusted target and the necessary flat proof ports.
-All mathematical declarations and proof bodies are retained, except
-any explicitly documented ordinary-term expansion below.
-The full Apache 2.0 license is in LocalMathlibPortLicense.lean.
-Compatibility repair after WMI229491: count_prod and quotientEquiv supply
-proof-local classical equality decisions for their actual index/field types.
-No mathematical statement, assumption or kernel setting is changed.
--/
+/-! . -/
 
-/-! .
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- -/
+/-! . -/
 
 section ProximityFlatProofPort
 
@@ -82,8 +27,7 @@ variable {R : Type*} [CommRing R] {K : Type*} [Field K] [Algebra R K] [IsFractio
 
 variable [IsDedekindDomain R] (v : HeightOneSpectrum R)
 
-/-- .
- -/
+/-- . -/
 def IsDedekindDomain.HeightOneSpectrum.maxPowDividing (I : Ideal R) : Ideal R :=
   v.asIdeal ^ (Associates.mk v.asIdeal).count (Associates.mk I).factors
 
@@ -107,8 +51,7 @@ theorem Ideal.finite_factors {I : Ideal R} (hI : I ≠ 0) :
   intro v w hvw
   exact Subtype.coe_injective (HeightOneSpectrum.ext (by simpa using hvw))
 
-/-- .
- -/
+/-- . -/
 theorem Associates.finite_factors {I : Ideal R} (hI : I ≠ 0) :
     ∀ᶠ v : HeightOneSpectrum R in Filter.cofinite,
       ((Associates.mk v.asIdeal).count (Associates.mk I).factors : ℤ) = 0 := by
@@ -122,8 +65,7 @@ theorem Associates.finite_factors {I : Ideal R} (hI : I ≠ 0) :
 
 namespace Ideal
 
-/-- .
- -/
+/-- . -/
 @[fun_prop]
 theorem hasFiniteMulSupport {I : Ideal R} (hI : I ≠ 0) :
     HasFiniteMulSupport fun v : HeightOneSpectrum R ↦ v.maxPowDividing I :=
@@ -139,8 +81,7 @@ theorem hasFiniteMulSupport {I : Ideal R} (hI : I ≠ 0) :
 
 @[deprecated (since := "2026-03-03")] alias finite_mulSupport := hasFiniteMulSupport
 
-/-- .
- -/
+/-- . -/
 @[fun_prop]
 theorem hasFiniteMulSupport_coe {I : Ideal R} (hI : I ≠ 0) :
     HasFiniteMulSupport fun v : HeightOneSpectrum R ↦ (v.asIdeal : FractionalIdeal R⁰ K) ^
@@ -151,8 +92,7 @@ theorem hasFiniteMulSupport_coe {I : Ideal R} (hI : I ≠ 0) :
 
 @[deprecated (since := "2026-03-03")] alias finite_mulSupport_coe := hasFiniteMulSupport_coe
 
-/-- .
- -/
+/-- . -/
 @[fun_prop]
 theorem hasFiniteMulSupport_inv {I : Ideal R} (hI : I ≠ 0) :
     HasFiniteMulSupport fun v : HeightOneSpectrum R ↦ (v.asIdeal : FractionalIdeal R⁰ K) ^
@@ -241,8 +181,7 @@ theorem iInf_maxPowDividing_eq {I : Ideal R} (h0 : I ≠ 0) :
 
 variable (K)
 
-/-- .
- -/
+/-- . -/
 theorem finprod_heightOneSpectrum_factorization_coe {I : Ideal R} (hI : I ≠ 0) :
     (∏ᶠ v : HeightOneSpectrum R, (v.asIdeal : FractionalIdeal R⁰ K) ^
       ((Associates.mk v.asIdeal).count (Associates.mk I).factors : ℤ)) = I := by
@@ -260,8 +199,7 @@ namespace FractionalIdeal
 open Int IsLocalization
 
 open Ideal in
-/-- .
- -/
+/-- . -/
 theorem finprod_heightOneSpectrum_factorization {I : FractionalIdeal R⁰ K} (hI : I ≠ 0) {a : R}
     {J : Ideal R} (haJ : I = spanSingleton R⁰ ((algebraMap R K) a)⁻¹ * ↑J) :
     ∏ᶠ v : HeightOneSpectrum R, (v.asIdeal : FractionalIdeal R⁰ K) ^
@@ -279,8 +217,7 @@ theorem finprod_heightOneSpectrum_factorization {I : FractionalIdeal R⁰ K} (hI
   intro v
   rw [← zpow_add₀ ((@coeIdeal_ne_zero R _ K _ _ _ _).mpr v.ne_bot), sub_eq_add_neg]
 
-/-- .
- -/
+/-- . -/
 theorem finprod_heightOneSpectrum_factorization_principal_fraction {n : R} (hn : n ≠ 0) (d : ↥R⁰) :
     ∏ᶠ v : HeightOneSpectrum R, (v.asIdeal : FractionalIdeal R⁰ K) ^
       ((Associates.mk v.asIdeal).count (Associates.mk (Ideal.span {n} : Ideal R)).factors -
@@ -299,8 +236,7 @@ theorem finprod_heightOneSpectrum_factorization_principal_fraction {n : R} (hn :
   exact finprod_heightOneSpectrum_factorization h0 hI
 
 open Classical in
-/-- .
- -/
+/-- . -/
 theorem finprod_heightOneSpectrum_factorization_principal {I : FractionalIdeal R⁰ K} (hI : I ≠ 0)
     (k : K) (hk : I = spanSingleton R⁰ k) :
     ∏ᶠ v : HeightOneSpectrum R, (v.asIdeal : FractionalIdeal R⁰ K) ^
@@ -320,8 +256,7 @@ theorem finprod_heightOneSpectrum_factorization_principal {I : FractionalIdeal R
 variable (K)
 
 open Classical in
-/-- .
- -/
+/-- . -/
 def count (I : FractionalIdeal R⁰ K) : ℤ :=
   dite (I = 0) (fun _ : I = 0 => 0) fun _ : ¬I = 0 =>
     let a := choose (exists_eq_spanSingleton_mul I)
@@ -401,8 +336,7 @@ theorem count_mul {I I' : FractionalIdeal R⁰ K} (hI : I ≠ 0) (hI' : I' ≠ 0
   push_cast
   ring
 
-/-- .
- -/
+/-- . -/
 theorem count_mul' (I I' : FractionalIdeal R⁰ K) [Decidable (I ≠ 0 ∧ I' ≠ 0)] :
     count K v (I * I') = if I ≠ 0 ∧ I' ≠ 0 then count K v I + count K v I' else 0 := by
   split_ifs with h
@@ -623,8 +557,7 @@ end FractionalIdeal
 
 section div
 
-/-- .
- -/
+/-- . -/
 lemma IsDedekindDomain.exists_sup_span_eq {I J : Ideal R} (hIJ : I ≤ J) (hI : I ≠ 0) :
     ∃ a, I ⊔ Ideal.span {a} = J := by
   classical
@@ -676,8 +609,7 @@ lemma IsDedekindDomain.exists_sup_span_eq {I J : Ideal R} (hIJ : I ≤ J) (hI : 
   · refine Ideal.mul_mono_right ?_ (ha p' hp's)
     exact Ideal.prod_le_inf.trans (Finset.inf_le (b := q) (by simpa [hq] using hqp))
 
-/-- .
- -/
+/-- . -/
 lemma IsDedekindDomain.exists_eq_span_pair {I : Ideal R} {x : R} (hxI : x ∈ I) (hx : x ≠ 0) :
     ∃ y, I = .span {x, y} := by
   obtain ⟨y, rfl⟩ := exists_sup_span_eq (I.span_singleton_le_iff_mem.mpr hxI) (by simpa)
@@ -716,8 +648,7 @@ lemma IsDedekindDomain.exists_add_spanSingleton_mul_eq
 
 namespace FractionalIdeal
 
-/-- .
- -/
+/-- . -/
 noncomputable
 def divMod (c b a : FractionalIdeal R⁰ K) : K :=
   letI := Classical.propDecidable
@@ -748,9 +679,7 @@ lemma divMod_zero_of_not_le {a b c : FractionalIdeal R⁰ K} (hac : ¬ a ≤ c) 
     c.divMod b a = 0 := by
   simp [divMod, hac]
 
-/-- .
-
- -/
+/-- . -/
 noncomputable
 def quotientEquiv (I J I' J' : FractionalIdeal R⁰ K)
     (H : I * J' = I' * J) (h : J ≤ I) (h' : J' ≤ I') (hJ' : J' ≠ 0) (hI : I ≠ 0) :
@@ -821,10 +750,7 @@ variable {S : Type*} [CommRing S] [Algebra S R] [Algebra.IsIntegral S R] [IsDoma
 
 open IsDedekindDomain Ideal.IsDedekindDomain HeightOneSpectrum
 
-/-- .
-
-
- -/
+/-- . -/
 theorem Ideal.map_algebraMap_eq_finsetProd_pow {p : Ideal S} [p.IsMaximal] (hp : p ≠ 0) :
     map (algebraMap S R) p = ∏ P ∈ p.primesOver R, P ^ P.ramificationIdx S := by
   classical
@@ -848,12 +774,7 @@ alias Ideal.map_algebraMap_eq_finset_prod_pow := Ideal.map_algebraMap_eq_finsetP
 
 end primesOver
 
-/-! .
-
-
-
-
- -/
+/-! . -/
 
 section conversion
 
@@ -865,8 +786,7 @@ variable {I : Ideal R} (hI : I ≠ ⊥) (p : HeightOneSpectrum R)
 include hI
 
 open UniqueFactorizationMonoid in
-/-- .
- -/
+/-- . -/
 @[simp]
 lemma count_normalizedFactors_eq_multiplicity :
     Multiset.count p.asIdeal (normalizedFactors I) = multiplicity p.asIdeal I := by
@@ -876,15 +796,13 @@ lemma count_normalizedFactors_eq_multiplicity :
   rw [← this]
   exact (finiteMultiplicity_of_emultiplicity_eq_natCast this).emultiplicity_eq_multiplicity
 
-/-- .
- -/
+/-- . -/
 lemma maxPowDividing_eq_pow_multiplicity :
     p.maxPowDividing I = p.asIdeal ^ multiplicity p.asIdeal I := by
   classical
   rw [maxPowDividing_eq_pow_multiset_count _ hI, count_normalizedFactors_eq_multiplicity hI]
 
-/-- .
- -/
+/-- . -/
 @[simp]
 lemma factorization_eq_multiplicity :
     factorization I p.asIdeal = multiplicity p.asIdeal I := by
@@ -894,13 +812,7 @@ end IsDedekindDomain.HeightOneSpectrum
 
 end conversion
 
-/-! .
-
-
-
-
-
- -/
+/-! . -/
 
 section multiplicity
 
@@ -981,5 +893,3 @@ lemma multiplicity_iSup [Nonempty ι] {I : ι → Ideal R} (hI : ∀ i, I i ≠ 
 end IsDedekindDomain.HeightOneSpectrum
 
 end multiplicity
-
-/- -/

@@ -7,82 +7,20 @@ Authors: Sebastian Monnet
 import ProximityPrize.Benchmark.TargetLower
 import ProximityPrize.SubmissionLower.LocalMathlibPortLicense
 
-/-!
-Permitted flat proof port of Mathlib.FieldTheory.KrullTopology.
-Model label: gpt-5.
-Original Mathlib revision: 905b95818eb32af7874a58b427f50c1711a5e96c.
-Original source SHA256: bf16fcfb1dfc63e4dd62a210f9db2b7f6873dc4a7240ee55394377c58fa8cf79.
-Original copyright and author notices are retained above.
-Modifications: module/public visibility packaging is removed; imports
-are replaced by the trusted target and the necessary flat proof ports.
-All mathematical declarations and proof bodies are retained, except
-any explicitly documented ordinary-term expansion below.
-The full Apache 2.0 license is in LocalMathlibPortLicense.lean.
--/
+/-! . -/
 
-/-! .
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- -/
+/-! . -/
 
 section ProximityFlatProofPort
 
 open scoped Pointwise
 
-/-- .
- -/
+/-- . -/
 def finiteExts (K : Type*) [Field K] (L : Type*) [Field L] [Algebra K L] :
     Set (IntermediateField K L) :=
   {E | FiniteDimensional K E}
 
-/-- .
- -/
+/-- . -/
 def fixedByFinite (K L : Type*) [Field K] [Field L] [Algebra K L] : Set (Subgroup Gal(L/K)) :=
   IntermediateField.fixingSubgroup '' finiteExts K L
 
@@ -91,8 +29,7 @@ theorem top_fixedByFinite {K L : Type*} [Field K] [Field L] [Algebra K L] :
     ⊤ ∈ fixedByFinite K L :=
   ⟨⊥, IntermediateField.instFiniteSubtypeMemBot K, IntermediateField.fixingSubgroup_bot⟩
 
-/-- .
- -/
+/-- . -/
 def galBasis (K L : Type*) [Field K] [Field L] [Algebra K L] : FilterBasis Gal(L/K) where
   sets := (fun g => g.carrier) '' fixedByFinite K L
   nonempty := ⟨⊤, ⊤, top_fixedByFinite, rfl⟩
@@ -103,14 +40,12 @@ def galBasis (K L : Type*) [Field K] [Field L] [Algebra K L] : FilterBasis Gal(L
     refine ⟨(E1 ⊔ E2).fixingSubgroup.carrier, ⟨_, ⟨_, E1.finiteDimensional_sup E2, rfl⟩, rfl⟩, ?_⟩
     exact Set.subset_inter (E1.fixingSubgroup_le le_sup_left) (E2.fixingSubgroup_le le_sup_right)
 
-/-- .
- -/
+/-- . -/
 theorem mem_galBasis_iff (K L : Type*) [Field K] [Field L] [Algebra K L] (U : Set Gal(L/K)) :
     U ∈ galBasis K L ↔ U ∈ (fun g => g.carrier) '' fixedByFinite K L :=
   Iff.rfl
 
-/-- .
- -/
+/-- . -/
 @[implicit_reducible]
 def galGroupBasis (K L : Type*) [Field K] [Field L] [Algebra K L] :
     GroupFilterBasis Gal(L/K) where
@@ -143,8 +78,7 @@ def galGroupBasis (K L : Type*) [Field K] [Field L] [Algebra K L] :
     change σ (σ⁻¹ x) = x
     exact AlgEquiv.apply_symm_apply σ x
 
-/-- .
- -/
+/-- . -/
 instance krullTopology (K L : Type*) [Field K] [Field L] [Algebra K L] :
     TopologicalSpace Gal(L/K) :=
   GroupFilterBasis.topology (galGroupBasis K L)
@@ -179,8 +113,7 @@ section KrullT2
 
 open scoped Topology Filter
 
-/-- .
- -/
+/-- . -/
 theorem IntermediateField.fixingSubgroup_isOpen {K L : Type*} [Field K] [Field L] [Algebra K L]
     (E : IntermediateField K L) [FiniteDimensional K E] :
     IsOpen (E.fixingSubgroup : Set Gal(L/K)) := by
@@ -189,8 +122,7 @@ theorem IntermediateField.fixingSubgroup_isOpen {K L : Type*} [Field K] [Field L
   have h_nhds := GroupFilterBasis.mem_nhds_one (galGroupBasis K L) h_basis
   exact Subgroup.isOpen_of_mem_nhds _ h_nhds
 
-/-- .
- -/
+/-- . -/
 theorem IntermediateField.fixingSubgroup_isClosed {K L : Type*} [Field K] [Field L] [Algebra K L]
     (E : IntermediateField K L) [FiniteDimensional K E] :
     IsClosed (E.fixingSubgroup : Set Gal(L/K)) :=
@@ -251,8 +183,7 @@ instance {K L : Type*} [Field K] [Field L] [Algebra K L] [Algebra.IsIntegral K L
     IntermediateField.mem_fixingSubgroup_iff, not_forall]
   exact ⟨x, IntermediateField.mem_adjoin_simple_self K x, hx⟩
 
-/-- .
- -/
+/-- . -/
 theorem krullTopology_isTotallySeparated {K L : Type*} [Field K] [Field L] [Algebra K L]
     [Algebra.IsIntegral K L] : IsTotallySeparated (Set.univ : Set Gal(L/K)) :=
   (totallySeparatedSpace_iff _).mp inferInstance
@@ -270,8 +201,7 @@ section MulAction
 
 variable {K L : Type*} [Field K] [Field L] [Algebra K L]
 
-/-- .
- -/
+/-- . -/
 theorem stabilizer_isOpen_of_isIntegral [Algebra.IsIntegral K L] (x : L) :
     IsOpen (MulAction.stabilizer Gal(L/K) x : Set Gal(L/K)) := by
   open IntermediateField in
@@ -288,11 +218,7 @@ namespace IntermediateField
 variable {k E : Type*} (K : Type*) [Field k] [Field E] [Field K]
   [Algebra k E] [Algebra k K] [Algebra E K] [IsScalarTower k E K] (L : IntermediateField k E)
 
-/-- .
-
-
-
- -/
+/-- . -/
 theorem map_fixingSubgroup [Normal k E] :
     (L.map (IsScalarTower.toAlgHom k E K)).fixingSubgroup =
       L.fixingSubgroup.comap (AlgEquiv.restrictNormalHom (F := k) (K₁ := K) E) := by
@@ -308,18 +234,14 @@ theorem map_fixingSubgroup [Normal k E] :
     replace h := congr(algebraMap E K $(show f.restrictNormal E x = x from h x hx))
     rwa [AlgEquiv.restrictNormal_commutes] at h
 
-/-- .
-
-
- -/
+/-- . -/
 theorem map_fixingSubgroup_index [Normal k E] [Normal k K] :
     (L.map (IsScalarTower.toAlgHom k E K)).fixingSubgroup.index = L.fixingSubgroup.index := by
   rw [L.map_fixingSubgroup K, L.fixingSubgroup.index_comap_of_surjective
     (AlgEquiv.restrictNormalHom_surjective _)]
 
 variable {K} in
-/-- .
- -/
+/-- . -/
 theorem finrank_eq_fixingSubgroup_index (L : IntermediateField k K) [IsGalois k K] :
     Module.finrank k L = L.fixingSubgroup.index := by
   wlog hnfd : FiniteDimensional k L generalizing L

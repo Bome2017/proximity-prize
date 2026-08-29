@@ -10,38 +10,11 @@ import ProximityPrize.SubmissionLower.LocalMathlib_RingTheory_Etale_Basic
 import ProximityPrize.SubmissionLower.LocalMathlib_RingTheory_Kaehler_JacobiZariski
 import ProximityPrize.SubmissionLower.LocalMathlib_RingTheory_Smooth_Kaehler
 
-/-!
-Permitted flat proof port of Mathlib.RingTheory.Etale.Kaehler.
-Model label: gpt-5.
-Original Mathlib revision: 905b95818eb32af7874a58b427f50c1711a5e96c.
-Original source SHA256: 2e3c892fa69179c7b9438f7318a810116138243af7290e2dff5c8878f3f21d10.
-Original copyright and author notices are retained above.
-Modifications: module/public visibility packaging is removed; imports
-are replaced by the trusted target and the necessary flat proof ports.
-All mathematical declarations and proof bodies are retained, except
-any explicitly documented ordinary-term expansion below.
-The full Apache 2.0 license is in LocalMathlibPortLicense.lean.
--/
+/-! . -/
 
-/-!
-Ordinary elaboration repair after the actual WMI 229476 failure, model gpt-5:
-spell the diagnosed underconstrained compositions as LinearMap.comp, including
-the identical expression in the paired inverse-law proof. The right inverse
-also fixes the intended tensor coefficient type explicitly as (1 : T), after
-WMI 229479 exposed an unintended natural-number inference. Mathematical API,
-hypotheses, proof arguments, imports, copyrights and license are preserved.
-No kernel setting, protected source or dependency pin is changed.
--/
+/-! . -/
 
-/-! .
-
-
-
-
-
-
-
- -/
+/-! . -/
 
 section ProximityFlatProofPort
 
@@ -52,10 +25,7 @@ variable [Algebra R S] [Algebra R T] [Algebra S T] [IsScalarTower R S T]
 
 open TensorProduct
 
-/-- .
-
-
- -/
+/-- . -/
 @[simps! apply] noncomputable
 def KaehlerDifferential.tensorKaehlerEquivOfFormallyEtale [Algebra.FormallyEtale S T] :
     T ⊗[S] Ω[S⁄R] ≃ₗ[T] Ω[T⁄R] := by
@@ -103,14 +73,7 @@ attribute [local instance] SMulCommClass.of_commMonoid
 
 variable {R S T}
 
-/-! .
-
-
-
-
-
-
- -/
+/-! . -/
 variable {P : Extension.{u} R S} {Q : Extension.{u} R T} (f : P.Hom Q)
 
 set_option backward.defeqAttrib.useBackward true in
@@ -162,9 +125,7 @@ def tensorCotangentSpaceOfFormallyEtale
       ext a
       simp; rfl }
 
-/-- .
-
- -/
+/-- . -/
 noncomputable
 def tensorCotangentInvFun
     [alg : Algebra P.Ring Q.Ring] (halg : algebraMap P.Ring Q.Ring = f.toRingHom)
@@ -413,5 +374,3 @@ instance H1Cotangent.isLocalizedModule (M : Submonoid S) [IsLocalization M T] :
   exact (tensorH1CotangentOfIsLocalization R T M).bijective
 
 end Algebra
-
--- Transitive kernel dependency audits for this ordinary flat proof-port repair.

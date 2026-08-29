@@ -9,32 +9,10 @@ import ProximityPrize.SubmissionLower.LocalMathlibPortLicense
 import ProximityPrize.SubmissionLower.LocalMathlib_NumberTheory_RamificationInertia_Ramification
 import ProximityPrize.SubmissionLower.LocalMathlib_RingTheory_Valuation_Discrete_RankOne
 
-/-!
-Permitted flat proof port of Mathlib.NumberTheory.RamificationInertia.Valuation.
-Model label: gpt-5.
-Original Mathlib revision: 905b95818eb32af7874a58b427f50c1711a5e96c.
-Original source SHA256: 047561ca46cd68176272e1e678fbcc472fc939765b5e8245ea64979c4bd00d8a.
-Original copyright and author notices are retained above.
-Modifications: module/public visibility packaging is removed; imports
-are replaced by the trusted target and the necessary flat proof ports.
-All mathematical declarations and proof bodies are retained, except
-any explicitly documented ordinary-term expansion below.
-The full Apache 2.0 license is in LocalMathlibPortLicense.lean.
--/
+/-! . -/
 
 
-/-! .
-
-
-
-
-
-
-
-
-
-
- -/
+/-! . -/
 
 section ProximityFlatProofPort
 
@@ -80,26 +58,14 @@ theorem uniformContinuous_algebraMap_liesOver :
   rw [ContinuousAt, map_zero, (IsValuativeTopology.hasBasis_nhds_zero _).tendsto_iff
     (IsValuativeTopology.hasBasis_nhds_zero _)]
   intro γL _
-  /- 
 
-
-
-
-
-
-
-
-
-
-
--/
   let e := v.asIdeal.ramificationIdx' w.asIdeal
-  --
+
   let σL := WithVal.valueGroupOrderIso₀ (w.valuation L)
   let σw := valueGroup₀_equiv_withZeroMulInt (w.valuation L)
   let σwV := ValuativeRel.ValueGroupWithZero.orderMonoidIso (WithVal.valuation (w.valuation L))
   let m : ℤᵐ⁰ := σw (σL (σwV γL))
-  --
+
   let σvV := ValuativeRel.ValueGroupWithZero.orderMonoidIso (WithVal.valuation (v.valuation K))
   let σv := valueGroup₀_equiv_withZeroMulInt (v.valuation K)
   let σK := WithVal.valueGroupOrderIso₀ (v.valuation K)

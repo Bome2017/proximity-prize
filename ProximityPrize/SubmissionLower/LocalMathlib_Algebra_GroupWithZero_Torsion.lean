@@ -7,30 +7,9 @@ Authors: Kenny Lau, Xavier Roblot
 import ProximityPrize.Benchmark.TargetLower
 import ProximityPrize.SubmissionLower.LocalMathlibPortLicense
 
-/-!
-Permitted flat proof port of Mathlib.Algebra.GroupWithZero.Torsion.
-Model label: gpt-5.
-Original Mathlib revision: 905b95818eb32af7874a58b427f50c1711a5e96c.
-Original source SHA256: 690464d5bf13fce10a91bd15774810084d5d8435e35df2c33f8aaa3f21c54db0.
-Original copyright and author notices are retained above.
-Modifications: module/public visibility packaging is removed; imports
-are replaced by the trusted target and the necessary flat proof ports.
-All mathematical declarations and proof bodies are retained, except
-any explicitly documented ordinary-term expansion below.
-The full Apache 2.0 license is in LocalMathlibPortLicense.lean.
-Port elaboration adjustment: explicitly choose classical decidability in
-the existing case-split proof; its statement and argument are unchanged.
--/
+/-! . -/
 
-/-! .
-
-
-
-
-
-
-
- -/
+/-! . -/
 
 section ProximityFlatProofPort
 

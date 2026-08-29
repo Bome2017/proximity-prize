@@ -10,67 +10,11 @@ import ProximityPrize.SubmissionLower.LocalMathlib_RingTheory_Extension_Cotangen
 import ProximityPrize.SubmissionLower.LocalMathlib_RingTheory_Extension_Generators
 import ProximityPrize.SubmissionLower.LocalMathlib_Algebra_Module_SnakeLemma
 
-/-!
-Permitted flat proof port of Mathlib.RingTheory.Kaehler.JacobiZariski.
-Model label: gpt-5.
-Original Mathlib revision: 905b95818eb32af7874a58b427f50c1711a5e96c.
-Original source SHA256: 75e24c579169ec68663ca623bd252ea22a1b114bba72efe3769d1f5f3edd9b5e.
-Original copyright and author notices are retained above.
-Modifications: module/public visibility packaging is removed; imports
-are replaced by the trusted target and the necessary flat proof ports.
-All mathematical declarations and proof bodies are retained, except
-any explicitly documented ordinary-term expansion below.
-The full Apache 2.0 license is in LocalMathlibPortLicense.lean.
--/
+/-! . -/
 
-/-! .
+/-! . -/
 
-
-
-
-
- -/
-
-/-! .
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- -/
+/-! . -/
 
 section ProximityFlatProofPort
 
@@ -78,12 +22,12 @@ open KaehlerDifferential Module MvPolynomial TensorProduct
 
 namespace Algebra
 
---
---
---
---
---
---
+
+
+
+
+
+
 universe w₁ w₂ w₃ w₄ w₅ u₁ u₂ u₃
 
 variable {R : Type u₁} {S : Type u₂} [CommRing R] [CommRing S] [Algebra R S]
@@ -110,11 +54,7 @@ lemma Cotangent.surjective_map_ofComp :
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
 open Extension.Cotangent in
-/-- .
-
-
-
- -/
+/-- . -/
 lemma Cotangent.exact :
     Function.Exact
       ((Extension.Cotangent.map (Q.toComp P).toExtensionHom).liftBaseChange T)
@@ -163,8 +103,7 @@ lemma Cotangent.exact :
     · rw [map_mk]
       rfl
 
-/-- .
- -/
+/-- . -/
 noncomputable
 def CotangentSpace.compEquiv :
     (Q.comp P).toExtension.CotangentSpace ≃ₗ[T]
@@ -234,11 +173,7 @@ lemma CotangentSpace.map_ofComp_surjective :
   rw [← fst_compEquiv]
   exact (Prod.fst_surjective).comp (compEquiv Q P).surjective
 
-/-! .
-
-
-
- -/
+/-! . -/
 lemma CotangentSpace.exact :
     Function.Exact ((Extension.CotangentSpace.map (Q.toComp P).toExtensionHom).liftBaseChange T)
       (Extension.CotangentSpace.map (Q.ofComp P).toExtensionHom) := by
@@ -250,10 +185,7 @@ lemma CotangentSpace.exact :
 namespace H1Cotangent
 
 variable (R) in
-/-- .
-
-
- -/
+/-- . -/
 noncomputable
 def δAux :
     Q.Ring →ₗ[R] T ⊗[S] Ω[S⁄R] :=
@@ -349,23 +281,7 @@ lemma map_comp_cotangentComplex_baseChange :
   ext x; simp [Extension.CotangentSpace.map_cotangentComplex]
 
 open Generators in
-/-- .
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- -/
+/-- . -/
 noncomputable
 def δ :
     Q.toExtension.H1Cotangent →ₗ[T] T ⊗[S] Ω[S⁄R] :=
@@ -510,9 +426,7 @@ private lemma auxMemKer (z : T ⊗[S] P.toExtension.H1Cotangent) :
   | add x y hx hy => simpa using Submodule.add_mem _ hx hy
 
 open LinearMap in
-/-- .
-
- -/
+/-- . -/
 theorem exact_liftBaseChange_map_of_flat [Module.Flat S T] :
     Function.Exact ((Extension.H1Cotangent.map (toComp Q P).toExtensionHom).liftBaseChange T)
       (Extension.H1Cotangent.map (ofComp Q P).toExtensionHom) := by
@@ -533,8 +447,7 @@ theorem exact_liftBaseChange_map_of_flat [Module.Flat S T] :
   | tmul x y => ext; simp
   | add x y hx hy => ext; simp [hx (auxMemKer Q P x), hy (auxMemKer Q P y)]
 
-/-- .
- -/
+/-- . -/
 theorem exact_liftBaseChange_map_of_flat' [Module.Flat S T] (f : Hom W Q) (g : Hom P W) :
     Function.Exact ((Extension.H1Cotangent.map g.toExtensionHom).liftBaseChange T)
       (Extension.H1Cotangent.map f.toExtensionHom) := by
@@ -562,24 +475,18 @@ noncomputable
 def H1Cotangent.δ : H1Cotangent S T →ₗ[T] T ⊗[S] Ω[S⁄R] :=
   Generators.H1Cotangent.δ (Generators.self S T) (Generators.self R S)
 
-/-- .
-
- -/
+/-- . -/
 @[stacks 00S2]
 lemma H1Cotangent.exact_map_δ : Function.Exact (map R S T T) (δ R S T) :=
   Generators.H1Cotangent.exact_map_δ' (Generators.self S T)
     (Generators.self R S) (Generators.self R T) (Generators.defaultHom _ _)
 
-/-- .
-
- -/
+/-- . -/
 @[stacks 00S2]
 lemma H1Cotangent.exact_δ_mapBaseChange : Function.Exact (δ R S T) (mapBaseChange R S T) :=
   Generators.H1Cotangent.exact_δ_map (Generators.self S T) (Generators.self R S)
 
-/-- .
-
- -/
+/-- . -/
 @[stacks 00S2]
 lemma H1Cotangent.exact_liftBaseChange_map_of_flat [Module.Flat S T] :
     Function.Exact ((map R R S T).liftBaseChange T) (map R S T T) :=
@@ -588,5 +495,3 @@ lemma H1Cotangent.exact_liftBaseChange_map_of_flat [Module.Flat S T] :
     (Generators.defaultHom _ _) (Generators.defaultHom _ _)
 
 end Algebra
-
--- Kernel dependency audit for this isolated ordinary proof-port repair.

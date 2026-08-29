@@ -8,60 +8,9 @@ import ProximityPrize.Benchmark.TargetLower
 import ProximityPrize.SubmissionLower.LocalMathlibPortLicense
 import ProximityPrize.SubmissionLower.LocalMathlib_Order_GameAdd
 
-/-!
-Permitted flat proof port of Mathlib.Data.DFinsupp.WellFounded.
-Model label: gpt-5.
-Original Mathlib revision: 905b95818eb32af7874a58b427f50c1711a5e96c.
-Original source SHA256: c78cafb79ebf43a96a64703ae454cdb16aa93bbca7dba1093c95935488b426cc.
-Original copyright and author notices are retained above.
-Modifications: module/public visibility packaging is removed; imports
-are replaced by the trusted target and the necessary flat proof ports.
-All mathematical declarations and proof bodies are retained, except
-any explicitly documented ordinary-term expansion below.
-The full Apache 2.0 license is in LocalMathlibPortLicense.lean.
+/-! . -/
 
-Elaboration repair for the required TargetLower import environment:
-Lex.wellFounded explicitly binds the classical DecidableEq ι already used
-by its original classical proof; no decidability hypothesis is added.
-These changes do not add mathematical hypotheses or change the original
-mathematical declarations, conclusions, or proof arguments.
--/
-
-/-! .
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- -/
+/-! . -/
 
 section ProximityFlatProofPort
 
@@ -76,14 +25,7 @@ section Zero
 
 variable [∀ i, Zero (α i)] (r : ι → ι → Prop) (s : ∀ i, α i → α i → Prop)
 
-/-- .
-
-
-
-
-
-
- -/
+/-- . -/
 theorem lex_fibration [∀ (i) (s : Set ι), Decidable (i ∈ s)] :
     Fibration (InvImage (GameAdd (DFinsupp.Lex r s) (DFinsupp.Lex r s)) snd) (DFinsupp.Lex r s)
       fun x => piecewise x.2.1 x.2.2 x.1 := by

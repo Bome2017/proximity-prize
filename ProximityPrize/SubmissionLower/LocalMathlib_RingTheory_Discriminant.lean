@@ -8,56 +8,9 @@ import ProximityPrize.Benchmark.TargetLower
 import ProximityPrize.SubmissionLower.LocalMathlibPortLicense
 import ProximityPrize.SubmissionLower.LocalMathlib_RingTheory_Norm_Transitivity
 
-/-!
-Permitted flat proof port of Mathlib.RingTheory.Discriminant.
-Model label: gpt-5.
-Original Mathlib revision: 905b95818eb32af7874a58b427f50c1711a5e96c.
-Original source SHA256: 36ddd826bf8c3af0abf9eac1053f09c1b851380f7adc6685cd7fd1239740c42e.
-Original copyright and author notices are retained above.
-Modifications: module/public visibility packaging is removed; imports
-are replaced by the trusted target and the necessary flat proof ports.
-All mathematical declarations and proof bodies are retained, except
-any explicitly documented ordinary-term expansion below.
-The full Apache 2.0 license is in LocalMathlibPortLicense.lean.
--/
+/-! . -/
 
-/-! .
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- -/
+/-! . -/
 
 section ProximityFlatProofPort
 
@@ -75,8 +28,7 @@ variable [CommRing A] [CommRing B] [Algebra A B] [CommRing C] [Algebra A C]
 
 section Discr
 
-/-- .
- -/
+/-- . -/
 noncomputable def discr (A : Type u) {B : Type v} [CommRing A] [CommRing B] [Algebra A B]
     [Fintype ι] (b : ι → B) := (traceMatrix A b).det
 
@@ -115,15 +67,13 @@ theorem discr_zero_of_not_linearIndependent [IsDomain A] {b : ι → B}
 
 variable {A}
 
-/-- .
- -/
+/-- . -/
 theorem discr_of_matrix_vecMul (b : ι → B) (P : Matrix ι ι A) :
     discr A (b ᵥ* P.map (algebraMap A B)) = P.det ^ 2 * discr A b := by
   rw [discr_def, traceMatrix_of_matrix_vecMul, det_mul, det_mul, det_transpose, mul_comm, ←
     mul_assoc, discr_def, pow_two]
 
-/-- .
- -/
+/-- . -/
 theorem discr_of_matrix_mulVec (b : ι → B) (P : Matrix ι ι A) :
     discr A (P.map (algebraMap A B) *ᵥ b) = P.det ^ 2 * discr A b := by
   rw [discr_def, traceMatrix_of_matrix_mulVec, det_mul, det_mul, det_transpose, mul_comm, ←
@@ -143,17 +93,13 @@ theorem discr_not_zero_of_basis [Algebra.IsSeparable K L] (b : Basis ι K L) :
   rw [discr_def, traceMatrix_of_basis, ← LinearMap.BilinForm.nondegenerate_iff_det_ne_zero]
   exact traceForm_nondegenerate _ _
 
-/-- .
- -/
+/-- . -/
 theorem discr_isUnit_of_basis [Algebra.IsSeparable K L] (b : Basis ι K L) : IsUnit (discr K b) :=
   IsUnit.mk0 _ (discr_not_zero_of_basis _ _)
 
 variable (b : ι → L) (pb : PowerBasis K L)
 
-/-- .
-
-
- -/
+/-- . -/
 theorem discr_eq_det_embeddingsMatrixReindex_pow_two
     [Algebra.IsSeparable K L] (e : ι ≃ (L →ₐ[K] E)) :
     algebraMap K E (discr K b) = (embeddingsMatrixReindex K E b e).det ^ 2 := by
@@ -198,8 +144,8 @@ theorem discr_powerBasis_eq_prod'' [Algebra.IsSeparable K L] (e : Fin pb.dim ≃
   rw [← Nat.cast_sum, ← @Finset.sum_range ℕ _ pb.dim fun i => i, sum_range_id]
   have hn : n = pb.dim := by
     rw [← AlgHom.card K L E, ← Fintype.card_fin pb.dim]
-    --
-    --
+
+
     exact Fintype.card_congr e.symm
   have h₂ : 2 ∣ pb.dim * (pb.dim - 1) := pb.dim.even_mul_pred_self.two_dvd
   have hne : ((2 : ℕ) : ℚ) ≠ 0 := by simp
@@ -255,17 +201,13 @@ section Integral
 
 variable {R : Type z} [CommRing R] [Algebra R K] [Algebra R L] [IsScalarTower R K L]
 
-/-- .
- -/
+/-- . -/
 theorem discr_isIntegral {b : ι → L} (h : ∀ i, IsIntegral R (b i)) : IsIntegral R (discr K b) := by
   classical
   rw [discr_def]
   exact IsIntegral.det fun i j ↦ isIntegral_trace ((h i).mul (h j))
 
-/-- .
-
-
- -/
+/-- . -/
 theorem discr_mul_isIntegral_mem_adjoin [Algebra.IsSeparable K L] [IsIntegrallyClosed R]
     [IsFractionRing R K] {B : PowerBasis K L} (hint : IsIntegral R B.gen) {z : L}
     (hz : IsIntegral R z) : discr K B.basis • z ∈ adjoin R ({B.gen} : Set L) := by

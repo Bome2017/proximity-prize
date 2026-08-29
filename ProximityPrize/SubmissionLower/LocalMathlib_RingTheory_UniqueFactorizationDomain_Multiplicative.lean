@@ -7,32 +7,9 @@ Authors: Johannes Hölzl, Jens Wagemaker, Aaron Anderson
 import ProximityPrize.Benchmark.TargetLower
 import ProximityPrize.SubmissionLower.LocalMathlibPortLicense
 
-/-!
-Permitted flat proof port of Mathlib.RingTheory.UniqueFactorizationDomain.Multiplicative.
-Model label: gpt-5.
-Original Mathlib revision: 905b95818eb32af7874a58b427f50c1711a5e96c.
-Original source SHA256: 437125697b120fa9c5e29a4a4e069a4c8fcdc18094f24ebfdd05667ca8ae9cdb.
-Original copyright and author notices are retained above.
-Modifications: module/public visibility packaging is removed; imports
-are replaced by the trusted target and the necessary flat proof ports.
-All mathematical declarations and proof bodies are retained, except
-any explicitly documented ordinary-term expansion below.
-The full Apache 2.0 license is in LocalMathlibPortLicense.lean.
-Port elaboration adjustment: omit the upstream assert_not_exists Field development
-check, which only enforces Mathlib's original import layering and is incompatible
-with the required TargetLower import. Every mathematical declaration and proof
-is retained; no challenge checker, target, or verification infrastructure is changed.
--/
+/-! . -/
 
-/-! .
-
-
-
-
-
-
-
- -/
+/-! . -/
 
 section ProximityFlatProofPort
 
@@ -65,9 +42,7 @@ theorem prime_pow_coprime_prod_of_coprime_insert [DecidableEq α] {s : Finset α
   rw [Finset.mem_val,
     is_coprime _ (Finset.mem_insert_self p s) _ (Finset.mem_insert_of_mem q_mem) this]
 
-/-- .
-
- -/
+/-- . -/
 @[elab_as_elim]
 theorem induction_on_prime_power {P : α → Prop} (s : Finset α) (i : α → ℕ)
     (is_prime : ∀ p ∈ s, Prime p) (is_coprime : ∀ᵉ (p ∈ s) (q ∈ s), p ∣ q → p = q)
@@ -85,9 +60,7 @@ theorem induction_on_prime_power {P : α → Prop} (s : Finset α) (i : α → �
         (ih (fun q hq => is_prime _ (Finset.mem_insert_of_mem hq)) fun q hq q' hq' =>
           is_coprime _ (Finset.mem_insert_of_mem hq) _ (Finset.mem_insert_of_mem hq'))
 
-/-- .
-
- -/
+/-- . -/
 @[elab_as_elim]
 theorem induction_on_coprime {P : α → Prop} (a : α) (h0 : P 0) (h1 : ∀ {x}, IsUnit x → P x)
     (hpr : ∀ {p} (i : ℕ), Prime p → P (p ^ i))
@@ -106,8 +79,7 @@ theorem induction_on_coprime {P : α → Prop} (a : α) (h0 : P 0) (h1 : ∀ {x}
   · apply prime_of_normalized_factor
   · apply normalizedFactors_eq_of_dvd
 
-/-- .
- -/
+/-- . -/
 theorem multiplicative_prime_power {f : α → β} (s : Finset α) (i j : α → ℕ)
     (is_prime : ∀ p ∈ s, Prime p) (is_coprime : ∀ᵉ (p ∈ s) (q ∈ s), p ∣ q → p = q)
     (h1 : ∀ {x y}, IsUnit y → f (x * y) = f x * f y)
@@ -127,8 +99,7 @@ theorem multiplicative_prime_power {f : α → β} (s : Finset α) (i j : α →
       hpr _ hpr_p, hcp (hcp_p _), hpr _ hpr_p, hcp (hcp_p (fun p => i p + j p)), hpr _ hpr_p,
       ih hpr_s hcp_s, pow_add, mul_assoc, mul_left_comm (f p ^ j p), mul_assoc]
 
-/-- .
- -/
+/-- . -/
 theorem multiplicative_of_coprime (f : α → β) (a b : α) (h0 : f 0 = 0)
     (h1 : ∀ {x y}, IsUnit y → f (x * y) = f x * f y)
     (hpr : ∀ {p} (i : ℕ), Prime p → f (p ^ i) = f p ^ i)

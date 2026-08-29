@@ -8,66 +8,18 @@ import ProximityPrize.Benchmark.TargetLower
 import ProximityPrize.SubmissionLower.LocalMathlibPortLicense
 import ProximityPrize.SubmissionLower.LocalMathlib_RingTheory_Invariant_Defs
 
-/-!
-Permitted flat proof port of Mathlib.RingTheory.IsGaloisGroup.Defs.
-Model label: gpt-5.
-Original Mathlib revision: 905b95818eb32af7874a58b427f50c1711a5e96c.
-Original source SHA256: d96c79f130eb50e1e2cc1fe7734d576c489491c8ade4de96c06bb1630180e5f4.
-Original copyright and author notices are retained above.
-Modifications: module/public visibility packaging is removed; imports
-are replaced by the trusted target and the necessary flat proof ports.
-All mathematical declarations and proof bodies are retained, except
-any explicitly documented ordinary-term expansion below.
-The full Apache 2.0 license is in LocalMathlibPortLicense.lean.
+/-! . -/
 
-Elaboration repair for the required TargetLower import environment:
-Only the upstream development-time dependency-layering assertion expecting
-IsFractionRing to be absent is omitted: the required trusted TargetLower
-import already provides it. The class and every mathematical proof remain
-unchanged; no protected verifier or import-policy check is edited.
-These changes do not add mathematical hypotheses or change the original
-mathematical declarations, conclusions, or proof arguments.
--/
-
-/-! .
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- -/
+/-! . -/
 
 section ProximityFlatProofPort
 
---
+
 
 variable (G A A' B : Type*) [Group G] [CommSemiring A] [Semiring B] [Algebra A B]
   [MulSemiringAction G B]
 
-/-- .
-
-
-
- -/
+/-- . -/
 class IsGaloisGroup where
   faithful : FaithfulSMul G B
   commutes : SMulCommClass G A B
@@ -140,8 +92,7 @@ attribute [instance low] IsGaloisGroup.commutes IsGaloisGroup.isInvariant
 
 variable [hA : IsGaloisGroup G A B] [FaithfulSMul A B]
 
-/-- .
- -/
+/-- . -/
 @[simps apply_coe]
 noncomputable def ringEquivFixedPoints :
     A ≃+* FixedPoints.subsemiring B G where

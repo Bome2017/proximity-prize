@@ -8,30 +8,9 @@ import ProximityPrize.Benchmark.TargetLower
 import ProximityPrize.SubmissionLower.LocalMathlibPortLicense
 import ProximityPrize.SubmissionLower.LocalMathlib_RingTheory_Spectrum_Prime_TensorProduct
 
-/-!
-Permitted flat proof port of Mathlib.RingTheory.LocalRing.ResidueField.Fiber.
-Model label: gpt-5.
-Original Mathlib revision: 905b95818eb32af7874a58b427f50c1711a5e96c.
-Original source SHA256: 8e59563f8d7a01af1a51f2b4062902543cd63cd960f9bc1ef293130f14554294.
-Original copyright and author notices are retained above.
-Modifications: module/public visibility packaging is removed; imports
-are replaced by the trusted target and the necessary flat proof ports.
-All mathematical declarations and proof bodies are retained, except
-any explicitly documented ordinary-term expansion below.
-The full Apache 2.0 license is in LocalMathlibPortLicense.lean.
--/
+/-! . -/
 
-/-! .
-
-
-
-
-
-
-
-
-
- -/
+/-! . -/
 
 section ProximityFlatProofPort
 
@@ -70,19 +49,14 @@ lemma ResidueField.exists_smul_eq_tmul_one
     ← IsLocalRing.ResidueField.algebraMap_eq, ← algebraMap.coe_smul,
     ← IsScalarTower.algebraMap_apply] using congr(t • $e)
 
-/-- .
-
-
- -/
+/-- . -/
 abbrev Fiber (p : Ideal R) [p.IsPrime] (S : Type*) [AddCommGroup S] [Module R S] : Type _ :=
   p.ResidueField ⊗[R] S
 
 instance (q : Ideal (p.Fiber S)) [q.IsPrime] : q.LiesOver p :=
   .trans _ (⊥ : Ideal p.ResidueField) _
 
-/-- .
-
- -/
+/-- . -/
 instance (q : Ideal (p.Fiber S)) [q.IsPrime] : Localization.AtPrime.IsLiesOverAlgebra p q where
   algebraMap_eq := (Localization.localRingHom_unique p q _ (Ideal.over_def q p) fun _ ↦ rfl).symm
 
@@ -160,8 +134,7 @@ end Ideal
 
 set_option backward.isDefEq.respectTransparency false in
 variable (R S) in
-/-- .
- -/
+/-- . -/
 @[simps]
 noncomputable def PrimeSpectrum.preimageEquivFiber (p : PrimeSpectrum R) :
     comap (algebraMap R S) ⁻¹' {p} ≃ PrimeSpectrum (p.asIdeal.Fiber S) where
@@ -176,7 +149,7 @@ noncomputable def PrimeSpectrum.preimageEquivFiber (p : PrimeSpectrum R) :
   right_inv q := by
     ext x
     obtain ⟨r, hr, s, e⟩ := Ideal.Fiber.exists_smul_eq_one_tmul _ x
-    have := @PrimeSpectrum.isPrime --
+    have := @PrimeSpectrum.isPrime
     rw [← Ideal.IsPrime.mul_mem_left_iff (x := algebraMap _ _ r), iff_comm,
       ← Ideal.IsPrime.mul_mem_left_iff (x := algebraMap _ _ r), ← Algebra.smul_def, e]
     · simp
@@ -187,8 +160,7 @@ noncomputable def PrimeSpectrum.preimageEquivFiber (p : PrimeSpectrum R) :
         -Ideal.ResidueField.map_algebraMap]
 
 variable (R S) in
-/-- .
- -/
+/-- . -/
 @[simps!]
 noncomputable def PrimeSpectrum.preimageOrderIsoFiber (p : PrimeSpectrum R) :
     comap (algebraMap R S) ⁻¹' {p} ≃o PrimeSpectrum (p.asIdeal.Fiber S) where
@@ -210,8 +182,7 @@ noncomputable def PrimeSpectrum.preimageOrderIsoFiber (p : PrimeSpectrum R) :
 alias PrimeSpectrum.preimageOrderIsoTensorResidueField := PrimeSpectrum.preimageOrderIsoFiber
 
 variable (R S) in
-/-- .
- -/
+/-- . -/
 @[simps!]
 noncomputable def PrimeSpectrum.primesOverOrderIsoFiber (R S : Type*) [CommRing R]
     [CommRing S] [Algebra R S] (p : Ideal R) [p.IsPrime] :
@@ -220,8 +191,7 @@ noncomputable def PrimeSpectrum.primesOverOrderIsoFiber (R S : Type*) [CommRing 
     fun q ↦ ⟨q.1.asIdeal, ⟨q.1.2, ⟨congr($(q.2).1).symm⟩⟩⟩, fun _ ↦ rfl, fun _ ↦ rfl⟩, .rfl⟩
     (PrimeSpectrum.preimageOrderIsoFiber R S ⟨p, ‹_›⟩)
 
-/-- .
- -/
+/-- . -/
 @[simps!]
 noncomputable def PrimeSpectrum.preimageHomeomorphFiber (R S : Type*) [CommRing R]
     [CommRing S] [Algebra R S] (p : PrimeSpectrum R) :

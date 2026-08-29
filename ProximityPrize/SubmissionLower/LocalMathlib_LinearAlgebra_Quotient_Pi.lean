@@ -7,34 +7,9 @@ Authors: Anne Baanen, Alex J. Best
 import ProximityPrize.Benchmark.TargetLower
 import ProximityPrize.SubmissionLower.LocalMathlibPortLicense
 
-/-!
-Permitted flat proof port of Mathlib.LinearAlgebra.Quotient.Pi.
-Model label: gpt-5.
-Original Mathlib revision: 905b95818eb32af7874a58b427f50c1711a5e96c.
-Original source SHA256: d9da9d2d65eac42d61ebce4b4577b5669368330273cdd4a7310214763fb8a4ce.
-Original copyright and author notices are retained above.
-Modifications: module/public visibility packaging is removed; imports
-are replaced by the trusted target and the necessary flat proof ports.
-All mathematical declarations and proof bodies are retained, except
-any explicitly documented ordinary-term expansion below.
-The full Apache 2.0 license is in LocalMathlibPortLicense.lean.
-Port elaboration adjustment: qualify LinearMap.sum_apply to avoid an ambient
-namespace ambiguity; the original statements and proof steps are retained.
--/
+/-! . -/
 
-/-! .
-
-
-
-
-
-
-
-
-
-
-
- -/
+/-! . -/
 
 section ProximityFlatProofPort
 

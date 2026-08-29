@@ -9,54 +9,9 @@ import ProximityPrize.SubmissionLower.LocalMathlibPortLicense
 import ProximityPrize.SubmissionLower.LocalMathlib_RingTheory_Extension_Generators
 import ProximityPrize.SubmissionLower.LocalMathlib_RingTheory_MvPolynomial_Localization
 
-/-!
-Permitted flat proof port of Mathlib.RingTheory.Extension.Presentation.Basic.
-Model label: gpt-5.
-Original Mathlib revision: 905b95818eb32af7874a58b427f50c1711a5e96c.
-Original source SHA256: d61f013a5e08fbabb8816e4a10bf0a0f47a45e0ebefa628868a42e0f48e2e69a.
-Original copyright and author notices are retained above.
-Modifications: module/public visibility packaging is removed; imports
-are replaced by the trusted target and the necessary flat proof ports.
-All mathematical declarations and proof bodies are retained, except
-any explicitly documented ordinary-term expansion below.
-The full Apache 2.0 license is in LocalMathlibPortLicense.lean.
+/-! . -/
 
-Candidate compatibility repairs: qualify the intended MvPolynomial.X terms
-and escape the original local proof identifier Z to avoid unrelated ambient
-bivariate notation. Mathematical declarations, hypotheses, and proof arguments
-are unchanged; no resource limits are changed.
--/
-
-/-! .
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- -/
+/-! . -/
 
 section ProximityFlatProofPort
 
@@ -66,11 +21,7 @@ open TensorProduct MvPolynomial
 
 variable (R : Type u) (S : Type v) (ι : Type w) (σ : Type t) [CommRing R] [CommRing S] [Algebra R S]
 
-/-- .
-
-
-
- -/
+/-- . -/
 structure Algebra.Presentation extends Algebra.Generators R S ι where
   /-- . -/
   relation : σ → toGenerators.Ring
@@ -110,14 +61,7 @@ lemma quotientEquiv_symm (x : S) : P.quotientEquiv.symm x = P.σ x :=
   rfl
 
 set_option linter.unusedVariables false in
-/-- .
-
-
-
-
-
-
- -/
+/-- . -/
 @[nolint unusedArguments]
 noncomputable def dimension (P : Presentation R S ι σ) : ℕ :=
   Nat.card ι - Nat.card σ
@@ -126,8 +70,7 @@ lemma fg_ker [Finite σ] : P.ker.FG := by
   use (Set.finite_range P.relation).toFinset
   simp [span_range_relation_eq_ker]
 
-/-- .
- -/
+/-- . -/
 instance [Finite σ] [Finite ι] : FinitePresentation R P.Quotient :=
   FinitePresentation.quotient P.fg_ker
 
@@ -235,8 +178,7 @@ lemma _root_.Algebra.Generators.ker_localizationAway :
   simp [RingHom.ker_equiv, ← RingHom.ker_eq_comap_bot]
 
 variable (S) in
-/-- .
- -/
+/-- . -/
 @[simps relation]
 noncomputable def localizationAway : Presentation R S Unit Unit where
   toGenerators := Generators.localizationAway S r
@@ -303,8 +245,7 @@ lemma span_range_relation_eq_ker_baseChange :
     convert! H'
     simp [e]
 
-/-- .
- -/
+/-- . -/
 @[simps relation]
 noncomputable
 def baseChange : Presentation T (T ⊗[R] S) ι σ where
@@ -318,53 +259,17 @@ end BaseChange
 
 section Composition
 
-/-! .
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- -/
+/-! . -/
 
 variable {ι' σ' T : Type*} [CommRing T] [Algebra S T]
 variable (Q : Presentation S T ι' σ') (P : Presentation R S ι σ)
 
-/-- .
- -/
+/-- . -/
 private noncomputable def aux (_Q : Presentation S T ι' σ') (P : Presentation R S ι σ) :
     MvPolynomial (ι' ⊕ ι) R →ₐ[R] MvPolynomial ι' S :=
   aeval (Sum.elim _root_.MvPolynomial.X (MvPolynomial.C ∘ P.val))
 
-/-- .
- -/
+/-- . -/
 noncomputable def compRelationAux (r : σ') : MvPolynomial (ι' ⊕ ι) R :=
   (AddMonoidAlgebra.coeff <| Q.relation r).sum
     (fun x j ↦ (MvPolynomial.rename Sum.inr <| P.σ j) * monomial (x.mapDomain Sum.inl) 1)
@@ -445,8 +350,7 @@ lemma span_range_relation_eq_ker_comp : Ideal.span
   ext
   simp
 
-/-- .
- -/
+/-- . -/
 @[simps -isSimp relation]
 noncomputable def comp : Presentation R T (ι' ⊕ ι) (σ' ⊕ σ) where
   toGenerators := Q.toGenerators.comp P.toGenerators
@@ -469,10 +373,7 @@ lemma comp_aeval_relation_inl (r : σ') :
 
 variable (g : S) [IsLocalization.Away g T] (P : Generators R S ι)
 
-/-- .
-
-
- -/
+/-- . -/
 lemma relation_comp_localizationAway_inl (P : Presentation R S ι σ)
     (h1 : P.σ (-1) = -1) (h0 : P.σ 0 = 0) (r : Unit) :
     ((Presentation.localizationAway T g).comp P).relation (Sum.inl r) =
@@ -488,9 +389,7 @@ lemma relation_comp_localizationAway_inl (P : Presentation R S ι σ)
 
 end Composition
 
-/-- .
-
- -/
+/-- . -/
 @[simps toGenerators]
 noncomputable def reindex (P : Presentation R S ι σ)
     {ι' σ' : Type*} (e : ι' ≃ ι) (f : σ' ≃ σ) :
@@ -518,10 +417,7 @@ variable {v : ι → MvPolynomial σ R}
   (s : MvPolynomial σ R ⧸ (Ideal.span <| Set.range v) → MvPolynomial σ R)
   (hs : ∀ x, Ideal.Quotient.mk _ (s x) = x)
 
-/-- .
-
-
- -/
+/-- . -/
 @[simps! toGenerators]
 noncomputable
 def naive {v : ι → MvPolynomial σ R}

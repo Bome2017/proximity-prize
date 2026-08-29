@@ -13,40 +13,9 @@ import ProximityPrize.SubmissionLower.LocalKaehlerBasic
 import ProximityPrize.SubmissionLower.LocalMathlib_RingTheory_Localization_Away_AdjoinRoot
 import ProximityPrize.SubmissionLower.LocalMathlib_Algebra_Algebra_Shrink
 
-/-!
-Permitted flat proof port of Mathlib.RingTheory.Unramified.Basic.
-Model label: gpt-5.
-Original Mathlib revision: 905b95818eb32af7874a58b427f50c1711a5e96c.
-Original source SHA256: 3515fc6cb9dca5ac2299be57f26e635ec27ebf8210939a036c04117dc1144714.
-Original copyright and author notices are retained above.
-Modifications: module/public visibility packaging is removed; imports
-are replaced by the trusted target and the necessary flat proof ports.
-All mathematical declarations and proof bodies are retained, except
-any explicitly documented ordinary-term expansion below.
-The full Apache 2.0 license is in LocalMathlibPortLicense.lean.
--/
+/-! . -/
 
-/-! .
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- -/
+/-! . -/
 
 section ProximityFlatProofPort
 
@@ -60,12 +29,7 @@ section
 
 variable (R : Type v) (A : Type u) [CommRing R] [CommRing A] [Algebra R A]
 
-/-- .
-
-
-
-
- -/
+/-- . -/
 @[mk_iff, stacks 00UM]
 class FormallyUnramified : Prop where
   subsingleton_kaehlerDifferential : Subsingleton Ω[A⁄R]
@@ -324,11 +288,7 @@ instance [FormallyUnramified R S] (M : Submonoid S) : FormallyUnramified R (Loca
   .comp _ S _
 
 set_option linter.unusedSectionVars false in
-/-- .
-
-
-
- -/
+/-- . -/
 @[nolint unusedArguments]
 theorem localization_base [FormallyUnramified R Sₘ] : FormallyUnramified Rₘ Sₘ :=
   FormallyUnramified.of_restrictScalars R Rₘ Sₘ
@@ -342,8 +302,7 @@ theorem localization_map [FormallyUnramified R S] :
 
 end Localization
 
-/-- .
- -/
+/-- . -/
 lemma exists_algEquiv_prod (R S : Type u) [CommRing R] [CommRing S]
     [Algebra R S] [Algebra.EssFiniteType R S] [Algebra.FormallyUnramified R S] :
     ∃ (T : Type u) (_ : CommRing T) (_ : Algebra S T), Nonempty (S ⊗[R] S ≃ₐ[S] S × T) := by

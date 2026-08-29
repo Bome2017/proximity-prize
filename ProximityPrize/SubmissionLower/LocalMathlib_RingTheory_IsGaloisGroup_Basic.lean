@@ -9,38 +9,15 @@ import ProximityPrize.SubmissionLower.LocalMathlibPortLicense
 import ProximityPrize.SubmissionLower.LocalMathlib_RingTheory_Invariant_Basic
 import ProximityPrize.SubmissionLower.LocalMathlib_RingTheory_IsGaloisGroup_Defs
 
-/-!
-Permitted flat proof port of Mathlib.RingTheory.IsGaloisGroup.Basic.
-Model label: gpt-5.
-Original Mathlib revision: 905b95818eb32af7874a58b427f50c1711a5e96c.
-Original source SHA256: 491ecd2ac89e55c08624430b1f6ae8f6288a1c4878f908da655e203a93b870ee.
-Original copyright and author notices are retained above.
-Modifications: module/public visibility packaging is removed; imports
-are replaced by the trusted target and the necessary flat proof ports.
-All mathematical declarations and proof bodies are retained, except
-any explicitly documented ordinary-term expansion below.
-The full Apache 2.0 license is in LocalMathlibPortLicense.lean.
+/-! . -/
 
-Elaboration repair (gpt-5, 2026-08-27): the copied development-only
-`assert_not_exists IntermediateField.adjoin` import-layering assertion is
-omitted because the permitted TargetLower already imports that declaration.
-No mathematical declaration or proof is removed or changed; no protected
-challenge check is changed.
--/
-
-/-! .
-
-
-
-
-
- -/
+/-! . -/
 
 section ProximityFlatProofPort
 
---
---
---
+
+
+
 
 open Module
 
@@ -100,8 +77,7 @@ theorem IsGaloisGroup.to_isFractionRing [Finite G] [hGAB : IsGaloisGroup G A B] 
   have := hGAB.isInvariant.isIntegral
   IsGaloisGroup.to_isFractionRing_of_isIntegral G A B K L
 
-/-- .
- -/
+/-- . -/
 theorem IsGaloisGroup.of_isFractionRing [hGKL : IsGaloisGroup G K L]
     [IsIntegrallyClosed A] [Algebra.IsIntegral A B] : IsGaloisGroup G A B := by
   have hc (a : A) : (algebraMap K L) (algebraMap A K a) = (algebraMap B L) (algebraMap A B a) := by
@@ -120,8 +96,7 @@ theorem IsGaloisGroup.of_isFractionRing [hGKL : IsGaloisGroup G K L]
     obtain ⟨a, rfl⟩ := hx
     exact ⟨a, by rwa [hc, IsFractionRing.coe_inj] at hb⟩
 
-/-- .
- -/
+/-- . -/
 theorem IsGaloisGroup.iff_isFractionRing [Finite G] [IsIntegrallyClosed A] :
     IsGaloisGroup G A B ↔ Algebra.IsIntegral A B ∧ IsGaloisGroup G K L :=
   ⟨fun h ↦ ⟨h.isInvariant.isIntegral, h.to_isFractionRing G A B K L⟩,
@@ -130,11 +105,7 @@ theorem IsGaloisGroup.iff_isFractionRing [Finite G] [IsIntegrallyClosed A] :
 @[deprecated (since := "2026-04-20")] alias FractionRing.mulSemiringAction_of_isGaloisGroup :=
   IsFractionRing.mulSemiringAction
 
-/-- .
-
-
-
- -/
+/-- . -/
 instance IsGaloisGroup.toFractionRing [IsDomain A] [IsDomain B] [Finite G]
     [IsGaloisGroup G A B] [Algebra (FractionRing A) (FractionRing B)]
     [IsScalarTower A (FractionRing A) (FractionRing B)] :
@@ -185,9 +156,7 @@ section Semiring
 variable (A B C : Type*) [CommSemiring A] [Semiring C] [Algebra A C] [MulSemiringAction G C]
 variable (N : Subgroup G) [CommSemiring B] [Algebra B C]
 
-/-- .
-
- -/
+/-- . -/
 @[implicit_reducible]
 noncomputable def smulOfNormal [N.Normal] [IsGaloisGroup N B C] : SMul G B where
   smul g x := (smul_mem_of_normal G C N g x).choose
@@ -198,8 +167,7 @@ theorem algebraMap_smulOfNormal [N.Normal] [IsGaloisGroup N B C] (g : G) (x : B)
     algebraMap B C (g • x) = g • algebraMap B C x :=
   (smul_mem_of_normal G C N g x).choose_spec
 
-/-- .
- -/
+/-- . -/
 instance smulDistribClass_smulOfNormal [N.Normal] [IsGaloisGroup N B C] :
     letI := smulOfNormal G B C
     SMulDistribClass G B C :=
@@ -208,8 +176,7 @@ instance smulDistribClass_smulOfNormal [N.Normal] [IsGaloisGroup N B C] :
 
 variable [FaithfulSMul B C]
 
-/-- .
- -/
+/-- . -/
 @[implicit_reducible]
 noncomputable def mulSemiringActionOfNormal [IsGaloisGroup N B C] [N.Normal] :
     MulSemiringAction G B := by
@@ -217,8 +184,7 @@ noncomputable def mulSemiringActionOfNormal [IsGaloisGroup N B C] [N.Normal] :
   have : SMulDistribClass G B C := smulDistribClass_smulOfNormal G B C N
   exact mulSemiringActionOfSmulDistribClass B C G
 
-/-- .
- -/
+/-- . -/
 @[implicit_reducible]
 noncomputable def mulSemiringActionQuotient [IsGaloisGroup N B C] [N.Normal] :
     MulSemiringAction (G ⧸ N) B :=

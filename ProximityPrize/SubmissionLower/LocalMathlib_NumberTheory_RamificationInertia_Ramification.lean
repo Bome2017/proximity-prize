@@ -8,42 +8,9 @@ import ProximityPrize.Benchmark.TargetLower
 import ProximityPrize.SubmissionLower.LocalMathlibPortLicense
 import ProximityPrize.SubmissionLower.LocalMathlib_Algebra_GroupWithZero_Torsion
 
-/-!
-Permitted flat proof port of Mathlib.NumberTheory.RamificationInertia.Ramification.
-Model label: gpt-5.
-Original Mathlib revision: 905b95818eb32af7874a58b427f50c1711a5e96c.
-Original source SHA256: 87eae446d93ec8d7e79cf4f47bacd2cafc381c99c744f2bb150507c0ea7d967f.
-Original copyright and author notices are retained above.
-Modifications: module/public visibility packaging is removed; imports
-are replaced by the trusted target and the necessary flat proof ports.
-All mathematical declarations and proof bodies are retained, except
-any explicitly documented ordinary-term expansion below.
-The full Apache 2.0 license is in LocalMathlibPortLicense.lean.
--/
+/-! . -/
 
-/-! .
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- -/
+/-! . -/
 
 section ProximityFlatProofPort
 
@@ -66,16 +33,7 @@ attribute [local instance] Ideal.Quotient.field
 
 section DecEq
 
-/-- .
-
-
-
-
-
-
-
-
- -/
+/-- . -/
 noncomputable def ramificationIdx' : ℕ := sSup {n | map f p ≤ P ^ n}
 
 variable {p P}
@@ -217,8 +175,7 @@ lemma ramificationIdx'_ne_one_iff (hp : map f p ≤ P) :
   ramificationIdx'_ne_one_iff
 
 open IsLocalRing in
-/-- .
- -/
+/-- . -/
 lemma ramificationIdx'_eq_one_of_map_localization
     {p : Ideal R} {P : Ideal S} [P.IsPrime] [IsNoetherianRing S]
     (hpP : map (algebraMap R S) p ≤ P) (hp : P ≠ ⊥) (hp' : P.primeCompl ≤ nonZeroDivisors S)
@@ -355,8 +312,7 @@ theorem emultiplicity_map_eq_zero_of_ne [IsDedekindDomain R] {v : Ideal R}
   rw [Ideal.dvd_iff_le, Ideal.map_le_iff_le_comap, ← under_def, ← Ideal.over_def w v] at h
   exact ((isPrime_of_prime hp).isMaximal hp.ne_zero).eq_of_le (isPrime_of_prime hv.prime).ne_top h
 
-/-- .
- -/
+/-- . -/
 private theorem emultiplicity_map_eq_ramificationIdx'_mul_of_prime [IsDedekindDomain R]
     [FaithfulSMul R S] {v : Ideal R} {w : Ideal S} {p : Ideal R}
     (hv : Irreducible v) (hp : Prime p) (hw : Irreducible w) (hw_bot : w ≠ ⊥)
@@ -370,9 +326,7 @@ private theorem emultiplicity_map_eq_ramificationIdx'_mul_of_prime [IsDedekindDo
   · rw [emultiplicity_eq_zero_of_irreducible_ne hv hp.irreducible hvp, mul_zero,
       emultiplicity_map_eq_zero_of_ne hv hp hvp]
 
-/-- .
-
- -/
+/-- . -/
 theorem emultiplicity_map_eq_ramificationIdx'_mul [IsDedekindDomain R]
     [FaithfulSMul R S] {v : Ideal R} {w : Ideal S} {I : Ideal R} (h : I ≠ ⊥)
     (hv : Irreducible v) (hw : Irreducible w) (hw_bot : w ≠ ⊥) [w.LiesOver v] :
@@ -401,8 +355,7 @@ section tower
 variable {R S T : Type*} [CommRing R] [CommRing S] [CommRing T]
 variable [Algebra R S] [Algebra S T] [Algebra R T] [IsScalarTower R S T]
 
-/-- .
- -/
+/-- . -/
 theorem ramificationIdx'_algebra_tower [IsDedekindDomain S] [IsDedekindDomain T]
     {p : Ideal R} {P : Ideal S} {Q : Ideal T} [hpm : P.IsPrime] [hqm : Q.IsPrime]
     (hg0 : map (algebraMap S T) P ≠ ⊥)

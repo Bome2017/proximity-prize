@@ -13,48 +13,11 @@ import ProximityPrize.SubmissionLower.LocalMathlib_RingTheory_DedekindDomain_Ins
 import ProximityPrize.SubmissionLower.LocalMathlib_RingTheory_Ideal_Int
 import ProximityPrize.SubmissionLower.LocalMathlib_RingTheory_NormalClosure
 
-/-!
-Permitted flat proof port of Mathlib.RingTheory.Ideal.Norm.RelNorm.
-Model label: gpt-5.
-Original Mathlib revision: 905b95818eb32af7874a58b427f50c1711a5e96c.
-Original source SHA256: 5a0692e5e18d26ddaa0c29e1b3d6e29434bd20fbe5776f8a512b430e770ca4b2.
-Original copyright and author notices are retained above.
-Modifications: module/public visibility packaging is removed; imports
-are replaced by the trusted target and the necessary flat proof ports.
-All mathematical declarations and proof bodies are retained, except
-any explicitly documented ordinary-term expansion below.
-The full Apache 2.0 license is in LocalMathlibPortLicense.lean.
--/
+/-! . -/
 
-/-! .
+/-! . -/
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- -/
-
-/-! .
-
-
-
-
-
-
- -/
+/-! . -/
 
 section ProximityFlatProofPort
 
@@ -73,11 +36,7 @@ variable [IsTorsionFree R S]
 
 attribute [local instance] FractionRing.liftAlgebra
 
-/-- .
-
-
-
- -/
+/-- . -/
 noncomputable def spanNorm (I : Ideal S) : Ideal R :=
   Ideal.map (Algebra.intNorm R S) I
 
@@ -189,9 +148,7 @@ theorem spanNorm_mul_spanNorm_le (I J : Ideal S) :
   rintro _ ⟨x, hxI, y, hyJ, rfl⟩
   exact Ideal.mul_mem_mul hxI hyJ
 
-/-- .
-
- -/
+/-- . -/
 theorem spanNorm_mul_of_bot_or_top (eq_bot_or_top : ∀ I : Ideal R, I = ⊥ ∨ I = ⊤) (I J : Ideal S) :
     spanNorm R (I * J) = spanNorm R I * spanNorm R J := by
   refine le_antisymm ?_ (spanNorm_mul_spanNorm_le R _ _)
@@ -252,11 +209,7 @@ theorem le_spanNorm_spanNorm (I : Ideal S) : spanNorm R I ≤ spanNorm R (spanNo
   rintro _ ⟨x, hx, rfl⟩
   exact ⟨intNorm T S x, subset_span <| Set.mem_image_of_mem _ hx, by rw [intNorm_intNorm]⟩
 
-/-- .
-
-
-
- -/
+/-- . -/
 theorem spanNorm_spanNorm_of_bot_or_top (eq_bot_or_top : ∀ I : Ideal R, I = ⊥ ∨ I = ⊤)
     (I : Ideal S) : spanNorm R (spanNorm T I) = spanNorm R I := by
   obtain h | h := eq_bot_or_top (spanNorm R I)
@@ -287,8 +240,7 @@ end spanNorm_spanNorm
 
 variable [IsDedekindDomain R] [IsDedekindDomain S]
 
-/-- .
- -/
+/-- . -/
 noncomputable def relNorm : Ideal S →*₀ Ideal R where
   toFun := spanNorm R
   map_zero' := spanNorm_bot R
@@ -402,9 +354,7 @@ section relNorm_prime
 
 variable {R} {S} (P : Ideal S) (p : Ideal R) [hPp : P.LiesOver p]
 
-/-- .
-
- -/
+/-- . -/
 theorem exists_relNorm_eq_pow_of_isPrime [p.IsPrime] : ∃ s, relNorm R P = p ^ s := by
   by_cases hp : p = ⊥
   · refine ⟨1, ?_⟩
@@ -416,10 +366,7 @@ theorem exists_relNorm_eq_pow_of_isPrime [p.IsPrime] : ∃ s, relNorm R P = p ^ 
   obtain ⟨s, _, hs⟩ := h
   exact ⟨s, by rwa [associated_iff_eq] at hs⟩
 
-/-- .
-
-
- -/
+/-- . -/
 theorem relNorm_eq_pow_of_isPrime_isGalois [p.IsMaximal] [P.IsPrime]
     [IsGalois (FractionRing R) (FractionRing S)] : relNorm R P = p ^ P.inertiaDeg R := by
   have : P.IsMaximal := IsMaximal.of_liesOver_isMaximal P p

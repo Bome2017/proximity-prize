@@ -9,43 +9,9 @@ import ProximityPrize.SubmissionLower.LocalMathlibPortLicense
 import ProximityPrize.SubmissionLower.LocalMathlib_RingTheory_Finiteness_Quotient
 import ProximityPrize.SubmissionLower.LocalMathlib_RingTheory_Ideal_Norm_AbsNorm
 
-/-!
-Permitted flat proof port of Mathlib.NumberTheory.RamificationInertia.Inertia.
-Model label: gpt-5.
-Original Mathlib revision: 905b95818eb32af7874a58b427f50c1711a5e96c.
-Original source SHA256: 76a79db651e57cbb3f78c8cb8a94223caab520ffc0d29c2a6bb67559bda77085.
-Original copyright and author notices are retained above.
-Modifications: module/public visibility packaging is removed; imports
-are replaced by the trusted target and the necessary flat proof ports.
-All mathematical declarations and proof bodies are retained, except
-any explicitly documented ordinary-term expansion below.
-The full Apache 2.0 license is in LocalMathlibPortLicense.lean.
--/
+/-! . -/
 
-/-! .
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- -/
+/-! . -/
 
 section ProximityFlatProofPort
 
@@ -70,23 +36,14 @@ section DecEq
 
 variable {S₁ : Type*} [CommRing S₁] [Algebra R S₁]
 
-/-- .
-
-
-
-
-
-
-
-
- -/
+/-- . -/
 noncomputable def inertiaDeg' : ℕ :=
   if hPp : comap f P = p then
     letI : Algebra (R ⧸ p) (S ⧸ P) := Quotient.algebraQuotientOfLEComap hPp.ge
     finrank (R ⧸ p) (S ⧸ P)
   else 0
 
---
+
 @[simp]
 theorem inertiaDeg'_of_subsingleton [hp : p.IsMaximal] [hQ : Subsingleton (S ⧸ P)] :
     inertiaDeg' p P = 0 := by
@@ -179,18 +136,14 @@ lemma absNorm_eq_pow_inertiaDeg'_of_liesOver {S : Type*} [CommRing S] [IsDedekin
 @[deprecated (since := "2026-07-03")] alias absNorm_eq_pow_inertiaDeg_of_liesOver :=
   absNorm_eq_pow_inertiaDeg'_of_liesOver
 
-/-- .
-
- -/
+/-- . -/
 lemma absNorm_eq_pow_inertiaDeg [IsDedekindDomain R] [Module.Free ℤ R] [Module.Finite ℤ R] {p : ℤ}
     (P : Ideal R) [P.LiesOver (span {p})] (hp : Prime p) :
     absNorm P = p.natAbs ^ ((span {p}).inertiaDeg' P) := by
   simpa using absNorm_eq_pow_inertiaDeg'_of_liesOver P (span {p})
     (by rwa [span_singleton_prime hp.ne_zero]) (by simpa using hp.ne_zero)
 
-/-- .
-
- -/
+/-- . -/
 lemma absNorm_eq_pow_inertiaDeg' [IsDedekindDomain R] [Module.Free ℤ R] [Module.Finite ℤ R] {p : ℕ}
     (P : Ideal R) [P.LiesOver (span {(p : ℤ)})] (hp : p.Prime) :
     absNorm P = p ^ ((span {(p : ℤ)}).inertiaDeg' P) :=
@@ -203,9 +156,7 @@ section tower
 variable {R S T : Type*} [CommRing R] [CommRing S] [CommRing T]
 variable [Algebra R S] [Algebra S T] [Algebra R T] [IsScalarTower R S T]
 
-/-- .
-
- -/
+/-- . -/
 theorem inertiaDeg'_algebra_tower (p : Ideal R) (P : Ideal S) (I : Ideal T) [p.IsMaximal]
     [P.IsMaximal] [P.LiesOver p] [I.LiesOver P] : inertiaDeg' p I =
     inertiaDeg' p P * inertiaDeg' P I := by

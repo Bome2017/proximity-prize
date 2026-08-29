@@ -7,50 +7,9 @@ Authors: Andrew Yang
 import ProximityPrize.Benchmark.TargetLower
 import ProximityPrize.SubmissionLower.LocalMathlibPortLicense
 
-/-!
-Permitted flat proof port of Mathlib.RingTheory.Idempotents.
-Model label: gpt-5.
-Original Mathlib revision: 905b95818eb32af7874a58b427f50c1711a5e96c.
-Original source SHA256: e4c11db5e888464c81ab8668daedbe8c9e26ee697c32b66a08713c643dac183b.
-Original copyright and author notices are retained above.
-Modifications: module/public visibility packaging is removed; imports
-are replaced by the trusted target and the necessary flat proof ports.
-All mathematical declarations and proof bodies are retained, except
-any explicitly documented ordinary-term expansion below.
-The full Apache 2.0 license is in LocalMathlibPortLicense.lean.
-Port elaboration adjustment: explicitly bind classical decidable equality
-for the original finite-index proofs, preserving all mathematical statements.
--/
+/-! . -/
 
-/-! .
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- -/
+/-! . -/
 
 section ProximityFlatProofPort
 
@@ -142,11 +101,7 @@ lemma OrthogonalIdempotents.option (he : OrthogonalIdempotents e) [Fintype I] (x
 
 variable [Fintype I]
 
-/-- .
-
-
-
- -/
+/-- . -/
 @[mk_iff]
 structure CompleteOrthogonalIdempotents (e : I → R) : Prop extends OrthogonalIdempotents e where
   complete : ∑ i, e i = 1
@@ -492,8 +447,7 @@ lemma RingHom.prod_bijective_of_isIdempotentElem {e f : R} (he : IsIdempotentEle
   · simpa
 
 variable (R) in
-/-- .
- -/
+/-- . -/
 @[simps! -isSimp apply, simps! apply_fst apply_snd]
 noncomputable def AlgEquiv.prodQuotientOfIsIdempotentElem
     {S : Type*} [CommRing S] [Algebra R S] {e f : S} (he : IsIdempotentElem e)
@@ -502,10 +456,7 @@ noncomputable def AlgEquiv.prodQuotientOfIsIdempotentElem
   AlgEquiv.ofBijective ((Ideal.Quotient.mkₐ _ _).prod (Ideal.Quotient.mkₐ _ _)) <|
     RingHom.prod_bijective_of_isIdempotentElem he hf hef₁ hef₂
 
-/-- .
-
-
- -/
+/-- . -/
 lemma CompleteOrthogonalIdempotents.exists_eq_comp_of_ker_eq_span
     (f : R →+* S) (e₀ : R) (he₀ : IsIdempotentElem e₀) (hfe₀ : RingHom.ker f = .span {e₀})
     (e : I → S) (he : CompleteOrthogonalIdempotents e) (hef : ∀ i, e i ∈ f.range) :
@@ -542,8 +493,7 @@ namespace Subsemigroup
 
 variable [Semigroup R]
 
-/-- .
- -/
+/-- . -/
 def corner : Subsemigroup R where
   carrier := Set.range (e * · * e)
   mul_mem' := by rintro _ _ ⟨a, rfl⟩ ⟨b, rfl⟩; exact ⟨a * e * e * b, by simp_rw [mul_assoc]⟩
@@ -569,22 +519,19 @@ lemma mem_corner_iff_mem_range_mul_right (hc : IsMulCentral e) {r : R} :
     r ∈ corner e ↔ r ∈ Set.range (· * e) := by
   simp_rw [mem_corner_iff_mem_range_mul_left idem hc, (hc.comm _).eq]
 
-/-- .
- -/
+/-- . -/
 @[nolint unusedArguments]
 def _root_.IsIdempotentElem.Corner (_ : IsIdempotentElem e) : Type _ := Subsemigroup.corner e
 
 end Subsemigroup
 
-/-- .
- -/
+/-- . -/
 def NonUnitalSubsemiring.corner [NonUnitalSemiring R] : NonUnitalSubsemiring R where
   __ := Subsemigroup.corner e
   add_mem' := by rintro _ _ ⟨a, rfl⟩ ⟨b, rfl⟩; exact ⟨a + b, by simp_rw [mul_add, add_mul]⟩
   zero_mem' := ⟨0, by simp_rw [mul_zero, zero_mul]⟩
 
-/-- .
- -/
+/-- . -/
 def NonUnitalRing.corner [NonUnitalRing R] : NonUnitalSubring R where
   __ := NonUnitalSubsemiring.corner e
   neg_mem' := by rintro _ ⟨a, rfl⟩; exact ⟨-a, by simp_rw [mul_neg, neg_mul]⟩
@@ -612,8 +559,7 @@ instance [NonUnitalCommRing R] (idem : IsIdempotentElem e) : CommRing idem.Corne
 
 variable {I : Type*} [Fintype I] {e : I → R}
 
-/-- .
- -/
+/-- . -/
 def CompleteOrthogonalIdempotents.ringEquivOfIsMulCentral [Semiring R]
     (he : CompleteOrthogonalIdempotents e) (hc : ∀ i, IsMulCentral (e i)) :
     R ≃+* Π i, (he.idem i).Corner where
@@ -637,8 +583,7 @@ def CompleteOrthogonalIdempotents.ringEquivOfIsMulCentral [Semiring R]
       simp_rw [mul_assoc]
   map_add' r₁ r₂ := funext fun i ↦ Subtype.ext <| by simpa [mul_add] using! add_mul ..
 
-/-- .
- -/
+/-- . -/
 def CompleteOrthogonalIdempotents.ringEquivOfComm [CommSemiring R]
     (he : CompleteOrthogonalIdempotents e) : R ≃+* Π i, (he.idem i).Corner :=
   he.ringEquivOfIsMulCentral fun _ ↦ Semigroup.mem_center_iff.mpr fun _ ↦ mul_comm ..

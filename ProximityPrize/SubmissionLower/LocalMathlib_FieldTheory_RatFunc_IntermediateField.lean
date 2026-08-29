@@ -7,31 +7,11 @@ Authors: Miriam Philipp, Justus Springer, Junyan Xu
 import ProximityPrize.Benchmark.TargetLower
 import ProximityPrize.SubmissionLower.LocalMathlibPortLicense
 
-/-!
-Permitted flat proof port of Mathlib.FieldTheory.RatFunc.IntermediateField.
-Model label: gpt-5.
-Original Mathlib revision: 905b95818eb32af7874a58b427f50c1711a5e96c.
-Original source SHA256: 768f64cee55e4a59ede0f596e2f692acd09f3fd4cfc634d9a60534a050a507d8.
-Original copyright and author notices are retained above.
-Modifications: module/public visibility packaging is removed; imports
-are replaced by the trusted target and the necessary flat proof ports.
-All mathematical declarations and proof bodies are retained, except
-any explicitly documented ordinary-term expansion below.
-The full Apache 2.0 license is in LocalMathlibPortLicense.lean.
--/
+/-! . -/
 
-/-!
-Port elaboration repairs (gpt-5, 2026-08-27): qualify RatFunc.X against
-the trusted target's conflicting polynomial notation. Prove the existing
-bivariate swap identity with its public map/swap lemmas instead of unfolding
-the evaluation implementation. All original statements and definitions remain.
--/
+/-! . -/
 
-/-! .
-
-
-
- -/
+/-! . -/
 
 variable {K : Type*} [Field K]
 
@@ -57,8 +37,7 @@ noncomputable def IntermediateField.adjoinXEquiv (E : IntermediateField K K⟮X�
     E⟮(RatFunc.X : K⟮X⟯)⟯ ≃ₐ[E] K⟮X⟯ :=
   (equivOfEq (adjoin_X E)).trans topEquiv
 
-/-- .
- -/
+/-- . -/
 noncomputable abbrev minpolyX (A : Type*) [CommRing A] [Algebra K A] [Algebra K[f] A] : A[X] :=
   f.num.map (algebraMap K A) -
   Polynomial.C (algebraMap K[f] A (⟨f, self_mem_adjoin_singleton K f⟩ : K[f])) *

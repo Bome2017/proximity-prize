@@ -9,35 +9,9 @@ import ProximityPrize.SubmissionLower.LocalMathlibPortLicense
 import ProximityPrize.SubmissionLower.LocalMathlib_NumberTheory_RamificationInertia_Inertia
 import ProximityPrize.SubmissionLower.LocalMathlib_RingTheory_QuasiFinite_Basic
 
-/-!
-Permitted flat proof port of Mathlib.RingTheory.RamificationInertia.Inertia.
-Model label: gpt-5.
-Original Mathlib revision: 905b95818eb32af7874a58b427f50c1711a5e96c.
-Original source SHA256: 758503ca5d2a8366b84cd17302fa5576d0ed17ecf052f8d9f2b3035b8040b7b2.
-Original copyright and author notices are retained above.
-Modifications: module/public visibility packaging is removed; imports
-are replaced by the trusted target and the necessary flat proof ports.
-All mathematical declarations and proof bodies are retained, except
-any explicitly documented ordinary-term expansion below.
-The full Apache 2.0 license is in LocalMathlibPortLicense.lean.
--/
+/-! . -/
 
-/-! .
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- -/
+/-! . -/
 
 section ProximityFlatProofPort
 
@@ -48,12 +22,7 @@ section
 variable {S : Type*} [CommRing S] (q : Ideal S) (R : Type*) [CommRing R] [Algebra R S]
 
 open scoped Classical in
-/-- .
-
-
-
-
- -/
+/-- . -/
 noncomputable def inertiaDeg : ℕ :=
   if _ : q.IsPrime then
     letI := Localization.AtPrime.algebraOfLiesOver (q.under R) q

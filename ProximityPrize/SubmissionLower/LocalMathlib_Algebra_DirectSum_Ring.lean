@@ -9,87 +9,9 @@ import ProximityPrize.SubmissionLower.LocalMathlibPortLicense
 import ProximityPrize.SubmissionLower.LocalGradedMonoid
 import ProximityPrize.SubmissionLower.LocalMathlib_Algebra_Ring_Associator
 
-/-!
-Permitted flat proof port of Mathlib.Algebra.DirectSum.Ring.
-Model label: gpt-5.
-Original Mathlib revision: 905b95818eb32af7874a58b427f50c1711a5e96c.
-Original source SHA256: ee63a11371190f3bc23da4b8aff43cbdf1d204a42ef1788e384eaaeadb8bfdaa.
-Original copyright and author notices are retained above.
-Modifications: module/public visibility packaging is removed; imports
-are replaced by the trusted target and the necessary flat proof ports.
-All mathematical declarations and proof bodies are retained, except
-any explicitly documented ordinary-term expansion below.
-The full Apache 2.0 license is in LocalMathlibPortLicense.lean.
--/
+/-! . -/
 
-/-! .
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- -/
+/-! . -/
 
 section ProximityFlatProofPort
 
@@ -114,11 +36,9 @@ class GNonUnitalNonAssocSemiring [Add ι] [∀ i, AddCommMonoid (A i)] extends
   mul_zero : ∀ {i j} (a : A i), mul a (0 : A j) = 0
   /-- . -/
   zero_mul : ∀ {i j} (b : A j), mul (0 : A i) b = 0
-  /-- .
- -/
+  /-- . -/
   mul_add : ∀ {i j} (a : A i) (b c : A j), mul a (b + c) = mul a b + mul a c
-  /-- .
- -/
+  /-- . -/
   add_mul : ∀ {i j} (a b : A i) (c : A j), mul (a + b) c = mul a c + mul b c
 
 end Defs
@@ -145,12 +65,10 @@ class GCommSemiring [AddCommMonoid ι] [∀ i, AddCommMonoid (A i)] extends GSem
 class GRing [AddMonoid ι] [∀ i, AddCommGroup (A i)] extends GSemiring A where
   /-- . -/
   intCast : ℤ → A 0
-  /-- .
- -/
+  /-- . -/
   intCast_ofNat : ∀ n : ℕ, intCast n = natCast n
-  /-- .
- -/
-  -- Porting note: -(n + 1) -> Int.negSucc
+  /-- . -/
+
   intCast_negSucc_ofNat : ∀ n : ℕ, intCast (Int.negSucc n) = -natCast (n + 1 : ℕ)
 
 /-- . -/
@@ -195,7 +113,7 @@ def gMulHom {i j} : A i →+ A j →+ A (i + j) where
   map_add' _ _ := AddMonoidHom.ext fun _ => GNonUnitalNonAssocSemiring.add_mul _ _ _
 
 /-- . -/
---
+
 @[reducible]
 def mulHom : (⨁ i, A i) →+ (⨁ i, A i) →+ ⨁ i, A i :=
   DirectSum.toAddMonoid fun _ =>
@@ -249,7 +167,7 @@ private nonrec theorem mul_one (x : ⨁ i, A i) : x * 1 = x := by
 
 set_option backward.defeqAttrib.useBackward true in
 private theorem mul_assoc (a b c : ⨁ i, A i) : a * b * c = a * (b * c) := by
-  --
+
   suffices AddMonoidHom.mulLeft₃ = AddMonoidHom.mulRight₃ by
       simpa only [AddMonoidHom.mulLeft₃_apply, AddMonoidHom.mulRight₃_apply] using
         DFunLike.congr_fun (DFunLike.congr_fun (DFunLike.congr_fun this a) b) c
@@ -301,9 +219,9 @@ theorem mul_eq_dfinsuppSum [∀ (i : ι) (x : A i), Decidable (x ≠ 0)] (a a' :
     a * a'
       = a.sum fun _ ai => a'.sum fun _ aj => DirectSum.of _ _ <| GradedMonoid.GMul.mul ai aj := by
   change mulHom _ a a' = _
-  -- Porting note: I have no idea how the proof from ml3 worked it used to be
-  --
-  --
+
+
+
   rw [mulHom, toAddMonoid, DFinsupp.liftAddHom_apply]
   dsimp only [DirectSum]
   rw [DFinsupp.sumAddHom_apply, AddMonoidHom.dfinsuppSum_apply]
@@ -350,7 +268,7 @@ section Ring
 
 variable [∀ i, AddCommGroup (A i)] [AddMonoid ι] [GRing A]
 
--- Porting note: overspecified fields in ml4
+
 /-- . -/
 instance ring : Ring (⨁ i, A i) where
   toIntCast.intCast z := of A 0 <| (GRing.intCast z)
@@ -369,17 +287,7 @@ instance commRing : CommRing (⨁ i, A i) where
 
 end CommRing
 
-/-! .
-
-
-
-
-
-
-
-
-
- -/
+/-! . -/
 
 
 section GradeZero
@@ -406,15 +314,13 @@ theorem of_zero_smul {i} (a : A 0) (b : A i) : of _ _ (a • b) = of _ _ a * of 
 theorem of_zero_mul (a b : A 0) : of _ 0 (a * b) = of _ 0 a * of _ 0 b :=
   of_zero_smul A a b
 
-/-- .
- -/
+/-- . -/
 scoped instance (priority := 900) :
     NonUnitalNonAssocSemiring (A 0) :=
   Function.Injective.nonUnitalNonAssocSemiring (of A 0) DFinsupp.single_injective (of A 0).map_zero
     (of A 0).map_add (of_zero_mul A) (map_nsmul _)
 
-/-- .
- -/
+/-- . -/
 scoped instance (i : ι) : SMulWithZero (A 0) (A i) := by
   letI := SMulWithZero.compHom (⨁ i, A i) (of A 0).toZeroHom
   exact Function.Injective.smulWithZero (of A i).toZeroHom DFinsupp.single_injective
@@ -429,7 +335,7 @@ variable [∀ i, AddCommMonoid (A i)] [AddMonoid ι] [GSemiring A]
 @[simp]
 theorem of_zero_pow (a : A 0) : ∀ n : ℕ, of A 0 (a ^ n) = of A 0 a ^ n
   | 0 => by rw [pow_zero, pow_zero, DirectSum.of_zero_one]
-  -- Porting note: Lean doesn't think this terminates if we only use `of_zero_pow` alone
+
   | n + 1 => by rw [pow_succ, pow_succ, of_zero_mul, of_zero_pow _ n]
 
 /-- . -/
@@ -437,8 +343,8 @@ scoped instance (priority := 900) : NatCast (A 0) :=
   ⟨GSemiring.natCast⟩
 
 
---
---
+
+
 @[simp]
 theorem of_natCast (n : ℕ) : of A 0 n = n :=
   rfl
@@ -459,9 +365,7 @@ def ofZeroRingHom : A 0 →+* ⨁ i, A i :=
     map_one' := of_zero_one A
     map_mul' := of_zero_mul A }
 
-/-- .
-
- -/
+/-- . -/
 scoped instance {i} : Module (A 0) (A i) :=
   letI := Module.compHom (⨁ i, A i) (ofZeroRingHom A)
   DFinsupp.single_injective.module (A 0) (of A i) fun a => of_zero_smul A a
@@ -531,10 +435,7 @@ section ToSemiring
 variable {R : Type*} [∀ i, AddCommMonoid (A i)] [AddMonoid ι] [GSemiring A] [Semiring R]
 variable {A}
 
-/-- .
-
-
- -/
+/-- . -/
 @[ext]
 theorem ringHom_ext' ⦃F G : (⨁ i, A i) →+* R⦄
     (h : ∀ i, (↑F : _ →+ R).comp (of A i) = (↑G : _ →+ R).comp (of A i)) : F = G :=
@@ -544,13 +445,7 @@ theorem ringHom_ext' ⦃F G : (⨁ i, A i) →+* R⦄
 theorem ringHom_ext ⦃f g : (⨁ i, A i) →+* R⦄ (h : ∀ i x, f (of A i x) = g (of A i x)) : f = g :=
   ringHom_ext' fun i => AddMonoidHom.ext <| h i
 
-/-- .
-
-
-
-
-
- -/
+/-- . -/
 @[simps]
 def toSemiring (f : ∀ i, A i →+ R) (hone : f _ GradedMonoid.GOne.one = 1)
     (hmul : ∀ {i j} (ai : A i) (aj : A j), f _ (GradedMonoid.GMul.mul ai aj) = f _ ai * f _ aj) :
@@ -580,9 +475,7 @@ theorem toSemiring_coe_addMonoidHom (f : ∀ i, A i →+ R) (hone hmul) :
     (toSemiring f hone hmul : (⨁ i, A i) →+ R) = toAddMonoid f :=
   rfl
 
-/-- .
-
- -/
+/-- . -/
 @[simps]
 def liftRingHom :
     { f : ∀ {i}, A i →+ R //
@@ -619,8 +512,7 @@ section Uniform
 
 variable (ι)
 
-/-- .
- -/
+/-- . -/
 instance NonUnitalNonAssocSemiring.directSumGNonUnitalNonAssocSemiring {R : Type*} [AddMonoid ι]
     [NonUnitalNonAssocSemiring R] : DirectSum.GNonUnitalNonAssocSemiring fun _ : ι => R where
   mul_zero := mul_zero
@@ -644,7 +536,7 @@ instance Ring.directSumGRing {R : Type*} [AddMonoid ι] [Ring R] :
 
 open DirectSum
 
---
+
 example {R : Type*} [AddMonoid ι] [Semiring R] (i j : ι) (a b : R) :
     (DirectSum.of _ i a * DirectSum.of _ j b : ⨁ _, R) = DirectSum.of _ (i + j) (a * b) := by
   rw [DirectSum.of_mul_of, Mul.gMul_mul]

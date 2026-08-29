@@ -8,64 +8,9 @@ import ProximityPrize.Benchmark.TargetLower
 import ProximityPrize.SubmissionLower.LocalMathlibPortLicense
 import ProximityPrize.SubmissionLower.LocalMathlib_Data_Finsupp_WellFounded
 
-/-!
-Permitted flat proof port of Mathlib.Data.Finsupp.MonomialOrder.
-Model label: gpt-5.
-Original Mathlib revision: 905b95818eb32af7874a58b427f50c1711a5e96c.
-Original source SHA256: 71114bf9b47d6a60687bfb3809b826415fedd02b01ac0de53d372865ee289736.
-Original copyright and author notices are retained above.
-Modifications: module/public visibility packaging is removed; imports
-are replaced by the trusted target and the necessary flat proof ports.
-All mathematical declarations and proof bodies are retained, except
-any explicitly documented ordinary-term expansion below.
-The full Apache 2.0 license is in LocalMathlibPortLicense.lean.
--/
+/-! . -/
 
-/-! .
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- -/
+/-! . -/
 
 section ProximityFlatProofPort
 
@@ -151,7 +96,7 @@ open Finsupp
 
 open scoped MonomialOrder
 
---
+
 noncomputable instance {α N : Type*} [LinearOrder α]
     [AddCommMonoid N] [PartialOrder N] [IsOrderedCancelAddMonoid N] :
     IsOrderedCancelAddMonoid (Lex (α →₀ N)) where

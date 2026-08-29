@@ -9,53 +9,9 @@ import ProximityPrize.SubmissionLower.LocalMathlibPortLicense
 import ProximityPrize.SubmissionLower.LocalMathlib_RingTheory_Kaehler_Polynomial
 import ProximityPrize.SubmissionLower.LocalMathlib_RingTheory_Extension_Presentation_Basic
 
-/-!
-Permitted flat proof port of Mathlib.RingTheory.Extension.Cotangent.Basic.
-Model label: gpt-5.
-Original Mathlib revision: 905b95818eb32af7874a58b427f50c1711a5e96c.
-Original source SHA256: 194206bb2f0ba4529dcefcd99a93348b595c99eb311c8226ee03a1f371a82e74.
-Original copyright and author notices are retained above.
-Modifications: module/public visibility packaging is removed; imports
-are replaced by the trusted target and the necessary flat proof ports.
-All mathematical declarations and proof bodies are retained, except
-any explicitly documented ordinary-term expansion below.
-The full Apache 2.0 license is in LocalMathlibPortLicense.lean.
+/-! . -/
 
-Elaboration repair (gpt-5, 2026-08-27): spell out the three ambiguous
-linear-map compositions and their LinearEquiv.toLinearMap coercions, and
-qualify the intended MvPolynomial.X constructor. The required TargetLower
-imports otherwise expose unrelated lens-composition and bivariate-X notation.
-No mathematical hypotheses, definitions, conclusions, or proof arguments
-are changed; these are the ordinary linear maps of the original formulas.
--/
-
-/-! .
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- -/
+/-! . -/
 
 section ProximityFlatProofPort
 
@@ -71,10 +27,7 @@ namespace Extension
 
 variable (P : Extension.{w} R S)
 
-/-- .
-
-
- -/
+/-- . -/
 abbrev CotangentSpace : Type _ := S ⊗[P.Ring] Ω[P.Ring⁄R]
 
 /-- . -/
@@ -100,8 +53,7 @@ section baseChange
 variable {A : Type*} [CommRing A] [Algebra S A] [Algebra P.Ring A] [IsScalarTower P.Ring S A]
 
 variable (R S) in
-/-- .
- -/
+/-- . -/
 noncomputable
 def _root_.KaehlerDifferential.cotangentComplexBaseChange
     (P A : Type*) [CommRing P] [CommRing A] [Algebra P S] [Algebra P A]
@@ -163,10 +115,7 @@ variable [IsScalarTower R R' R''] [IsScalarTower S S' S'']
 
 namespace CotangentSpace
 
-/-- .
-
-
- -/
+/-- . -/
 protected noncomputable
 def map (f : Hom P P') : P.CotangentSpace →ₗ[S] P'.CotangentSpace := by
   letI := ((algebraMap S S').comp (algebraMap P.Ring S)).toAlgebra
@@ -254,10 +203,7 @@ lemma Hom.sub_aux (f g : Hom P P') (x y) :
   simp only [map_mul]
   ring
 
-/-- .
-
-
- -/
+/-- . -/
 @[simps! apply_coe]
 noncomputable
 def Hom.subToKer (f g : Hom P P') : P.Ring →ₗ[R] P'.ker := by
@@ -269,11 +215,7 @@ def Hom.subToKer (f g : Hom P P') : P.Ring →ₗ[R] P'.ker := by
     sub_self, toAlgHom_apply]
 
 variable [IsScalarTower R S S'] in
-/-- .
-
-
-
- -/
+/-- . -/
 noncomputable
 def Hom.sub (f g : Hom P P') : P.CotangentSpace →ₗ[S] P'.Cotangent := by
   letI := ((algebraMap S S').comp (algebraMap P.Ring S)).toAlgebra
@@ -358,11 +300,7 @@ lemma exact_cotangentComplex_toKaehler : Function.Exact P.cotangentComplex P.toK
   exact_kerCotangentToTensor_mapBaseChange _ _ _ P.algebraMap_surjective
 
 variable (P) in
-/-- .
-
-
-
- -/
+/-- . -/
 protected noncomputable
 def H1Cotangent : Type _ := LinearMap.ker P.cotangentComplex
 
@@ -410,9 +348,7 @@ lemma exact_hCotangentι_cotangentComplex : Function.Exact h1Cotangentι P.cotan
   rw [LinearMap.exact_iff]
   exact (Submodule.range_subtype _).symm
 
-/-- .
-
- -/
+/-- . -/
 @[simps!]
 noncomputable
 def H1Cotangent.map (f : Hom P P') : P.H1Cotangent →ₗ[S] P'.H1Cotangent := by
@@ -445,8 +381,7 @@ lemma H1Cotangent.map_comp_apply (f : Hom P P') (g : Hom P' P'') (x : P.H1Cotang
     map (g.comp f) x = map g (map f x) :=
   congr($(H1Cotangent.map_comp f g) x)
 
-/-- .
- -/
+/-- . -/
 @[simps! apply]
 noncomputable
 def H1Cotangent.equiv {P₁ P₂ : Extension R S} (f₁ : P₁.Hom P₂) (f₂ : P₂.Hom P₁) :
@@ -501,8 +436,7 @@ lemma cotangentSpaceBasis_apply (i) :
 instance (P : Generators R S ι) : Module.Free S P.toExtension.CotangentSpace :=
   .of_basis P.cotangentSpaceBasis
 
-/-- .
- -/
+/-- . -/
 noncomputable
 def cotangentRestrict {σ : Type*} {u : σ → ι} (hu : Function.Injective u) :
     P.toExtension.Cotangent →ₗ[S] (σ →₀ S) :=
@@ -567,9 +501,9 @@ end Generators
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
---
+
 set_option linter.flexible false in
---
+
 open KaehlerDifferential in
 attribute [local instance] Module.finitePresentation_of_projective in
 instance [Algebra.FinitePresentation R S] : Module.FinitePresentation S Ω[S⁄R] := by
@@ -608,7 +542,7 @@ def H1Cotangent.map : H1Cotangent R S' →ₗ[S'] H1Cotangent S T :=
 noncomputable
 def H1Cotangent.mapEquiv (e : S ≃ₐ[R] S') :
     H1Cotangent R S ≃ₗ[R] H1Cotangent R S' :=
-  --
+
   letI := e.toRingHom.toAlgebra
   letI := e.symm.toRingHom.toAlgebra
   have : IsScalarTower R S S' := .of_algebraMap_eq' e.toAlgHom.comp_algebraMap.symm
@@ -638,7 +572,7 @@ abbrev Generators.equivH1Cotangent (P : Generators R S ι) :
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
---
+
 set_option linter.flexible false in
 attribute [local instance] Module.finitePresentation_of_projective in
 instance [FinitePresentation R S] [Module.Projective S Ω[S⁄R]] :
@@ -658,5 +592,3 @@ instance [FinitePresentation R S] [Module.Projective S Ω[S⁄R]] :
     _ P.toExtension.cotangentComplex.surjective_rangeRestrict
 
 end Algebra
-
-/- -/

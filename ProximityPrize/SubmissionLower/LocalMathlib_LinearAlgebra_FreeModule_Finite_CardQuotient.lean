@@ -10,28 +10,9 @@ import ProximityPrize.SubmissionLower.LocalMathlib_Data_Int_Associated
 import ProximityPrize.SubmissionLower.LocalMathlib_Data_Int_NatAbs
 import ProximityPrize.SubmissionLower.LocalMathlib_LinearAlgebra_FreeModule_Finite_Quotient
 
-/-!
-Permitted flat proof port of Mathlib.LinearAlgebra.FreeModule.Finite.CardQuotient.
-Model label: gpt-5.
-Original Mathlib revision: 905b95818eb32af7874a58b427f50c1711a5e96c.
-Original source SHA256: 79993198e810d5cab56597d8c5df62c1526a603c2789891c1c83f34908712ea4.
-Original copyright and author notices are retained above.
-Modifications: module/public visibility packaging is removed; imports
-are replaced by the trusted target and the necessary flat proof ports.
-All mathematical declarations and proof bodies are retained, except
-any explicitly documented ordinary-term expansion below.
-The full Apache 2.0 license is in LocalMathlibPortLicense.lean.
--/
+/-! . -/
 
-/-! .
-
-
-
-
-
-
-
- -/
+/-! . -/
 
 section ProximityFlatProofPort
 
@@ -41,10 +22,7 @@ section Submodule
 
 variable {M : Type*} [AddCommGroup M] [Module.Free ℤ M] [Module.Finite ℤ M]
 
-/-- .
-
-
- -/
+/-- . -/
 theorem Submodule.natAbs_det_equiv (N : Submodule ℤ M) {E : Type*} [EquivLike E M N]
     [AddEquivClass E M N] (e : E) :
     Int.natAbs
@@ -52,10 +30,10 @@ theorem Submodule.natAbs_det_equiv (N : Submodule ℤ M) {E : Type*} [EquivLike 
         (N.subtype ∘ₗ AddMonoidHom.toIntLinearMap (e : M →+ N))) =
       Nat.card (M ⧸ N) := by
   let b := Module.Free.chooseBasis ℤ M
-  --
+
   have h : Module.finrank ℤ N = Module.finrank ℤ M :=
     (AddEquiv.toIntLinearEquiv e : M ≃ₗ[ℤ] N).symm.finrank_eq
-  --
+
   let a := smithNormalFormCoeffs b h
   let b' := smithNormalFormTopBasis b h
   let ab := smithNormalFormBotBasis b h
@@ -81,20 +59,18 @@ theorem Submodule.natAbs_det_equiv (N : Submodule ℤ M) {E : Type*} [EquivLike 
     _ = Int.natAbs (∏ i, a i) := by rw [Matrix.det_diagonal]
     _ = ∏ i, Int.natAbs (a i) := map_prod Int.natAbsHom a Finset.univ
     _ = Nat.card (M ⧸ N) := ?_
-  --
+
   · congr 2; ext i j
     rw [LinearMap.toMatrix_apply, ha, map_smul, Basis.repr_self, Finsupp.smul_single,
       smul_eq_mul, mul_one]
     by_cases h : i = j
     · rw [h, Matrix.diagonal_apply_eq, Finsupp.single_eq_same]
     · rw [Matrix.diagonal_apply_ne _ h, Finsupp.single_eq_of_ne h]
-  --
-  --
+
+
   simp_rw [Nat.card_congr (quotientEquivPiZMod N b h).toEquiv, Nat.card_pi, Nat.card_zmod, a]
 
-/-- .
-
- -/
+/-- . -/
 theorem Submodule.natAbs_det_basis_change {ι : Type*} [Fintype ι] [DecidableEq ι] (b : Basis ι ℤ M)
     (N : Submodule ℤ M) (bN : Basis ι ℤ N) :
     (b.det ((↑) ∘ bN)).natAbs = Nat.card (M ⧸ N) := by

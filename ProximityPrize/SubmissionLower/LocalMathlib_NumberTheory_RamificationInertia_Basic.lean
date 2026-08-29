@@ -10,51 +10,9 @@ import ProximityPrize.SubmissionLower.LocalMathlib_NumberTheory_RamificationIner
 import ProximityPrize.SubmissionLower.LocalMathlib_NumberTheory_RamificationInertia_Ramification
 import ProximityPrize.SubmissionLower.LocalMathlib_RingTheory_Ideal_Norm_AbsNorm
 
-/-!
-Permitted flat proof port of Mathlib.NumberTheory.RamificationInertia.Basic.
-Model label: gpt-5.
-Original Mathlib revision: 905b95818eb32af7874a58b427f50c1711a5e96c.
-Original source SHA256: e69ad497b25828fac8c3379b12513fde24f2a6fd34cc181689d1fe52c572a715.
-Original copyright and author notices are retained above.
-Modifications: module/public visibility packaging is removed; imports
-are replaced by the trusted target and the necessary flat proof ports.
-All mathematical declarations and proof bodies are retained, except
-any explicitly documented ordinary-term expansion below.
-The full Apache 2.0 license is in LocalMathlibPortLicense.lean.
--/
+/-! . -/
 
-/-! .
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- -/
+/-! . -/
 
 section ProximityFlatProofPort
 
@@ -90,16 +48,7 @@ variable (K)
 open scoped Matrix
 
 variable {K} in
-/-- .
-
-
-
-
-
-
-
-
- -/
+/-- . -/
 theorem FinrankQuotientMap.span_eq_top [IsDomain R] [IsDomain S] [Algebra K L] [Module.Finite R S]
     [Algebra R L] [IsScalarTower R S L] [IsScalarTower R K L] [Algebra.IsAlgebraic R S]
     [IsTorsionFree R K] (hp : p ≠ ⊤) (b : Set S)
@@ -108,17 +57,17 @@ theorem FinrankQuotientMap.span_eq_top [IsDomain R] [IsDomain S] [Algebra K L] [
   have hRL : Function.Injective (algebraMap R L) := by
     rw [IsScalarTower.algebraMap_eq R K L]
     exact (algebraMap K L).injective.comp (FaithfulSMul.algebraMap_injective R K)
-  --
+
   let M : Submodule R S := Submodule.span R b
-  --
+
   obtain ⟨n, a, ha⟩ := @Module.Finite.exists_fin R (S ⧸ M) _ _ _ _
-  --
+
   have smul_top_eq : p • (⊤ : Submodule R (S ⧸ M)) = ⊤ := by
     calc
       p • ⊤ = Submodule.map M.mkQ (p • ⊤) := by
         rw [Submodule.map_smul'', Submodule.map_top, M.range_mkQ]
       _ = ⊤ := by rw [Ideal.smul_top_eq_map, (Submodule.map_mkQ_eq_top M _).mpr hb']
-  --
+
   have exists_sum : ∀ x : S ⧸ M, ∃ a' : Fin n → R, (∀ i, a' i ∈ p) ∧ ∑ i, a' i • a i = x := by
     intro x
     obtain ⟨a'', ha'', hx⟩ := (Submodule.mem_ideal_smul_span_iff_exists_sum p a x).1
@@ -128,14 +77,14 @@ theorem FinrankQuotientMap.span_eq_top [IsDomain R] [IsDomain S] [Algebra K L] [
       rw [← hx, Finsupp.sum_fintype]
       exact fun _ => zero_smul _ _
   choose A' hA'p hA' using fun i => exists_sum (a i)
-  --
+
   let A : Matrix (Fin n) (Fin n) R := Matrix.of A' - 1
   let B := A.adjugate
   have A_smul : ∀ i, ∑ j, A i j • a j = 0 := by
     intros
     simp [A, Matrix.sub_apply, Matrix.of_apply, Matrix.one_apply, sub_smul,
       Finset.sum_sub_distrib, hA', sub_self]
-  --
+
   have d_smul : ∀ i, A.det • a i = 0 := by
     intro i
     calc
@@ -147,7 +96,7 @@ theorem FinrankQuotientMap.span_eq_top [IsDomain R] [IsDomain S] [Algebra K L] [
     · simp only [Matrix.mul_apply, Finset.smul_sum, Finset.sum_smul, smul_smul]
       rw [Finset.sum_comm]
     · rw [A_smul, smul_zero]
-  --
+
   have span_d : (Submodule.span S ({algebraMap R S A.det} : Set S)).restrictScalars R ≤ M := by
     intro x hx
     rw [Submodule.restrictScalars_mem] at hx
@@ -164,7 +113,7 @@ theorem FinrankQuotientMap.span_eq_top [IsDomain R] [IsDomain S] [Algebra K L] [
       (calc
         ⊤ = (Ideal.span {algebraMap R L A.det}).restrictScalars K := ?_
         _ ≤ Submodule.span K (algebraMap S L '' b) := ?_)
-  --
+
   · rw [eq_comm, Submodule.restrictScalars_eq_top_iff, Ideal.span_singleton_eq_top]
     refine IsUnit.mk0 _ ((map_ne_zero_iff (algebraMap R L) hRL).mpr ?_)
     refine ne_zero_of_map («f» := Ideal.Quotient.mk p) ?_
@@ -183,30 +132,23 @@ theorem FinrankQuotientMap.span_eq_top [IsDomain R] [IsDomain S] [Algebra K L] [
       simp
     · refine congr_arg Matrix.det (Matrix.ext fun i j => ?_)
       rw [Ideal.Quotient.eq_zero_iff_mem.mpr (hA'p i j), zero_sub, Matrix.neg_apply]
-  --
+
   · intro x hx
     rw [Submodule.restrictScalars_mem, IsScalarTower.algebraMap_apply R S L] at hx
     exact IsFractionRing.ideal_span_singleton_map_subset R hRL span_d hx
 
 variable [hRK : IsFractionRing R K]
 
-/-- .
-
-
-
-
-
-
- -/
+/-- . -/
 theorem FinrankQuotientMap.linearIndependent_of_nontrivial [IsDedekindDomain R]
     (hRS : RingHom.ker (algebraMap R S) ≠ ⊤) (F : V'' →ₗ[R] V) (hf : Function.Injective F)
     (f' : V'' →ₗ[R] V') {ι : Type*} {b : ι → V''} (hb' : LinearIndependent S (f' ∘ b)) :
     LinearIndependent K (F ∘ b) := by
   contrapose hb' with hb
-  --
-  --
-  --
-  --
+
+
+
+
   simp only [linearIndependent_iff', not_forall] at hb ⊢
   obtain ⟨s, g, eq, j', hj's, hj'g⟩ := hb
   use s
@@ -216,7 +158,7 @@ theorem FinrankQuotientMap.linearIndependent_of_nontrivial [IsDedekindDomain R]
   let g' i := if h : i ∈ s then g'' i h else 0
   have hg' : ∀ i ∈ s, algebraMap _ _ (g' i) = a * g i := by
     intro i hi; exact (congr_arg _ (dif_pos hi)).trans (hg'' i hi)
-  --
+
   have hgI : algebraMap R S (g' j) ≠ 0 := by
     simp only [FractionalIdeal.mem_coeIdeal, not_exists, not_and'] at hgI
     exact hgI _ (hg' j hjs)
@@ -232,35 +174,34 @@ theorem FinrankQuotientMap.linearIndependent_of_nontrivial [IsDedekindDomain R]
 
 variable (L)
 
-/-- .
- -/
+/-- . -/
 theorem finrank_quotient_map [IsDomain S] [IsDedekindDomain R] [Algebra K L]
     [Algebra R L] [IsScalarTower R K L] [IsScalarTower R S L]
     [hp : p.IsMaximal] [Module.Finite R S] :
     finrank (R ⧸ p) (S ⧸ map (algebraMap R S) p) = finrank K L := by
-  --
-  --
+
+
   let ι := Module.Free.ChooseBasisIndex (R ⧸ p) (S ⧸ map (algebraMap R S) p)
   let b : Basis ι (R ⧸ p) (S ⧸ map (algebraMap R S) p) := Module.Free.chooseBasis _ _
-  --
+
   let b' : ι → S := fun i => (Ideal.Quotient.mk_surjective (b i)).choose
   have b_eq_b' : ⇑b = (Submodule.mkQ (map (algebraMap R S) p)).restrictScalars R ∘ b' :=
     funext fun i => (Ideal.Quotient.mk_surjective (b i)).choose_spec.symm
-  --
-  --
+
+
   let b'' : ι → L := algebraMap S L ∘ b'
   have b''_li : LinearIndependent K b'' := ?_
   · have b''_sp : Submodule.span K (Set.range b'') = ⊤ := ?_
-    --
+
     · let c : Basis ι K L := Basis.mk b''_li b''_sp.ge
       rw [finrank_eq_card_basis b, finrank_eq_card_basis c]
-    --
+
     · rw [Set.range_comp]
       refine FinrankQuotientMap.span_eq_top p hp.ne_top _ (top_le_iff.mp ?_)
-      --
-      --
-      --
-      --
+
+
+
+
       intro x _
       have mem_span_b : ((Submodule.mkQ (map (algebraMap R S) p)) x : S ⧸ map (algebraMap R S) p) ∈
           Submodule.span (R ⧸ p) (Set.range b) := b.mem_span _
@@ -286,8 +227,7 @@ section FactLeComap
 
 local notation "e" => ramificationIdx' p P
 
-/-- .
- -/
+/-- . -/
 noncomputable instance Quotient.algebraQuotientPowRamificationIdx : Algebra (R ⧸ p) (S ⧸ P ^ e) :=
   Quotient.algebraQuotientOfLEComap (Ideal.map_le_iff_le_comap.mp le_pow_ramificationIdx')
 
@@ -295,10 +235,7 @@ noncomputable instance Quotient.algebraQuotientPowRamificationIdx : Algebra (R �
 theorem Quotient.algebraMap_quotient_pow_ramificationIdx (x : R) :
     algebraMap (R ⧸ p) (S ⧸ P ^ e) (Ideal.Quotient.mk p x) = Ideal.Quotient.mk (P ^ e) (f x) := rfl
 
-/-- .
-
-
- -/
+/-- . -/
 @[instance_reducible]
 def Quotient.algebraQuotientOfRamificationIdxNeZero [hfp : NeZero e] :
     Algebra (R ⧸ p) (S ⧸ P) :=
@@ -327,10 +264,7 @@ theorem powQuotSuccInclusion_injective (i : ℕ) :
   rw [Subtype.ext_iff] at hx0 ⊢
   rwa [powQuotSuccInclusion_apply_coe] at hx0
 
-/-- .
-
-
- -/
+/-- . -/
 noncomputable def quotientToQuotientRangePowQuotSuccAux {i : ℕ} {a : S} (a_mem : a ∈ P ^ i) :
     S ⧸ P →
       (P ^ i).map (Ideal.Quotient.mk (P ^ e)) ⧸ LinearMap.range (powQuotSuccInclusion p P i) :=
@@ -418,8 +352,7 @@ theorem quotientToQuotientRangePowQuotSucc_surjective [IsDedekindDomain S]
   rwa [sup_comm, irreducible_pow_sup hspan0 ((prime_iff_isPrime hP0).mpr hP).irreducible,
     count_normalizedFactors_eq a_mem a_notMem, min_eq_left i.le_succ]
 
-/-- .
- -/
+/-- . -/
 noncomputable def quotientRangePowQuotSuccInclusionEquiv [IsDedekindDomain S]
     [P.IsPrime] (hP : P ≠ ⊥) {i : ℕ} (hi : i < e) :
     ((P ^ i).map (Ideal.Quotient.mk (P ^ e)) ⧸ LinearMap.range (powQuotSuccInclusion p P i))
@@ -432,8 +365,7 @@ noncomputable def quotientRangePowQuotSuccInclusionEquiv [IsDedekindDomain S]
   · exact quotientToQuotientRangePowQuotSucc_injective p P hi a_mem a_notMem
   · exact quotientToQuotientRangePowQuotSucc_surjective p P hP hi a_mem a_notMem
 
-/-- .
- -/
+/-- . -/
 theorem rank_pow_quot_aux [IsDedekindDomain S] [p.IsMaximal] [P.IsPrime] (hP0 : P ≠ ⊥)
     {i : ℕ} (hi : i < e) :
     Module.rank (R ⧸ p) (Ideal.map (Ideal.Quotient.mk (P ^ e)) (P ^ i)) =
@@ -461,8 +393,7 @@ theorem rank_pow_quot [IsDedekindDomain S] [p.IsMaximal] [P.IsPrime] (hP0 : P �
 
 end
 
-/-- .
- -/
+/-- . -/
 theorem rank_prime_pow_ramificationIdx [IsDedekindDomain S] [p.IsMaximal] [P.IsPrime]
     (hP0 : P ≠ ⊥) (he : e ≠ 0) :
     Module.rank (R ⧸ p) (S ⧸ P ^ e) =
@@ -475,8 +406,7 @@ theorem rank_prime_pow_ramificationIdx [IsDedekindDomain S] [p.IsMaximal] [P.IsP
   rw [pow_zero, Nat.sub_zero, Ideal.one_eq_top, Ideal.map_top] at this
   exact (rank_top (R ⧸ p) _).symm.trans this
 
-/-- .
- -/
+/-- . -/
 theorem finrank_prime_pow_ramificationIdx [IsDedekindDomain S] (hP0 : P ≠ ⊥)
     [p.IsMaximal] [P.IsPrime] (he : e ≠ 0) :
     finrank (R ⧸ p) (S ⧸ P ^ e) =
@@ -546,8 +476,7 @@ instance Factors.finiteDimensional_quotient_pow [Module.Finite R S] [p.IsMaximal
 
 universe w
 
-/-- .
- -/
+/-- . -/
 noncomputable def Factors.piQuotientEquiv (p : Ideal R) (hp : map (algebraMap R S) p ≠ ⊥) :
     S ⧸ map (algebraMap R S) p ≃+*
       ∀ P : (factors (map (algebraMap R S) p)).toFinset,
@@ -572,9 +501,7 @@ theorem Factors.piQuotientEquiv_map (p : Ideal R) (hp : map (algebraMap R S) p �
 
 variable (S)
 
-/-- .
-
- -/
+/-- . -/
 noncomputable def Factors.piQuotientLinearEquiv (p : Ideal R) (hp : map (algebraMap R S) p ≠ ⊥) :
     (S ⧸ map (algebraMap R S) p) ≃ₗ[R ⧸ p]
       ∀ P : (factors (map (algebraMap R S) p)).toFinset,
@@ -591,10 +518,7 @@ variable (K L : Type*) [Field K] [Field L] [IsDedekindDomain R] [Algebra R K] [I
   [Algebra S L] [IsFractionRing S L] [Algebra K L] [Algebra R L] [IsScalarTower R S L]
   [IsScalarTower R K L] [Module.Finite R S]
 
-/-- .
-
-
- -/
+/-- . -/
 theorem sum_ramification_inertia {p : Ideal R} [p.IsMaximal] (hp0 : p ≠ ⊥) :
     ∑ P ∈ IsDedekindDomain.primesOverFinset p S,
         ramificationIdx' p P * inertiaDeg' p P = finrank K L := by

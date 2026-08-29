@@ -9,31 +9,9 @@ import ProximityPrize.SubmissionLower.LocalMathlibPortLicense
 import ProximityPrize.SubmissionLower.LocalMathlib_RingTheory_Invariant_Basic
 import ProximityPrize.SubmissionLower.LocalMathlib_RingTheory_IntegralClosure_IntegralRestrict
 
-/-!
-Permitted flat proof port of Mathlib.RingTheory.Invariant.Galois.
-Model label: gpt-5.
-Original Mathlib revision: 905b95818eb32af7874a58b427f50c1711a5e96c.
-Original source SHA256: d413c26eca04159c0d356d93cf1df1671c131b427fd0d12ebae829dd3f96a321.
-Original copyright and author notices are retained above.
-Modifications: module/public visibility packaging is removed; imports
-are replaced by the trusted target and the necessary flat proof ports.
-All mathematical declarations and proof bodies are retained, except
-any explicitly documented ordinary-term expansion below.
-The full Apache 2.0 license is in LocalMathlibPortLicense.lean.
+/-! . -/
 
-Candidate compatibility repair: explicitly qualify the original univariate
-Polynomial.X in the composition polynomial. Mathematical APIs, hypotheses,
-and proof arguments are unchanged.
--/
-
-/-! .
-
-
-
-
-
-
- -/
+/-! . -/
 
 section ProximityFlatProofPort
 
@@ -152,9 +130,7 @@ end Ideal.IsFractionRing
 
 attribute [local instance] Ideal.Quotient.field in
 include G in
-/-- .
-
- -/
+/-- . -/
 lemma Ideal.Quotient.normal [P.IsMaximal] [Q.IsMaximal] :
     Normal (A ⧸ P) (B ⧸ Q) :=
   IsFractionRing.normal G P Q (A ⧸ P) (B ⧸ Q)

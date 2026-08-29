@@ -13,47 +13,9 @@ import ProximityPrize.SubmissionLower.LocalMathlib_RingTheory_Ideal_Basis
 import ProximityPrize.SubmissionLower.LocalMathlib_RingTheory_Norm_Basic
 import ProximityPrize.SubmissionLower.LocalMathlib_RingTheory_UniqueFactorizationDomain_Multiplicative
 
-/-!
-Permitted flat proof port of Mathlib.RingTheory.Ideal.Norm.AbsNorm.
-Model label: gpt-5.
-Original Mathlib revision: 905b95818eb32af7874a58b427f50c1711a5e96c.
-Original source SHA256: f65320cd8e0ab8c00c39efc7b533d5c9b42467670853e4a1c5b6715175162736.
-Original copyright and author notices are retained above.
-Modifications: module/public visibility packaging is removed; imports
-are replaced by the trusted target and the necessary flat proof ports.
-All mathematical declarations and proof bodies are retained, except
-any explicitly documented ordinary-term expansion below.
-The full Apache 2.0 license is in LocalMathlibPortLicense.lean.
+/-! . -/
 
-Candidate compatibility repair: provide an explicit Classical.decEq S in
-absNorm_span_singleton before its original zero/nonzero split. All original
-mathematical declarations, hypotheses, and proof steps are retained; no
-resource limits are changed.
--/
-
-/-! .
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- -/
+/-! . -/
 
 section ProximityFlatProofPort
 
@@ -68,9 +30,7 @@ variable {R M : Type*} [Ring R] [AddCommGroup M] [Module R M]
 
 section
 
-/-- .
-
- -/
+/-- . -/
 noncomputable def cardQuot (S : Submodule R M) : ℕ :=
   AddSubgroup.index S.toAddSubgroup
 
@@ -103,18 +63,14 @@ variable {S : Type*} [CommRing S]
 
 open Submodule
 
-/-- .
-
- -/
+/-- . -/
 theorem cardQuot_mul_of_coprime
     {I J : Ideal S} (coprime : IsCoprime I J) : cardQuot (I * J) = cardQuot I * cardQuot J := by
   rw [cardQuot_apply, cardQuot_apply, cardQuot_apply,
     Nat.card_congr (Ideal.quotientMulEquivQuotientProd I J coprime).toEquiv,
     Nat.card_prod]
 
-/-- .
-
- -/
+/-- . -/
 theorem Ideal.mul_add_mem_pow_succ_inj (P : Ideal S) {i : ℕ} (a d d' e e' : S) (a_mem : a ∈ P ^ i)
     (e_mem : e ∈ P ^ (i + 1)) (e'_mem : e' ∈ P ^ (i + 1)) (h : d - d' ∈ P) :
     a * d + e - (a * d' + e') ∈ P ^ (i + 1) := by
@@ -128,9 +84,7 @@ section PPrime
 
 variable {P : Ideal S} [P_prime : P.IsPrime]
 
-/-- .
-
- -/
+/-- . -/
 theorem Ideal.exists_mul_add_mem_pow_succ [IsDedekindDomain S] (hP : P ≠ ⊥)
     {i : ℕ} (a c : S) (a_mem : a ∈ P ^ i)
     (a_notMem : a ∉ P ^ (i + 1)) (c_mem : c ∈ P ^ i) :
@@ -153,8 +107,7 @@ theorem Ideal.mem_prime_of_mul_mem_pow [IsDedekindDomain S] {P : Ideal S} [P_pri
     Ideal.span_singleton_mul_span_singleton] at a_notMem ab_mem ⊢
   exact (prime_pow_succ_dvd_mul (Ideal.prime_of_isPrime hP P_prime) ab_mem).resolve_left a_notMem
 
-/-- .
- -/
+/-- . -/
 theorem Ideal.mul_add_mem_pow_succ_unique [IsDedekindDomain S] (hP : P ≠ ⊥)
     {i : ℕ} (a d d' e e' : S)
     (a_notMem : a ∉ P ^ (i + 1)) (e_mem : e ∈ P ^ (i + 1)) (e'_mem : e' ∈ P ^ (i + 1))
@@ -288,15 +241,13 @@ theorem span_singleton_absNorm {I : Ideal S} (hI : (Ideal.absNorm I).Prime) :
 
 variable [Module.Finite ℤ S]
 
-/-- .
-
- -/
+/-- . -/
 theorem natAbs_det_equiv (I : Ideal S) {E : Type*} [EquivLike E S I] [AddEquivClass E S I] (e : E) :
     Int.natAbs
         (LinearMap.det
           ((Submodule.subtype I).restrictScalars ℤ ∘ₗ AddMonoidHom.toIntLinearMap (e : S →+ I))) =
       Ideal.absNorm I := by
-  --
+
   by_cases hI : I = ⊥
   · subst hI
     have : (1 : S) ≠ 0 := one_ne_zero
@@ -304,9 +255,7 @@ theorem natAbs_det_equiv (I : Ideal S) {E : Type*} [EquivLike E S I] [AddEquivCl
     contradiction
   exact Submodule.natAbs_det_equiv (I.restrictScalars ℤ) e
 
-/-- .
-
- -/
+/-- . -/
 theorem natAbs_det_basis_change {ι : Type*} [Fintype ι] [DecidableEq ι] (b : Basis ι ℤ S)
     (I : Ideal S) (bI : Basis ι ℤ I) : (b.det ((↑) ∘ bI)).natAbs = Ideal.absNorm I :=
   Submodule.natAbs_det_basis_change b (I.restrictScalars ℤ) bI
@@ -377,9 +326,7 @@ lemma isFiniteRelIndex {I : Ideal S} (hI : I ≠ ⊥) (J : Ideal S) :
   have := finiteIndex hI
   exact isFiniteRelIndex_of_finiteIndex
 
-/-- .
-
- -/
+/-- . -/
 lemma exists_prime_and_absNorm_eq_pow (P : Ideal S) [P.IsMaximal] :
     ∃ p n, 0 < n ∧ ↑p ∈ P ∧ p.Prime ∧ P.absNorm = p ^ n := by
   have : IsAddTorsionFree S := .of_isTorsionFree ℤ _

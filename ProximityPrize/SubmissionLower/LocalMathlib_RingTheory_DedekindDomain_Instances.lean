@@ -9,42 +9,9 @@ import ProximityPrize.SubmissionLower.LocalMathlibPortLicense
 import ProximityPrize.SubmissionLower.LocalMathlib_RingTheory_DedekindDomain_PID
 import ProximityPrize.SubmissionLower.LocalMathlib_RingTheory_RingHom_Finite
 
-/-!
-Permitted flat proof port of Mathlib.RingTheory.DedekindDomain.Instances.
-Model label: gpt-5.
-Original Mathlib revision: 905b95818eb32af7874a58b427f50c1711a5e96c.
-Original source SHA256: 14571861c080b70cb9ad576a8ffcd5bd46c472bbb2b219542f5a36dfb12301f3.
-Original copyright and author notices are retained above.
-Modifications: module/public visibility packaging is removed; imports
-are replaced by the trusted target and the necessary flat proof ports.
-All mathematical declarations and proof bodies are retained, except
-any explicitly documented ordinary-term expansion below.
-The full Apache 2.0 license is in LocalMathlibPortLicense.lean.
-Port elaboration adjustments: qualify the original IsLocalization.ringHom_ext;
-give the original anonymous localization-algebra instance an explicit distinct
-name so its original diamond test refers to this exact definition despite the
-broader target environment. Its type, construction, and test are unchanged.
--/
+/-! . -/
 
-/-! .
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- -/
+/-! . -/
 
 section ProximityFlatProofPort
 
@@ -119,9 +86,7 @@ instance : IsTorsionFree R Sₚ := by
   have := IsLocalization.AtPrime.faithfulSMul Rₚ R P
   exact IsTorsionFree.trans_faithfulSMul R Rₚ _
 
-/-- .
-
- -/
+/-- . -/
 noncomputable abbrev Localization.AtPrime.liftAlgebra : Algebra Sₚ L :=
   (map _ (T := S⁰) (RingHom.id S)
     (algebraMapSubmonoid_le_nonZeroDivisors_of_faithfulSMul _
@@ -144,7 +109,7 @@ noncomputable instance proximityPortAlgebraAtPrimeFractionRing : Algebra Rₚ L 
   (lift (M := P.primeCompl) (g := algebraMap R L) <|
     fun ⟨x, hx⟩ ↦ by simpa using fun h ↦ hx <| by simp [h]).toAlgebra
 
---
+
 example : instAlgebraLocalizationAtPrime P = proximityPortAlgebraAtPrimeFractionRing (S := R) := by
   with_reducible_and_instances rfl
 
@@ -173,7 +138,7 @@ instance [IsDedekindDomain R] [IsDedekindDomain S] [Module.Finite R S] [hP : NeZ
   IsDedekindDomain.isPrincipalIdealRing_localization_over_prime S P (fun h ↦ hP.1 h)
 
 instance [Algebra.IsSeparable K L] :
-    --
+
     letI : Algebra Rₚ (FractionRing Sₚ) := OreLocalization.instAlgebra
     Algebra.IsSeparable (FractionRing Rₚ) (FractionRing Sₚ) :=
   let _ : Algebra Rₚ (FractionRing Sₚ) := OreLocalization.instAlgebra
@@ -188,11 +153,7 @@ instance : IsLocalization (algebraMapSubmonoid T P') Tₚ := by
   rw [show algebraMapSubmonoid T P' = P'' by simp]
   exact Localization.isLocalization
 
-/-- .
-
-
-
- -/
+/-- . -/
 noncomputable abbrev Localization.AtPrime.algebra_localization_localization :
     Algebra Sₚ Tₚ := localizationAlgebra P' T
 

@@ -14,80 +14,27 @@ import ProximityPrize.SubmissionLower.LocalMathlib_RingTheory_Localization_InvSu
 import ProximityPrize.SubmissionLower.LocalMathlib_RingTheory_Spectrum_Prime_Jacobson
 import ProximityPrize.SubmissionLower.LocalMathlib_RingTheory_TensorProduct_Pi
 
-/-!
-Permitted flat proof port of Mathlib.RingTheory.QuasiFinite.Basic.
-Model label: gpt-5.
-Original Mathlib revision: 905b95818eb32af7874a58b427f50c1711a5e96c.
-Original source SHA256: 30820404653eabb9be05dd89f54de9d2d053e6433d800d9bf9c0ec4e86ef04fc.
-Original copyright and author notices are retained above.
-Modifications: module/public visibility packaging is removed; imports
-are replaced by the trusted target and the necessary flat proof ports.
-All mathematical declarations and proof bodies are retained, except
-any explicitly documented ordinary-term expansion below.
-The full Apache 2.0 license is in LocalMathlibPortLicense.lean.
+/-! . -/
 
-Candidate compatibility repairs: escape the original theorem identifier trans,
-qualify its two term references, supply a proof-local residue-field equality
-instance, and spell out the coefficient and target rings in a finiteness proof.
-The upstream import-hygiene assertion is preserved below as a comment because
-RatFunc is already in the required trusted target; it is not a mathematical
-hypothesis or a protected checker. All mathematical APIs and proof steps are
-retained without resource-limit changes.
--/
-
-/-! .
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- -/
+/-! . -/
 
 section ProximityFlatProofPort
 
 variable {R S T : Type*} [CommRing R] [CommRing S] [CommRing T]
   [Algebra R S] [Algebra R T] [Algebra S T] [IsScalarTower R S T]
 
---
-/-
-Upstream import-hygiene assertion retained for attribution:
-  assert_not_exists RatFunc
-It is inapplicable to this flat port: the required TargetLower import already
-contains RatFunc. No mathematical declaration or proof, and no protected
-source-policy check, is removed by documenting this dependency-layer check.
--/
+
+
 
 open TensorProduct
 
---
+
 attribute [-instance] Module.Free.instFaithfulSMulOfNontrivial Algebra.IsIntegral.isLocalHom
 
 namespace Algebra
 
 variable (R S) in
-/-- .
-
-
-
-
-
-
-
-
-
- -/
+/-- . -/
 @[mk_iff, stacks 00PL]
 class QuasiFinite : Prop where
   finite_fiber (P : Ideal R) [P.IsPrime] :
@@ -143,7 +90,7 @@ instance baseChange [QuasiFinite R S] {A : Type*} [CommRing A] [Algebra R A] :
   exact .of_surjective e.symm.toLinearMap e.symm.surjective
 
 open IsLocalRing in
---
+
 private lemma finite_of_isArtinianRing_of_isLocalRing
     [QuasiFinite R S] [IsArtinianRing R] [IsLocalRing R] : Module.Finite R S := by
   let e : (maximalIdeal R).Fiber S ≃ₐ[R] S ⧸ (maximalIdeal R).map (algebraMap R S) :=
@@ -331,8 +278,7 @@ lemma iff_finite_primesOver [FiniteType R S] :
   simp [(PrimeSpectrum.equivSubtype S).exists_congr_left, PrimeSpectrum.ext_iff, eq_comm,
     PrimeSpectrum.equivSubtype, Ideal.primesOver, and_comm, Ideal.liesOver_iff, Ideal.under]
 
-/-- .
- -/
+/-- . -/
 lemma of_isIntegral_of_finiteType [Algebra.IsIntegral R S] [Algebra.FiniteType R T]
     (s : S) [IsLocalization.Away s T] : Algebra.QuasiFinite R T := by
   let A := Algebra.adjoin R {s}
@@ -375,10 +321,7 @@ end QuasiFinite
 section QuasiFiniteAt
 
 variable (R) in
-/-- .
-
-
- -/
+/-- . -/
 abbrev QuasiFiniteAt (p : Ideal S) [p.IsPrime] : Prop :=
   QuasiFinite R (Localization.AtPrime p)
 
@@ -484,15 +427,14 @@ lemma QuasiFiniteAt.exists_basicOpen_eq_singleton
   refine ⟨r, hrp, subset_antisymm (fun q hrq ↦ ?_) (Set.singleton_subset_iff.mpr hrp)⟩
   obtain ⟨q, rfl⟩ := (PrimeSpectrum.localization_away_comap_range (Localization.Away r) r).ge hrq
   obtain ⟨q, rfl⟩ := (PrimeSpectrum.comapEquiv φ.toRingEquiv).symm.surjective q
-  --
+
   obtain rfl : q = IsLocalRing.closedPoint _ := Subsingleton.elim _ _
   ext1
   dsimp [-RingEquiv.symm_mk]
   rw [Ideal.comap_comap, ← AlgEquiv.toAlgHom_toRingHom, AlgHom.comp_algebraMap]
   exact IsLocalization.AtPrime.under_maximalIdeal _ _
 
-/-- .
- -/
+/-- . -/
 lemma QuasiFiniteAt.isClopen_singleton
     (p : PrimeSpectrum S) [IsArtinianRing R] [Algebra.FiniteType R S]
     [Algebra.QuasiFiniteAt R p.asIdeal] : IsClopen {p} := by

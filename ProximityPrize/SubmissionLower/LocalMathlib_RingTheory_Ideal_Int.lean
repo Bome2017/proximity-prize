@@ -8,45 +8,9 @@ import ProximityPrize.Benchmark.TargetLower
 import ProximityPrize.SubmissionLower.LocalMathlibPortLicense
 import ProximityPrize.SubmissionLower.LocalMathlib_RingTheory_Ideal_Norm_AbsNorm
 
-/-!
-Permitted flat proof port of Mathlib.RingTheory.Ideal.Int.
-Model label: gpt-5.
-Original Mathlib revision: 905b95818eb32af7874a58b427f50c1711a5e96c.
-Original source SHA256: cc430d230dcbe02b655b8ce3109209b77eb6ccdbd47e07561a6fdd46a56c54de.
-Original copyright and author notices are retained above.
-Modifications: module/public visibility packaging is removed; imports
-are replaced by the trusted target and the necessary flat proof ports.
-All mathematical declarations and proof bodies are retained, except
-any explicitly documented ordinary-term expansion below.
-The full Apache 2.0 license is in LocalMathlibPortLicense.lean.
+/-! . -/
 
-Candidate compatibility repair: explicitly qualify the intended Ideal.under
-terms to avoid an unrelated reserved token in the broader target environment.
-The mathematical statements and proof arguments are unchanged.
--/
-
-/-! .
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- -/
+/-! . -/
 
 section ProximityFlatProofPort
 

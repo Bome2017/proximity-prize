@@ -10,107 +10,11 @@ import ProximityPrize.SubmissionLower.LocalMathlib_Data_Finsupp_MonomialOrder
 import ProximityPrize.SubmissionLower.LocalMathlib_Data_Finsupp_WellFounded
 import ProximityPrize.SubmissionLower.LocalMathlib_RingTheory_MvPolynomial_Homogeneous
 
-/-!
-Permitted flat proof port of Mathlib.RingTheory.MvPolynomial.MonomialOrder.
-Model label: gpt-5.
-Original Mathlib revision: 905b95818eb32af7874a58b427f50c1711a5e96c.
-Original source SHA256: 78b15614ba9660997c1be38b52075bc4c9a8198953d69677c278fe334dd3aced.
-Original copyright and author notices are retained above.
-Modifications: module/public visibility packaging is removed; imports
-are replaced by the trusted target and the necessary flat proof ports.
-All mathematical declarations and proof bodies are retained, except
-any explicitly documented ordinary-term expansion below.
-The full Apache 2.0 license is in LocalMathlibPortLicense.lean.
--/
+/-! . -/
 
-/-!
-Elaboration repair after actual WMI build 229463 (model: gpt-5).
-The TargetLower ambient environment made bare X resolve to bivariate
-notation, made mem_support_iff ambiguous with a probability-support lemma,
-and stalled several implicit decidability searches. This revision qualifies
-the existing MvPolynomial constructors/support lemma and supplies ordinary
-local Classical.decEq instances in the affected proofs. No mathematical
-statement, hypothesis, license, import policy, or protected checker changes;
-no heartbeat limit is raised. All other proof steps are retained.
--/
+/-! . -/
 
-/-! .
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- -/
+/-! . -/
 
 section ProximityFlatProofPort
 
@@ -137,8 +41,7 @@ noncomputable def leadingCoeff (f : MvPolynomial σ R) : R :=
   f.coeff (m.degree f)
 
 variable (m) in
-/-- .
- -/
+/-- . -/
 def Monic (f : MvPolynomial σ R) : Prop :=
   m.leadingCoeff f = 1
 
@@ -680,7 +583,7 @@ theorem degree_prod_of_mem_nonZeroDivisors {ι : Type*}
     rw [MvPolynomial.mem_support_iff, m.coeff_prod_sum_degree]
     exact nonZeroDivisors.ne_zero (prod_mem_nonZeroDivisors_of_mem_nonZeroDivisors H)
 
---
+
 theorem degree_prod_of_regular {ι : Type*}
     {P : ι → MvPolynomial σ R} {s : Finset ι} (H : ∀ i ∈ s, IsRegular (m.leadingCoeff (P i))) :
     m.degree (∏ i ∈ s, P i) = ∑ i ∈ s, m.degree (P i) := by
@@ -717,7 +620,7 @@ theorem leadingCoeff_prod_of_mem_nonZeroDivisors {ι : Type*}
     m.leadingCoeff (∏ i ∈ s, P i) = ∏ i ∈ s, m.leadingCoeff (P i) := by
   simp only [leadingCoeff, degree_prod_of_mem_nonZeroDivisors H, coeff_prod_sum_degree]
 
---
+
 theorem leadingCoeff_prod_of_regular {ι : Type*}
     {P : ι → MvPolynomial σ R} {s : Finset ι} (H : ∀ i ∈ s, IsRegular (m.leadingCoeff (P i))) :
     m.leadingCoeff (∏ i ∈ s, P i) = ∏ i ∈ s, m.leadingCoeff (P i) := by
@@ -733,9 +636,7 @@ protected theorem Monic.prod {ι : Type*} {P : ι → MvPolynomial σ R} {s : Fi
     rw [(H i hi).leadingCoeff_eq_one]
     exact isRegular_one
 
-/-- .
-
- -/
+/-- . -/
 @[simp]
 lemma leadingTerm_eq_zero_iff (p : MvPolynomial σ R) : m.leadingTerm p = 0 ↔ p = 0 := by
   simp only [leadingTerm, monomial_eq_zero, leadingCoeff_eq_zero_iff]
@@ -745,18 +646,12 @@ lemma leadingTerm_eq_zero_iff (p : MvPolynomial σ R) : m.leadingTerm p = 0 ↔ 
 lemma leadingTerm_zero : m.leadingTerm (0 : MvPolynomial σ R) = 0 := by
   rw [leadingTerm_eq_zero_iff]
 
-/-- .
-
-
- -/
+/-- . -/
 lemma image_leadingTerm_sdiff_singleton_zero (B : Set (MvPolynomial σ R)) :
     m.leadingTerm '' (B \ {0}) = (m.leadingTerm '' B) \ {0} := by
   aesop
 
-/-- .
-
-
- -/
+/-- . -/
 lemma image_leadingTerm_insert_zero (B : Set (MvPolynomial σ R)) :
     m.leadingTerm '' (insert (0 : MvPolynomial σ R) B) = insert 0 (m.leadingTerm '' B) := by
   aesop
@@ -883,30 +778,7 @@ section Ring
 variable {R : Type*} [CommRing R]
 
 variable (m) in
-/-- .
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- -/
+/-- . -/
 noncomputable def sPolynomial (f g : MvPolynomial σ R) : MvPolynomial σ R :=
   monomial (m.degree g - m.degree f) (m.leadingCoeff g) * f -
   monomial (m.degree f - m.degree g) (m.leadingCoeff f) * g

@@ -7,34 +7,9 @@ Authors: Anne Baanen, Kenny Lau
 import ProximityPrize.Benchmark.TargetLower
 import ProximityPrize.SubmissionLower.LocalMathlibPortLicense
 
-/-!
-Permitted flat proof port of Mathlib.RingTheory.DedekindDomain.PID.
-Model label: gpt-5.
-Original Mathlib revision: 905b95818eb32af7874a58b427f50c1711a5e96c.
-Original source SHA256: a1761c6b7c41ba9bedfdd97beaabaa03ca40af32a2486be59180a42f1fa0fcf6.
-Original copyright and author notices are retained above.
-Modifications: module/public visibility packaging is removed; imports
-are replaced by the trusted target and the necessary flat proof ports.
-All mathematical declarations and proof bodies are retained, except
-any explicitly documented ordinary-term expansion below.
-The full Apache 2.0 license is in LocalMathlibPortLicense.lean.
--/
+/-! . -/
 
-/-! .
-
-
-
-
-
-
-
-
-
-
-
-
-
- -/
+/-! . -/
 
 section ProximityFlatProofPort
 
@@ -47,8 +22,7 @@ open UniqueFactorizationMonoid
 
 open scoped nonZeroDivisors
 
-/-- .
- -/
+/-- . -/
 theorem Ideal.eq_span_singleton_of_mem_of_notMem_sq_of_notMem_prime_ne {P : Ideal R}
     (hP : P.IsPrime) [IsDedekindDomain R] {x : R} (x_mem : x ∈ P) (hxP2 : x ∉ P ^ 2)
     (hxQ : ∀ Q : Ideal R, IsPrime Q → Q ≠ P → x ∉ Q) : P = Ideal.span {x} := by
@@ -70,7 +44,7 @@ theorem Ideal.eq_span_singleton_of_mem_of_notMem_sq_of_notMem_prime_ne {P : Idea
   exact Multiset.count_eq_zero.mpr fun hQi ↦
     hQp <| isPrime_of_prime <| irreducible_iff_prime.mp <| irreducible_of_normalized_factor _ hQi
 
--- Porting note: replaced three implicit coercions of `I` with explicit `(I : Submodule R A)`
+
 theorem FractionalIdeal.isPrincipal_of_unit_of_comap_mul_span_singleton_eq_top {R A : Type*}
     [CommRing R] [CommRing A] [Algebra R A] {S : Submonoid R} [IsLocalization S A]
     (I : (FractionalIdeal S A)ˣ) {v : A} (hv : v ∈ (↑I⁻¹ : FractionalIdeal S A))
@@ -94,10 +68,7 @@ theorem FractionalIdeal.isPrincipal_of_unit_of_comap_mul_span_singleton_eq_top {
   · rw [FractionalIdeal.one_le, ← hvw, mul_comm]
     exact FractionalIdeal.mul_mem_mul (FractionalIdeal.mem_spanSingleton_self _ _) hv
 
-/-- .
-
-
- -/
+/-- . -/
 theorem FractionalIdeal.isPrincipal.of_finite_maximals_of_inv {A : Type*} [CommRing A]
     [Algebra R A] {S : Submonoid R} [IsLocalization S A] (hS : S ≤ R⁰)
     (hf : {I : Ideal R | I.IsMaximal}.Finite) (I I' : FractionalIdeal S A) (hinv : I * I' = 1) :
@@ -156,9 +127,7 @@ theorem FractionalIdeal.isPrincipal.of_finite_maximals_of_inv {A : Type*} [CommR
     simp_rw [Ideal.mem_iInf, Finset.mem_erase] at hu
     exact Submodule.mem_map_of_mem <| M.mul_mem_right _ <| hu M ⟨hM'.1.symm, hM⟩
 
-/-- .
-
- -/
+/-- . -/
 theorem Ideal.IsPrincipal.of_finite_maximals_of_isUnit (hf : {I : Ideal R | I.IsMaximal}.Finite)
     {I : Ideal R} (hI : IsUnit (I : FractionalIdeal R⁰ (FractionRing R))) : I.IsPrincipal :=
   (IsLocalization.coeSubmodule_isPrincipal _ le_rfl).mp
@@ -189,12 +158,10 @@ variable [IsLocalization (Algebra.algebraMapSubmonoid S p.primeCompl) Sₚ]
 variable [Algebra R Sₚ] [IsScalarTower R S Sₚ]
 include hp0
 
-/- 
--/
+
 variable [IsDedekindDomain Sₚ]
 
-/-- .
- -/
+/-- . -/
 theorem IsLocalization.OverPrime.mem_normalizedFactors_of_isPrime [IsDomain S]
     {P : Ideal Sₚ} (hP : IsPrime P) (hP0 : P ≠ ⊥) :
     P ∈ normalizedFactors (Ideal.map (algebraMap R Sₚ) p) := by
@@ -233,8 +200,7 @@ theorem IsLocalization.OverPrime.mem_normalizedFactors_of_isPrime [IsDomain S]
     exact
       (IsLocalization.injective Sₚ non_zero_div).comp (FaithfulSMul.algebraMap_injective _ _)
 
-/-- .
- -/
+/-- . -/
 theorem IsDedekindDomain.isPrincipalIdealRing_localization_over_prime [IsDomain S] :
     IsPrincipalIdealRing Sₚ := by
   letI := Classical.decEq (Ideal Sₚ)
@@ -251,7 +217,7 @@ theorem IsDedekindDomain.isPrincipalIdealRing_localization_over_prime [IsDomain 
       or_iff_not_imp_left.mpr (IsLocalization.OverPrime.mem_normalizedFactors_of_isPrime S p hp0 hP)
 end
 
---
+
 theorem IsPrincipalIdealRing.of_isDedekindDomain_of_uniqueFactorizationMonoid
     (R : Type*) [CommRing R] [IsDedekindDomain R] [UniqueFactorizationMonoid R] :
     IsPrincipalIdealRing R := by

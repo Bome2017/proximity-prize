@@ -9,57 +9,9 @@ import ProximityPrize.SubmissionLower.LocalMathlibPortLicense
 import ProximityPrize.SubmissionLower.LocalGradedMonoid
 import ProximityPrize.SubmissionLower.LocalMathlib_RingTheory_GradedAlgebra_Homogeneous_Ideal
 
-/-!
-Permitted flat proof port of Mathlib.RingTheory.MvPolynomial.WeightedHomogeneous.
-Model label: gpt-5.
-Original Mathlib revision: 905b95818eb32af7874a58b427f50c1711a5e96c.
-Original source SHA256: 9fa09f4ed3906b58fdbf40d804ebb74844a5876d861786ce7287002d6cf0a14c.
-Original copyright and author notices are retained above.
-Modifications: module/public visibility packaging is removed; imports
-are replaced by the trusted target and the necessary flat proof ports.
-All mathematical declarations and proof bodies are retained, except
-any explicitly documented ordinary-term expansion below.
-The full Apache 2.0 license is in LocalMathlibPortLicense.lean.
+/-! . -/
 
-Candidate compatibility repairs: explicitly supply the classical equality
-instances used by the existing coefficient and component proofs, and qualify
-the intended MvPolynomial.X term to avoid ambient bivariate notation. All
-original mathematical APIs and proof steps are retained, with no resource-limit
-changes. The original one-line classical simp proof is expanded only to insert
-its equality instance. Final commands report selected declaration axioms.
--/
-
-/-! .
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- -/
+/-! . -/
 
 section ProximityFlatProofPort
 
@@ -105,8 +57,7 @@ section OrderBot
 
 variable [OrderBot M]
 
-/-- .
- -/
+/-- . -/
 def weightedTotalDegree (w : σ → M) (p : MvPolynomial σ R) : M :=
   p.support.sup fun s => weight w s
 
@@ -137,8 +88,7 @@ end OrderBot
 
 end SemilatticeSup
 
-/-- .
- -/
+/-- . -/
 def IsWeightedHomogeneous (w : σ → M) (φ : MvPolynomial σ R) (m : M) : Prop :=
   ∀ ⦃d⦄, coeff d φ ≠ 0 → weight w d = m
 
@@ -166,10 +116,7 @@ theorem mem_weightedHomogeneousSubmodule (w : σ → M) (m : M) (p : MvPolynomia
   Iff.rfl
 
 set_option backward.isDefEq.respectTransparency false in
-/-- .
-
-
- -/
+/-- . -/
 theorem weightedHomogeneousSubmodule_eq_finsupp_supported (w : σ → M) (m : M) :
     weightedHomogeneousSubmodule R w m = AddMonoidAlgebra.supported R R {d | weight w d = m} := by
   ext x
@@ -185,8 +132,7 @@ lemma weightedHomogeneousSubmodule_fg [Finite σ] (w : σ → ℕ) (hw : ∀ (x 
 variable {R}
 
 set_option backward.isDefEq.respectTransparency false in
-/-- .
- -/
+/-- . -/
 theorem weightedHomogeneousSubmodule_mul (w : σ → M) (m n : M) :
     weightedHomogeneousSubmodule R w m * weightedHomogeneousSubmodule R w n ≤
       weightedHomogeneousSubmodule R w (m + n) := by
@@ -269,21 +215,18 @@ theorem inj_right {w : σ → M} (hφ : φ ≠ 0) (hm : IsWeightedHomogeneous w 
   obtain ⟨d, hd⟩ : ∃ d, coeff d φ ≠ 0 := exists_coeff_ne_zero hφ
   rw [← hm hd, ← hn hd]
 
-/-- .
- -/
+/-- . -/
 theorem add {w : σ → M} (hφ : IsWeightedHomogeneous w φ n) (hψ : IsWeightedHomogeneous w ψ n) :
     IsWeightedHomogeneous w (φ + ψ) n :=
   (weightedHomogeneousSubmodule R w n).add_mem hφ hψ
 
-/-- .
- -/
+/-- . -/
 theorem sum {ι : Type*} (s : Finset ι) (φ : ι → MvPolynomial σ R) (n : M) {w : σ → M}
     (h : ∀ i ∈ s, IsWeightedHomogeneous w (φ i) n) : IsWeightedHomogeneous w (∑ i ∈ s, φ i) n :=
   (weightedHomogeneousSubmodule R w n).sum_mem h
 
 set_option backward.isDefEq.respectTransparency false in
-/-- .
- -/
+/-- . -/
 theorem mul {w : σ → M} (hφ : IsWeightedHomogeneous w φ m) (hψ : IsWeightedHomogeneous w ψ n) :
     IsWeightedHomogeneous w (φ * ψ) (m + n) :=
   weightedHomogeneousSubmodule_mul w m n <| Submodule.mul_mem_mul hφ hψ
@@ -299,8 +242,7 @@ theorem pow {w : σ → M} (hφ : IsWeightedHomogeneous w φ m) (n : ℕ) :
   | zero => rw [pow_zero, zero_smul]; exact isWeightedHomogeneous_one R w
   | succ n ih => rw [pow_succ, succ_nsmul]; exact ih.mul hφ
 
-/-- .
- -/
+/-- . -/
 theorem prod {ι : Type*} (s : Finset ι) (φ : ι → MvPolynomial σ R) (n : ι → M) {w : σ → M} :
     (∀ i ∈ s, IsWeightedHomogeneous w (φ i) (n i)) →
       IsWeightedHomogeneous w (∏ i ∈ s, φ i) (∑ i ∈ s, n i) := by
@@ -315,8 +257,7 @@ theorem prod {ι : Type*} (s : Finset ι) (φ : ι → MvPolynomial σ R) (n : �
     intro j hjs
     exact h j (Finset.mem_insert_of_mem hjs)
 
-/-- .
- -/
+/-- . -/
 theorem weighted_total_degree [SemilatticeSup M] {w : σ → M} (hφ : IsWeightedHomogeneous w φ n)
     (h : φ ≠ 0) : weightedTotalDegree' w φ = n := by
   simp only [weightedTotalDegree']
@@ -367,10 +308,7 @@ lemma WeightedHomogeneousSubmodule.gradedMonoid {w : σ → M} :
   one_mem := isWeightedHomogeneous_one R w
   mul_mem _ _ _ _ := IsWeightedHomogeneous.mul
 
-/-- .
-
-
- -/
+/-- . -/
 def weightedHomogeneousComponent (w : σ → M) (n : M) : MvPolynomial σ R →ₗ[R] MvPolynomial σ R :=
   letI := Classical.decEq M
   (coeffLinearEquiv _).symm.toLinearMap ∘ₗ Submodule.subtype _ ∘ₗ
@@ -393,8 +331,7 @@ theorem weightedHomogeneousComponent_apply [DecidableEq M] :
   simp [weightedHomogeneousComponent, MvPolynomial, coeff, Finsupp.filter_eq_sum, support, monomial]
   congr
 
-/-- .
- -/
+/-- . -/
 theorem weightedHomogeneousComponent_isWeightedHomogeneous :
     (weightedHomogeneousComponent w n φ).IsWeightedHomogeneous w n := by
   classical
@@ -572,8 +509,7 @@ section OrderedAddCommMonoid
 variable [AddCommMonoid M] [PartialOrder M]
   {w : σ → M} (φ : MvPolynomial σ R)
 
-/-- .
- -/
+/-- . -/
 @[simp]
 theorem weightedHomogeneousComponent_zero [CanonicallyOrderedAdd M] [IsAddTorsionFree M]
     (hw : ∀ i : σ, w i ≠ 0) :
@@ -601,8 +537,7 @@ theorem nonTorsionWeight_of [IsAddTorsionFree M] (hw : ∀ i : σ, w i ≠ 0) :
     NonTorsionWeight w :=
   fun _ x hnx => (smul_eq_zero_iff_left (hw x)).mp hnx
 
-/-- .
- -/
+/-- . -/
 theorem weightedDegree_eq_zero_iff [CanonicallyOrderedAdd M]
     (hw : NonTorsionWeight w) {m : σ →₀ ℕ} :
     weight w m = 0 ↔ ∀ x : σ, m x = 0 := by
@@ -625,8 +560,7 @@ section LinearOrderedAddCommMonoid
 variable [AddCommMonoid M] [LinearOrder M] [OrderBot M] [CanonicallyOrderedAdd M]
   {w : σ → M} (φ : MvPolynomial σ R)
 
-/-- .
- -/
+/-- . -/
 theorem isWeightedHomogeneous_zero_iff_weightedTotalDegree_eq_zero {p : MvPolynomial σ R} :
     IsWeightedHomogeneous w p 0 ↔ p.weightedTotalDegree w = 0 := by
   rw [weightedTotalDegree, ← bot_eq_zero, Finset.sup_eq_bot_iff, bot_eq_zero, IsWeightedHomogeneous]
@@ -634,8 +568,7 @@ theorem isWeightedHomogeneous_zero_iff_weightedTotalDegree_eq_zero {p : MvPolyno
   intro m
   rw [mem_support_iff]
 
-/-- .
- -/
+/-- . -/
 theorem weightedTotalDegree_eq_zero_iff (hw : NonTorsionWeight w) (p : MvPolynomial σ R) :
     p.weightedTotalDegree w = 0 ↔ ∀ (m : σ →₀ ℕ) (_ : m ∈ p.support) (x : σ), m x = 0 := by
   rw [← isWeightedHomogeneous_zero_iff_weightedTotalDegree_eq_zero, IsWeightedHomogeneous]
@@ -650,8 +583,7 @@ end LinearOrderedAddCommMonoid
 
 section GradedAlgebra
 
-/- 
--/
+
 variable (w : σ → M) [AddCommMonoid M]
 
 theorem weightedHomogeneousComponent_eq_zero_of_notMem [DecidableEq M]
@@ -677,8 +609,7 @@ theorem decompose'_apply [DecidableEq M] (φ : MvPolynomial σ R) (m : M) :
   · rw [DirectSum.mk_apply_of_notMem hm, Submodule.coe_zero,
       weightedHomogeneousComponent_eq_zero_of_notMem w φ m hm]
 
-/-- .
- -/
+/-- . -/
 @[implicit_reducible]
 def weightedDecomposition [DecidableEq M] :
     DirectSum.Decomposition (weightedHomogeneousSubmodule R w) where
@@ -703,7 +634,7 @@ def weightedDecomposition [DecidableEq M] :
     exact weightedHomogeneousComponent_directSum R w x m
 
 
-set_option linter.style.whitespace false in --
+set_option linter.style.whitespace false in
 /-- . -/
 @[implicit_reducible]
 def weightedGradedAlgebra [DecidableEq M] :

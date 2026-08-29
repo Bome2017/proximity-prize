@@ -8,28 +8,9 @@ import ProximityPrize.Benchmark.TargetLower
 import ProximityPrize.SubmissionLower.LocalMathlibPortLicense
 import ProximityPrize.SubmissionLower.LocalKaehlerBasic
 
-/-!
-Permitted flat proof port of Mathlib.RingTheory.Kaehler.Polynomial.
-Model label: gpt-5.
-Original Mathlib revision: 905b95818eb32af7874a58b427f50c1711a5e96c.
-Original source SHA256: 43583c3ac7bef530c0b3cbfe6dc114d31d1a19b81ff88819ab7ad0165c02c799.
-Original copyright and author notices are retained above.
-Modifications: module/public visibility packaging is removed; imports
-are replaced by the trusted target and the necessary flat proof ports.
-All mathematical declarations and proof bodies are retained, except
-any explicitly documented ordinary-term expansion below.
-The full Apache 2.0 license is in LocalMathlibPortLicense.lean.
+/-! . -/
 
-Compatibility repairs under the broader trusted-target import: provide
-Classical.decEq for the multivariable index type in the coefficient proof,
-and explicitly qualify the univariate Polynomial.X term to avoid unrelated
-bivariate notation. Mathematical APIs, hypotheses, and proof arguments are
-retained. Final commands report the named declarations' kernel axioms.
--/
-
-/-! .
-
- -/
+/-! . -/
 
 section ProximityFlatProofPort
 
@@ -44,8 +25,7 @@ suppress_compilation
 
 section MvPolynomial
 
-/-- .
- -/
+/-- . -/
 def KaehlerDifferential.mvPolynomialEquiv (σ : Type*) :
     Ω[MvPolynomial σ R⁄R] ≃ₗ[MvPolynomial σ R] σ →₀ MvPolynomial σ R where
   __ := (MvPolynomial.mkDerivation _ (Finsupp.single · 1)).liftKaehlerDifferential
@@ -73,8 +53,7 @@ def KaehlerDifferential.mvPolynomialEquiv (σ : Type*) :
       · simp only [map_add, *]
       · simp [*]
 
-/-- .
- -/
+/-- . -/
 def KaehlerDifferential.mvPolynomialBasis (σ) :
     Basis σ (MvPolynomial σ R) Ω[MvPolynomial σ R⁄R] :=
   ⟨mvPolynomialEquiv R σ⟩
@@ -127,8 +106,7 @@ lemma KaehlerDifferential.polynomial_D_apply (P : R[X]) :
     D R R[X] P = derivative P • D R R[X] _root_.Polynomial.X := by
   rw [← aeval_X_left_apply P, (D R R[X]).map_aeval, aeval_X_left_apply, aeval_X_left_apply]
 
-/-- .
- -/
+/-- . -/
 def KaehlerDifferential.polynomialEquiv : Ω[R[X]⁄R] ≃ₗ[R[X]] R[X] where
   __ := derivative'.liftKaehlerDifferential
   invFun := (Algebra.lsmul R R _).toLinearMap.flip (D R R[X] _root_.Polynomial.X)

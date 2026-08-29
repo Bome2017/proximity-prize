@@ -7,47 +7,9 @@ Authors: Eric Wieser
 import ProximityPrize.Benchmark.TargetLower
 import ProximityPrize.SubmissionLower.LocalMathlibPortLicense
 
-/-!
-Permitted flat proof port of Mathlib.Algebra.MvPolynomial.Division.
-Model label: gpt-5.
-Original Mathlib revision: 905b95818eb32af7874a58b427f50c1711a5e96c.
-Original source SHA256: 241674532aa085ff0566802acc0265095464bf1da6b8d54702069b02b77738d4.
-Original copyright and author notices are retained above.
-Modifications: module/public visibility packaging is removed; imports
-are replaced by the trusted target and the necessary flat proof ports.
-All mathematical declarations and proof bodies are retained, except
-any explicitly documented ordinary-term expansion below.
-The full Apache 2.0 license is in LocalMathlibPortLicense.lean.
+/-! . -/
 
-Elaboration repair for the required TargetLower import environment:
-The variable constructor is explicitly MvPolynomial.X, avoiding the trusted
-ArkLib bivariate X notation. X-prefixed simp lemmas are qualified where the
-same notation affects tokenization. Existing classical proofs explicitly
-supply DecidableEq σ to avoid unrelated imported instance-search branches.
-These changes do not add mathematical hypotheses or change the original
-mathematical declarations, conclusions, or proof arguments.
--/
-
-/-! .
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- -/
+/-! . -/
 
 section ProximityFlatProofPort
 
@@ -58,8 +20,7 @@ namespace MvPolynomial
 
 section CopiedDeclarations
 
-/-! .
- -/
+/-! . -/
 
 
 /-- . -/

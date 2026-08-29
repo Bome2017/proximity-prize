@@ -1,7 +1,7 @@
 import ProximityPrize.SubmissionLower.ContactStackedResidualCells6656Research
 import ProximityPrize.SubmissionLower.ContactStackedSeedPartition6670Research
-import ProximityPrize.SubmissionLower.ContactMovingStackedBoxTransport6731Research
-import ProximityPrize.SubmissionLower.ContactMovingStackedResidualParameters6731Research
+import ProximityPrize.SubmissionLower.ContactMovingStackedBoxTransport6732Research
+import ProximityPrize.SubmissionLower.ContactMovingStackedResidualParameters6732Research
 /-! .
 
 
@@ -10,16 +10,16 @@ import ProximityPrize.SubmissionLower.ContactMovingStackedResidualParameters6731
 
 
  -/
-namespace ProximityPrize.SubmissionLower.ContactMovingStackedResidualCells6731Research
+namespace ProximityPrize.SubmissionLower.ContactMovingStackedResidualCells6732Research
 open scoped Classical BigOperators
 open ProximityPrize.Benchmark
 open ContactInterpolation ContactTranslation ContactFactorCaps
 open ContactPrimeSeedIncidence ContactProperCutSeedCount ContactRecursiveGCDResearch
-open ContactMovingParameters6731Research
+open ContactMovingParameters6732Research
 attribute [local simp] n errors agreements
 open ContactStackedGCDCover6670Research
 open ContactStackedSeedPartition6670Research
-open ContactMovingStackedBoxTransport6731Research
+open ContactMovingStackedBoxTransport6732Research
 open ContactTightSingularLedgerResearch
 open ContactSingularLedger6600Research
 open ContactSingularBranch6600Research
@@ -37,24 +37,24 @@ local instance : CharP IRSProfile.Field prime := by
   simpa [prime, ContactParameters6600Research.prime] using
     ContactFrozenAlignment6600Research.challenge_field_characteristic6600
 def stageOne : UnequalParameters :=
-  ContactMovingStackedResidualParameters6731Research.residualStageOne
+  ContactMovingStackedResidualParameters6732Research.residualStageOne
 def stageTwo : UnequalParameters :=
-  ContactMovingStackedResidualParameters6731Research.residualStageTwo
-def pivotB : TightParameters := ContactMovingStackedResidualParameters6731Research.pivotB
+  ContactMovingStackedResidualParameters6732Research.residualStageTwo
+def pivotB : TightParameters := ContactMovingStackedResidualParameters6732Research.pivotB
 def pivotGcd12 : TightParameters :=
-  ContactMovingStackedResidualParameters6731Research.pivotGcd12
+  ContactMovingStackedResidualParameters6732Research.pivotGcd12
 attribute [local simp] stageOne stageTwo pivotB pivotGcd12
 attribute [local simp]
-  ContactMovingStackedResidualParameters6731Research.residualStageOne
-  ContactMovingStackedResidualParameters6731Research.residualStageTwo
-  ContactMovingStackedResidualParameters6731Research.pivotB
-  ContactMovingStackedResidualParameters6731Research.pivotGcd12
+  ContactMovingStackedResidualParameters6732Research.residualStageOne
+  ContactMovingStackedResidualParameters6732Research.residualStageTwo
+  ContactMovingStackedResidualParameters6732Research.pivotB
+  ContactMovingStackedResidualParameters6732Research.pivotGcd12
 theorem firstResidualCell_count_lt
     (QA QB QC : StackedPoly) (hQA : QA ≠ 0) (hQB : QB ≠ 0)
     (hboxA : QA ∈ globalCoefficientBox IRSProfile.Field
-      (42 * agreements) w 22328 11)
+      (43 * agreements) w 38583 11)
     (hboxB : QB ∈ globalCoefficientBox IRSProfile.Field
-      (78 * agreements) w 1205 24)
+      (81 * agreements) w 1222 25)
     (selected : IRSProfile.Field → Polynomial IRSProfile.Field)
     (Gamma : Finset IRSProfile.Field)
     (u0 u1 : IRSProfile.Index → IRSProfile.Field)
@@ -67,7 +67,7 @@ theorem firstResidualCell_count_lt
           u0 i + gamma * u1 i)).card)
     (hnoPencil : NoLargeSelectedPencil selected Gamma w errors) :
     (firstResidualSeeds selected Gamma QA QB).card <
-      118051399505874 + 582880209987137 := by
+      216720566639304 + 667325631931636 := by
   let Delta := firstResidualSeeds selected Gamma QA QB
   let Q := quotientB QA QB
   let T := quotientA QA QB
@@ -85,7 +85,7 @@ theorem firstResidualCell_count_lt
     ContactStackedResidualCells6656Research.quotientB_ne_zero QA QB hQB
   have hQbox := quotientB_mem_parent_box QA QB hQB hboxB
   have hTbox := quotientA_mem_parent_box QA QB hQA hboxA
-  have hTcaps := degree_bounds_of_mem_box T (42 * agreements) w 22328 11
+  have hTcaps := degree_bounds_of_mem_box T (43 * agreements) w 38583 11
     (by norm_num [w]) hTbox
   have hrel : IsRelPrime Q T :=
     (firstQuotients_isRelPrime hQA).symm
@@ -161,21 +161,21 @@ theorem firstResidualCell_count_lt
         (by simpa [stageOne, pivotB, UnequalParameters.errors,
           TightParameters.errors] using hnoPencilDelta))
   have hceil : stageOne.regularCountCap + pivotB.countCap + 1 =
-      118051399505874 + 582880209987137 := by
+      216720566639304 + 667325631931636 := by
     simpa only [stageOne, pivotB,
-      ContactMovingStackedResidualParameters6731Research.firstResidualSingularCeiling,
-      ContactMovingParameters6731Research.six_cells_exact.2.2.2.1] using
-      ContactMovingStackedResidualParameters6731Research.residual_stage_ceilings.1
+      ContactMovingStackedResidualParameters6732Research.firstResidualSingularCeiling,
+      ContactMovingParameters6732Research.six_cells_exact.2.2.2.1] using
+      ContactMovingStackedResidualParameters6732Research.residual_stage_ceilings.1
   rw [hceil] at hstage
   simpa [Delta] using hstage
 theorem secondResidualCell_count_lt
     (QA QB QC : StackedPoly) (hQA : QA ≠ 0) (hQB : QB ≠ 0) (hQC : QC ≠ 0)
     (hboxA : QA ∈ globalCoefficientBox IRSProfile.Field
-      (42 * agreements) w 22328 11)
+      (43 * agreements) w 38583 11)
     (hboxB : QB ∈ globalCoefficientBox IRSProfile.Field
-      (78 * agreements) w 1205 24)
+      (81 * agreements) w 1222 25)
     (hboxC : QC ∈ globalCoefficientBox IRSProfile.Field
-      (40 * agreements) w 27619 12)
+      (40 * agreements) w 91386 12)
     (selected : IRSProfile.Field → Polynomial IRSProfile.Field)
     (Gamma : Finset IRSProfile.Field)
     (u0 u1 : IRSProfile.Index → IRSProfile.Field)
@@ -188,7 +188,7 @@ theorem secondResidualCell_count_lt
           u0 i + gamma * u1 i)).card)
     (hnoPencil : NoLargeSelectedPencil selected Gamma w errors) :
     (secondResidualSeeds selected Gamma QA QB QC).card <
-      49569724906768 + 62654593239340 := by
+      163704523661892 + 65054160163108 := by
   let Delta := secondResidualSeeds selected Gamma QA QB QC
   let Q := middleQuotient QA QB QC
   let T := quotientC QA QB QC
@@ -207,7 +207,7 @@ theorem secondResidualCell_count_lt
     ContactStackedResidualCells6656Research.middleQuotient_ne_zero QA QB QC hQA
   have hQbox := middleQuotient_mem_parent_box QA QB QC hQA hbox12
   have hTbox := quotientC_mem_parent_box QA QB QC hQC hboxC
-  have hTcaps := degree_bounds_of_mem_box T (40 * agreements) w 27619 12
+  have hTcaps := degree_bounds_of_mem_box T (40 * agreements) w 91386 12
     (by norm_num [w]) hTbox
   have hrel : IsRelPrime Q T := secondQuotients_isRelPrime hQA
   have hdegreeDelta : ∀ gamma ∈ Delta,
@@ -282,12 +282,12 @@ theorem secondResidualCell_count_lt
         (by simpa [stageTwo, pivotGcd12, UnequalParameters.errors,
           TightParameters.errors] using hnoPencilDelta))
   have hceil : stageTwo.regularCountCap + pivotGcd12.countCap + 1 =
-      49569724906768 + 62654593239340 := by
+      163704523661892 + 65054160163108 := by
     simpa only [stageTwo, pivotGcd12,
-      ContactMovingStackedResidualParameters6731Research.secondResidualSingularCeiling,
-      ContactMovingParameters6731Research.six_cells_exact.2.2.2.2.2] using
-      ContactMovingStackedResidualParameters6731Research.residual_stage_ceilings.2
+      ContactMovingStackedResidualParameters6732Research.secondResidualSingularCeiling,
+      ContactMovingParameters6732Research.six_cells_exact.2.2.2.2.2] using
+      ContactMovingStackedResidualParameters6732Research.residual_stage_ceilings.2
   rw [hceil] at hstage
   simpa [Delta] using hstage
 end
-end ProximityPrize.SubmissionLower.ContactMovingStackedResidualCells6731Research
+end ProximityPrize.SubmissionLower.ContactMovingStackedResidualCells6732Research

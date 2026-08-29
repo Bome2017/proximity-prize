@@ -7,48 +7,9 @@ Authors: Janos Wolosz
 import ProximityPrize.Benchmark.TargetLower
 import ProximityPrize.SubmissionLower.LocalMathlibPortLicense
 
-/-!
-Permitted flat proof port of Mathlib.RingTheory.Nilpotent.Exp.
-Model label: gpt-5.
-Original Mathlib revision: 905b95818eb32af7874a58b427f50c1711a5e96c.
-Original source SHA256: 1cd3144ed1e739b410ca3c482ddf5e3a15ba692f56d2f20ba370e03be66e35b0.
-Original copyright and author notices are retained above.
-Modifications: module/public visibility packaging is removed; imports
-are replaced by the trusted target and the necessary flat proof ports.
-All mathematical declarations and proof bodies are retained, except
-any explicitly documented ordinary-term expansion below.
-The full Apache 2.0 license is in LocalMathlibPortLicense.lean.
+/-! . -/
 
-Compatibility repair: references to the root `IsNilpotent` namespace in
-`Module.End` are explicitly qualified to avoid name resolution changes
-under the broader trusted-target import. No mathematical declaration,
-hypothesis, or proof step is removed. The final commands report kernel axioms.
--/
-
-/-! .
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- -/
+/-! . -/
 
 section ProximityFlatProofPort
 
@@ -59,8 +20,7 @@ variable {A : Type*} [Ring A] [Module ℚ A]
 open Finset
 open scoped Nat
 
-/-- .
- -/
+/-- . -/
 noncomputable def exp (a : A) : A :=
   ∑ i ∈ range (nilpotencyClass a), (i.factorial : ℚ)⁻¹ • (a ^ i)
 
@@ -208,7 +168,7 @@ theorem exp_smul {G : Type*} [Monoid G] [MulSemiringAction G A]
     exp (g • a) = g • exp a :=
   (map_exp ha (MulSemiringAction.toRingHom G A g)).symm
 
-set_option linter.flexible false in --
+set_option linter.flexible false in
 theorem isNilpotent_exp_sub_one {a : A} (ha : IsNilpotent a) : IsNilpotent (exp a - 1) := by
   nontriviality A
   rw [exp, ← Nat.sub_add_cancel (pos_nilpotencyClass_iff.2 ha), Finset.sum_range_succ']

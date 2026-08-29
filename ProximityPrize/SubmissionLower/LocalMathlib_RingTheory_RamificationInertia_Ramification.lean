@@ -12,38 +12,9 @@ import ProximityPrize.SubmissionLower.LocalMathlib_RingTheory_LocalRing_ResidueF
 import ProximityPrize.SubmissionLower.LocalMathlib_RingTheory_QuasiFinite_Basic
 import ProximityPrize.SubmissionLower.LocalMathlib_RingTheory_Unramified_LocalRing
 
-/-!
-Permitted flat proof port of Mathlib.RingTheory.RamificationInertia.Ramification.
-Model label: gpt-5.
-Original Mathlib revision: 905b95818eb32af7874a58b427f50c1711a5e96c.
-Original source SHA256: c2a305dfe70efa8b26dc73bcf117952d39ebe260fc8fd5417f3e2f5226cf2887.
-Original copyright and author notices are retained above.
-Modifications: module/public visibility packaging is removed; imports
-are replaced by the trusted target and the necessary flat proof ports.
-All mathematical declarations and proof bodies are retained, except
-any explicitly documented ordinary-term expansion below.
-The full Apache 2.0 license is in LocalMathlibPortLicense.lean.
--/
+/-! . -/
 
-/-! .
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- -/
+/-! . -/
 
 section ProximityFlatProofPort
 
@@ -54,14 +25,7 @@ section
 variable {S : Type*} [CommRing S] (q : Ideal S) (R : Type*) [CommRing R] [Algebra R S]
 
 open scoped Classical in
-/-- .
-
-
-
-
-
-
- -/
+/-- . -/
 noncomputable def ramificationIdx : ℕ :=
   if _ : q.IsPrime then
     letI Sq := Localization.AtPrime q

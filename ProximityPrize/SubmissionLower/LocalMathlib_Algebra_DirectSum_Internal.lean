@@ -8,59 +8,9 @@ import ProximityPrize.Benchmark.TargetLower
 import ProximityPrize.SubmissionLower.LocalMathlibPortLicense
 import ProximityPrize.SubmissionLower.LocalMathlib_Algebra_DirectSum_Algebra
 
-/-!
-Permitted flat proof port of Mathlib.Algebra.DirectSum.Internal.
-Model label: gpt-5.
-Original Mathlib revision: 905b95818eb32af7874a58b427f50c1711a5e96c.
-Original source SHA256: 8995014b06092e5438c44eb35edf058f88163c45bba6ee9074524f54470f3e3a.
-Original copyright and author notices are retained above.
-Modifications: module/public visibility packaging is removed; imports
-are replaced by the trusted target and the necessary flat proof ports.
-All mathematical declarations and proof bodies are retained, except
-any explicitly documented ordinary-term expansion below.
-The full Apache 2.0 license is in LocalMathlibPortLicense.lean.
--/
+/-! . -/
 
-/-! .
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- -/
+/-! . -/
 
 section ProximityFlatProofPort
 
@@ -101,8 +51,7 @@ variable [DecidableEq ι]
 
 namespace SetLike
 
-/-- .
- -/
+/-- . -/
 instance gnonUnitalNonAssocSemiring [Add ι] [NonUnitalNonAssocSemiring R] [SetLike σ R]
     [AddSubmonoidClass σ R] (A : ι → σ) [SetLike.GradedMul A] :
     DirectSum.GNonUnitalNonAssocSemiring fun i => A i where
@@ -258,8 +207,7 @@ theorem coe_mul_of_apply_of_not_le (r : ⨁ i, A i) {i : ι} (r' : A i) (n : ι)
 
 variable [Sub ι] [OrderedSub ι] [AddLeftReflectLE ι]
 
-/-! .
- -/
+/-! . -/
 
 theorem coe_mul_of_apply_of_le (r : ⨁ i, A i) {i : ι} (r' : A i) (n : ι) (h : i ≤ n) :
     ((r * of (fun i => A i) i r') n : R) = r (n - i) * r' :=
@@ -320,8 +268,7 @@ def DirectSum.coeAlgHom [AddMonoid ι] [CommSemiring S] [Semiring R] [Algebra S 
     (A : ι → Submodule S R) [SetLike.GradedMonoid A] : (⨁ i, A i) →ₐ[S] R :=
   DirectSum.toAlgebra S _ (fun i => (A i).subtype) rfl (fun _ _ => rfl)
 
-/-- .
- -/
+/-- . -/
 theorem Submodule.iSup_eq_toSubmodule_range [AddMonoid ι] [CommSemiring S] [Semiring R]
     [Algebra S R] (A : ι → Submodule S R) [SetLike.GradedMonoid A] :
     ⨆ i, A i = Subalgebra.toSubmodule (DirectSum.coeAlgHom A).range :=
@@ -349,7 +296,7 @@ def subsemiring : Subsemiring R where
   add_mem' := add_mem
   zero_mem' := zero_mem (A 0)
 
---
+
 /-- . -/
 instance instSemiring : Semiring (A 0) := inferInstanceAs <| Semiring (subsemiring A)
 
@@ -364,9 +311,8 @@ section CommSemiring
 variable [CommSemiring R] [AddMonoid ι] [SetLike σ R] [AddSubmonoidClass σ R]
 variable (A : ι → σ) [SetLike.GradedMonoid A]
 
---
-/-- .
- -/
+
+/-- . -/
 instance instCommSemiring : CommSemiring (A 0) := inferInstanceAs <| CommSemiring (subsemiring A)
 
 instance : Algebra (A 0) R :=
@@ -385,7 +331,7 @@ def subring : Subring R where
   __ := subsemiring A
   neg_mem' := neg_mem
 
---
+
 /-- . -/
 instance instRing : Ring (A 0) := inferInstanceAs <| Ring (subring A)
 
@@ -397,7 +343,7 @@ section CommRing
 variable [CommRing R] [AddCommMonoid ι] [SetLike σ R] [AddSubgroupClass σ R]
 variable (A : ι → σ) [SetLike.GradedMonoid A]
 
---
+
 /-- . -/
 instance instCommRing : CommRing (A 0) := inferInstanceAs <| CommRing (subring A)
 
@@ -412,7 +358,7 @@ def subalgebra : Subalgebra S R where
   __ := subsemiring A
   algebraMap_mem' := algebraMap_mem_graded A
 
---
+
 /-- . -/
 instance instAlgebra : Algebra S (A 0) := inferInstanceAs <| Algebra S (subalgebra A)
 
@@ -461,8 +407,7 @@ theorem mul_apply_eq_zero {r r' : ⨁ i, A i} {m n : ι}
 
 variable [CanonicallyOrderedAdd ι]
 
-/-- .
- -/
+/-- . -/
 theorem listProd_apply_eq_zero' {l : List ((⨁ i, A i) × ι)}
     (hl : ∀ xn ∈ l, ∀ k < xn.2, xn.1 k = 0) ⦃n : ι⦄ (hn : n < (l.map Prod.snd).sum) :
     (l.map Prod.fst).prod n = 0 := by
@@ -476,7 +421,7 @@ theorem listProd_apply_eq_zero' {l : List ((⨁ i, A i) × ι)}
 theorem listProd_apply_eq_zero {l : List (⨁ i, A i)} {m : ι}
     (hl : ∀ x ∈ l, ∀ k < m, x k = 0) ⦃n : ι⦄ (hn : n < l.length • m) :
     l.prod n = 0 := by
-  --
+
   induction l generalizing n with
   | nil => simp at hn
   | cons head tail ih =>
@@ -493,8 +438,7 @@ section CommSemiring
 variable [CommSemiring R] [SetLike σ R] [AddSubmonoidClass σ R]
 variable {A : ι → σ} [SetLike.GradedMonoid A]
 
-/-- .
- -/
+/-- . -/
 theorem multisetProd_apply_eq_zero' {s : Multiset ((⨁ i, A i) × ι)}
     (hs : ∀ xn ∈ s, ∀ k < xn.2, xn.1 k = 0) ⦃n : ι⦄ (hn : n < (s.map Prod.snd).sum) :
     (s.map Prod.fst).prod n = 0 := by
@@ -509,8 +453,7 @@ theorem multisetProd_apply_eq_zero {s : Multiset (⨁ i, A i)} {m : ι}
     (by simpa [← Multiset.sum_coe, ← Multiset.map_coe])
   simpa [← Multiset.prod_coe, ← Multiset.map_coe]
 
-/-- .
- -/
+/-- . -/
 theorem finsetProd_apply_eq_zero' {s : Finset ((⨁ i, A i) × ι)}
     (hs : ∀ xn ∈ s, ∀ k < xn.2, xn.1 k = 0) ⦃n : ι⦄ (hn : n < ∑ xn ∈ s, xn.2) :
     (∏ xn ∈ s, xn.1) n = 0 := by

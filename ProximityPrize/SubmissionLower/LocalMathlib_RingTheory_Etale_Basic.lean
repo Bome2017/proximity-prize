@@ -9,36 +9,9 @@ import ProximityPrize.SubmissionLower.LocalMathlibPortLicense
 import ProximityPrize.SubmissionLower.LocalMathlib_RingTheory_Smooth_Basic
 import ProximityPrize.SubmissionLower.LocalMathlib_RingTheory_Unramified_Basic
 
-/-!
-Permitted flat proof port of Mathlib.RingTheory.Etale.Basic.
-Model label: gpt-5.
-Original Mathlib revision: 905b95818eb32af7874a58b427f50c1711a5e96c.
-Original source SHA256: 1250aaa4e2146c085a1e87f086accb1c824436f310d4bd0a43cf5649ca627807.
-Original copyright and author notices are retained above.
-Modifications: module/public visibility packaging is removed; imports
-are replaced by the trusted target and the necessary flat proof ports.
-All mathematical declarations and proof bodies are retained, except
-any explicitly documented ordinary-term expansion below.
-The full Apache 2.0 license is in LocalMathlibPortLicense.lean.
--/
+/-! . -/
 
-/-! .
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- -/
+/-! . -/
 
 section ProximityFlatProofPort
 
@@ -54,8 +27,7 @@ variable {R : Type u} {A : Type v} {B : Type*} [CommRing R] [CommRing A] [Algebr
 section
 
 variable (R A) in
-/-- .
- -/
+/-- . -/
 @[mk_iff, stacks 00UQ]
 class FormallyEtale : Prop where
   subsingleton_kaehlerDifferential : Subsingleton Ω[A⁄R]
@@ -91,11 +63,7 @@ lemma comp_bijective [FormallyEtale R A] (I : Ideal B) (hI : I ^ 2 = ⊥) :
     Function.Bijective ((Ideal.Quotient.mkₐ R I).comp : (A →ₐ[R] B) → A →ₐ[R] B ⧸ I) :=
   ⟨FormallyUnramified.comp_injective I hI, FormallySmooth.comp_surjective R A I hI⟩
 
-/-- .
-
-
-
- -/
+/-- . -/
 theorem iff_comp_bijective :
    FormallyEtale R A ↔ ∀ ⦃B : Type max u v⦄ [CommRing B] [Algebra R B] (I : Ideal B), I ^ 2 = ⊥ →
       Function.Bijective ((Ideal.Quotient.mkₐ R I).comp : (A →ₐ[R] B) → A →ₐ[R] B ⧸ I) :=
@@ -171,21 +139,7 @@ end BaseChange
 
 section Localization
 
-/-! .
-
-
-
-
-
-
-
-
-
-
-
-
-
- -/
+/-! . -/
 
 /-! . -/
 variable {R S Rₘ Sₘ : Type*} [CommRing R] [CommRing S] [CommRing Rₘ] [CommRing Sₘ]
@@ -303,10 +257,7 @@ namespace RingHom
 
 variable {R S : Type*} [CommRing R] [CommRing S]
 
-/-- .
-
-
- -/
+/-- . -/
 @[algebraize Algebra.FormallyEtale]
 def FormallyEtale (f : R →+* S) : Prop :=
   letI := f.toAlgebra

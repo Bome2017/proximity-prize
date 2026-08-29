@@ -11,53 +11,11 @@ import ProximityPrize.SubmissionLower.LocalMathlib_FieldTheory_RatFunc_Intermedi
 import ProximityPrize.SubmissionLower.LocalMathlib_RingTheory_Adjoin_Polynomial_Bivariate
 import ProximityPrize.SubmissionLower.LocalMathlib_FieldTheory_RatFunc_Valuation
 
-/-!
-Permitted flat proof port of Mathlib.NumberTheory.FunctionField.
-Model label: gpt-5.
-Original Mathlib revision: 905b95818eb32af7874a58b427f50c1711a5e96c.
-Original source SHA256: d6e838a5f1b3817af8820eb123fb16847eef4259153bc8aa4506ab114a1382bf.
-Original copyright and author notices are retained above.
-Modifications: module/public visibility packaging is removed; imports
-are replaced by the trusted target and the necessary flat proof ports.
-All mathematical declarations and proof bodies are retained, except
-any explicitly documented ordinary-term expansion below.
-The full Apache 2.0 license is in LocalMathlibPortLicense.lean.
--/
+/-! . -/
 
-/-!
-Port elaboration repair (gpt-5, 2026-08-27): qualify the rational-function
-value RatFunc.X in the transcendental-adjunction section to avoid the
-trusted target's conflicting bivariate-polynomial notation. All original
-definitions, theorem statements, hypotheses and proof arguments are retained.
--/
+/-! . -/
 
-/-! .
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- -/
+/-! . -/
 
 section ProximityFlatProofPort
 
@@ -68,11 +26,7 @@ open scoped nonZeroDivisors Polynomial WithZero RatFunc
 
 variable (F K : Type*) [Field F] [Field K]
 
-/-- .
-
-
-
- -/
+/-- . -/
 abbrev FunctionField [Algebra F⟮X⟯ K] : Prop :=
   FiniteDimensional F⟮X⟯ K
 
@@ -103,12 +57,7 @@ theorem algebraMap_injective [Algebra F[X] K] [Algebra F⟮X⟯ K]
   rw [IsScalarTower.algebraMap_eq F[X] F⟮X⟯ K]
   exact (algebraMap F⟮X⟯ K).injective.comp (IsFractionRing.injective F[X] F⟮X⟯)
 
-/-- .
-
-
-
-
- -/
+/-- . -/
 def ringOfIntegers [Algebra F[X] K] :=
   integralClosure F[X] K
 
@@ -246,11 +195,11 @@ theorem isAlgebraic_X_over_adjoin_transcendental (hy : Transcendental F y) :
 
 lemma finiteDimensional_of_adjoin_transcendental (hy : Transcendental F y) :
     FiniteDimensional F⟮y⟯ K :=
-  --
+
   let x := algebraMap _ K (RatFunc.X : F⟮X⟯)
   let Fyx := restrictScalars F F⟮y⟯⟮x⟯
   let Fxy := restrictScalars F F⟮x⟯⟮y⟯
-  --
+
   let : Algebra F⟮y⟯ Fyx := F⟮y⟯⟮x⟯.algebra
   let : Module F⟮y⟯ Fyx := Algebra.toModule
   let : SMul F⟮y⟯ Fyx := Algebra.toSMul
@@ -290,8 +239,7 @@ theorem finiteDimensional_ratFunc_of_constantExtension [IsScalarTower F[X] E[X] 
     FiniteDimensional F⟮X⟯ E⟮X⟯ :=
   .equiv (AlgEquiv.ofInjectiveField (IsScalarTower.toAlgHom F⟮X⟯ E⟮X⟯ K)).toLinearEquiv.symm
 
-/-- .
- -/
+/-- . -/
 theorem finiteDimensional_of_constantExtension [IsScalarTower F[X] E[X] K]
     [Algebra.IsAlgebraic F E] : FiniteDimensional F E :=
   have := finiteDimensional_ratFunc_of_constantExtension (F := F) (E := E) K
@@ -307,8 +255,7 @@ variable [Algebra F K] (E : IntermediateField F K) [Algebra E[X] K] [FaithfulSMu
 instance : FiniteDimensional F⟮X⟯ E⟮X⟯ :=
   finiteDimensional_ratFunc_of_constantExtension K
 
-/-- .
- -/
+/-- . -/
 instance [Algebra.IsAlgebraic F E] : FiniteDimensional F E :=
   finiteDimensional_of_constantExtension K
 

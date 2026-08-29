@@ -7,41 +7,9 @@ Authors: Andrew Yang
 import ProximityPrize.Benchmark.TargetLower
 import ProximityPrize.SubmissionLower.LocalMathlibPortLicense
 
-/-!
-Permitted flat proof port of Mathlib.RingTheory.Extension.Basic.
-Model label: gpt-5.
-Original Mathlib revision: 905b95818eb32af7874a58b427f50c1711a5e96c.
-Original source SHA256: efeafe255d03e70b98b4add26064249fdc0455c2d2ef045cdf0da8eae74e8e54.
-Original copyright and author notices are retained above.
-Modifications: module/public visibility packaging is removed; imports
-are replaced by the trusted target and the necessary flat proof ports.
-All mathematical declarations and proof bodies are retained, except
-any explicitly documented ordinary-term expansion below.
-The full Apache 2.0 license is in LocalMathlibPortLicense.lean.
--/
+/-! . -/
 
-/-! .
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- -/
+/-! . -/
 
 section ProximityFlatProofPort
 
@@ -51,10 +19,7 @@ open TensorProduct MvPolynomial
 
 variable (R : Type u) (S : Type v) [CommRing R] [CommRing S] [Algebra R S]
 
-/-- .
-
-
- -/
+/-- . -/
 structure Algebra.Extension where
   /-- . -/
   Ring : Type w
@@ -75,7 +40,7 @@ attribute [instance] commRing algebra₁ algebra₂ isScalarTower
 
 attribute [simp] algebraMap_σ
 
---
+
 @[nolint unusedArguments]
 noncomputable instance {R₀} [CommRing R₀] [Algebra R₀ R] [Algebra R₀ S] [IsScalarTower R₀ R S] :
     Algebra R₀ P.Ring := Algebra.compHom P.Ring (algebraMap R₀ R)
@@ -135,10 +100,7 @@ section Localization
 variable (M : Submonoid S) {S' : Type*} [CommRing S'] [Algebra S S'] [IsLocalization M S']
 variable [Algebra R S'] [IsScalarTower R S S']
 
-/-- .
-
-
- -/
+/-- . -/
 noncomputable
 def localization (P : Extension.{w} R S) : Extension R S' where
   Ring := Localization (M.comap (algebraMap P.Ring S))
@@ -178,11 +140,7 @@ lemma ker_baseChange :
     P.algebraMap_surjective
 
 variable (T) in
-/-- .
-
-
-
- -/
+/-- . -/
 @[instance_reducible]
 noncomputable def algebraBaseChange : Algebra P.Ring (P.baseChange (T := T)).Ring :=
   fast_instance% TensorProduct.rightAlgebra
@@ -204,15 +162,7 @@ section
 variable [Algebra R R'] [Algebra R' R''] [Algebra R R'']
 variable [Algebra S S'] [Algebra S' S''] [Algebra S S'']
 
-/-- .
-
-
-
-
-
-
-
- -/
+/-- . -/
 @[ext]
 structure Hom where
   /-- . -/
@@ -237,8 +187,7 @@ def Hom.toAlgHom [Algebra R S'] [IsScalarTower R R' S'] (f : Hom P P') :
 lemma Hom.toAlgHom_apply [Algebra R S'] [IsScalarTower R R' S'] (f : Hom P P') (x) :
     f.toAlgHom x = f.toRingHom x := rfl
 
-/-- .
- -/
+/-- . -/
 @[simps]
 def Hom.ofAlgHom [Algebra R S'] [IsScalarTower R R' S'] [IsScalarTower R S S']
     (f : P.Ring →ₐ[R] P'.Ring)
@@ -312,8 +261,7 @@ end Hom
 
 section Infinitesimal
 
-/-- .
- -/
+/-- . -/
 noncomputable
 def infinitesimal (P : Extension R S) : Extension R S where
   Ring := P.Ring ⧸ P.ker ^ 2
@@ -335,9 +283,7 @@ end Infinitesimal
 
 section Cotangent
 
-/-- .
-
- -/
+/-- . -/
 def Cotangent : Type _ := P.ker.Cotangent
 
 noncomputable

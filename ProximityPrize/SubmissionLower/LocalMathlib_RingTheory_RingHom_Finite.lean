@@ -7,35 +7,9 @@ Authors: Andrew Yang
 import ProximityPrize.Benchmark.TargetLower
 import ProximityPrize.SubmissionLower.LocalMathlibPortLicense
 
-/-!
-Permitted flat proof port of Mathlib.RingTheory.RingHom.Finite.
-Model label: gpt-5.
-Original Mathlib revision: 905b95818eb32af7874a58b427f50c1711a5e96c.
-Original source SHA256: 7be7c367cb2d59461643dd157e3c710f1bce58be43742e1766271f7573d8aa12.
-Original copyright and author notices are retained above.
-Modifications: module/public visibility packaging is removed; imports
-are replaced by the trusted target and the necessary flat proof ports.
-All mathematical declarations and proof bodies are retained, except
-any explicitly documented ordinary-term expansion below.
-The full Apache 2.0 license is in LocalMathlibPortLicense.lean.
-Port elaboration adjustment: explicitly bind classical decidable equality
-for the original finite-union proof; all statements and arguments are retained.
--/
+/-! . -/
 
-/-! .
-
-
-
-
-
-
-
-
-
-
-
-
- -/
+/-! . -/
 
 section ProximityFlatProofPort
 
@@ -94,14 +68,13 @@ theorem RingHom.localization_away_map_finite (R S R' S' : Type u) [CommRing R] [
     [IsLocalization.Away (f r) S'] (hf : f.Finite) : (IsLocalization.Away.map R' S' f r).Finite :=
   finite_localizationPreserves.away f r _ _ hf
 
-/-- .
- -/
+/-- . -/
 theorem RingHom.finite_ofLocalizationSpan : RingHom.OfLocalizationSpan @RingHom.Finite := by
   classical
   rw [RingHom.ofLocalizationSpan_iff_finite]
   introv R hs H
   letI : DecidableEq S := Classical.decEq S
-  --
+
   letI := f.toAlgebra
   letI := fun r : s => (Localization.awayMap f r).toAlgebra
   have (r : s) : IsLocalization ((Submonoid.powers (r : R)).map (algebraMap R S))
@@ -110,19 +83,19 @@ theorem RingHom.finite_ofLocalizationSpan : RingHom.OfLocalizationSpan @RingHom.
   haveI : ∀ r : s, IsScalarTower R (Localization.Away (r : R)) (Localization.Away (f r)) :=
     fun r => IsScalarTower.of_algebraMap_eq'
       (IsLocalization.map_comp (Submonoid.powers (r : R)).le_comap_map).symm
-  --
-  --
-  --
+
+
+
   constructor
   replace H := fun r => (H r).1
   choose s₁ s₂ using H
   let sf := fun x : s => IsLocalization.finsetIntegerMultiple (Submonoid.powers (f x)) (s₁ x)
   use s.attach.biUnion sf
   rw [Submodule.span_attach_biUnion, eq_top_iff]
-  --
-  --
-  --
-  --
+
+
+
+
   rintro x -
   apply Submodule.mem_of_span_eq_top_of_smul_pow_mem _ (s : Set R) hs _ _
   intro r

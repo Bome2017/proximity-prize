@@ -10,59 +10,8 @@ import ProximityPrize.SubmissionLower.LocalMathlib_FieldTheory_KrullTopology
 import ProximityPrize.SubmissionLower.LocalMathlib_FieldTheory_Galois_GaloisClosure
 import ProximityPrize.SubmissionLower.LocalMathlib_Topology_Algebra_Group_ClosedSubgroup
 
-/-!
-Permitted flat proof port of Mathlib.FieldTheory.Galois.Infinite.
-Model label: gpt-5.
-Original Mathlib revision: 905b95818eb32af7874a58b427f50c1711a5e96c.
-Original source SHA256: a91a234de35e8af83e1c9528f7d4c26e495bd57861b8ea2191b34d48fc7888f5.
-Original copyright and author notices are retained above.
-Modifications: module/public visibility packaging is removed; imports
-are replaced by the trusted target and the necessary flat proof ports.
-All mathematical declarations and proof bodies are retained, except
-any explicitly documented ordinary-term expansion below.
-The full Apache 2.0 license is in LocalMathlibPortLicense.lean.
--/
-/-! .
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- -/
+/-! . -/
+/-! . -/
 
 section ProximityFlatProofPort
 
@@ -72,7 +21,7 @@ namespace InfiniteGalois
 
 open scoped Pointwise
 open FiniteGaloisIntermediateField AlgEquiv
---
+
 
 lemma fixingSubgroup_isClosed (L : IntermediateField k K) [IsGalois k K] :
     IsClosed (L.fixingSubgroup : Set Gal(K/k)) where
@@ -129,8 +78,7 @@ theorem mem_range_algebraMap_iff_fixed [IsGalois k K] (x : K) :
   mem_bot_iff_fixed x
 
 open IntermediateField in
-/-- .
- -/
+/-- . -/
 lemma restrict_fixedField (H : Subgroup Gal(K/k)) (L : IntermediateField k K) [Normal k L] :
     fixedField H ⊓ L = lift (fixedField (Subgroup.map (restrictNormalHom L) H)) := by
   apply SetLike.ext'
@@ -236,8 +184,7 @@ def GaloisCoinsertionIntermediateFieldSubgroup [IsGalois k K] :
   choice_eq _ _ := rfl
 
 open IntermediateField in
-/-- .
- -/
+/-- . -/
 noncomputable def normalAutEquivQuotient [IsGalois k K]
     (H : ClosedSubgroup Gal(K/k)) [H.Normal] :
     Gal(K/k) ⧸ H.1 ≃* Gal(fixedField H.1/k) :=

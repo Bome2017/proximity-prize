@@ -7,40 +7,9 @@ Authors: María Inés de Frutos-Fernández
 import ProximityPrize.Benchmark.TargetLower
 import ProximityPrize.SubmissionLower.LocalMathlibPortLicense
 
-/-!
-Permitted flat proof port of Mathlib.RingTheory.Valuation.Discrete.IsDiscreteValuationRing.
-Model label: gpt-5.
-Original Mathlib revision: 905b95818eb32af7874a58b427f50c1711a5e96c.
-Original source SHA256: 24a27073de0d984d79d0173e0caa3d6b889b281ba20e1025ae77f1ba880486f1.
-Original copyright and author notices are retained above.
-Modifications: module/public visibility packaging is removed; imports
-are replaced by the trusted target and the necessary flat proof ports.
-All mathematical declarations and proof bodies are retained, except
-any explicitly documented ordinary-term expansion below.
-The full Apache 2.0 license is in LocalMathlibPortLicense.lean.
-Port elaboration adjustment: explicitly bind classical decidable equality
-at the three original valuation case-split proofs; no statements are changed.
--/
+/-! . -/
 
-/-! .
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- -/
+/-! . -/
 
 section ProximityFlatProofPort
 
@@ -159,8 +128,7 @@ theorem map_algebraMap_eq_valuationSubring : Subring.map (algebraMap A K) ⊤ =
     rw [Subring.mem_map]
     exact ⟨y, mem_top _, rfl⟩
 
-/-- .
- -/
+/-- . -/
 noncomputable def equivValuationSubring :
     A ≃+* ((maximalIdeal A).valuation K).valuationSubring :=
   (topEquiv.symm.trans (equivMapOfInjective ⊤ (algebraMap A K)

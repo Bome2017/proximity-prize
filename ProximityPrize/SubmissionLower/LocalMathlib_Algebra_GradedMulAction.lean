@@ -8,57 +8,9 @@ import ProximityPrize.Benchmark.TargetLower
 import ProximityPrize.SubmissionLower.LocalMathlibPortLicense
 import ProximityPrize.SubmissionLower.LocalGradedMonoid
 
-/-!
-Permitted flat proof port of Mathlib.Algebra.GradedMulAction.
-Model label: gpt-5.
-Original Mathlib revision: 905b95818eb32af7874a58b427f50c1711a5e96c.
-Original source SHA256: 80ab409f7bf6f0ac37396fb0e246e3e649098e4b5b278bef51a76f3eea4323a1.
-Original copyright and author notices are retained above.
-Modifications: module/public visibility packaging is removed; imports
-are replaced by the trusted target and the necessary flat proof ports.
-All mathematical declarations and proof bodies are retained, except
-any explicitly documented ordinary-term expansion below.
-The full Apache 2.0 license is in LocalMathlibPortLicense.lean.
--/
+/-! . -/
 
-/-! .
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- -/
+/-! . -/
 
 section ProximityFlatProofPort
 
@@ -74,8 +26,7 @@ section Defs
 
 variable (A : ιA → Type*) (M : ιM → Type*)
 
-/-- .
- -/
+/-- . -/
 class GSMul [VAdd ιA ιM] where
   /-- . -/
   smul {i j} : A i → M j → M (i +ᵥ j)

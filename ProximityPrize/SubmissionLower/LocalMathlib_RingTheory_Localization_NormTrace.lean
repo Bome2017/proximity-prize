@@ -9,45 +9,9 @@ import ProximityPrize.SubmissionLower.LocalMathlibPortLicense
 import ProximityPrize.SubmissionLower.LocalMathlib_RingTheory_Norm_Basic
 import ProximityPrize.SubmissionLower.LocalMathlib_RingTheory_Discriminant
 
-/-!
-Permitted flat proof port of Mathlib.RingTheory.Localization.NormTrace.
-Model label: gpt-5.
-Original Mathlib revision: 905b95818eb32af7874a58b427f50c1711a5e96c.
-Original source SHA256: 47a7b5378b7b5f65128c47af07dcd2d1a3444f6f7d112f8461d281a579bcd299.
-Original copyright and author notices are retained above.
-Modifications: module/public visibility packaging is removed; imports
-are replaced by the trusted target and the necessary flat proof ports.
-All mathematical declarations and proof bodies are retained, except
-any explicitly documented ordinary-term expansion below.
-The full Apache 2.0 license is in LocalMathlibPortLicense.lean.
--/
+/-! . -/
 
-/-! .
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- -/
+/-! . -/
 
 section ProximityFlatProofPort
 
@@ -70,9 +34,7 @@ theorem Algebra.map_leftMulMatrix_localization {ι : Type*} [Fintype ι] [Decida
   simp only [Matrix.map_apply, RingHom.mapMatrix_apply, leftMulMatrix_eq_repr_mul, ← map_mul,
     Basis.localizationLocalization_apply, Basis.localizationLocalization_repr_algebraMap]
 
-/-- .
-
- -/
+/-- . -/
 theorem Algebra.norm_localization [Module.Free R S] [Module.Finite R S] (a : S) :
     Algebra.norm Rₘ (algebraMap S Sₘ a) = algebraMap R Rₘ (Algebra.norm R a) := by
   cases subsingleton_or_nontrivial R
@@ -91,9 +53,7 @@ lemma Algebra.norm_eq_iff [Module.Free R S] [Module.Finite R S] {a : S} {b : R}
   ⟨fun h ↦ h.symm ▸ Algebra.norm_localization _ M _, fun h ↦
     IsLocalization.injective Rₘ hM <| h.symm ▸ (Algebra.norm_localization R M a).symm⟩
 
-/-- .
-
- -/
+/-- . -/
 theorem Algebra.trace_localization [Module.Free R S] [Module.Finite R S] (a : S) :
     Algebra.trace Rₘ Sₘ (algebraMap S Sₘ a) = algebraMap R Rₘ (Algebra.trace R S a) := by
   cases subsingleton_or_nontrivial R
@@ -122,10 +82,7 @@ theorem Algebra.traceMatrix_localizationLocalization (b : Basis ι R S) :
     Basis.localizationLocalization_apply, ← map_mul]
   exact Algebra.trace_localization R M _
 
-/-- .
-
-
- -/
+/-- . -/
 theorem Algebra.discr_localizationLocalization (b : Basis ι R S) :
     Algebra.discr Rₘ (b.localizationLocalization Rₘ M Sₘ) =
     algebraMap R Rₘ (Algebra.discr R b) := by

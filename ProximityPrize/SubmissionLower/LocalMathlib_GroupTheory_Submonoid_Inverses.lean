@@ -7,41 +7,9 @@ Authors: Andrew Yang
 import ProximityPrize.Benchmark.TargetLower
 import ProximityPrize.SubmissionLower.LocalMathlibPortLicense
 
-/-!
-Permitted flat proof port of Mathlib.GroupTheory.Submonoid.Inverses.
-Model label: gpt-5.
-Original Mathlib revision: 905b95818eb32af7874a58b427f50c1711a5e96c.
-Original source SHA256: a94c3bced005a121864f0c9fa38feb3d92e3178fde885bad450b1c2c2e3f036e.
-Original copyright and author notices are retained above.
-Modifications: module/public visibility packaging is removed; imports
-are replaced by the trusted target and the necessary flat proof ports.
-All mathematical declarations and proof bodies are retained, except
-any explicitly documented ordinary-term expansion below.
-The full Apache 2.0 license is in LocalMathlibPortLicense.lean.
--/
+/-! . -/
 
-/-! .
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- -/
+/-! . -/
 
 section ProximityFlatProofPort
 
@@ -79,7 +47,7 @@ variable [Monoid M] (S : Submonoid M)
 
 /-- . -/
 @[to_additive
-/-- `S.leftNeg` is the additive submonoid containing all the left additive inverses of `S`. -/]
+/-- . -/]
 def leftInv : Submonoid M where
   carrier := { x : M | ∃ y : S, x * y = 1 }
   one_mem' := ⟨1, mul_one 1⟩
@@ -106,11 +74,9 @@ theorem leftInv_leftInv_eq (hS : S ≤ IsUnit.submonoid M) : S.leftInv.leftInv =
   rw [this]
   exact S.leftInv.unit_mem_leftInv _ (S.unit_mem_leftInv _ hx)
 
-/-- .
- -/
+/-- . -/
 @[to_additive
-/-- The function from `S.leftAdd` to `S` sending an element to its right additive
-inverse in `S`. This is an `AddMonoidHom` when `M` is commutative. -/]
+/-- . -/]
 noncomputable def fromLeftInv : S.leftInv → S := fun x ↦ x.prop.choose
 
 @[to_additive (attr := simp)]
@@ -141,8 +107,7 @@ theorem fromLeftInv_eq_iff (a : S.leftInv) (b : M) :
   rw [← IsUnit.mul_right_inj (leftInv_le_isUnit _ a.prop), S.mul_fromLeftInv, eq_comm]
 
 /-- . -/
-@[to_additive (attr := simps) /-- The `AddMonoidHom` from `S.leftNeg` to `S` sending an element to
-its right additive inverse in  `S`. -/]
+@[to_additive (attr := simps) /-- . -/]
 noncomputable def fromCommLeftInv : S.leftInv →* S where
   toFun := S.fromLeftInv
   map_one' := S.fromLeftInv_one
@@ -154,8 +119,7 @@ noncomputable def fromCommLeftInv : S.leftInv →* S where
 variable (hS : S ≤ IsUnit.submonoid M)
 
 /-- . -/
-@[to_additive (attr := simps apply) /-- The additive submonoid of pointwise additive inverse of `S`
-is `AddEquiv` to `S`. -/]
+@[to_additive (attr := simps apply) /-- . -/]
 noncomputable def leftInvEquiv : S.leftInv ≃* S :=
   { S.fromCommLeftInv with
     invFun := fun x ↦ ⟨↑(hS x.2).unit⁻¹, x, by simp⟩

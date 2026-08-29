@@ -7,34 +7,11 @@ Authors: Anne Baanen
 import ProximityPrize.Benchmark.TargetLower
 import ProximityPrize.SubmissionLower.LocalMathlibPortLicense
 
-/-!
-Permitted flat proof port of Mathlib.FieldTheory.RatFunc.Degree.
-Model label: gpt-5.
-Original Mathlib revision: 905b95818eb32af7874a58b427f50c1711a5e96c.
-Original source SHA256: f92ad0e7d471b925eba21d3dc40708d34e9a126b63fb834c30a1fe2061fbbcfe.
-Original copyright and author notices are retained above.
-Modifications: module/public visibility packaging is removed; imports
-are replaced by the trusted target and the necessary flat proof ports.
-All mathematical declarations and proof bodies are retained, except
-any explicitly documented ordinary-term expansion below.
-The full Apache 2.0 license is in LocalMathlibPortLicense.lean.
--/
+/-! . -/
 
-/-!
-Port elaboration repair (gpt-5, 2026-08-27): qualify the rational-function
-variable as RatFunc.X because the trusted target opens a conflicting
-bivariate-polynomial X notation. The original theorem and proof are unchanged.
--/
+/-! . -/
 
-/-! .
-
-
-
-
-
-
-
- -/
+/-! . -/
 
 section ProximityFlatProofPort
 
@@ -53,9 +30,7 @@ open Polynomial
 
 variable [Field K]
 
-/-- .
-
- -/
+/-- . -/
 def intDegree (x : K⟮X⟯) : ℤ :=
   natDegree x.num - natDegree x.denom
 

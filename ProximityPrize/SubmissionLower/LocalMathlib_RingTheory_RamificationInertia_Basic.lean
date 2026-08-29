@@ -12,39 +12,9 @@ import ProximityPrize.SubmissionLower.LocalMathlib_RingTheory_RamificationInerti
 import ProximityPrize.SubmissionLower.LocalMathlib_RingTheory_RamificationInertia_Ramification
 import ProximityPrize.SubmissionLower.LocalMathlib_RingTheory_Spectrum_Prime_FreeLocus
 
-/-!
-Permitted flat proof port of Mathlib.RingTheory.RamificationInertia.Basic.
-Model label: gpt-5.
-Original Mathlib revision: 905b95818eb32af7874a58b427f50c1711a5e96c.
-Original source SHA256: a940622f746d76c375c027e7020e56c5935c67b0c9289daa0c9122b9147b4ccc.
-Original copyright and author notices are retained above.
-Modifications: module/public visibility packaging is removed; imports
-are replaced by the trusted target and the necessary flat proof ports.
-All mathematical declarations and proof bodies are retained, except
-any explicitly documented ordinary-term expansion below.
-The full Apache 2.0 license is in LocalMathlibPortLicense.lean.
--/
+/-! . -/
 
-/-! .
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- -/
+/-! . -/
 
 section ProximityFlatProofPort
 
@@ -80,18 +50,13 @@ theorem sum_ramification_inertia_eq_finrank_fiber
     _ = length κp Sq := length_eq_of_surjective residue_surjective
     _ = finrank κp Sq := length_eq_finrank κp Sq
 
-/-- .
-
- -/
+/-- . -/
 theorem sum_ramification_inertia_eq_finrank
     [IsDomain R] [Module.Finite R S] [Module.Flat R S] [Fintype (p.primesOver S)] :
     ∑ q : p.primesOver S, q.1.ramificationIdx R * q.1.inertiaDeg R = Module.finrank R S := by
   rw [sum_ramification_inertia_eq_finrank_fiber, finrank_fiber_eq_finrank]
 
-/-- .
-
-
- -/
+/-- . -/
 theorem sum_ramification_inertia_eq_card
     [IsDomain R] [IsDomain S] [Module.Finite R S] [Module.Flat R S] [Fintype (p.primesOver S)]
     {G : Type*} [Group G] [MulSemiringAction G S] [IsGaloisGroup G R S] :

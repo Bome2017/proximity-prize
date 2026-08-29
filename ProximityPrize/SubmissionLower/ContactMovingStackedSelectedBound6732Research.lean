@@ -1,11 +1,11 @@
 import ProximityPrize.Benchmark.TargetLower
 import ProximityPrize.SubmissionLower.ContactAlignmentBridge
-import ProximityPrize.SubmissionLower.ContactMovingStackedInterpolation6731Research
+import ProximityPrize.SubmissionLower.ContactMovingStackedInterpolation6732Research
 import ProximityPrize.SubmissionLower.ContactStackedGCDCover6670Research
 import ProximityPrize.SubmissionLower.ContactStackedSeedPartition6670Research
-import ProximityPrize.SubmissionLower.ContactMovingStackedBoxTransport6731Research
-import ProximityPrize.SubmissionLower.ContactMovingStackedResidualCells6731Research
-import ProximityPrize.SubmissionLower.ContactMovingParameters6731Research
+import ProximityPrize.SubmissionLower.ContactMovingStackedBoxTransport6732Research
+import ProximityPrize.SubmissionLower.ContactMovingStackedResidualCells6732Research
+import ProximityPrize.SubmissionLower.ContactMovingParameters6732Research
 /-! .
 
 
@@ -13,17 +13,17 @@ import ProximityPrize.SubmissionLower.ContactMovingParameters6731Research
 
 
  -/
-namespace ProximityPrize.SubmissionLower.ContactMovingStackedSelectedBound6731Research
+namespace ProximityPrize.SubmissionLower.ContactMovingStackedSelectedBound6732Research
 open ProximityPrize.Benchmark
 open ContactAlignmentBridge ContactInterpolation ContactTranslation
 open ContactPrimeSeedIncidence ContactProperCutSeedCount
 open ContactRecursiveGCDResearch
-open ContactMovingParameters6731Research
+open ContactMovingParameters6732Research
 attribute [local simp] n errors agreements
 open ContactStackedGCDCover6670Research
 open ContactStackedSeedPartition6670Research
-open ContactMovingStackedResidualCells6731Research
-open ContactMovingParameters6731Research
+open ContactMovingStackedResidualCells6732Research
+open ContactMovingParameters6732Research
 open ContactResidualSupportParametersResearch
 noncomputable section
 set_option maxHeartbeats 6000000
@@ -35,10 +35,10 @@ local instance : GCDMonoid GlobalPoly :=
 /-- .
 
  -/
-def FixedCellCountProvider6731 : Prop :=
+def FixedCellCountProvider6732 : Prop :=
   ∀ (Q : GlobalPoly), Q ≠ 0 →
-    Q ∈ globalCoefficientBox IRSProfile.Field (40 * agreements) w 1205 11 →
-    ResidualSupportData ContactMovingStackedBoxTransport6731Research.fixedSupport Q →
+    Q ∈ globalCoefficientBox IRSProfile.Field (40 * agreements) w 1222 11 →
+    ResidualSupportData ContactMovingStackedBoxTransport6732Research.fixedSupport Q →
     ∀ (selected : IRSProfile.Field → Polynomial IRSProfile.Field)
       (Delta : Finset IRSProfile.Field)
       (u0 u1 : IRSProfile.Index → IRSProfile.Field),
@@ -131,16 +131,16 @@ theorem selected_full_domain_agreement
 /-- .
  -/
 theorem fixedSeeds_card_le_of_provider
-    (hfixedProvider : FixedCellCountProvider6731)
+    (hfixedProvider : FixedCellCountProvider6732)
     (QA QB QC : GlobalPoly) (hQA : QA ≠ 0) (hQB : QB ≠ 0) (hQC : QC ≠ 0)
     (hboxA : QA ∈ globalCoefficientBox IRSProfile.Field
-      (42 * agreements) w 22328 11)
+      (43 * agreements) w 38583 11)
     (hboxB : QB ∈ globalCoefficientBox IRSProfile.Field
-      (78 * agreements) w 1205 24)
+      (81 * agreements) w 1222 25)
     (hboxC : QC ∈ globalCoefficientBox IRSProfile.Field
-      (40 * agreements) w 27619 12)
+      (40 * agreements) w 91386 12)
     (hflagB : QB ∈ ContactFlagInterpolation6641Research.globalCoefficientBox
-      IRSProfile.Field (78 * agreements) w 1205 24)
+      IRSProfile.Field (81 * agreements) w 1222 25)
     (selected : IRSProfile.Field → Polynomial IRSProfile.Field)
     (Gamma : Finset IRSProfile.Field)
     (u0 u1 : IRSProfile.Index → IRSProfile.Field)
@@ -158,14 +158,14 @@ theorem fixedSeeds_card_le_of_provider
       ContactStackedBoxTransport6656Research.gcd123_ne_zero
         (B := QB) (C := QC) hQA
   have hbox12 :=
-    ContactMovingStackedBoxTransport6731Research.gcd12_mem_meet_box
+    ContactMovingStackedBoxTransport6732Research.gcd12_mem_meet_box
       QA QB hQA hQB hboxA hboxB
   have hQbox : Q ∈ globalCoefficientBox IRSProfile.Field
-      (40 * agreements) w 1205 11 := by
+      (40 * agreements) w 1222 11 := by
     simpa [Q] using
-      ContactMovingStackedBoxTransport6731Research.gcd123_mem_meet_box
+      ContactMovingStackedBoxTransport6732Research.gcd123_mem_meet_box
         QA QB QC hQA hQC hbox12 hboxC
-  have hQsupport := ContactMovingStackedBoxTransport6731Research.gcd123_support_of_flagB
+  have hQsupport := ContactMovingStackedBoxTransport6732Research.gcd123_support_of_flagB
     QA QB QC hQA hQB hQC hboxA hboxB hboxC hflagB
   have hsub : Delta ⊆ Gamma := by
     simpa [Delta] using fixedSeeds_subset selected Gamma QA QB QC
@@ -188,10 +188,10 @@ theorem fixedSeeds_card_le_of_provider
     hsolution hdegreeDelta hagreementDelta hnoPencilDelta
 /-- .
  -/
-theorem selectedNoLargePencilBound6731_of_fixedProvider
-    (hfixedProvider : FixedCellCountProvider6731) :
+theorem selectedNoLargePencilBound6732_of_fixedProvider
+    (hfixedProvider : FixedCellCountProvider6732) :
     SelectedNoLargePencilBound IRSProfile.domain
-      131071 80073 274980727111395087 := by
+      131071 80082 274980727111395087 := by
   intro U seeds A selected hdegreeRaw hcardRaw hvalues hnoRaw
   have hdegree : ∀ gamma ∈ seeds,
       (selected gamma).natDegree ≤ w := by
@@ -212,7 +212,7 @@ theorem selectedNoLargePencilBound6731_of_fixedProvider
     · norm_num [errors, n, agreements]
   obtain ⟨QA, QB, QC, hQA, hboxA, hQB, hboxB, hQC, hboxC, hflagB,
       huniversal⟩ :=
-    ContactMovingStackedInterpolation6731Research.exists_stacked_interpolants_with_recursive_cover (U 0) (U 1)
+    ContactMovingStackedInterpolation6732Research.exists_stacked_interpolants_with_recursive_cover (U 0) (U 1)
   have hcover := selected_recursive_cover U seeds A selected QA QB QC
     huniversal hdegree hcard hvalues
   have hfirstRaw := firstResidualCell_count_lt QA QB QC hQA hQB hboxA hboxB
@@ -235,4 +235,4 @@ theorem selectedNoLargePencilBound6731_of_fixedProvider
       hfirst hsecond hfixed
 
 end
-end ProximityPrize.SubmissionLower.ContactMovingStackedSelectedBound6731Research
+end ProximityPrize.SubmissionLower.ContactMovingStackedSelectedBound6732Research

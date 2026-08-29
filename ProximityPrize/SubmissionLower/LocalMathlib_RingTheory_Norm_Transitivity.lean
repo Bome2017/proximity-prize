@@ -8,38 +8,9 @@ import ProximityPrize.Benchmark.TargetLower
 import ProximityPrize.SubmissionLower.LocalMathlibPortLicense
 import ProximityPrize.SubmissionLower.LocalMathlib_RingTheory_Norm_Basic
 
-/-!
-Permitted flat proof port of Mathlib.RingTheory.Norm.Transitivity.
-Model label: gpt-5.
-Original Mathlib revision: 905b95818eb32af7874a58b427f50c1711a5e96c.
-Original source SHA256: 67c58bdfd1cc46e59ba20738c829b44b3829e4b259ab653c5bcff179cb5dba78.
-Original copyright and author notices are retained above.
-Modifications: module/public visibility packaging is removed; imports
-are replaced by the trusted target and the necessary flat proof ports.
-All mathematical declarations and proof bodies are retained, except
-any explicitly documented ordinary-term expansion below.
-The full Apache 2.0 license is in LocalMathlibPortLicense.lean.
+/-! . -/
 
-Elaboration repair (gpt-5, 2026-08-27): qualify the intended polynomial
-constructors and provide explicit classical equality decisions for Prop and
-basis indices. This avoids notation/instance collisions from TargetLower;
-mathematical statements and the original determinant/norm proof are retained.
-The final block-determinant identity uses the same `convert! rfl` treatment
-of Prop decision-instance diamonds as the original `det_mul_corner_pow` proof.
--/
-
-/-! .
-
-
-
-
-
-
-
-
-
-
- -/
+/-! . -/
 
 section ProximityFlatProofPort
 
@@ -49,8 +20,7 @@ open Matrix Polynomial
 
 namespace Algebra.Norm.Transitivity
 
-/-- .
- -/
+/-- . -/
 def auxMat : Matrix m m S :=
   of fun i j ↦
     if j = k then
@@ -108,8 +78,8 @@ lemma det_mul_corner_pow :
   rw [(mul_auxMat_blockTriangular M k).det_fintype, Fintype.prod_Prop, mul_auxMat_toSquareBlock_eq]
   simp_rw [det_smul_of_tower, eq_iff_iff, iff_true, Fintype.card_unique,
     pow_one, det_one, smul_eq_mul, mul_one]
-  --
-  --
+
+
   convert! rfl
 
 /-- . -/
@@ -169,10 +139,7 @@ end Algebra.Norm.Transitivity
 
 open Algebra.Norm.Transitivity
 
-/-- .
-
-
- -/
+/-- . -/
 theorem Matrix.det_det [Fintype m] [Fintype n] (f : S →+* Matrix n n R) :
     (f M.det).det = ((M.map f).comp m m n n R).det := by
   induction l : Fintype.card m generalizing R S m with
@@ -215,8 +182,7 @@ theorem LinearMap.det_restrictScalars [AddCommGroup A] [Module R A] [Module S A]
   rw [Algebra.norm_eq_matrix_det bS, ← AlgHom.coe_toRingHom, ← det_toMatrix bA, det_det,
     ← det_toMatrix (bS.smulTower' bA), restrictScalars_toMatrix, RingHom.coe_coe]
 
-/-- .
- -/
+/-- . -/
 theorem Algebra.norm_norm {A} [Ring A] [Algebra R A] [Algebra S A]
     [IsScalarTower R S A] [Module.Free S A] {a : A} :
     norm R (norm S a) = norm R a := by
@@ -275,9 +241,7 @@ theorem norm_eq_prod_roots {x : L} (hF : ((minpoly K x).map (algebraMap K F)).Sp
 
 variable [FiniteDimensional K L]
 
-/-- .
-
- -/
+/-- . -/
 theorem norm_eq_prod_embeddings [Algebra.IsSeparable K L] [IsAlgClosed E]
     (x : L) : algebraMap K E (norm K x) = ∏ σ : L →ₐ[K] E, σ x := by
   have hx := Algebra.IsSeparable.isIntegral K x

@@ -9,49 +9,11 @@ import ProximityPrize.SubmissionLower.LocalMathlibPortLicense
 import ProximityPrize.SubmissionLower.LocalMathlib_RingTheory_Unramified_Field
 import ProximityPrize.SubmissionLower.LocalMathlib_RingTheory_Unramified_Locus
 
-/-!
-Permitted flat proof port of Mathlib.RingTheory.Unramified.LocalRing.
-Model label: gpt-5.
-Original Mathlib revision: 905b95818eb32af7874a58b427f50c1711a5e96c.
-Original source SHA256: fef689bf72e1f8f7fad47b522e0bd28715d9388be7262ed1245722dd9a2ef1ac.
-Original copyright and author notices are retained above.
-Modifications: module/public visibility packaging is removed; imports
-are replaced by the trusted target and the necessary flat proof ports.
-All mathematical declarations and proof bodies are retained, except
-any explicitly documented ordinary-term expansion below.
-The full Apache 2.0 license is in LocalMathlibPortLicense.lean.
--/
+/-! . -/
 
-/-! .
+/-! . -/
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- -/
-
-/-! .
-
-
-
-
-
-
- -/
+/-! . -/
 
 section ProximityFlatProofPort
 
@@ -150,8 +112,7 @@ variable [EssFiniteType R S] (p : Ideal R) [p.IsPrime] (q : Ideal S) [q.IsPrime]
   [Algebra (Localization.AtPrime p) (Localization.AtPrime q)]
   [Localization.AtPrime.IsLiesOverAlgebra p q]
 
-/-- .
- -/
+/-- . -/
 lemma isUnramifiedAt_iff_map_eq :
     Algebra.IsUnramifiedAt R q ↔
       Algebra.IsSeparable p.ResidueField q.ResidueField ∧

@@ -9,47 +9,9 @@ import ProximityPrize.SubmissionLower.LocalMathlibPortLicense
 import ProximityPrize.SubmissionLower.LocalMathlib_RingTheory_GradedAlgebra_Basic
 import ProximityPrize.SubmissionLower.LocalMathlib_Algebra_GradedMulAction
 
-/-!
-Permitted flat proof port of Mathlib.RingTheory.GradedAlgebra.Homogeneous.Submodule.
-Model label: gpt-5.
-Original Mathlib revision: 905b95818eb32af7874a58b427f50c1711a5e96c.
-Original source SHA256: 7b89a19be3538b32b36161d6fc3af06d10d3549652bb148301779fcbcb137546.
-Original copyright and author notices are retained above.
-Modifications: module/public visibility packaging is removed; imports
-are replaced by the trusted target and the necessary flat proof ports.
-All mathematical declarations and proof bodies are retained, except
-any explicitly documented ordinary-term expansion below.
-The full Apache 2.0 license is in LocalMathlibPortLicense.lean.
-Port elaboration adjustment: escape the original coercion argument X so
-the target's polynomial notation does not capture its name.
--/
+/-! . -/
 
-/-! .
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- -/
+/-! . -/
 
 section ProximityFlatProofPort
 
@@ -61,10 +23,7 @@ variable [Semiring A] [AddCommMonoid M] [Module A M]
 
 section HomogeneousDef
 
-/-- .
-
-
- -/
+/-- . -/
 def Submodule.IsHomogeneous (p : Submodule A M) (ℳ : ιM → σM)
     [DecidableEq ιM] [SetLike σM M] [AddSubmonoidClass σM M] [Decomposition ℳ] : Prop :=
   SetLike.IsHomogeneous ℳ p
@@ -127,9 +86,7 @@ theorem HomogeneousSubmodule.ext
     {I J : HomogeneousSubmodule 𝒜 ℳ} (h : I.toSubmodule = J.toSubmodule) : I = J :=
   HomogeneousSubmodule.toSubmodule_injective _ _ h
 
-/-- .
-
- -/
+/-- . -/
 theorem HomogeneousSubmodule.ext' {I J : HomogeneousSubmodule 𝒜 ℳ}
     (h : ∀ i, ∀ x ∈ ℳ i, x ∈ I ↔ x ∈ J) :
     I = J := by

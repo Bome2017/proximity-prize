@@ -5,105 +5,9 @@ Authors: Eric Wieser
 -/
 import ProximityPrize.Benchmark.TargetLower
 
-/-!
-# Attributed flat port of pinned Mathlib graded-monoid proofs
+/-! . -/
 
-Model label: gpt-5.
-
-Public proof reuse, NOT a new mathematical result.
-Original: Mathlib/Algebra/GradedMonoid.lean
-Pinned revision: 905b95818eb32af7874a58b427f50c1711a5e96c
-Original source SHA-256:
-18bb94f16346ffaa7fa79c4b1ee6d4905d30a807c832b0c38ffd78ab9c29e9ae
-
-https://github.com/leanprover-community/mathlib4/blob/905b95818eb32af7874a58b427f50c1711a5e96c/Mathlib/Algebra/GradedMonoid.lean
-
-Modifications: replace the upstream imports with TargetLower; remove the
-module/public-section packaging; replace two optional-field proof shorthands
-by ordinary fully qualified applications of the same proved lemmas; supply an
-explicit classical equality decision in the finite-product proof; append a
-default-power construction check and explicit axiom reports. All original
-mathematical definitions, instances, theorem names and statements are retained.
-The original copyright and author notice is preserved above. The complete
-Apache 2.0 license is provided in the accompanying LICENSE file.
--/
-
-/-! .
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- -/
+/-! . -/
 
 
 
@@ -177,8 +81,7 @@ instance GOne.toOne [Zero ι] [GOne A] : One (GradedMonoid A) :=
 
 @[simp] theorem snd_one [Zero ι] [GOne A] : (1 : GradedMonoid A).snd = GOne.one := rfl
 
-/-- .
- -/
+/-- . -/
 class GMul [Add ι] where
   /-- . -/
   mul {i j} : A i → A j → A (i + j)
@@ -202,8 +105,7 @@ namespace GMonoid
 variable {A}
 variable [AddMonoid ι] [GMul A] [GOne A]
 
-/-- .
- -/
+/-- . -/
 def gnpowRec : ∀ (n : ℕ) {i}, A i → A (n • i)
   | 0, i, _ => cast (congr_arg A (zero_nsmul i).symm) GOne.one
   | n + 1, i, a => cast (congr_arg A (succ_nsmul i n).symm) (GMul.mul (gnpowRec _ a) a)
@@ -219,10 +121,7 @@ theorem gnpowRec_succ (n : ℕ) (a : GradedMonoid A) :
 
 end GMonoid
 
-/-- .
-
-
- -/
+/-- . -/
 class GMonoid [AddMonoid ι] extends GMul A, GOne A where
   /-- . -/
   one_mul (a : GradedMonoid A) : 1 * a = a
@@ -264,19 +163,14 @@ class GCommMonoid [AddCommMonoid ι] extends GMonoid A where
   /-- . -/
   mul_comm (a : GradedMonoid A) (b : GradedMonoid A) : a * b = b * a
 
-/-- .
- -/
+/-- . -/
 instance GCommMonoid.toCommMonoid [AddCommMonoid ι] [GCommMonoid A] :
     CommMonoid (GradedMonoid A) where
   mul_comm := GCommMonoid.mul_comm
 
 end Defs
 
-/-! .
-
-
-
- -/
+/-! . -/
 
 
 section GradeZero
@@ -298,15 +192,11 @@ section Mul
 
 variable [AddZeroClass ι] [GMul A]
 
-/-- .
-
- -/
+/-- . -/
 instance GradeZero.smul (i : ι) : SMul (A 0) (A i) where
   smul x y := @Eq.rec ι (0 + i) (fun a _ => A a) (GMul.mul x y) i (zero_add i)
 
-/-- .
-
- -/
+/-- . -/
 instance (priority := 900) GradeZero.mul : Mul (A 0) where mul := (· • ·)
 
 variable {A}
@@ -353,8 +243,7 @@ section MulAction
 
 variable [AddMonoid ι] [GMonoid A]
 
-/-- .
- -/
+/-- . -/
 def mkZeroMonoidHom : A 0 →* GradedMonoid A where
   toFun := mk 0
   map_one' := rfl
@@ -378,8 +267,7 @@ section DProd
 
 variable {α : Type*} {A : ι → Type*} [AddMonoid ι] [GradedMonoid.GMonoid A]
 
-/-- .
- -/
+/-- . -/
 def List.dProdIndex (l : List α) (fι : α → ι) : ι :=
   l.foldr (fun i b => fι i + b) 0
 
@@ -398,11 +286,7 @@ theorem List.dProdIndex_eq_map_sum (l : List α) (fι : α → ι) :
   | [] => simp
   | head::tail => simp [List.dProdIndex_eq_map_sum tail fι]
 
-/-- .
-
-
-
- -/
+/-- . -/
 def List.dProd (l : List α) (fι : α → ι) (fA : ∀ a, A (fι a)) : A (l.dProdIndex fι) :=
   l.foldrRecOn _ GradedMonoid.GOne.one fun _ x a _ => GradedMonoid.GMul.mul (fA a) x
 
@@ -411,8 +295,8 @@ theorem List.dProd_nil (fι : α → ι) (fA : ∀ a, A (fι a)) :
     (List.nil : List α).dProd fι fA = GradedMonoid.GOne.one :=
   rfl
 
---
---
+
+
 @[simp]
 theorem List.dProd_cons (fι : α → ι) (fA : ∀ a, A (fι a)) (a : α) (l : List α) :
     (a :: l).dProd fι fA = (GradedMonoid.GMul.mul (fA a) (l.dProd fι fA) :) :=
@@ -451,8 +335,7 @@ instance One.gOne [Zero ι] [One R] : GradedMonoid.GOne fun _ : ι => R where on
 @[simps mul]
 instance Mul.gMul [Add ι] [Mul R] : GradedMonoid.GMul fun _ : ι => R where mul x y := x * y
 
-/-- .
- -/
+/-- . -/
 @[simps gnpow]
 instance Monoid.gMonoid [AddMonoid ι] [Monoid R] : GradedMonoid.GMonoid fun _ : ι => R where
   one_mul := fun _ => Sigma.ext (zero_add _) (heq_of_eq (one_mul _))
@@ -462,8 +345,7 @@ instance Monoid.gMonoid [AddMonoid ι] [Monoid R] : GradedMonoid.GMonoid fun _ :
   gnpow_zero' := fun _ => Sigma.ext (zero_nsmul _) (heq_of_eq (Monoid.npow_zero _))
   gnpow_succ' := fun _ ⟨_, _⟩ => Sigma.ext (succ_nsmul _ _) (heq_of_eq (Monoid.npow_succ _ _))
 
-/-- .
- -/
+/-- . -/
 instance CommMonoid.gCommMonoid [AddCommMonoid ι] [CommMonoid R] :
     GradedMonoid.GCommMonoid fun _ : ι => R where
   mul_comm := fun _ _ => Sigma.ext (add_comm _ _) (heq_of_eq (mul_comm _ _))
@@ -544,12 +426,12 @@ def submonoid : Submonoid R where
   mul_mem' ha hb := add_zero (0 : ι) ▸ SetLike.mul_mem_graded ha hb
   one_mem' := SetLike.one_mem_graded A
 
---
+
 /-- . -/
 instance instMonoid : Monoid (A 0) :=
   inferInstanceAs <| Monoid (GradeZero.submonoid A)
 
---
+
 /-- . -/
 instance instCommMonoid
     {R S : Type*} [SetLike S R] [CommMonoid R]
@@ -703,8 +585,7 @@ end SetLike
 
 end CommMonoid
 
-/-- .
- -/
+/-- . -/
 abbrev ProximityPrize.SubmissionLower.LocalGradedMonoid.defaultPowerConstruction
     {ι : Type*} [AddMonoid ι] (A : ι → Type*) [GradedMonoid.GOne A] [GradedMonoid.GMul A]
     (hOne : ∀ a : GradedMonoid A, 1 * a = a)

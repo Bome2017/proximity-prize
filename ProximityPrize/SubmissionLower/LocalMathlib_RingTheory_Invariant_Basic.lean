@@ -8,63 +8,15 @@ import ProximityPrize.Benchmark.TargetLower
 import ProximityPrize.SubmissionLower.LocalMathlibPortLicense
 import ProximityPrize.SubmissionLower.LocalMathlib_RingTheory_Invariant_Defs
 
-/-!
-Permitted flat proof port of Mathlib.RingTheory.Invariant.Basic.
-Model label: gpt-5.
-Original Mathlib revision: 905b95818eb32af7874a58b427f50c1711a5e96c.
-Original source SHA256: 43dec22e3a090d064adcc65d0c600a6bd06f3a8874e73913d7d73bd0825c23d0.
-Original copyright and author notices are retained above.
-Modifications: module/public visibility packaging is removed; imports
-are replaced by the trusted target and the necessary flat proof ports.
-All mathematical declarations and proof bodies are retained, except
-any explicitly documented ordinary-term expansion below.
-The full Apache 2.0 license is in LocalMathlibPortLicense.lean.
+/-! . -/
 
-Elaboration repair for the required TargetLower import environment:
-Univariate constructors are explicitly Polynomial.X and Polynomial.C,
-leaving polynomial type notation intact. The existing equality case split
-uses an explicit classical DecidableEq B. The upstream development-only
-layering check excluding IntermediateField.adjoin is omitted because the
-required trusted TargetLower import already includes that declaration.
-These changes do not add mathematical hypotheses or change the original
-mathematical declarations, conclusions, or proof arguments.
--/
-
-/-! .
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- -/
+/-! . -/
 
 section ProximityFlatProofPort
 
---
---
---
+
+
+
 
 open scoped Pointwise
 
@@ -390,9 +342,7 @@ theorem Ideal.Quotient.stabilizerHom_surjective :
   exact key.of_comp_left (IsFractionRing.fieldEquivOfAlgEquivHom_injective (A ⧸ P) (B ⧸ Q)
     (FractionRing (A ⧸ P)) (FractionRing (B ⧸ Q)))
 
-/-- .
-
- -/
+/-- . -/
 noncomputable def IsFractionRing.stabilizerQuotientInertiaEquiv :
     MulAction.stabilizer G Q ⧸ Q.inertia (MulAction.stabilizer G Q) ≃* Gal(L/K) :=
   QuotientGroup.liftEquiv (N := Q.inertia (MulAction.stabilizer G Q))
@@ -402,10 +352,7 @@ noncomputable def IsFractionRing.stabilizerQuotientInertiaEquiv :
 theorem IsFractionRing.stabilizerQuotientInertiaEquiv_mk (g : MulAction.stabilizer G Q) :
     stabilizerQuotientInertiaEquiv G P Q K L g = stabilizerHom G P Q K L g := rfl
 
-/-- .
-
-
- -/
+/-- . -/
 noncomputable def Ideal.Quotient.stabilizerQuotientInertiaEquiv :
     MulAction.stabilizer G Q ⧸ Q.inertia (MulAction.stabilizer G Q) ≃*
       Gal((B ⧸ Q)/(A ⧸ P)) :=
@@ -427,12 +374,7 @@ variable {A B k : Type*} [CommRing A] [CommRing B] [Algebra A B]
   [IsDomain k] [FaithfulSMul (B ⧸ Q) k]
 
 include G in
-/-- .
-
-
-
-
- -/
+/-- . -/
 lemma Ideal.Quotient.exists_algHom_fixedPoint_quotient_under
     (σ : k →ₐ[A ⧸ P] k) :
     ∃ τ : (B ⧸ Q) →ₐ[A ⧸ P] B ⧸ Q, ∀ x : B ⧸ Q,
@@ -467,10 +409,7 @@ lemma Ideal.Quotient.exists_algHom_fixedPoint_quotient_under
   exact ⟨Ideal.Quotient.mk _ (τ • x), hτ.symm⟩
 
 include G in
-/-- .
-
-
- -/
+/-- . -/
 lemma Ideal.Quotient.exists_algEquiv_fixedPoint_quotient_under
     (σ : k ≃ₐ[A ⧸ P] k) :
     ∃ τ : (B ⧸ Q) ≃ₐ[A ⧸ P] B ⧸ Q, ∀ x : B ⧸ Q,
@@ -504,8 +443,7 @@ variable (G A B K L : Type*) [Group G] [CommRing A] [CommRing B] [Algebra A B] [
   [IsScalarTower A K L] [IsScalarTower A B L] [MulSemiringAction G B] [MulSemiringAction G L]
   [SMulDistribClass G B L] [hAB : Algebra.IsInvariant A B G] [SMulCommClass G A B]
 
-/-- .
- -/
+/-- . -/
 theorem isInvariant_of_isIntegral [Algebra.IsIntegral A B] : Algebra.IsInvariant K L G := by
   refine ⟨fun x h ↦ ?_⟩
   have hc (a : A) : (algebraMap K L) (algebraMap A K a) = (algebraMap B L) (algebraMap A B a) := by
@@ -526,8 +464,7 @@ theorem isInvariant_of_isIntegral [Algebra.IsIntegral A B] : Algebra.IsInvariant
   rw [hxy, map_div₀, hc, hc]
 
 include A B in
-/-- .
- -/
+/-- . -/
 theorem isInvariant [Finite G] : Algebra.IsInvariant K L G :=
   have := hAB.isIntegral
   isInvariant_of_isIntegral G A B K L

@@ -7,52 +7,11 @@ Authors: Anne Baanen
 import ProximityPrize.Benchmark.TargetLower
 import ProximityPrize.SubmissionLower.LocalMathlibPortLicense
 
-/-!
-Permitted flat proof port of Mathlib.RingTheory.Norm.Basic.
-Model label: gpt-5.
-Original Mathlib revision: 905b95818eb32af7874a58b427f50c1711a5e96c.
-Original source SHA256: 6436fedaf58c5c81b7d6c12bf39cd162bd0546bff0f5ef61c0aedc0981f15856.
-Original copyright and author notices are retained above.
-Modifications: module/public visibility packaging is removed; imports
-are replaced by the trusted target and the necessary flat proof ports.
-All mathematical declarations and proof bodies are retained, except
-any explicitly documented ordinary-term expansion below.
-The full Apache 2.0 license is in LocalMathlibPortLicense.lean.
--/
+/-! . -/
 
-/-!
-Port elaboration repairs (gpt-5, 2026-08-27): select the Matrix determinant
-coefficient theorem explicitly, and provide Classical.decEq L locally in
-norm_inv. These resolve name ambiguity and instance search in TargetLower's
-larger environment; no statement or mathematical argument is weakened.
--/
+/-! . -/
 
-/-! .
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- -/
+/-! . -/
 
 section ProximityFlatProofPort
 
@@ -77,15 +36,13 @@ namespace Algebra
 
 section EqProdRoots
 
-/-- .
- -/
+/-- . -/
 theorem PowerBasis.norm_gen_eq_coeff_zero_minpoly (pb : PowerBasis R S) :
     norm R pb.gen = (-1) ^ pb.dim * coeff (minpoly R pb.gen) 0 := by
   rw [norm_eq_matrix_det pb.basis, Matrix.det_eq_sign_charpoly_coeff, charpoly_leftMulMatrix,
     Fintype.card_fin]
 
-/-- .
- -/
+/-- . -/
 theorem PowerBasis.norm_gen_eq_prod_roots [Algebra R F] (pb : PowerBasis R S)
     (hf : ((minpoly R pb.gen).map (algebraMap R F)).Splits) :
     algebraMap R F (norm R pb.gen) = ((minpoly R pb.gen).aroots F).prod := by

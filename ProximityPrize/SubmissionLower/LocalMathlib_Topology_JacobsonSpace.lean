@@ -7,38 +7,9 @@ Authors: Andrew Yang
 import ProximityPrize.Benchmark.TargetLower
 import ProximityPrize.SubmissionLower.LocalMathlibPortLicense
 
-/-!
-Permitted flat proof port of Mathlib.Topology.JacobsonSpace.
-Model label: gpt-5.
-Original Mathlib revision: 905b95818eb32af7874a58b427f50c1711a5e96c.
-Original source SHA256: c12a0b6da0d0b702fcab56f58c49c20e4468fd37d2d64d6c0a86a0d2fd94b2b0.
-Original copyright and author notices are retained above.
-Modifications: module/public visibility packaging is removed; imports
-are replaced by the trusted target and the necessary flat proof ports.
-All mathematical declarations and proof bodies are retained, except
-any explicitly documented ordinary-term expansion below.
-The full Apache 2.0 license is in LocalMathlibPortLicense.lean.
-Port elaboration adjustment: escape the original type-variable identifiers X, Y, and Z
-so the target's polynomial notation cannot capture them. All names, statements,
-and mathematical proof bodies are otherwise unchanged.
--/
+/-! . -/
 
-/-! .
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- -/
+/-! . -/
 
 section ProximityFlatProofPort
 
@@ -80,8 +51,7 @@ lemma Set.Finite.isDiscrete_of_subset_closedPoints
 
 end closedPoints
 
-/-- .
- -/
+/-- . -/
 @[mk_iff, stacks 005U]
 class JacobsonSpace : Prop where
   closure_inter_closedPoints : ∀ {«Z»}, IsClosed «Z» → closure («Z» ∩ closedPoints «X») = «Z»

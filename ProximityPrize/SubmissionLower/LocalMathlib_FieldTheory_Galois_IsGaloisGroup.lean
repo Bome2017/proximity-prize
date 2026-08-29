@@ -9,45 +9,9 @@ import ProximityPrize.SubmissionLower.LocalMathlibPortLicense
 import ProximityPrize.SubmissionLower.LocalMathlib_FieldTheory_Galois_Infinite
 import ProximityPrize.SubmissionLower.LocalMathlib_RingTheory_IsGaloisGroup_Basic
 
-/-!
-Permitted flat proof port of Mathlib.FieldTheory.Galois.IsGaloisGroup.
-Model label: gpt-5.
-Original Mathlib revision: 905b95818eb32af7874a58b427f50c1711a5e96c.
-Original source SHA256: f7ee6968bc17cc4a9195c3c4ef5b5a50fbb3b2c652a8c4b362c8b7fe4e411538.
-Original copyright and author notices are retained above.
-Modifications: module/public visibility packaging is removed; imports
-are replaced by the trusted target and the necessary flat proof ports.
-All mathematical declarations and proof bodies are retained, except
-any explicitly documented ordinary-term expansion below.
-The full Apache 2.0 license is in LocalMathlibPortLicense.lean.
--/
+/-! . -/
 
-/-! .
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- -/
+/-! . -/
 
 section ProximityFlatProofPort
 
@@ -92,9 +56,7 @@ instance of_isGalois [IsGalois K L] : IsGaloisGroup Gal(L/K) K L where
   commutes := inferInstance
   isInvariant := ⟨fun x ↦ (InfiniteGalois.mem_bot_iff_fixed x).mpr⟩
 
-/-- .
-
- -/
+/-- . -/
 theorem card_eq_finrank [IsGaloisGroup G K L] : Nat.card G = Module.finrank K L := by
   rcases fintypeOrInfinite G with _ | hG
   · have : FaithfulSMul G L := faithful K
@@ -128,9 +90,7 @@ variable (A B : Type*) [CommRing A] [CommRing B] [IsDomain B] [Algebra A B] [Fai
   [MulSemiringAction G B] [MulSemiringAction G' B] [IsGaloisGroup G A B] [IsGaloisGroup G' A B]
   [Finite G] [Finite G']
 
-/-- .
-
- -/
+/-- . -/
 theorem card_eq_finrank' : Nat.card G = Module.finrank A B := by
   have := IsDomain.of_faithfulSMul A B
   let := FractionRing.liftAlgebra A (FractionRing B)
@@ -217,8 +177,7 @@ instance intermediateField [Finite G] [hGKL : IsGaloisGroup G K L] :
   .of_mulEquiv_algEquiv e fun _ _ ↦ rfl
 
 include K in
-/-- .
- -/
+/-- . -/
 theorem of_isScalarTower [Finite G] [IsGaloisGroup G K L] (E : Type*) [Field E] [Algebra K E]
     [Algebra E L] [IsScalarTower K E L] :
     IsGaloisGroup (fixingSubgroup G (Set.range (algebraMap E L))) E L := by
@@ -265,8 +224,8 @@ section IsGaloisGroup
 
 variable [hGKL : IsGaloisGroup G K L]
 
---
---
+
+
 theorem fixingSubgroup_top : fixingSubgroup G ((⊤ : IntermediateField K L) : Set L) = ⊥ := by
   have := hGKL.faithful
   ext; simpa [mem_fixingSubgroup_iff, Set.ext_iff] using MulAction.fixedBy_eq_univ_iff_eq_one
@@ -313,8 +272,7 @@ theorem fixedPoints_fixingSubgroup [Finite G] :
   rw [← ofDual_intermediateFieldEquivSubgroup_apply, ← intermediateFieldEquivSubgroup_symm_apply,
     OrderIso.symm_apply_apply]
 
-/-- .
- -/
+/-- . -/
 theorem fixedPoints_eq_range_algebraMap (B : Type*)
     [CommSemiring B] [Algebra B L] [IsGaloisGroup H B L] :
     (FixedPoints.intermediateField H : IntermediateField K L) = Set.range (algebraMap B L) := by
@@ -325,17 +283,14 @@ theorem fixedPoints_eq_range_algebraMap (B : Type*)
   exact smul_algebraMap h x
 
 include K in
-/-- .
-
- -/
+/-- . -/
 theorem fixingSubgroup_range_algebraMap' [Finite G] (B : Type*) [CommSemiring B] [Algebra B L]
     [IsGaloisGroup H B L] :
     fixingSubgroup G (Set.range (algebraMap B L)) = H := by
   rw [← fixedPoints_eq_range_algebraMap G K L H, fixingSubgroup_fixedPoints]
 
 attribute [local instance] FractionRing.liftAlgebra in
-/-- .
- -/
+/-- . -/
 theorem fixingSubgroup_range_algebraMap [Finite G] (A B C : Type*) (H : Subgroup G)
     [CommRing A] [CommRing B] [CommRing C] [IsDomain C]
     [Algebra A C] [FaithfulSMul A C] [MulSemiringAction G C] [hGAC : IsGaloisGroup G A C]
@@ -364,8 +319,7 @@ theorem fixingSubgroup_range_algebraMap [Finite G] (A B C : Type*) (H : Subgroup
     rw [← IsScalarTower.algebraMap_apply, ← IsScalarTower.algebraMap_apply]
 
 open Pointwise in
-/-- .
- -/
+/-- . -/
 theorem normal_of_isGalois (E : Type*) [Field E] [Algebra K E] [Algebra E L] [IsScalarTower K E L]
     [Finite G] [IsGaloisGroup H E L] [IsGalois K E] : H.Normal := by
   let F := (IsScalarTower.toAlgHom K E L).fieldRange
@@ -388,8 +342,7 @@ section Domain
 variable (A B C : Type*) [CommRing A] [CommRing B] [CommRing C] [IsDomain C] [Algebra A B]
     [Algebra A C] [Algebra B C] [FaithfulSMul A B] [FaithfulSMul B C] [IsScalarTower A B C]
 
-/-- .
- -/
+/-- . -/
 theorem quotient [Finite G] (N : Subgroup G) [N.Normal] [MulSemiringAction G C]
     [hG : IsGaloisGroup G A C] [MulSemiringAction G B] [MulSemiringAction (G ⧸ N) B]
     [SMulCommClass (G ⧸ N) A B] [SMulDistribClass G B C] [IsScalarTower G (G ⧸ N) B]
@@ -413,8 +366,7 @@ theorem quotient [Finite G] (N : Subgroup G) [N.Normal] [MulSemiringAction G C]
     have := (FaithfulSMul.algebraMap_injective B C).eq_iff.mpr <| h g
     rwa [MulAction.coe_quotient_smul, algebraMap.smul'] at this
 
-/-- .
- -/
+/-- . -/
 noncomputable def quotientMulEquiv [Finite G] [Finite G'] (N : Subgroup G) [N.Normal]
     [MulSemiringAction G C] [IsGaloisGroup G A C] [IsGaloisGroup N B C] [MulSemiringAction G' B]
     [IsGaloisGroup G' A B] :
@@ -441,8 +393,7 @@ theorem algebraMap_quotientMulEquiv_smul [Finite G] [Finite G'] (N : Subgroup G)
   apply mulEquivCongr_apply_smul
 
 attribute [local instance] FractionRing.liftAlgebra in
-/-- .
- -/
+/-- . -/
 noncomputable def restrictHom [Finite G] [Finite G'] [MulSemiringAction G C] [IsGaloisGroup G A C]
     [MulSemiringAction G' B] [IsGaloisGroup G' A B] :
     G →* G' :=
@@ -499,8 +450,7 @@ noncomputable section IntermediateField
 
 variable (N : Subgroup G) [N.Normal] [IsGaloisGroup N F L]
 
-/-- .
- -/
+/-- . -/
 instance [Finite G] [IsGaloisGroup G K L] : IsGaloisGroup (G ⧸ N) K F :=
   letI := smulOfNormal G F L N
   haveI := smulDistribClass_smulOfNormal G F L N
@@ -509,9 +459,7 @@ instance [Finite G] [IsGaloisGroup G K L] : IsGaloisGroup (G ⧸ N) K F :=
 
 variable (E : IntermediateField K L) [hE : IsGaloisGroup H E L]
 
-/-- .
-
- -/
+/-- . -/
 theorem map_quotientMk' [Finite G] [IsGaloisGroup G K L] (h : E ≤ F) :
     letI : Algebra E F := (IntermediateField.inclusion h).toAlgebra
     IsGaloisGroup (H.map (QuotientGroup.mk' N)) E F :=

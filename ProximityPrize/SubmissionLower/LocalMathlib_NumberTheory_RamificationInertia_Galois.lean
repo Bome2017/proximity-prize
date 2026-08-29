@@ -9,62 +9,11 @@ import ProximityPrize.SubmissionLower.LocalMathlibPortLicense
 import ProximityPrize.SubmissionLower.LocalMathlib_RingTheory_Invariant_Galois
 import ProximityPrize.SubmissionLower.LocalMathlib_RingTheory_RamificationInertia_Basic
 
-/-!
-Permitted flat proof port of Mathlib.NumberTheory.RamificationInertia.Galois.
-Model label: gpt-5.
-Original Mathlib revision: 905b95818eb32af7874a58b427f50c1711a5e96c.
-Original source SHA256: 1a77ec7beca09117d4e469c05f8b552fbf02cded5aa1809bf8fda3856d2ab2de.
-Original copyright and author notices are retained above.
-Modifications: module/public visibility packaging is removed; imports
-are replaced by the trusted target and the necessary flat proof ports.
-All mathematical declarations and proof bodies are retained, except
-any explicitly documented ordinary-term expansion below.
-The full Apache 2.0 license is in LocalMathlibPortLicense.lean.
--/
+/-! . -/
 
-/-! .
+/-! . -/
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- -/
-
-/-! .
-
-
-
-
-
-
- -/
+/-! . -/
 
 section ProximityFlatProofPort
 
@@ -76,18 +25,14 @@ attribute [local instance] FractionRing.liftAlgebra
 namespace Ideal
 
 open scoped Classical in
-/-- .
-
- -/
+/-- . -/
 noncomputable def ramificationIdxIn {A : Type*} [CommRing A] (p : Ideal A)
     (B : Type*) [CommRing B] [Algebra A B] : ℕ :=
   if h : ∃ P : Ideal B, P.IsPrime ∧ P.LiesOver p then h.choose.ramificationIdx A
   else 0
 
 open scoped Classical in
-/-- .
-
- -/
+/-- . -/
 noncomputable def inertiaDegIn {A : Type*} [CommRing A] (p : Ideal A)
     (B : Type*) [CommRing B] [Algebra A B] : ℕ :=
   if h : ∃ P : Ideal B, P.IsPrime ∧ P.LiesOver p then h.choose.inertiaDeg A else 0
@@ -144,9 +89,7 @@ variable {A B : Type*} [CommRing A] [CommRing B] [Algebra A B] (p : Ideal A) (P 
   (G : Type*) [Group G] [Finite G] [MulSemiringAction G B] [IsGaloisGroup G A B]
 
 include p in
-/-- .
-
- -/
+/-- . -/
 theorem exists_smul_eq_of_isGaloisGroup : ∃ σ : G, σ • P = Q := by
   rcases IsInvariant.exists_smul_of_under_eq A B G P Q <|
     (over_def P p).symm.trans (over_def Q p) with ⟨σ, hs⟩
@@ -348,8 +291,7 @@ lemma card_inertia_eq_ramificationIdxIn [IsDomain R] [IsDomain S] [Module.Finite
   rwa [← ncard_primesOver_mul_ramificationIdxIn_mul_inertiaDegIn p S G,
     mul_assoc, mul_right_inj' h1, mul_left_inj' h2] at H
 
-/-- .
- -/
+/-- . -/
 lemma card_stabilizer_eq [IsDomain R] [IsDomain S] [Module.Finite R S] [Flat R S]
     (p : Ideal R) (P : Ideal S) [P.LiesOver p] [p.IsPrime] [P.IsPrime]
     [PerfectField p.ResidueField] :

@@ -8,39 +8,9 @@ import ProximityPrize.Benchmark.TargetLower
 import ProximityPrize.SubmissionLower.LocalMathlibPortLicense
 import ProximityPrize.SubmissionLower.LocalMathlib_Data_Finsupp_MonomialOrder
 
-/-!
-Permitted flat proof port of Mathlib.Data.Finsupp.MonomialOrder.DegLex.
-Model label: gpt-5.
-Original Mathlib revision: 905b95818eb32af7874a58b427f50c1711a5e96c.
-Original source SHA256: 846f2550bacbb25e02bdc4b57977e15c4eac685093e4b42ecab0ef022d1b5109.
-Original copyright and author notices are retained above.
-Modifications: module/public visibility packaging is removed; imports
-are replaced by the trusted target and the necessary flat proof ports.
-All mathematical declarations and proof bodies are retained, except
-any explicitly documented ordinary-term expansion below.
-The full Apache 2.0 license is in LocalMathlibPortLicense.lean.
+/-! . -/
 
-Elaboration repair (gpt-5, 2026-08-27): spell the original strict-order
-structure field as `«trans»` to avoid a command-token collision imported by
-TargetLower. Its name, proof, mathematical API, imports and license remain
-unchanged; no field is omitted or replaced by a hypothesis.
--/
-
-/-! .
-
-
-
-
-
-
-
-
-
-
-
-
-
- -/
+/-! . -/
 
 section ProximityFlatProofPort
 
@@ -90,10 +60,8 @@ theorem ofDegLex_add [AddCommMonoid α] (a b : DegLex α) :
 
 namespace Finsupp
 
-open scoped Function in --
-/-- .
-
- -/
+open scoped Function in
+/-- . -/
 protected def DegLex (r : α → α → Prop) (s : ℕ → ℕ → Prop) :
     (α →₀ ℕ) → (α →₀ ℕ) → Prop :=
   (Prod.Lex s (Finsupp.Lex r s)) on (fun x ↦ (x.degree, x))

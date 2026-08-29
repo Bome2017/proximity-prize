@@ -9,34 +9,11 @@ import ProximityPrize.SubmissionLower.LocalMathlibPortLicense
 import ProximityPrize.SubmissionLower.LocalMathlib_Data_ZMod_QuotientRing
 import ProximityPrize.SubmissionLower.LocalMathlib_LinearAlgebra_Quotient_Pi
 
-/-!
-Permitted flat proof port of Mathlib.LinearAlgebra.FreeModule.Finite.Quotient.
-Model label: gpt-5.
-Original Mathlib revision: 905b95818eb32af7874a58b427f50c1711a5e96c.
-Original source SHA256: 2e9a501203fcdaedf24b8cbbdb6811adf4ee5e6975f40ec706beec7ece81c5a4.
-Original copyright and author notices are retained above.
-Modifications: module/public visibility packaging is removed; imports
-are replaced by the trusted target and the necessary flat proof ports.
-All mathematical declarations and proof bodies are retained, except
-any explicitly documented ordinary-term expansion below.
-The full Apache 2.0 license is in LocalMathlibPortLicense.lean.
--/
+/-! . -/
 
-/-!
-Port elaboration repair (gpt-5, 2026-08-27): install proof-local
-Classical.decEq for the finite basis index before constructing the quotient
-equivalence. This resolves instance-search ambiguity in the larger trusted
-environment; no hypothesis, definition or mathematical formula is changed.
--/
+/-! . -/
 
-/-! .
-
-
-
-
-
-
- -/
+/-! . -/
 
 section ProximityFlatProofPort
 
@@ -48,18 +25,15 @@ namespace Submodule
 variable {ι R M : Type*} [CommRing R] [AddCommGroup M] [Module R M]
 variable [IsDomain R] [IsPrincipalIdealRing R] [Finite ι]
 
-/-- .
-
-
- -/
+/-- . -/
 noncomputable def quotientEquivPiSpan (N : Submodule R M) (b : Basis ι R M)
     (h : Module.finrank R N = Module.finrank R M) :
     (M ⧸ N) ≃ₗ[R] Π i, R ⧸ Ideal.span ({smithNormalFormCoeffs b h i} : Set R) := by
   letI : DecidableEq ι := Classical.decEq ι
   haveI := Fintype.ofFinite ι
-  --
-  --
-  --
+
+
+
   let a := smithNormalFormCoeffs b h
   let b' := smithNormalFormTopBasis b h
   let ab := smithNormalFormBotBasis b h
@@ -76,8 +50,8 @@ noncomputable def quotientEquivPiSpan (N : Submodule R M) (b : Basis ι R M)
     · rintro ha
       choose c hc using ha
       exact ⟨c, b'.ext_elem fun i => Eq.trans (hc i) (this c i).symm⟩
-  --
-  --
+
+
   let N' : Submodule R (ι → R) := Submodule.pi Set.univ fun i => span R ({a i} : Set R)
   have : Submodule.map (b'.equivFun : M →ₗ[R] ι → R) N = N' := by
     ext x
@@ -95,10 +69,7 @@ noncomputable def quotientEquivPiSpan (N : Submodule R M) (b : Basis ι R M)
   classical
   exact Submodule.quotientPi (show _ → Submodule R R from fun i => span R ({a i} : Set R))
 
-/-- .
-
-
- -/
+/-- . -/
 noncomputable def quotientEquivPiZMod (N : Submodule ℤ M) (b : Basis ι ℤ M)
     (h : Module.finrank ℤ N = Module.finrank ℤ M) :
     M ⧸ N ≃+ Π i, ZMod (smithNormalFormCoeffs b h i).natAbs :=
@@ -108,10 +79,7 @@ noncomputable def quotientEquivPiZMod (N : Submodule ℤ M) (b : Basis ι ℤ M)
     AddEquiv.piCongrRight fun i => ↑(Int.quotientSpanEquivZMod (a i))
   (↑(e : (M ⧸ N) ≃ₗ[ℤ] _) : M ⧸ N ≃+ _).trans e'
 
-/-- .
-
-
- -/
+/-- . -/
 theorem finiteQuotientOfFreeOfRankEq [Module.Free ℤ M] [Module.Finite ℤ M]
     (N : Submodule ℤ M) (h : Module.finrank ℤ N = Module.finrank ℤ M) : Finite (M ⧸ N) := by
   let b := Module.Free.chooseBasis ℤ M
@@ -134,8 +102,7 @@ theorem finiteQuotient_iff [Module.Free ℤ M] [Module.Finite ℤ M] (N : Submod
 variable (F : Type*) [CommRing F] [Algebra F R] [Module F M] [IsScalarTower F R M]
   (b : Basis ι R M) {N : Submodule R M}
 
-/-- .
- -/
+/-- . -/
 noncomputable def quotientEquivDirectSum (h : Module.finrank R N = Module.finrank R M) :
     (M ⧸ N) ≃ₗ[F] ⨁ i, R ⧸ Ideal.span ({smithNormalFormCoeffs b h i} : Set R) := by
   haveI := Fintype.ofFinite ι

@@ -8,37 +8,9 @@ import ProximityPrize.Benchmark.TargetLower
 import ProximityPrize.SubmissionLower.LocalMathlibPortLicense
 import ProximityPrize.SubmissionLower.LocalMathlib_Data_Real_Embedding
 
-/-!
-Permitted flat proof port of Mathlib.RingTheory.Valuation.RankOne.
-Model label: gpt-5.
-Original Mathlib revision: 905b95818eb32af7874a58b427f50c1711a5e96c.
-Original source SHA256: 0d2cc9a5fb8a2d3243e2b6c0b9940a7e18a66ddb8a847000c7884f73093d0072.
-Original copyright and author notices are retained above.
-Modifications: module/public visibility packaging is removed; imports
-are replaced by the trusted target and the necessary flat proof ports.
-All mathematical declarations and proof bodies are retained, except
-any explicitly documented ordinary-term expansion below.
-The full Apache 2.0 license is in LocalMathlibPortLicense.lean.
-Port elaboration adjustment: explicitly bind classical decidability for
-the original with-zero homomorphisms and rank case split.
--/
+/-! . -/
 
-/-! .
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- -/
+/-! . -/
 
 section ProximityFlatProofPort
 
@@ -52,16 +24,13 @@ variable {R Γ₀ : Type*} [Ring R] [LinearOrderedCommGroupWithZero Γ₀]
 
 namespace Valuation
 
-/-- .
-
- -/
+/-- . -/
 class RankLeOne (v : Valuation R Γ₀) where
   /-- . -/
   hom' (v) : ValueGroup₀ (.ofClass v) →*₀ ℝ≥0
   strictMono' : StrictMono hom'
 
-/-- .
- -/
+/-- . -/
 class RankOne (v : Valuation R Γ₀) extends RankLeOne v, Valuation.IsNontrivial v
 
 open WithZero
@@ -79,7 +48,7 @@ lemma nonempty_rankOne_iff_mulArchimedean {v : Valuation R Γ₀} [v.IsNontrivia
     let e := AddMonoidHom.toMultiplicativeRight (α := (ValueGroup₀ (.ofClass v))ˣ) (β := ℝ) f
     have he : StrictMono e := by
       simp only [AddMonoidHom.coe_toMultiplicativeRight, AddMonoidHom.coe_coe, e]
-      --
+
       exact StrictMono.comp strictMono_id (f.monotone'.strictMono_of_injective hf)
     let rf : Multiplicative ℝ →* ℝ≥0ˣ := {
       toFun x := Units.mk0 (.mk ((2 : ℝ) ^ (log (M := ℝ) x)) (by positivity)) <| by
@@ -110,16 +79,14 @@ lemma strictMono : StrictMono (hom v) := hv.strictMono'
 
 lemma nontrivial : ∃ r : R, v r ≠ 0 ∧ v r ≠ 1 := IsNontrivial.exists_val_nontrivial
 
-/-- .
- -/
+/-- . -/
 theorem zero_of_hom_zero {x : ValueGroup₀ (.ofClass v)} (hx : hom v x = 0) : x = 0 := by
   refine (eq_of_le_of_not_lt (zero_le (a := x)) fun h_lt ↦ ?_).symm
   have hs := strictMono v h_lt
   rw [map_zero, hx] at hs
   exact hs.false
 
-/-- .
- -/
+/-- . -/
 theorem hom_eq_zero_iff {x : ValueGroup₀ (.ofClass v)} : hom v x = 0 ↔ x = 0 :=
   ⟨fun h ↦ zero_of_hom_zero v h, fun h ↦ by rw [h, map_zero]⟩
 
@@ -177,8 +144,7 @@ namespace RankLeOne
 
 variable {K : Type*} [DivisionRing K] (v : Valuation K Γ₀) [RankLeOne v]
 
-/-- .
- -/
+/-- . -/
 @[implicit_reducible]
 def rankOne_of_exists (H : ∃ x ≠ 0, v x ≠ 1) : RankOne v where
   exists_val_nontrivial := by
@@ -186,8 +152,7 @@ def rankOne_of_exists (H : ∃ x ≠ 0, v x ≠ 1) : RankOne v where
     obtain ⟨x, hx, hx'⟩ := H
     exact hx' (H' x ((ne_zero_iff v).mpr hx))
 
-/-- .
- -/
+/-- . -/
 @[implicit_reducible]
 def rankOne_of_nontrivial (H : Nontrivial (ValueGroup₀ (.ofClass v))ˣ) : RankOne v where
   exists_val_nontrivial := by
@@ -225,8 +190,7 @@ open ValuativeRel
 
 variable {R : Type*} [Ring R] [ValuativeRel R]
 
-/-- .
- -/
+/-- . -/
 @[implicit_reducible]
 def Valuation.RankOne.ofRankLeOneStruct [ValuativeRel.IsNontrivial R] (e : RankLeOneStruct R) :
     Valuation.RankOne (valuation R) where

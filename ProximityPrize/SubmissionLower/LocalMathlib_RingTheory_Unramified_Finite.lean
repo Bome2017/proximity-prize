@@ -9,46 +9,9 @@ import ProximityPrize.SubmissionLower.LocalMathlibPortLicense
 import ProximityPrize.SubmissionLower.LocalMathlib_RingTheory_Ideal_IdempotentFG
 import ProximityPrize.SubmissionLower.LocalMathlib_RingTheory_Unramified_Basic
 
-/-!
-Permitted flat proof port of Mathlib.RingTheory.Unramified.Finite.
-Model label: gpt-5.
-Original Mathlib revision: 905b95818eb32af7874a58b427f50c1711a5e96c.
-Original source SHA256: 025a2bd29a707fe0e43b84e131dd976f3d53d6b837e522a431d19986009bba54.
-Original copyright and author notices are retained above.
-Modifications: module/public visibility packaging is removed; imports
-are replaced by the trusted target and the necessary flat proof ports.
-All mathematical declarations and proof bodies are retained, except
-any explicitly documented ordinary-term expansion below.
-The full Apache 2.0 license is in LocalMathlibPortLicense.lean.
+/-! . -/
 
-Compatibility repair under the broader trusted-target import: explicitly
-provide Classical.decEq S in the original finite-generation proof. The
-mathematical APIs, hypotheses, and remaining proof body are retained, with
-no resource-limit changes. Final commands report the kernel axioms.
--/
-
-/-! .
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- -/
+/-! . -/
 
 section ProximityFlatProofPort
 
@@ -60,12 +23,7 @@ variable (M : Type*) [AddCommGroup M] [Module R M] [Module S M] [IsScalarTower R
 
 namespace Algebra.FormallyUnramified
 
-/-- .
-
-
-
-
- -/
+/-- . -/
 theorem iff_exists_tensorProduct [EssFiniteType R S] :
     FormallyUnramified R S ↔ ∃ t : S ⊗[R] S,
       (∀ s, ((1 : S) ⊗ₜ[R] s - s ⊗ₜ[R] (1 : S)) * t = 0) ∧ TensorProduct.lmul' R t = 1 := by
@@ -145,14 +103,7 @@ lemma finite_of_free_aux (I) [DecidableEq I] (b : Basis I R S)
 variable [FormallyUnramified R S] [EssFiniteType R S]
 
 variable (R S) in
-/-- .
-
-
-
-
-
-
- -/
+/-- . -/
 noncomputable
 def elem : S ⊗[R] S :=
   (iff_exists_tensorProduct.mp inferInstance).choose
@@ -177,10 +128,10 @@ lemma finite_of_free [Module.Free R S] : Module.Finite R S := by
   classical
   letI : DecidableEq S := Classical.decEq S
   let I := Module.Free.ChooseBasisIndex R S
-  --
+
   let b : Basis I R S := Module.Free.chooseBasis R S
-  --
-  --
+
+
   have ⟨f, hf⟩ : ∃ (a : I →₀ S), elem R S = a.sum (fun i x ↦ x ⊗ₜ b i) := by
     let b' := ((Basis.singleton PUnit.{1} S).tensorProduct b).reindex (Equiv.punitProd I)
     use b'.repr (elem R S)
@@ -188,13 +139,13 @@ lemma finite_of_free [Module.Free R S] : Module.Finite R S := by
     congr! with _ i x
     simp [b', Basis.tensorProduct, TensorProduct.smul_tmul']
   constructor
-  --
+
   use Finset.image₂ (fun i j ↦ f i * b j) f.support f.support
   rw [← top_le_iff]
-  --
+
   rintro x -
   let a : I → I →₀ R := fun i ↦ b.repr (b i * x)
-  --
+
   let F : I →₀ I →₀ R := Finsupp.onFinset f.support (fun j ↦ b.repr (x * f j))
     (fun j ↦ not_imp_comm.mp fun hj ↦ by simp [Finsupp.notMem_support_iff.mp hj])
   have hG : ∀ j ∉ (Finset.biUnion f.support fun i ↦ (a i).support),
@@ -209,12 +160,12 @@ lemma finite_of_free [Module.Free R S] : Module.Finite R S := by
       intro i hi
       rw [hj i hi, zero_smul]
     · simp only [Finset.sum_const_zero, map_zero]
-  --
+
   let G : I →₀ I →₀ R := Finsupp.onFinset (Finset.biUnion f.support (fun i ↦ (a i).support))
     (fun j ↦ b.repr (f.sum (fun i y ↦ a i j • y)))
     (fun j ↦ not_imp_comm.mp (hG j))
-  --
-  --
+
+
   have : F = G := by
     apply Finsupp.curryEquiv.symm.injective
     apply (Finsupp.equivCongrLeft (Equiv.prodComm I I)).injective
@@ -234,12 +185,12 @@ lemma finite_of_free [Module.Free R S] : Module.Finite R S := by
         rfl
     · intro; simp
     · intro; simp
-  --
+
   have : ∀ j, x * f j = f.sum fun i y ↦ a i j • y := by
     intro j
     apply b.repr.injective
     exact DFunLike.congr_fun this j
-  --
+
   rw [← mul_one x, ← @lmul_elem R, hf, map_finsuppSum, Finsupp.sum, Finset.mul_sum]
   simp only [TensorProduct.lmul'_apply_tmul, Finset.coe_image₂, ← mul_assoc, this,
     Finsupp.sum, Finset.sum_mul, smul_mul_assoc]
@@ -249,10 +200,7 @@ lemma finite_of_free [Module.Free R S] : Module.Finite R S := by
   apply Submodule.subset_span
   use j, hj, i, hi
 
-/-- .
-
-
- -/
+/-- . -/
 noncomputable
 def sec :
     M →ₗ[S] S ⊗[R] M where

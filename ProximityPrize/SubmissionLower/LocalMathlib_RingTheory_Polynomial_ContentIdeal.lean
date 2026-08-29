@@ -7,51 +7,9 @@ Authors: Fabrizio Barroero
 import ProximityPrize.Benchmark.TargetLower
 import ProximityPrize.SubmissionLower.LocalMathlibPortLicense
 
-/-!
-Permitted flat proof port of Mathlib.RingTheory.Polynomial.ContentIdeal.
-Model label: gpt-5.
-Original Mathlib revision: 905b95818eb32af7874a58b427f50c1711a5e96c.
-Original source SHA256: 618554477c35c5e0a3bb56ae057f3c935206d1d11657fef4af70aa25bf08ed69.
-Original copyright and author notices are retained above.
-Modifications: module/public visibility packaging is removed; imports
-are replaced by the trusted target and the necessary flat proof ports.
-All mathematical declarations and proof bodies are retained, except
-any explicitly documented ordinary-term expansion below.
-The full Apache 2.0 license is in LocalMathlibPortLicense.lean.
-Port elaboration adjustment: explicitly bind classical decidable equality
-at the original coefficient case splits; every mathematical declaration is retained.
--/
+/-! . -/
 
-/-! .
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- -/
+/-! . -/
 
 section ProximityFlatProofPort
 
@@ -228,8 +186,7 @@ section IsBezout
 
 variable {R : Type*} [CommSemiring R] [IsBezout R] (p : R[X])
 
-/-- .
- -/
+/-- . -/
 theorem isPrimitive_iff_contentIdeal_eq_top : p.IsPrimitive ↔ p.contentIdeal = ⊤ :=
   (IsBezout.isPrincipal_of_FG _ p.contentIdeal_FG).isPrimitive_iff_contentIdeal_eq_top
 

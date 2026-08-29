@@ -8,53 +8,11 @@ import ProximityPrize.Benchmark.TargetLower
 import ProximityPrize.SubmissionLower.LocalMathlibPortLicense
 import ProximityPrize.SubmissionLower.LocalMathlib_RingTheory_Extension_Cotangent_Basic
 
-/-!
-Permitted flat proof port of Mathlib.RingTheory.Smooth.Kaehler.
-Model label: gpt-5.
-Original Mathlib revision: 905b95818eb32af7874a58b427f50c1711a5e96c.
-Original source SHA256: bac44a45efd1d4beb87bdbd2cba37e7a08e92b1726b5659833ad00f15e8a6672.
-Original copyright and author notices are retained above.
-Modifications: module/public visibility packaging is removed; imports
-are replaced by the trusted target and the necessary flat proof ports.
-All mathematical declarations and proof bodies are retained, except
-any explicitly documented ordinary-term expansion below.
-The full Apache 2.0 license is in LocalMathlibPortLicense.lean.
--/
+/-! . -/
 
-/-! .
+/-! . -/
 
-
-
-
-
- -/
-
-/-! .
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- -/
+/-! . -/
 
 section ProximityFlatProofPort
 
@@ -70,14 +28,10 @@ variable [Algebra R P] [Algebra P S]
 section ofSection
 
 variable [Algebra R S] [IsScalarTower R P S]
---
+
 variable (g : S →ₐ[R] P)
 
-/-- .
-
-
-
- -/
+/-- . -/
 @[simps]
 def derivationOfSectionOfKerSqZero (f : P →ₐ[R] S) (hf' : (RingHom.ker f) ^ 2 = ⊥) (g : S →ₐ[R] P)
     (hg : f.comp g = AlgHom.id R S) : Derivation R P (RingHom.ker f) where
@@ -121,11 +75,7 @@ lemma isScalarTower_of_section_of_ker_sqZero :
   refine Ideal.mul_mem_mul ?_ m.2
   simpa [RingHom.mem_ker, sub_eq_zero] using AlgHom.congr_fun hg (algebraMap P S p)
 
-/-- .
-
-
-
- -/
+/-- . -/
 noncomputable
 def retractionOfSectionOfKerSqZero : S ⊗[P] Ω[P⁄R] →ₗ[P] RingHom.ker (algebraMap P S) :=
   letI := g.toRingHom.toAlgebra
@@ -142,8 +92,8 @@ lemma retractionOfSectionOfKerSqZero_tmul_D (s : S) (t : P) :
   haveI := isScalarTower_of_section_of_ker_sqZero g hf' hg
   simp only [retractionOfSectionOfKerSqZero, LinearMap.coe_restrictScalars,
     LinearMap.liftBaseChange_tmul, SetLike.val_smul_of_tower]
-  --
-  --
+
+
   erw [Derivation.liftKaehlerDifferential_comp_D]
   exact mul_sub (g s) t (g (algebraMap P S t))
 
@@ -159,7 +109,7 @@ variable (l : S ⊗[P] Ω[P⁄R] →ₗ[P] RingHom.ker (algebraMap P S))
 variable (hl : l.comp (kerToTensor R P S) = LinearMap.id)
 include hl
 
---
+
 variable (σ : S → P) (hσ : ∀ x, algebraMap P S (σ x) = x)
 
 lemma sectionOfRetractionKerToTensorAux_prop (x y) (h : algebraMap P S x = algebraMap P S y) :
@@ -172,12 +122,7 @@ variable [Algebra R S] [IsScalarTower R P S]
 variable (hf' : (RingHom.ker (algebraMap P S)) ^ 2 = ⊥)
 include hf'
 
-/-- .
-
-
-
-
- -/
+/-- . -/
 noncomputable
 def sectionOfRetractionKerToTensorAux : S →ₐ[R] P where
   toFun x := σ x - l (1 ⊗ₜ .D _ _ (σ x))
@@ -211,12 +156,7 @@ lemma toAlgHom_comp_sectionOfRetractionKerToTensorAux :
   obtain ⟨x, rfl⟩ := hf x
   simp [sectionOfRetractionKerToTensorAux_algebraMap, RingHom.mem_ker.mp]
 
-/-- .
-
-
-
-
- -/
+/-- . -/
 noncomputable def sectionOfRetractionKerToTensor : S →ₐ[R] P :=
   sectionOfRetractionKerToTensorAux l hl _ (fun x ↦ (hf x).choose_spec) hf'
 
@@ -236,11 +176,7 @@ end ofRetraction
 variable [Algebra R S] [IsScalarTower R P S]
 variable (hf' : (RingHom.ker (algebraMap P S)) ^ 2 = ⊥) (hf : Surjective (algebraMap P S))
 
-/-- .
-
-
-
- -/
+/-- . -/
 noncomputable
 def retractionKerToTensorEquivSection :
     { l // LinearMap.comp l (kerToTensor R P S) = LinearMap.id } ≃
@@ -262,10 +198,7 @@ def retractionKerToTensorEquivSection :
   right_inv g := by ext s; obtain ⟨s, rfl⟩ := hf s; simp
 
 variable (R P S) in
-/-- .
-
-
- -/
+/-- . -/
 noncomputable
 def derivationQuotKerSq :
     Derivation R (P ⧸ (RingHom.ker (algebraMap P S) ^ 2)) (S ⊗[P] Ω[P⁄R]) := by
@@ -296,10 +229,7 @@ lemma derivationQuotKerSq_mk (x : P) :
     derivationQuotKerSq R P S x = 1 ⊗ₜ .D R P x := rfl
 
 variable (R P S) in
-/-- .
-
-
- -/
+/-- . -/
 noncomputable
 def tensorKaehlerQuotKerSqEquiv :
     S ⊗[P ⧸ (RingHom.ker (algebraMap P S) ^ 2)] Ω[(P ⧸ (RingHom.ker (algebraMap P S) ^ 2))⁄R] ≃ₗ[S]
@@ -336,11 +266,7 @@ lemma tensorKaehlerQuotKerSqEquiv_symm_tmul_D (s t) :
   simp
 
 set_option backward.isDefEq.respectTransparency false in
-/-- .
-
-
-
- -/
+/-- . -/
 noncomputable
 def retractionKerCotangentToTensorEquivSection :
     { l // LinearMap.comp l (kerCotangentToTensor R P S) = LinearMap.id } ≃
@@ -441,5 +367,3 @@ lemma H1Cotangent.map_toInfinitesimal_bijective (P : Extension.{u} R S) :
       map_eq_zero_iff _ (CotangentSpace.map_toInfinitesimal_bijective P).injective] using hx
 
 end Algebra.Extension
-
--- Kernel dependency audit for this isolated ordinary proof-port repair.

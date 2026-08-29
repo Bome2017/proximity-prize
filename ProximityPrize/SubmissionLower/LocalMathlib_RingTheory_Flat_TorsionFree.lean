@@ -8,43 +8,13 @@ import ProximityPrize.Benchmark.TargetLower
 import ProximityPrize.SubmissionLower.LocalMathlibPortLicense
 import ProximityPrize.SubmissionLower.LocalMathlib_RingTheory_Ideal_IsPrincipal
 
-/-!
-Permitted flat proof port of Mathlib.RingTheory.Flat.TorsionFree.
-Model label: gpt-5.
-Original Mathlib revision: 905b95818eb32af7874a58b427f50c1711a5e96c.
-Original source SHA256: 03049d80fb81284518b7905ccdd8fa3459b0cb55d909ffe5f4465bf1cc8ed43a.
-Original copyright and author notices are retained above.
-Modifications: module/public visibility packaging is removed; imports
-are replaced by the trusted target and the necessary flat proof ports.
-All mathematical declarations and proof bodies are retained, except
-any explicitly documented ordinary-term expansion below.
-The full Apache 2.0 license is in LocalMathlibPortLicense.lean.
+/-! . -/
 
-Elaboration repair (gpt-5, 2026-08-27): expand the intended linear-map
-composition explicitly, avoiding the colliding lens-composition notation
-imported by TargetLower. Mathematical statements and proof logic are unchanged.
--/
-
-/-! .
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- -/
+/-! . -/
 
 section ProximityFlatProofPort
---
---
+
+
 
 open Function (Injective Surjective)
 
@@ -64,17 +34,17 @@ open LinearMap in
 /-- . -/
 lemma isSMulRegular_of_isRegular {r : R} (hr : IsRegular r) [Flat R M] :
     IsSMulRegular M r := by
-  --
-  --
+
+
   have h := Flat.rTensor_preserves_injective_linearMap (M := M)
     (toSpanSingleton R R r) <| hr.right
-  --
-  --
+
+
   have h2 : (fun (x : M) ↦ r • x) =
       (TensorProduct.lid R M).toLinearMap.comp
         ((rTensor M (toSpanSingleton R R r)).comp
           (TensorProduct.lid R M).symm.toLinearMap) := by ext; simp
-  --
+
   rw [IsSMulRegular, h2]
   simp [h, LinearEquiv.injective]
 
@@ -98,27 +68,27 @@ lemma isSMulRegular_of_nonZeroDivisors {r : R} (hr : r ∈ R⁰) [Flat R M] : Is
 /-- . -/
 theorem torsion_eq_bot [Flat R M] : torsion R M = ⊥ := by
   rw [eq_bot_iff]
-  --
+
   rintro m ⟨⟨r, hr⟩, h⟩
-  --
+
   exact isSMulRegular_of_nonZeroDivisors hr (by simpa using h)
 
 /-- . -/
 @[stacks 0539 "Generalized valuation ring to Bezout domain"]
 theorem flat_iff_torsion_eq_bot_of_isBezout [IsBezout R] [IsDomain R] :
     Flat R M ↔ torsion R M = ⊥ := by
-  --
+
   refine ⟨fun _ ↦ torsion_eq_bot, ?_⟩
-  --
+
   intro htors
-  --
+
   rw [iff_lift_lsmul_comp_subtype_injective]
   rintro I hFG
-  --
+
   obtain (rfl | h) := eq_or_ne I ⊥
   · rintro x y -
     apply Subsingleton.elim
-  · --
+  ·
     have hprinc : I.IsPrincipal := IsBezout.isPrincipal_of_FG I hFG
     have : IsPrincipal.generator I ≠ 0 := by
       rwa [ne_eq, ← IsPrincipal.eq_bot_iff_generator_eq_zero]
@@ -135,8 +105,7 @@ theorem flat_iff_torsion_eq_bot_of_isBezout [IsBezout R] [IsDomain R] :
     ext
     simp
 
-/-- .
- -/
+/-- . -/
 theorem flat_iff_torsion_eq_bot_of_valuationRing_localization_isMaximal [IsDomain R]
     (h : ∀ (P : Ideal R), [P.IsMaximal] → ValuationRing (Localization P.primeCompl)) :
     Flat R M ↔ torsion R M = ⊥ := by

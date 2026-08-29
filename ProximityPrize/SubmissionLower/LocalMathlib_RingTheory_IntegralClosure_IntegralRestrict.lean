@@ -10,39 +10,9 @@ import ProximityPrize.SubmissionLower.LocalMathlib_RingTheory_RingHom_Finite
 import ProximityPrize.SubmissionLower.LocalMathlib_RingTheory_Localization_NormTrace
 import ProximityPrize.SubmissionLower.LocalMathlib_RingTheory_Norm_Transitivity
 
-/-!
-Permitted flat proof port of Mathlib.RingTheory.IntegralClosure.IntegralRestrict.
-Model label: gpt-5.
-Original Mathlib revision: 905b95818eb32af7874a58b427f50c1711a5e96c.
-Original source SHA256: 6a1fd2aa47744142955f801b29fb06cc46e0d439ea80c9cccba97a19a60fbbe9.
-Original copyright and author notices are retained above.
-Modifications: module/public visibility packaging is removed; imports
-are replaced by the trusted target and the necessary flat proof ports.
-All mathematical declarations and proof bodies are retained, except
-any explicitly documented ordinary-term expansion below.
-The full Apache 2.0 license is in LocalMathlibPortLicense.lean.
+/-! . -/
 
-Candidate compatibility repair: provide an explicit Classical.decEq B in
-dvd_algebraMap_intNorm_self before the original zero/nonzero split. All
-mathematical declarations, hypotheses, and remaining proof steps are retained;
-no resource limits are changed.
--/
-
-/-! .
-
-
-
-
-
-
-
-
-
-
-
-
-
- -/
+/-! . -/
 
 section ProximityFlatProofPort
 
@@ -98,8 +68,7 @@ variable [Algebra.IsAlgebraic K L]
 section galLift
 variable {A B B₂ B₃}
 
-/-- .
- -/
+/-- . -/
 noncomputable
 def galLift (σ : B →ₐ[A] B₂) : L →ₐ[K] L₂ :=
   haveI := (IsFractionRing.injective A K).isDomain
@@ -154,9 +123,7 @@ theorem galRestrict'_galLift (σ : B →ₐ[A] B₂) :
   AlgHom.ext fun x ↦ IsIntegralClosure.algebraMap_injective B₂ A L₂
     (by simp)
 
-/-- .
-
- -/
+/-- . -/
 @[simps! -fullyApplied apply symm_apply]
 noncomputable
 def galLiftEquiv [Algebra.IsAlgebraic K L₂] (σ : B ≃ₐ[A] B₂) : L ≃ₐ[K] L₂ :=
@@ -169,8 +136,7 @@ theorem galLiftEquiv_algebraMap_apply [Algebra.IsAlgebraic K L₂] (σ : B ≃�
 
 end galLift
 
-/-- .
- -/
+/-- . -/
 @[simps -isSimp]
 noncomputable
 def galRestrictHom : (L →ₐ[K] L) ≃* (B →ₐ[A] B) where
@@ -185,7 +151,7 @@ lemma algebraMap_galRestrictHom_apply (σ : L →ₐ[K] L) (x : B) :
     algebraMap B L (galRestrictHom A K L B σ x) = σ (algebraMap B L x) :=
   algebraMap_galRestrict'_apply _ _ _ _ _
 
-@[simp, nolint unusedHavesSuffices] --
+@[simp, nolint unusedHavesSuffices]
 lemma galRestrictHom_symm_algebraMap_apply (σ : B →ₐ[A] B) (x : B) :
     (galRestrictHom A K L B).symm σ (algebraMap B L x) = algebraMap B L (σ x) :=
   galLift_algebraMap_apply _ _ _ _ _
@@ -235,7 +201,7 @@ instance (priority := 900) [IsDomain A] [IsDomain B] [IsIntegrallyClosed B]
     [Module.Finite A B] [IsTorsionFree A B] : Fintype (B ≃ₐ[A] B) :=
   haveI : IsIntegralClosure B A (FractionRing B) :=
     IsIntegralClosure.of_isIntegrallyClosed _ _ _
-  --
+
   haveI : Algebra.IsAlgebraic (FractionRing A) (FractionRing B) :=
     isAlgebraic_of_isFractionRing A B ..
   haveI : IsLocalization (Algebra.algebraMapSubmonoid B A⁰) (FractionRing B) :=
@@ -250,8 +216,7 @@ variable [IsLocalization (Algebra.algebraMapSubmonoid B M) Bₘ]
 
 section trace
 
-/-- .
- -/
+/-- . -/
 noncomputable
 def Algebra.intTraceAux [IsIntegrallyClosed A] :
     B →ₗ[A] A :=
@@ -271,13 +236,12 @@ variable (A B)
 variable [IsDomain A] [IsIntegrallyClosed A] [IsDomain B] [IsIntegrallyClosed B]
 variable [Module.Finite A B] [IsTorsionFree A B]
 
-/-- .
- -/
+/-- . -/
 noncomputable
 def Algebra.intTrace : B →ₗ[A] A :=
   haveI : IsIntegralClosure B A (FractionRing B) :=
     IsIntegralClosure.of_isIntegrallyClosed _ _ _
-  --
+
   haveI : Algebra.IsAlgebraic (FractionRing A) (FractionRing B) :=
     isAlgebraic_of_isFractionRing A B ..
   haveI : IsLocalization (algebraMapSubmonoid B A⁰) (FractionRing B) :=
@@ -291,7 +255,7 @@ lemma Algebra.algebraMap_intTrace (x : B) :
     algebraMap A K (Algebra.intTrace A B x) = Algebra.trace K L (algebraMap B L x) := by
   haveI : IsIntegralClosure B A (FractionRing B) :=
     IsIntegralClosure.of_isIntegrallyClosed _ _ _
-  --
+
   haveI : Algebra.IsAlgebraic (FractionRing A) (FractionRing B) :=
     isAlgebraic_of_isFractionRing A B ..
   haveI : IsLocalization (algebraMapSubmonoid B A⁰) (FractionRing B) :=
@@ -311,7 +275,7 @@ lemma Algebra.algebraMap_intTrace_fractionRing (x : B) :
       Algebra.trace (FractionRing A) (FractionRing B) (algebraMap B _ x) := by
   haveI : IsIntegralClosure B A (FractionRing B) :=
     IsIntegralClosure.of_isIntegrallyClosed _ _ _
-  --
+
   haveI : Algebra.IsAlgebraic (FractionRing A) (FractionRing B) :=
     isAlgebraic_of_isFractionRing A B ..
   haveI : IsLocalization (algebraMapSubmonoid B A⁰) (FractionRing B) :=
@@ -325,7 +289,7 @@ lemma Algebra.intTrace_eq_trace [Module.Free A B] : Algebra.intTrace A B = Algeb
   ext x
   haveI : IsIntegralClosure B A (FractionRing B) :=
     IsIntegralClosure.of_isIntegrallyClosed _ _ _
-  --
+
   haveI : Algebra.IsAlgebraic (FractionRing A) (FractionRing B) :=
     isAlgebraic_of_isFractionRing A B ..
   haveI : IsLocalization (algebraMapSubmonoid B A⁰) (FractionRing B) :=
@@ -349,7 +313,7 @@ lemma Algebra.intTrace_eq_of_isLocalization
   let L := FractionRing B
   have : IsIntegralClosure B A L :=
     IsIntegralClosure.of_isIntegrallyClosed _ _ _
-  --
+
   haveI : Algebra.IsAlgebraic (FractionRing A) (FractionRing B) :=
     isAlgebraic_of_isFractionRing A B ..
   have : IsLocalization (algebraMapSubmonoid B A⁰) L :=
@@ -389,8 +353,7 @@ section norm
 
 variable [IsIntegrallyClosed A]
 
-/-- .
- -/
+/-- . -/
 noncomputable
 def Algebra.intNormAux :
     B →* A where
@@ -412,8 +375,7 @@ variable (A B)
 variable [IsDomain A] [IsDomain B] [IsIntegrallyClosed B] [Algebra.IsIntegral A B]
   [IsTorsionFree A B]
 
-/-- .
- -/
+/-- . -/
 noncomputable
 def Algebra.intNorm : B →* A := Algebra.intNormAux A (FractionRing A) (FractionRing B) B
 

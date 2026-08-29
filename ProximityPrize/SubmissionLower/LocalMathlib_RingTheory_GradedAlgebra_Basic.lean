@@ -10,56 +10,9 @@ import ProximityPrize.SubmissionLower.LocalMathlib_Algebra_DirectSum_Algebra
 import ProximityPrize.SubmissionLower.LocalMathlib_Algebra_DirectSum_Internal
 import ProximityPrize.SubmissionLower.LocalMathlib_Algebra_DirectSum_Ring
 
-/-!
-Permitted flat proof port of Mathlib.RingTheory.GradedAlgebra.Basic.
-Model label: gpt-5.
-Original Mathlib revision: 905b95818eb32af7874a58b427f50c1711a5e96c.
-Original source SHA256: a09b362ac29d7043b68fab55b278603330bcba1220d1dd2dd405ff015cd23f6a.
-Original copyright and author notices are retained above.
-Modifications: module/public visibility packaging is removed; imports
-are replaced by the trusted target and the necessary flat proof ports.
-All mathematical declarations and proof bodies are retained, except
-any explicitly documented ordinary-term expansion below.
-The full Apache 2.0 license is in LocalMathlibPortLicense.lean.
+/-! . -/
 
-Elaboration repair for the required TargetLower import environment:
-The six zero/add evaluation rewrites for decomposed graded elements are
-qualified as DirectSum.zero_apply and DirectSum.add_apply. This removes
-ambiguity with unrelated root-level function lemmas imported by TargetLower.
-These changes do not add mathematical hypotheses or change the original
-mathematical declarations, conclusions, or proof arguments.
--/
-
-/-! .
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- -/
+/-! . -/
 
 section ProximityFlatProofPort
 
@@ -75,23 +28,14 @@ variable [SetLike σ A] [AddSubmonoidClass σ A] (𝒜 : ι → σ)
 
 open DirectSum
 
-/-- .
-
-
-
-
-
-
-
- -/
+/-- . -/
 class GradedRing (𝒜 : ι → σ) extends SetLike.GradedMonoid 𝒜, DirectSum.Decomposition 𝒜
 
 variable [GradedRing 𝒜]
 
 namespace DirectSum
 
-/-- .
- -/
+/-- . -/
 def decomposeRingEquiv : A ≃+* ⨁ i, 𝒜 i :=
   RingEquiv.symm
     { (decomposeAddEquiv 𝒜).symm with
@@ -185,16 +129,11 @@ section GradedAlgebra
 variable [DecidableEq ι] [AddMonoid ι] [CommSemiring R] [Semiring A] [Algebra R A]
 variable (𝒜 : ι → Submodule R A)
 
-/-- .
- -/
+/-- . -/
 abbrev GradedAlgebra :=
   GradedRing 𝒜
 
-/-- .
-
-
-
- -/
+/-- . -/
 abbrev GradedAlgebra.ofAlgHom [SetLike.GradedMonoid 𝒜] (decompose : A →ₐ[R] ⨁ i, 𝒜 i)
     (right_inv : (DirectSum.coeAlgHom 𝒜).comp decompose = AlgHom.id R A)
     (left_inv : ∀ i (x : 𝒜 i), decompose (x : A) = DirectSum.of (fun i => ↥(𝒜 i)) i x) :
@@ -213,10 +152,9 @@ variable [GradedAlgebra 𝒜]
 
 namespace DirectSum
 
-/-- .
- -/
---
---
+/-- . -/
+
+
 def decomposeAlgEquiv : A ≃ₐ[R] ⨁ i, 𝒜 i :=
   AlgEquiv.symm
     { (decomposeAddEquiv 𝒜).symm with
@@ -272,9 +210,7 @@ variable [Semiring A] [DecidableEq ι]
 variable [AddCommMonoid ι] [PartialOrder ι] [CanonicallyOrderedAdd ι]
 variable [SetLike σ A] [AddSubmonoidClass σ A] (𝒜 : ι → σ) [GradedRing 𝒜]
 
-/-- .
-
- -/
+/-- . -/
 @[simps]
 def GradedRing.projZeroRingHom : A →+* A where
   toFun a := decompose 𝒜 a 0
@@ -370,18 +306,13 @@ variable {R : Type*} [CommSemiring R] {A : Type*} [Semiring A] [Algebra R A]
 variable {ι : Type*} [DecidableEq ι] [AddMonoid ι]
 variable {M : ι → Submodule R A} [SetLike.GradedMonoid M]
 
---
+
 /-- . -/
 noncomputable def coeAlgEquiv (hM : DirectSum.IsInternal M) :
     (DirectSum ι fun i => ↥(M i)) ≃ₐ[R] A :=
   { RingEquiv.ofBijective (DirectSum.coeAlgHom M) hM with commutes' := fun r => by simp }
 
-/-- .
-
-
-
-
- -/
+/-- . -/
 @[implicit_reducible]
 noncomputable def gradedAlgebra (hM : DirectSum.IsInternal M) : GradedAlgebra M :=
   { (inferInstance : SetLike.GradedMonoid M) with

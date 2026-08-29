@@ -7,45 +7,11 @@ Authors: Xavier Roblot
 import ProximityPrize.Benchmark.TargetLower
 import ProximityPrize.SubmissionLower.LocalMathlibPortLicense
 
-/-!
-Permitted flat proof port of Mathlib.RingTheory.Ideal.IsPrincipal.
-Model label: gpt-5.
-Original Mathlib revision: 905b95818eb32af7874a58b427f50c1711a5e96c.
-Original source SHA256: c7b15b3c8472450ec2ad10cabeb9df5925ff597efc7f3042a991097f002b4ba4.
-Original copyright and author notices are retained above.
-Modifications: module/public visibility packaging is removed; imports
-are replaced by the trusted target and the necessary flat proof ports.
-All mathematical declarations and proof bodies are retained, except
-any explicitly documented ordinary-term expansion below.
-The full Apache 2.0 license is in LocalMathlibPortLicense.lean.
--/
+/-! . -/
 
-/-!
-Port elaboration repairs (gpt-5, 2026-08-27): give the principal-generator
-lemma its explicit ring, ideal and generator; use the explicit Associates
-equality theorem instead of an ambiguous Quotient.eq; spell linear composition
-with LinearMap.comp/toLinearMap instead of the target's overloaded notation.
-The original equivalences, theorem types and mathematical proofs are retained.
--/
+/-! . -/
 
-/-! .
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- -/
+/-! . -/
 
 section ProximityFlatProofPort
 
@@ -85,8 +51,7 @@ def isPrincipalNonZeroDivisorsSubmonoid : Submonoid (Ideal R)⁰ where
 variable [IsDomain R]
 
 variable (R) in
-/-- .
- -/
+/-- . -/
 noncomputable def associatesEquivIsPrincipal :
     Associates R ≃ {I : Ideal R // IsPrincipal I} where
   toFun := _root_.Quotient.lift (fun x ↦ ⟨span {x}, x, rfl⟩)
@@ -130,9 +95,9 @@ noncomputable def associatesMulEquivIsPrincipal :
   __ := associatesEquivIsPrincipal R
   map_mul' _ _ := by
     rw [Subtype.ext_iff]
-    --
-    --
-    --
+
+
+
     erw [associatesEquivIsPrincipal_mul]
     rfl
 
@@ -183,8 +148,7 @@ noncomputable def associatesNonZeroDivisorsMulEquivIsPrincipal :
       associatesNonZeroDivisorsEquivIsPrincipal_mul]
     rfl
 
-/-- .
- -/
+/-- . -/
 noncomputable def isoBaseOfIsPrincipal {I : Ideal R}
     [hprinc : I.IsPrincipal] (hI : I ≠ ⊥) : R ≃ₗ[R] I :=
   letI x := IsPrincipal.generator I
