@@ -1,7 +1,7 @@
-import ProximityPrize.SubmissionLower.ContactMovingSeedlessGeometry6719Research
+import ProximityPrize.SubmissionLower.ContactMovingSeedlessGeometry6731Research
 import ProximityPrize.SubmissionLower.ContactSeedlessLambdaResearch
 /-! . -/
-namespace ProximityPrize.SubmissionLower.ContactMovingSeedlessGeometry6719Research
+namespace ProximityPrize.SubmissionLower.ContactMovingSeedlessGeometry6731Research
 open scoped Classical BigOperators
 open ProximityPrize.Benchmark
 open ContactTranslation ContactInterpolation ContactPolynomialSolutions
@@ -129,7 +129,7 @@ theorem exists_seedless_vanishing_interpolant
         ContactTranslation.specialization IRSProfile.Field P 0 Q = 0 := by
   classical
   obtain ⟨Q, hQ, hbox, hcontact⟩ :=
-    ContactMovingSeedless6719Research.exists_seedless_interpolant received
+    ContactMovingSeedless6731Research.exists_seedless_interpolant received
   change Q ∈ ContactSeedlessInterpolationResearch.globalCoefficientBox IRSProfile.Field
     weightedCap w yTotalCap slopeCap at hbox
   have hlegacy : Q ∈ ContactInterpolation.globalCoefficientBox IRSProfile.Field
@@ -222,4 +222,4 @@ theorem irs_scalar_finite_list_card_le
     (by norm_num [IRSProfile.Index, n]) hdegree hsolution hagreement
   rwa [hcard] at hbound
 end
-end ProximityPrize.SubmissionLower.ContactMovingSeedlessGeometry6719Research
+end ProximityPrize.SubmissionLower.ContactMovingSeedlessGeometry6731Research

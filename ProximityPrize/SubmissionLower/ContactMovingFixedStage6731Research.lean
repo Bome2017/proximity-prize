@@ -1,8 +1,8 @@
 import ProximityPrize.Benchmark.TargetLower
-import ProximityPrize.SubmissionLower.ContactMovingFixedProfile6719Research
+import ProximityPrize.SubmissionLower.ContactMovingFixedProfile6731Research
 import ProximityPrize.SubmissionLower.ContactRegularFactorResidualStage6600Research
 
-namespace ProximityPrize.SubmissionLower.ContactMovingFixedStage6719Research
+namespace ProximityPrize.SubmissionLower.ContactMovingFixedStage6731Research
 
 open scoped Classical
 open ContactInterpolation ContactSelectedSeedDecomposition ContactFactorCaps
@@ -11,7 +11,7 @@ open ContactRegularFactorResidualStage6600Research ContactRegularFactorFlag6600R
 open ContactGenericInitialPoint ContactGlobalSelectedFamilies6600Research
 open ContactIdentityResidualIterationResearch ContactIdentityResidualGlobalFlagResearch
 open ContactResidualSupportParametersResearch ContactFlagBezout6543Research
-open ContactGCDCumulativeFlagsResearch ContactMovingFixedProfile6719Research
+open ContactGCDCumulativeFlagsResearch ContactMovingFixedProfile6731Research
 open ContactPrimeSeedIncidence ContactProperCutSeedCount
 
 noncomputable section
@@ -29,8 +29,6 @@ theorem fixedSupport_of_dvd
     (weightedTotalDegree_le_of_dvd residualYSWeights F Q hdiv hQ).trans Hsupport.ys_weight,
     (weightedTotalDegree_le_of_dvd residualTotalWeights F Q hdiv hQ).trans Hsupport.total_weight⟩
 
-/-- .
- -/
 def fixedGeometricStage
     (Q : MvPolynomial (Fin 4) K) (hQ : Q ≠ 0) [CharP K prime]
     (hbox : Q ∈ globalCoefficientBox K fixedProfile.weightedCap fixedProfile.w
@@ -75,5 +73,4 @@ theorem geometric_flag_caps
       (ContactImplicitContactLift.positiveRFactors_spec Q R.1 R.2).2.1 Hsupport) g
 
 end
-
-end ProximityPrize.SubmissionLower.ContactMovingFixedStage6719Research
+end ProximityPrize.SubmissionLower.ContactMovingFixedStage6731Research

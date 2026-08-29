@@ -1,5 +1,5 @@
 import ProximityPrize.Benchmark.TargetLower
-import ProximityPrize.SubmissionLower.ContactMovingClosure6719Research
+import ProximityPrize.SubmissionLower.ContactMovingClosure6731Research
 
 /-! .
 
@@ -10,8 +10,8 @@ import ProximityPrize.SubmissionLower.ContactMovingClosure6719Research
 
 namespace ProximityPrize.Benchmark
 
-theorem candidate : ProtocolClaim 6719 319823 1048576 :=
-  ProximityPrize.SubmissionLower.ContactMovingClosure6719Research.protocolClaim6719
+theorem candidate : ProtocolClaim 6731 320295 1048576 :=
+  ProximityPrize.SubmissionLower.ContactMovingClosure6731Research.protocolClaim6731
 
 end ProximityPrize.Benchmark
 

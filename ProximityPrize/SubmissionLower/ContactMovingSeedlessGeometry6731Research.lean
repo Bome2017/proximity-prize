@@ -1,7 +1,7 @@
 import ProximityPrize.SubmissionLower.ContactSeedlessListBoundResearch
-import ProximityPrize.SubmissionLower.ContactMovingSeedless6719Research
+import ProximityPrize.SubmissionLower.ContactMovingSeedless6731Research
 /-! . -/
-namespace ProximityPrize.SubmissionLower.ContactMovingSeedlessGeometry6719Research
+namespace ProximityPrize.SubmissionLower.ContactMovingSeedlessGeometry6731Research
 open scoped Classical BigOperators
 open ProximityPrize.Benchmark
 open ContactTranslation ContactInterpolation ContactPolynomialSolutions
@@ -22,15 +22,15 @@ set_option maxRecDepth 50000
 set_option maxHeartbeats 5000000
 def n : ℕ := 262144
 def w : ℕ := 131071
-def errors : ℕ := 79955
+def errors : ℕ := 80073
 def agreements : ℕ := n - errors
 def gap : ℕ := agreements - w
 def prime : ℕ := 2130706433
-def multiplicity : ℕ := 37
-def yTotalCap : ℕ := 51
-def slopeCap : ℕ := 10
+def multiplicity : ℕ := 41
+def yTotalCap : ℕ := 56
+def slopeCap : ℕ := 11
 def weightedCap : ℕ := multiplicity * agreements
-def listBudget : ℕ := 700000000
+def listBudget : ℕ := 1000000000
 def capY : ℕ := 1 + 2*w*yTotalCap
 def capR : ℕ := w*(2*slopeCap - 1)
 def regularListNumerator : ℕ := (n-w)*(capY*slopeCap + capR*yTotalCap)
@@ -274,4 +274,4 @@ theorem singular_seedless_card_le
     _ ≤ J.degreeOf 1 := surfaceMap_degreeOf_le phi J 0
     _ ≤ singularListCap := hJY
 end
-end ProximityPrize.SubmissionLower.ContactMovingSeedlessGeometry6719Research
+end ProximityPrize.SubmissionLower.ContactMovingSeedlessGeometry6731Research
