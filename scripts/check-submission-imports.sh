@@ -172,6 +172,13 @@ while IFS= read -r -d '' source; do
     if [[ "${module}" == "${target_module}" ]]; then
       continue
     fi
+    # The trusted libraries the challenge itself is built from, which ship
+    # precompiled in the verifier image.
+    case "${module}" in
+      Mathlib|Mathlib.*|ArkLib|ArkLib.*|CompPoly|CompPoly.*)
+        continue
+        ;;
+    esac
     if [[ "${module}" != "${submission_module}"* ]]; then
       echo "${source} imports untrusted module ${module}" >&2
       echo "only ${target_module} and modules inside ${submission_dir} are allowed" >&2
