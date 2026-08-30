@@ -48,49 +48,49 @@ theorem pad_sums (p : FlagDegree) :
   dsimp [padA, padB, padSlope]
   omega
 
-theorem exactTail6743_eq (p : FlagDegree) :
-    exactTail6743 p = LocatorFixedStage.exactFirstTail
+theorem exactTail6744_eq (p : FlagDegree) :
+    exactTail6744 p = LocatorFixedStage.exactFirstTail
       (padA p) (padB p) (padSlope p) := by
   have hp := pad_sums p
-  rw [exactTail6743_coordinates]
+  rw [exactTail6744_coordinates]
   change FlagDegree.mk _ _ _ = FlagDegree.mk _ _ _
   congr 1 <;> simp only [LocatorFixedStage.exactFirstTail,
     LocatorFixedStage.w, padA, padB, padSlope] <;> omega
 
-theorem hybridTail6743_eq (p : FlagDegree) :
-    hybridTail6743 p = LocatorFixedStage.hybridSecondTail
+theorem hybridTail6744_eq (p : FlagDegree) :
+    hybridTail6744 p = LocatorFixedStage.hybridSecondTail
       (padA p) (padB p) (padSlope p) := by
   have hp := pad_sums p
-  rw [hybridTail6743_coordinates]
+  rw [hybridTail6744_coordinates]
   change FlagDegree.mk _ _ _ = FlagDegree.mk _ _ _
   congr 1 <;> simp only [LocatorFixedStage.hybridSecondTail, LocatorFixedStage.errors,
     padA, padB, padSlope] <;> omega
 
-theorem movingFiber6743_eq (p : FlagDegree) :
-    movingFiber6743 p = LocatorFixedStage.movingFiber
+theorem movingFiber6744_eq (p : FlagDegree) :
+    movingFiber6744 p = LocatorFixedStage.movingFiber
       (padA p) (padB p) (padSlope p) := by
   have hp := pad_sums p
-  rw [movingFiber6743_coordinates]
+  rw [movingFiber6744_coordinates]
   change FlagDegree.mk _ _ _ = FlagDegree.mk _ _ _
   congr 1 <;> simp only [LocatorFixedStage.movingFiber,
     RCN206.fiberFlag, padA, padB, padSlope] <;> omega
 
-theorem movingCut6743_eq (p : FlagDegree) :
-    movingCut6743 p = LocatorFixedStage.movingCut
+theorem movingCut6744_eq (p : FlagDegree) :
+    movingCut6744 p = LocatorFixedStage.movingCut
       (padA p) (padB p) (padSlope p) := by
   have hp := pad_sums p
-  rw [movingCut6743_coordinates]
+  rw [movingCut6744_coordinates]
   change FlagDegree.mk _ _ _ = FlagDegree.mk _ _ _
   congr 1 <;> simp only [LocatorFixedStage.movingCut,
     RCN198.center, RCN198.direction, RCN206.surfaceFlag, LocatorFixedStage.w,
     unitYZFlag, add_zOnly, add_yz, add_all, nsmul_zOnly, nsmul_yz, nsmul_all,
     padA, padB, padSlope] <;> omega
 
-theorem hybridCostAt6743_eq (q p : FlagDegree) :
-    hybridCostAt6743 q p = LocatorFixedStage.hybridStageCost q
+theorem hybridCostAt6744_eq (q p : FlagDegree) :
+    hybridCostAt6744 q p = LocatorFixedStage.hybridStageCost q
       (padA p) (padB p) (padSlope p) := by
-  rw [hybridCostAt6743, LocatorFixedStage.hybridStageCost,
-    exactTail6743_eq, hybridTail6743_eq, movingFiber6743_eq, movingCut6743_eq]
+  rw [hybridCostAt6744, LocatorFixedStage.hybridStageCost,
+    exactTail6744_eq, hybridTail6744_eq, movingFiber6744_eq, movingCut6744_eq]
   rfl
 
 theorem padded_tail_eq (p : FlagDegree) (d : ℕ) :
@@ -142,7 +142,7 @@ theorem own_box (F : P4) (D w L s : ℕ)
 /-- Whole-polynomial support. The smaller Y bounds below concern individual
 irreducible factors only. -/
 def wholeSupport : ResidualSupportParameters :=
-  ⟨13, 62, 1470, by decide, by decide, by decide, by decide⟩
+  ⟨13, 62, 1497, by decide, by decide, by decide, by decide⟩
 
 theorem factor_support (Q : P4) (hQ : Q ≠ 0)
     (HQ : ResidualSupportData wholeSupport Q) (R : RegularIndex Q) :
@@ -153,42 +153,42 @@ theorem factor_support (Q : P4) (hQ : Q ≠ 0)
     (weightedTotalDegree_le_of_dvd residualTotalWeights R.1 Q hd hQ).trans HQ.total_weight⟩
 
 theorem own_parameter_caps (p : FlagDegree)
-    (hs : p.all ≤ 13) (hy : middle p ≤ 62) (ht : total p ≤ 1470) :
+    (hs : p.all ≤ 13) (hy : middle p ≤ 62) (ht : total p ≤ 1497) :
     padSlope p + 2 ≤ 13 ∧ padB p + padSlope p + 3 ≤ 62 ∧
-      padA p + padB p + padSlope p + 3 ≤ 1470 := by
+      padA p + padB p + padSlope p + 3 ≤ 1497 := by
   have hp := pad_sums p
   have hps : padS p ≤ 13 := max_le hs (by decide)
   have hpy : padY p ≤ 62 := max_le hy (by omega)
-  have hpt : padT p ≤ 1470 := max_le ht (by omega)
+  have hpt : padT p ≤ 1497 := max_le ht (by omega)
   rw [hp.1, hp.2.1, hp.2.2]
   exact ⟨hps, hpy, hpt⟩
 
 theorem regular_factor_count
     (Q : P4) (hQ : Q ≠ 0)
-    (hbox : Q ∈ RCN174.globalCoefficientBox K 8187885 131071 1470 13)
+    (hbox : Q ∈ RCN174.globalCoefficientBox K 8187435 131071 1497 13)
     (HQ : ResidualSupportData wholeSupport Q)
     (selected : K → Polynomial K) (Gamma : Finset K) (u0 u1 : I → K)
     (hdegree : ∀ gamma ∈ Gamma, (selected gamma).natDegree ≤ 131071)
-    (hagreement : ∀ gamma ∈ Gamma, 181953 ≤
+    (hagreement : ∀ gamma ∈ Gamma, 181943 ≤
       ((Finset.univ : Finset I).filter (fun i =>
         (selected gamma).eval (IRSProfile.domain i) = u0 i + gamma * u1 i)).card)
-    (hno : NoLargeSelectedPencil selected Gamma 131071 80191)
+    (hno : NoLargeSelectedPencil selected Gamma 131071 80201)
     (R : RegularIndex Q) :
     (regularSeeds Q selected Gamma R).card ≤
-      hybridCost6743 (regularCumulativeFlag Q R) := by
+      hybridCost6744 (regularCumulativeFlag Q R) := by
   letI : CharP (GenericField K) 2130706433 := genericField_charP K 2130706433
   let p := regularCumulativeFlag Q R
   let a := padA p
   let b := padB p
   let s := padSlope p
-  have hRdata := directFactor_data Q R.1 hQ 8187885 131071 1470 13 hbox R.2
+  have hRdata := directFactor_data Q R.1 hQ 8187435 131071 1497 13 hbox R.2
   have hRsmall : R.1.degreeOf (2 : Fin 4) < 2130706433 :=
     (degreeOf_R_le_of_mem_box _ _ _ _ _ hRdata.2.2).trans_lt (by decide)
-  have hRbox := own_box R.1 8187885 131071 1470 13 hRdata.2.2
+  have hRbox := own_box R.1 8187435 131071 1497 13 hRdata.2.2
   have hRsupport := own_support R.1
   have hRwhole := factor_support Q hQ HQ R
   have hc := originalCumulativeFlag_cumulative R.1
-  have hparam : s + 2 ≤ 13 ∧ b + s + 3 ≤ 62 ∧ a + b + s + 3 ≤ 1470 := by
+  have hparam : s + 2 ≤ 13 ∧ b + s + 3 ≤ 62 ∧ a + b + s + 3 ≤ 1497 := by
     apply own_parameter_caps p
     · exact hRwhole.s_weight
     · simpa only [p, middle, regularCumulativeFlag, hc.2.1, wholeSupport] using
@@ -203,7 +203,7 @@ theorem regular_factor_count
     (regularSeeds Q selected Gamma R) hsolutions
   have hstage (g : GeometricFactor K R.1) :
       (geometricSeeds K R.1 selected (regularSeeds Q selected Gamma R) g).card ≤
-        hybridCostAt6743 (geometricCumulativeFlag K g) p := by
+        hybridCostAt6744 (geometricCumulativeFlag K g) p := by
     let S0 := regularGeometricResidualStageOfSupport (RCN198.support a b s) Q selected Gamma
       (Finset.univ : Finset I) IRSProfile.domain u0 u1
       IRSProfile.domain.injective.injOn hdegree hno R
@@ -212,11 +212,11 @@ theorem regular_factor_count
     have hsub : geometricSeeds K R.1 selected
         (regularSeeds Q selected Gamma R) g ⊆ Gamma :=
       (geometricSeeds_subset K R.1 selected _ g).trans (regularSeeds_subset Q selected Gamma R)
-    have hnodes : S.nodes.card = 181953 + 80191 := by
+    have hnodes : S.nodes.card = 181943 + 80201 := by
       change (Finset.univ : Finset I).card = _
       norm_num [I, IRSProfile.Index]
     have hag : ∀ gamma ∈ geometricSeeds K R.1 selected
-        (regularSeeds Q selected Gamma R) g, 181953 ≤ (S.agreementFiber gamma).card := by
+        (regularSeeds Q selected Gamma R) g, 181943 ≤ (S.agreementFiber gamma).card := by
       intro gamma hgamma
       simpa [S, S0, ResidualStage.agreementFiber, ResidualStage.Agrees,
         reflagResidualStage, regularGeometricResidualStageOfSupport,
@@ -224,17 +224,17 @@ theorem regular_factor_count
     have hf := geometricCumulativeFlag_le_support R.1 hRdata.1.ne_zero hRsupport g
     have hcount := LocatorFixedStage.fixedStageBound a b s
       hparam.1 hparam.2.1 hparam.2.2 S hnodes hag hRbox hf
-    simpa only [geometricCumulativeFlag, a, b, s, hybridCostAt6743_eq] using hcount
+    simpa only [geometricCumulativeFlag, a, b, s, hybridCostAt6744_eq] using hcount
   calc
     (regularSeeds Q selected Gamma R).card ≤
         ∑ g : GeometricFactor K R.1,
           (geometricSeeds K R.1 selected (regularSeeds Q selected Gamma R) g).card := hcover
     _ ≤ ∑ g : GeometricFactor K R.1,
-        hybridCostAt6743 (geometricCumulativeFlag K g) p :=
+        hybridCostAt6744 (geometricCumulativeFlag K g) p :=
       Finset.sum_le_sum (fun g _ => hstage g)
-    _ ≤ hybridCost6743 p := by
+    _ ≤ hybridCost6744 p := by
       have hb := geometricCumulativeFlag_budgets R.1 hRdata.1.ne_zero
-      exact LocatorFactorAggregate.sum_hybridCostAt6743_le
+      exact LocatorFactorAggregate.sum_hybridCostAt6744_le
         (geometricCumulativeFlag K) p hb.1 hb.2.1 hb.2.2
 
 
@@ -242,14 +242,14 @@ theorem regular_factor_count
 irreducible factor.  The exceptional Y caps require no active-seed hypothesis. -/
 theorem regular_sum_count
     (Q : P4) (hQ : Q ≠ 0)
-    (hbox : Q ∈ RCN174.globalCoefficientBox K 8187885 131071 1470 13)
+    (hbox : Q ∈ RCN174.globalCoefficientBox K 8187435 131071 1497 13)
     (HQ : ResidualSupportData wholeSupport Q)
     (selected : K → Polynomial K) (Gamma : Finset K) (u0 u1 : I → K)
     (hdegree : ∀ gamma ∈ Gamma, (selected gamma).natDegree ≤ 131071)
-    (hagreement : ∀ gamma ∈ Gamma, 181953 ≤
+    (hagreement : ∀ gamma ∈ Gamma, 181943 ≤
       ((Finset.univ : Finset I).filter (fun i =>
         (selected gamma).eval (IRSProfile.domain i) = u0 i + gamma * u1 i)).card)
-    (hno : NoLargeSelectedPencil selected Gamma 131071 80191)
+    (hno : NoLargeSelectedPencil selected Gamma 131071 80201)
     (h10 : ∀ R : RegularIndex Q, (regularCumulativeFlag Q R).all = 10 →
       middle (regularCumulativeFlag Q R) ≤ 58)
     (h11 : ∀ R : RegularIndex Q, (regularCumulativeFlag Q R).all = 11 →
@@ -259,39 +259,39 @@ theorem regular_sum_count
     (h13 : ∀ R : RegularIndex Q, (regularCumulativeFlag Q R).all = 13 →
       middle (regularCumulativeFlag Q R) ≤ 46) :
     (∑ R : RegularIndex Q, (regularSeeds Q selected Gamma R).card) ≤
-      237171134622841770 := by
+      241613533669933335 := by
   have hb := regularCumulativeFlag_budgets Q hQ HQ
   have hsSum : (∑ R : RegularIndex Q, (regularCumulativeFlag Q R).all) ≤ 13 :=
     hb.1
   have hySum : (∑ R : RegularIndex Q, middle (regularCumulativeFlag Q R)) ≤ 62 :=
     hb.2.1
-  have htSum : (∑ R : RegularIndex Q, total (regularCumulativeFlag Q R)) ≤ 1470 :=
+  have htSum : (∑ R : RegularIndex Q, total (regularCumulativeFlag Q R)) ≤ 1497 :=
     hb.2.2
   have hs (R : RegularIndex Q) : (regularCumulativeFlag Q R).all ≤ 13 :=
     (Finset.single_le_sum (fun _ _ => Nat.zero_le _) (Finset.mem_univ R)).trans hsSum
   have hy (R : RegularIndex Q) : middle (regularCumulativeFlag Q R) ≤ 62 :=
     (Finset.single_le_sum (fun _ _ => Nat.zero_le _) (Finset.mem_univ R)).trans hySum
-  have hcost := LocatorFactorAggregate.aggregate_6743 (regularCumulativeFlag Q)
+  have hcost := LocatorFactorAggregate.aggregate_6744 (regularCumulativeFlag Q)
     hs hy htSum h10 h11 h12 h13
   exact (Finset.sum_le_sum (fun R _ =>
     regular_factor_count Q hQ hbox HQ selected Gamma u0 u1
       hdegree hagreement hno R)).trans hcost
 
 def profile : RCN276.Profile :=
-  ⟨262144, 131071, 181953, 8187885, 1470, 13⟩
+  ⟨262144, 131071, 181943, 8187435, 1497, 13⟩
 
-/-- Fixed-polynomial count for the 80191-error row. -/
+/-- Fixed-polynomial count for the 80201-error row. -/
 theorem fixed_count_le
     (Q : P4) (hQ : Q ≠ 0)
-    (hbox : Q ∈ RCN174.globalCoefficientBox K 8187885 131071 1470 13)
+    (hbox : Q ∈ RCN174.globalCoefficientBox K 8187435 131071 1497 13)
     (HQ : ResidualSupportData wholeSupport Q)
     (selected : K → Polynomial K) (Gamma : Finset K) (u0 u1 : I → K)
     (hsolution : ∀ gamma ∈ Gamma, specialization K (selected gamma) gamma Q = 0)
     (hdegree : ∀ gamma ∈ Gamma, (selected gamma).natDegree ≤ 131071)
-    (hagreement : ∀ gamma ∈ Gamma, 181953 ≤
+    (hagreement : ∀ gamma ∈ Gamma, 181943 ≤
       ((Finset.univ : Finset I).filter (fun i =>
         (selected gamma).eval (IRSProfile.domain i) = u0 i + gamma * u1 i)).card)
-    (hno : NoLargeSelectedPencil selected Gamma 131071 80191)
+    (hno : NoLargeSelectedPencil selected Gamma 131071 80201)
     (h10 : ∀ R : RegularIndex Q, (regularCumulativeFlag Q R).all = 10 →
       middle (regularCumulativeFlag Q R) ≤ 58)
     (h11 : ∀ R : RegularIndex Q, (regularCumulativeFlag Q R).all = 11 →
@@ -300,7 +300,7 @@ theorem fixed_count_le
       middle (regularCumulativeFlag Q R) ≤ 51)
     (h13 : ∀ R : RegularIndex Q, (regularCumulativeFlag Q R).all = 13 →
       middle (regularCumulativeFlag Q R) ≤ 46) :
-    Gamma.card ≤ 237171134622841770 + LocatorArithmetic.fixedSingular.countCap := by
+    Gamma.card ≤ 241613533669933335 + LocatorArithmetic.fixedSingular.countCap := by
   have hg := LocatorArithmetic.fixed_singular_gates
   have hcover := RCN239.card_le_regular_sum_add_singular
     profile Q hQ hbox hg.s_pos hg.s_small hg.w_pos hg.kD

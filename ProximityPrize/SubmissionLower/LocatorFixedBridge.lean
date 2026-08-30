@@ -22,31 +22,31 @@ theorem gcd_fixed_count_le
     (u0 u1 : I → K) (S : SelectedPair u0 u1)
     (selected : K → Polynomial K) (Gamma : Finset K)
     (hdegree : ∀ gamma ∈ Gamma, (selected gamma).natDegree ≤ 131071)
-    (hagreement : ∀ gamma ∈ Gamma, 181953 ≤
+    (hagreement : ∀ gamma ∈ Gamma, 181943 ≤
       ((Finset.univ : Finset I).filter (fun i =>
         (selected gamma).eval (IRSProfile.domain i) = u0 i + gamma * u1 i)).card)
-    (hno : NoLargeSelectedPencil selected Gamma 131071 80191) :
+    (hno : NoLargeSelectedPencil selected Gamma 131071 80201) :
     (LocatorCover.fixed
       (fun gamma => (specialization K (selected gamma) gamma).toRingHom)
       Gamma S.QA S.QB).card ≤
-      237171134622841770 + LocatorArithmetic.fixedSingular.countCap := by
+      241613533669933335 + LocatorArithmetic.fixedSingular.countCap := by
   classical
   let H : P4 := gcd12 S.QA S.QB
   let phi : K → P4 →+* Polynomial K :=
     fun gamma => (specialization K (selected gamma) gamma).toRingHom
   let Delta : Finset K := LocatorCover.fixed phi Gamma S.QA S.QB
   have hH : H ≠ 0 := gcd_ne_zero_of_left S.QA_ne
-  have hHflagC : H ∈ RCN100.globalCoefficientBox K 8187885 131071 43759 13 :=
+  have hHflagC : H ∈ RCN100.globalCoefficientBox K 8187435 131071 43759 13 :=
     S.common_C_flag
   have hHcaps := (mem_flagGlobalCoefficientBox_iff H
-    8187885 131071 43759 13 (by decide)).mp hHflagC
-  have hT : wt residualTotalWeights H ≤ 1470 := S.common_total_le
+    8187435 131071 43759 13 (by decide)).mp hHflagC
+  have hT : wt residualTotalWeights H ≤ 1497 := S.common_total_le
   have hY : wt residualYSWeights H ≤ 62 := S.common_ys_le
   have hS : wt residualSWeights H ≤ 13 := S.common_slope_le
-  have hflag : H ∈ RCN100.globalCoefficientBox K 8187885 131071 1470 13 :=
-    (mem_flagGlobalCoefficientBox_iff H 8187885 131071 1470 13 (by decide)).mpr
+  have hflag : H ∈ RCN100.globalCoefficientBox K 8187435 131071 1497 13 :=
+    (mem_flagGlobalCoefficientBox_iff H 8187435 131071 1497 13 (by decide)).mpr
       ⟨hT, hS, hHcaps.2.2⟩
-  have hbox := flag_box_to_ordinary K 8187885 131071 1470 13 H hflag
+  have hbox := flag_box_to_ordinary K 8187435 131071 1497 13 H hflag
   have hsupport : ResidualSupportData LocatorFixed.wholeSupport H :=
     ⟨hS, hY, hT⟩
   have hsub : Delta ⊆ Gamma := by
@@ -59,12 +59,12 @@ theorem gcd_fixed_count_le
     exact LocatorCover.fixed_vanish phi Gamma S.QA S.QB gamma hg
   have hdegreeD : ∀ gamma ∈ Delta, (selected gamma).natDegree ≤ 131071 :=
     fun gamma hg => hdegree gamma (hsub hg)
-  have hagreementD : ∀ gamma ∈ Delta, 181953 ≤
+  have hagreementD : ∀ gamma ∈ Delta, 181943 ≤
       ((Finset.univ : Finset I).filter (fun i =>
         (selected gamma).eval (IRSProfile.domain i) = u0 i + gamma * u1 i)).card :=
     fun gamma hg => hagreement gamma (hsub hg)
-  have hnoD : NoLargeSelectedPencil selected Delta 131071 80191 :=
-    noLargeSelectedPencil_mono selected Gamma Delta 131071 80191 hsub hno
+  have hnoD : NoLargeSelectedPencil selected Delta 131071 80201 :=
+    noLargeSelectedPencil_mono selected Gamma Delta 131071 80201 hsub hno
   have h10 (R : RegularIndex H) (hs : (regularCumulativeFlag H R).all = 10) :
       LocatorFactorAggregate.middle (regularCumulativeFlag H R) ≤ 58 := by
     have hf := RCN167.positiveRFactors_spec H R.1 R.2

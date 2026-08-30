@@ -2,7 +2,7 @@ import ProximityPrize.Benchmark.TargetLower
 import ProximityPrize.SubmissionLower.LocatorScalarArithmetic
 import ProximityPrize.SubmissionLower.F0
 /- The seedless scalar-list proof at the new, independently certified
-   (multiplicity, Y+R cap, R cap) = (45, 61, 13) profile.
+   (multiplicity, Y+R cap, R cap) = (45, 62, 13) profile.
    The regular/singular decomposition is unchanged; every numerical threshold
    below is supplied by LocatorScalarArithmetic. -/
 namespace ProximityPrize.SubmissionLower.LocatorScalar

@@ -168,7 +168,7 @@ theorem paddedTail_cap (t y s d : ℕ)
   simp only [paddedTail, hps, hpy, hpt]
 
 
-private abbrev bound6743 : ℕ := 237171134622841770
+private abbrev bound6744 : ℕ := 241613533669933335
 
 theorem middle_le_total (p : FlagDegree) : middle p ≤ total p := by
   dsimp [middle, total]
@@ -201,22 +201,22 @@ private theorem flag_eq {p q : FlagDegree}
   cases q
   simp_all
 
-def exactTail6743 (p : FlagDegree) : FlagDegree :=
+def exactTail6744 (p : FlagDegree) : FlagDegree :=
   cap (1 + 2 * (padT p - 1) * 131072)
     (1 + 2 * (padY p - 1) * 131072) ((2 * padS p - 1) * 131072)
 
-def hybridTail6743 (p : FlagDegree) : FlagDegree :=
-  cap (80192 + (2 * padT p - 3) * 65537)
-    (80192 + (2 * padY p - 3) * 65537) ((2 * padS p - 1) * 65537)
+def hybridTail6744 (p : FlagDegree) : FlagDegree :=
+  cap (80202 + (2 * padT p - 3) * 65537)
+    (80202 + (2 * padY p - 3) * 65537) ((2 * padS p - 1) * 65537)
 
-def movingFiber6743 (p : FlagDegree) : FlagDegree :=
+def movingFiber6744 (p : FlagDegree) : FlagDegree :=
   cap (padT p + 1) (padY p + 1) (padS p + 1)
 
-def movingCut6743 (p : FlagDegree) : FlagDegree :=
+def movingCut6744 (p : FlagDegree) : FlagDegree :=
   cap (131074 * padT p - 1) (131074 * padY p - 1) (131074 * padS p - 1)
 
-theorem exactTail6743_coordinates (p : FlagDegree) :
-    exactTail6743 p = ⟨2 * (padT p - padY p) * 131072,
+theorem exactTail6744_coordinates (p : FlagDegree) :
+    exactTail6744 p = ⟨2 * (padT p - padY p) * 131072,
       1 + (2 * (padY p - padS p - 1) + 1) * 131072,
       (2 * (padS p - 2) + 3) * 131072⟩ := by
   have hp := pad_relations p
@@ -252,14 +252,14 @@ theorem exactTail6743_coordinates (p : FlagDegree) :
     congr 1
     omega
 
-theorem hybridTail6743_coordinates (p : FlagDegree) :
-    hybridTail6743 p = ⟨(padT p - padY p) * 131074,
-      80192 + 2 * (padY p - padS p - 1) * 65537,
+theorem hybridTail6744_coordinates (p : FlagDegree) :
+    hybridTail6744 p = ⟨(padT p - padY p) * 131074,
+      80202 + 2 * (padY p - padS p - 1) * 65537,
       (2 * (padS p - 2) + 3) * 65537⟩ := by
   have hp := pad_relations p
   apply flag_eq
-  · change (80192 + (2 * padT p - 3) * 65537) -
-        (80192 + (2 * padY p - 3) * 65537) =
+  · change (80202 + (2 * padT p - 3) * 65537) -
+        (80202 + (2 * padY p - 3) * 65537) =
           (padT p - padY p) * 131074
     rw [Nat.add_sub_add_left]
     have hcoef : 2 * padT p - 3 =
@@ -270,9 +270,9 @@ theorem hybridTail6743_coordinates (p : FlagDegree) :
         2 * (padT p - padY p) * 65537 + (2 * padY p - 3) * 65537 := by ring
     rw [hdist, Nat.add_sub_cancel]
     ring
-  · change (80192 + (2 * padY p - 3) * 65537) -
+  · change (80202 + (2 * padY p - 3) * 65537) -
         ((2 * padS p - 1) * 65537) =
-          80192 + 2 * (padY p - padS p - 1) * 65537
+          80202 + 2 * (padY p - padS p - 1) * 65537
     have hcoef : 2 * padY p - 3 =
         2 * (padY p - padS p - 1) + (2 * padS p - 1) := by
       omega
@@ -287,8 +287,8 @@ theorem hybridTail6743_coordinates (p : FlagDegree) :
     congr 1
     omega
 
-theorem movingFiber6743_coordinates (p : FlagDegree) :
-    movingFiber6743 p = ⟨padT p - padY p,
+theorem movingFiber6744_coordinates (p : FlagDegree) :
+    movingFiber6744 p = ⟨padT p - padY p,
       padY p - padS p, padS p + 1⟩ := by
   have hp := pad_relations p
   apply flag_eq
@@ -299,8 +299,8 @@ theorem movingFiber6743_coordinates (p : FlagDegree) :
   · change padS p + 1 = padS p + 1
     rfl
 
-theorem movingCut6743_coordinates (p : FlagDegree) :
-    movingCut6743 p = ⟨131074 * (padT p - padY p),
+theorem movingCut6744_coordinates (p : FlagDegree) :
+    movingCut6744 p = ⟨131074 * (padT p - padY p),
       131074 * (padY p - padS p), 131074 * padS p - 1⟩ := by
   have hp := pad_relations p
   apply flag_eq
@@ -313,11 +313,11 @@ theorem movingCut6743_coordinates (p : FlagDegree) :
   · change 131074 * padS p - 1 = 131074 * padS p - 1
     rfl
 
-def hybridCostAt6743 (p q : FlagDegree) : ℕ :=
-  flagMixed p (exactTail6743 q) (hybridTail6743 q) +
-    131072 * flagMixed p (movingFiber6743 q) (movingCut6743 q)
+def hybridCostAt6744 (p q : FlagDegree) : ℕ :=
+  flagMixed p (exactTail6744 q) (hybridTail6744 q) +
+    131072 * flagMixed p (movingFiber6744 q) (movingCut6744 q)
 
-def hybridCost6743 (p : FlagDegree) : ℕ := hybridCostAt6743 p p
+def hybridCost6744 (p : FlagDegree) : ℕ := hybridCostAt6744 p p
 
 private theorem cap_mono {t y s t' y' s' : ℕ}
     (hsy : s ≤ y) (hyt : y ≤ t) (hSY : s' ≤ y') (hYT : y' ≤ t')
@@ -344,351 +344,351 @@ private theorem pad_cap_values (t y s : ℕ) (hs : 2 ≤ s)
     rw [hc.2.2, hpy, max_eq_left ht]
   exact ⟨hps, hpy, hpt⟩
 
-private theorem exactTail6743_mono {p q : FlagDegree} (h : Below p q) :
-    Below (exactTail6743 p) (exactTail6743 q) := by
+private theorem exactTail6744_mono {p q : FlagDegree} (h : Below p q) :
+    Below (exactTail6744 p) (exactTail6744 q) := by
   have hp := pad_relations p
   have hq := pad_relations q
   have hm := padding_mono h
-  unfold exactTail6743
+  unfold exactTail6744
   apply cap_mono <;> omega
 
-private theorem hybridTail6743_mono {p q : FlagDegree} (h : Below p q) :
-    Below (hybridTail6743 p) (hybridTail6743 q) := by
+private theorem hybridTail6744_mono {p q : FlagDegree} (h : Below p q) :
+    Below (hybridTail6744 p) (hybridTail6744 q) := by
   have hp := pad_relations p
   have hq := pad_relations q
   have hm := padding_mono h
-  unfold hybridTail6743
+  unfold hybridTail6744
   apply cap_mono <;> omega
 
-private theorem movingFiber6743_mono {p q : FlagDegree} (h : Below p q) :
-    Below (movingFiber6743 p) (movingFiber6743 q) := by
+private theorem movingFiber6744_mono {p q : FlagDegree} (h : Below p q) :
+    Below (movingFiber6744 p) (movingFiber6744 q) := by
   have hp := pad_relations p
   have hq := pad_relations q
   have hm := padding_mono h
-  unfold movingFiber6743
+  unfold movingFiber6744
   apply cap_mono <;> omega
 
-private theorem movingCut6743_mono {p q : FlagDegree} (h : Below p q) :
-    Below (movingCut6743 p) (movingCut6743 q) := by
+private theorem movingCut6744_mono {p q : FlagDegree} (h : Below p q) :
+    Below (movingCut6744 p) (movingCut6744 q) := by
   have hp := pad_relations p
   have hq := pad_relations q
   have hm := padding_mono h
-  unfold movingCut6743
+  unfold movingCut6744
   apply cap_mono <;> omega
 
-private theorem hybridCostAt6743_mono_tails (p : FlagDegree) {q Q : FlagDegree}
-    (h : Below q Q) : hybridCostAt6743 p q ≤ hybridCostAt6743 p Q := by
-  unfold hybridCostAt6743
+private theorem hybridCostAt6744_mono_tails (p : FlagDegree) {q Q : FlagDegree}
+    (h : Below q Q) : hybridCostAt6744 p q ≤ hybridCostAt6744 p Q := by
+  unfold hybridCostAt6744
   exact Nat.add_le_add
-    (mixed_mono_tails p (exactTail6743_mono h) (hybridTail6743_mono h))
+    (mixed_mono_tails p (exactTail6744_mono h) (hybridTail6744_mono h))
     (Nat.mul_le_mul_left 131072
-      (mixed_mono_tails p (movingFiber6743_mono h) (movingCut6743_mono h)))
+      (mixed_mono_tails p (movingFiber6744_mono h) (movingCut6744_mono h)))
 
-private theorem hybridCostAt6743_mono_first {p P q : FlagDegree} (h : Below p P) :
-    hybridCostAt6743 p q ≤ hybridCostAt6743 P q := by
-  unfold hybridCostAt6743
+private theorem hybridCostAt6744_mono_first {p P q : FlagDegree} (h : Below p P) :
+    hybridCostAt6744 p q ≤ hybridCostAt6744 P q := by
+  unfold hybridCostAt6744
   exact Nat.add_le_add (mixed_mono_first h _ _)
     (Nat.mul_le_mul_left 131072 (mixed_mono_first h _ _))
 
-theorem hybridCost6743_mono {p q : FlagDegree} (h : Below p q) :
-    hybridCost6743 p ≤ hybridCost6743 q :=
-  (hybridCostAt6743_mono_tails p h).trans (hybridCostAt6743_mono_first h)
+theorem hybridCost6744_mono {p q : FlagDegree} (h : Below p q) :
+    hybridCost6744 p ≤ hybridCost6744 q :=
+  (hybridCostAt6744_mono_tails p h).trans (hybridCostAt6744_mono_first h)
 
-theorem sum_hybridCostAt6743_le {I : Type*} [Fintype I]
+theorem sum_hybridCostAt6744_le {I : Type*} [Fintype I]
     (p : I → FlagDegree) (P : FlagDegree)
     (hs : (∑ i, (p i).all) ≤ P.all)
     (hy : (∑ i, middle (p i)) ≤ middle P)
     (ht : (∑ i, total (p i)) ≤ total P) :
-    (∑ i, hybridCostAt6743 (p i) P) ≤ hybridCost6743 P := by
+    (∑ i, hybridCostAt6744 (p i) P) ≤ hybridCost6744 P := by
   classical
-  unfold hybridCost6743 hybridCostAt6743
+  unfold hybridCost6744 hybridCostAt6744
   rw [Finset.sum_add_distrib, ← Finset.mul_sum]
   exact Nat.add_le_add
     (sum_mixed_le p P _ _ hs hy ht)
     (Nat.mul_le_mul_left 131072 (sum_mixed_le p P _ _ hs hy ht))
 
-private def diagonalRate6743 (u s : ℕ) : ℕ :=
-  hybridCostAt6743 ⟨0, 0, 1⟩ (cap u u s)
+private def diagonalRate6744 (u s : ℕ) : ℕ :=
+  hybridCostAt6744 ⟨0, 0, 1⟩ (cap u u s)
 
-private theorem cost_le_diagonal_rate6743 (p : FlagDegree) (u s : ℕ)
+private theorem cost_le_diagonal_rate6744 (p : FlagDegree) (u s : ℕ)
     (h : Below p (cap u u s)) :
-    hybridCost6743 p ≤ diagonalRate6743 u s * total p := by
+    hybridCost6744 p ≤ diagonalRate6744 u s * total p := by
   calc
-    _ ≤ hybridCostAt6743 p (cap u u s) := hybridCostAt6743_mono_tails p h
-    _ ≤ hybridCostAt6743 ⟨0, 0, total p⟩ (cap u u s) :=
-      hybridCostAt6743_mono_first (below_total_flag p)
-    _ = diagonalRate6743 u s * total p := by
-      simp only [hybridCostAt6743, diagonalRate6743, flagMixed]
+    _ ≤ hybridCostAt6744 p (cap u u s) := hybridCostAt6744_mono_tails p h
+    _ ≤ hybridCostAt6744 ⟨0, 0, total p⟩ (cap u u s) :=
+      hybridCostAt6744_mono_first (below_total_flag p)
+    _ = diagonalRate6744 u s * total p := by
+      simp only [hybridCostAt6744, diagonalRate6744, flagMixed]
       ring
 
-private theorem scale_rate6743 {c t k : ℕ} (hc : c ≤ k * t)
-    (hk : 1470 * k ≤ bound6743) : 1470 * c ≤ bound6743 * t := by
+private theorem scale_rate6744 {c t k : ℕ} (hc : c ≤ k * t)
+    (hk : 1497 * k ≤ bound6744) : 1497 * c ≤ bound6744 * t := by
   calc
-    1470 * c ≤ 1470 * (k * t) := Nat.mul_le_mul_left 1470 hc
-    _ = (1470 * k) * t := by ring
-    _ ≤ bound6743 * t := Nat.mul_le_mul_right t hk
+    1497 * c ≤ 1497 * (k * t) := Nat.mul_le_mul_left 1497 hc
+    _ = (1497 * k) * t := by ring
+    _ ≤ bound6744 * t := Nat.mul_le_mul_right t hk
 
-private theorem diagonal_rate6743 (p : FlagDegree) (u s : ℕ)
-    (h : Below p (cap u u s)) (hk : 1470 * diagonalRate6743 u s ≤ bound6743) :
-    1470 * hybridCost6743 p ≤ bound6743 * total p :=
-  scale_rate6743 (cost_le_diagonal_rate6743 p u s h) hk
+private theorem diagonal_rate6744 (p : FlagDegree) (u s : ℕ)
+    (h : Below p (cap u u s)) (hk : 1497 * diagonalRate6744 u s ≤ bound6744) :
+    1497 * hybridCost6744 p ≤ bound6744 * total p :=
+  scale_rate6744 (cost_le_diagonal_rate6744 p u s h) hk
 
 private theorem affine62 (t : ℕ) (ht : 62 ≤ t) :
-    hybridCost6743 (cap t 62 9) + 5243128521227636 = 157377088520227 * t := by
+    hybridCost6744 (cap t 62 9) + 5243128745360666 = 157377134395427 * t := by
   have hsub : t - 62 + 62 = t := Nat.sub_add_cancel ht
   have hp := pad_cap_values t 62 9 (by decide) (by decide) ht
-  simp only [hybridCost6743, hybridCostAt6743, exactTail6743, hybridTail6743,
-    movingFiber6743, movingCut6743]
+  simp only [hybridCost6744, hybridCostAt6744, exactTail6744, hybridTail6744,
+    movingFiber6744, movingCut6744]
   rw [hp.1, hp.2.1, hp.2.2]
   simp only [cap, flagMixed]
   ring_nf
   omega
 
 private theorem affine58 (t : ℕ) (ht : 58 ≤ t) :
-    hybridCost6743 (cap t 58 10) + 5089003231495260 = 161319023345703 * t := by
+    hybridCost6744 (cap t 58 10) + 5089003506746360 = 161319074463783 * t := by
   have hsub : t - 58 + 58 = t := Nat.sub_add_cancel ht
   have hp := pad_cap_values t 58 10 (by decide) (by decide) ht
-  simp only [hybridCost6743, hybridCostAt6743, exactTail6743, hybridTail6743,
-    movingFiber6743, movingCut6743]
+  simp only [hybridCost6744, hybridCostAt6744, exactTail6744, hybridTail6744,
+    movingFiber6744, movingCut6744]
   rw [hp.1, hp.2.1, hp.2.2]
   simp only [cap, flagMixed]
   ring_nf
   omega
 
 private theorem affine54 (t : ℕ) (ht : 54 ≤ t) :
-    hybridCost6743 (cap t 54 11) + 4837165034277704 = 162477776896043 * t := by
+    hybridCost6744 (cap t 54 11) + 4837165365889754 = 162477833257003 * t := by
   have hsub : t - 54 + 54 = t := Nat.sub_add_cancel ht
   have hp := pad_cap_values t 54 11 (by decide) (by decide) ht
-  simp only [hybridCost6743, hybridCostAt6743, exactTail6743, hybridTail6743,
-    movingFiber6743, movingCut6743]
+  simp only [hybridCost6744, hybridCostAt6744, exactTail6744, hybridTail6744,
+    movingFiber6744, movingCut6744]
   rw [hp.1, hp.2.1, hp.2.2]
   simp only [cap, flagMixed]
   ring_nf
   omega
 
 private theorem affine51 (t : ℕ) (ht : 51 ≤ t) :
-    hybridCost6743 (cap t 51 12) + 4687813986701880 = 164529897013295 * t := by
+    hybridCost6744 (cap t 51 12) + 4687814379917760 = 164529958617135 * t := by
   have hsub : t - 51 + 51 = t := Nat.sub_add_cancel ht
   have hp := pad_cap_values t 51 12 (by decide) (by decide) ht
-  simp only [hybridCost6743, hybridCostAt6743, exactTail6743, hybridTail6743,
-    movingFiber6743, movingCut6743]
+  simp only [hybridCost6744, hybridCostAt6744, exactTail6744, hybridTail6744,
+    movingFiber6744, movingCut6744]
   rw [hp.1, hp.2.1, hp.2.2]
   simp only [cap, flagMixed]
   ring_nf
   omega
 
 private theorem affine46 (t : ℕ) (ht : 46 ≤ t) :
-    hybridCost6743 (cap t 46 13) + 4098487481801004 = 156445740171315 * t := by
+    hybridCost6744 (cap t 46 13) + 4098487941863594 = 156445807018035 * t := by
   have hsub : t - 46 + 46 = t := Nat.sub_add_cancel ht
   have hp := pad_cap_values t 46 13 (by decide) (by decide) ht
-  simp only [hybridCost6743, hybridCostAt6743, exactTail6743, hybridTail6743,
-    movingFiber6743, movingCut6743]
+  simp only [hybridCost6744, hybridCostAt6744, exactTail6744, hybridTail6744,
+    movingFiber6744, movingCut6744]
   rw [hp.1, hp.2.1, hp.2.2]
   simp only [cap, flagMixed]
   ring_nf
   omega
 
-private theorem rate_of_affine6743 {t c top alpha deficit : ℕ}
-    (ht : t ≤ 1470) (hc : c + deficit = alpha * t)
-    (hTop : top + deficit = alpha * 1470) (hbound : top ≤ bound6743) :
-    1470 * c ≤ bound6743 * t := by
-  have hscaled : 1470 * c + deficit * t ≤ top * t + deficit * t := by
+private theorem rate_of_affine6744 {t c top alpha deficit : ℕ}
+    (ht : t ≤ 1497) (hc : c + deficit = alpha * t)
+    (hTop : top + deficit = alpha * 1497) (hbound : top ≤ bound6744) :
+    1497 * c ≤ bound6744 * t := by
+  have hscaled : 1497 * c + deficit * t ≤ top * t + deficit * t := by
     calc
-      _ ≤ 1470 * c + deficit * 1470 :=
+      _ ≤ 1497 * c + deficit * 1497 :=
         Nat.add_le_add_left (Nat.mul_le_mul_left deficit ht) _
-      _ = (c + deficit) * 1470 := by ring
-      _ = (alpha * t) * 1470 := by rw [hc]
-      _ = (alpha * 1470) * t := by ring
+      _ = (c + deficit) * 1497 := by ring
+      _ = (alpha * t) * 1497 := by rw [hc]
+      _ = (alpha * 1497) * t := by ring
       _ = (top + deficit) * t := by rw [← hTop]
       _ = top * t + deficit * t := by ring
   exact (Nat.le_of_add_le_add_right hscaled).trans
     (Nat.mul_le_mul_right t hbound)
 
-private theorem large_rate62 (t : ℕ) (hlo : 62 ≤ t) (hhi : t ≤ 1470) :
-    1470 * hybridCost6743 (cap t 62 9) ≤ bound6743 * t :=
-  rate_of_affine6743 hhi (affine62 t hlo) (affine62 1470 (by decide)) (by decide)
+private theorem large_rate62 (t : ℕ) (hlo : 62 ≤ t) (hhi : t ≤ 1497) :
+    1497 * hybridCost6744 (cap t 62 9) ≤ bound6744 * t :=
+  rate_of_affine6744 hhi (affine62 t hlo) (affine62 1497 (by decide)) (by decide)
 
-private theorem large_rate58 (t : ℕ) (hlo : 58 ≤ t) (hhi : t ≤ 1470) :
-    1470 * hybridCost6743 (cap t 58 10) ≤ bound6743 * t :=
-  rate_of_affine6743 hhi (affine58 t hlo) (affine58 1470 (by decide)) (by decide)
+private theorem large_rate58 (t : ℕ) (hlo : 58 ≤ t) (hhi : t ≤ 1497) :
+    1497 * hybridCost6744 (cap t 58 10) ≤ bound6744 * t :=
+  rate_of_affine6744 hhi (affine58 t hlo) (affine58 1497 (by decide)) (by decide)
 
-private theorem large_rate54 (t : ℕ) (hlo : 54 ≤ t) (hhi : t ≤ 1470) :
-    1470 * hybridCost6743 (cap t 54 11) ≤ bound6743 * t :=
-  rate_of_affine6743 hhi (affine54 t hlo) (affine54 1470 (by decide)) (by decide)
+private theorem large_rate54 (t : ℕ) (hlo : 54 ≤ t) (hhi : t ≤ 1497) :
+    1497 * hybridCost6744 (cap t 54 11) ≤ bound6744 * t :=
+  rate_of_affine6744 hhi (affine54 t hlo) (affine54 1497 (by decide)) (by decide)
 
-private theorem large_rate51 (t : ℕ) (hlo : 51 ≤ t) (hhi : t ≤ 1470) :
-    1470 * hybridCost6743 (cap t 51 12) ≤ bound6743 * t :=
-  rate_of_affine6743 hhi (affine51 t hlo) (affine51 1470 (by decide)) (by decide)
+private theorem large_rate51 (t : ℕ) (hlo : 51 ≤ t) (hhi : t ≤ 1497) :
+    1497 * hybridCost6744 (cap t 51 12) ≤ bound6744 * t :=
+  rate_of_affine6744 hhi (affine51 t hlo) (affine51 1497 (by decide)) (by decide)
 
-private theorem large_rate46 (t : ℕ) (hlo : 46 ≤ t) (hhi : t ≤ 1470) :
-    1470 * hybridCost6743 (cap t 46 13) ≤ bound6743 * t :=
-  rate_of_affine6743 hhi (affine46 t hlo) (affine46 1470 (by decide)) (by decide)
+private theorem large_rate46 (t : ℕ) (hlo : 46 ≤ t) (hhi : t ≤ 1497) :
+    1497 * hybridCost6744 (cap t 46 13) ≤ bound6744 * t :=
+  rate_of_affine6744 hhi (affine46 t hlo) (affine46 1497 (by decide)) (by decide)
 
 private theorem middle_formula62 (p : FlagDegree) :
-    hybridCostAt6743 p (cap 62 62 9) =
-      52028314943505 * total p + 143166160058792 * p.all := by
-  norm_num [hybridCostAt6743, exactTail6743, hybridTail6743,
-    movingFiber6743, movingCut6743, padT, padY, padS, cap, total, middle, flagMixed]
+    hybridCostAt6744 p (cap 62 62 9) =
+      52028337225745 * total p + 143166297684402 * p.all := by
+  norm_num [hybridCostAt6744, exactTail6744, hybridTail6744,
+    movingFiber6744, movingCut6744, padT, padY, padS, cap, total, middle, flagMixed]
   ring
 
 private theorem middle_formula58 (p : FlagDegree) :
-    hybridCostAt6743 p (cap 58 58 10) =
-      53355027431443 * total p + 117290853153182 * p.all := by
-  norm_num [hybridCostAt6743, exactTail6743, hybridTail6743,
-    movingFiber6743, movingCut6743, padT, padY, padS, cap, total, middle, flagMixed]
+    hybridCostAt6744 p (cap 58 58 10) =
+      53355052335123 * total p + 117290977671592 * p.all := by
+  norm_num [hybridCostAt6744, exactTail6744, hybridTail6744,
+    movingFiber6744, movingCut6744, padT, padY, padS, cap, total, middle, flagMixed]
   ring
 
 private theorem middle_formula54 (p : FlagDegree) :
-    hybridCostAt6743 p (cap 54 54 11) =
-      53754012827669 * total p + 93992565946772 * p.all := by
-  norm_num [hybridCostAt6743, exactTail6743, hybridTail6743,
-    movingFiber6743, movingCut6743, padT, padY, padS, cap, total, middle, flagMixed]
+    hybridCostAt6744 p (cap 54 54 11) =
+      53754040352789 * total p + 93992677357982 * p.all := by
+  norm_num [hybridCostAt6744, exactTail6744, hybridTail6744,
+    movingFiber6744, movingCut6744, padT, padY, padS, cap, total, middle, flagMixed]
   ring
 
 private theorem middle_formula51 (p : FlagDegree) :
-    hybridCostAt6743 p (cap 51 51 12) =
-      54445060325399 * total p + 77209390365068 * p.all := by
-  norm_num [hybridCostAt6743, exactTail6743, hybridTail6743,
-    movingFiber6743, movingCut6743, padT, padY, padS, cap, total, middle, flagMixed]
+    hybridCostAt6744 p (cap 51 51 12) =
+      54445090471959 * total p + 77209491290518 * p.all := by
+  norm_num [hybridCostAt6744, exactTail6744, hybridTail6744,
+    movingFiber6744, movingCut6744, padT, padY, padS, cap, total, middle, flagMixed]
   ring
 
 private theorem middle_formula46 (p : FlagDegree) :
-    hybridCostAt6743 p (cap 46 46 13) =
-      51768802344985 * total p + 55127050631552 * p.all := by
-  norm_num [hybridCostAt6743, exactTail6743, hybridTail6743,
-    movingFiber6743, movingCut6743, padT, padY, padS, cap, total, middle, flagMixed]
+    hybridCostAt6744 p (cap 46 46 13) =
+      51768835112985 * total p + 55127135828362 * p.all := by
+  norm_num [hybridCostAt6744, exactTail6744, hybridTail6744,
+    movingFiber6744, movingCut6744, padT, padY, padS, cap, total, middle, flagMixed]
   ring
 
-private theorem middle_cost_le6743 (p : FlagDegree) (u s a b : ℕ)
+private theorem middle_cost_le6744 (p : FlagDegree) (u s a b : ℕ)
     (h : Below p (cap u u s))
-    (heq : hybridCostAt6743 p (cap u u s) = a * total p + b * p.all) :
-    hybridCost6743 p ≤ a * total p + b * s := by
-  exact (hybridCostAt6743_mono_tails p h).trans
+    (heq : hybridCostAt6744 p (cap u u s) = a * total p + b * p.all) :
+    hybridCost6744 p ≤ a * total p + b * s := by
+  exact (hybridCostAt6744_mono_tails p h).trans
     (heq.le.trans (Nat.add_le_add_left (Nat.mul_le_mul_left b h.1) _))
 
 private theorem middle_rate62 (t : ℕ) (ht : 12 ≤ t) :
-    1470 * (52028314943505 * t + 143166160058792 * 9) ≤ bound6743 * t := by
-  unfold bound6743
+    1497 * (52028337225745 * t + 143166297684402 * 9) ≤ bound6744 * t := by
+  unfold bound6744
   omega
 
 private theorem middle_rate58 (t : ℕ) (ht : 11 ≤ t) :
-    1470 * (53355027431443 * t + 117290853153182 * 10) ≤ bound6743 * t := by
-  unfold bound6743
+    1497 * (53355052335123 * t + 117290977671592 * 10) ≤ bound6744 * t := by
+  unfold bound6744
   omega
 
 private theorem middle_rate54 (t : ℕ) (ht : 11 ≤ t) :
-    1470 * (53754012827669 * t + 93992565946772 * 11) ≤ bound6743 * t := by
-  unfold bound6743
+    1497 * (53754040352789 * t + 93992677357982 * 11) ≤ bound6744 * t := by
+  unfold bound6744
   omega
 
 private theorem middle_rate51 (t : ℕ) (ht : 12 ≤ t) :
-    1470 * (54445060325399 * t + 77209390365068 * 12) ≤ bound6743 * t := by
-  unfold bound6743
+    1497 * (54445090471959 * t + 77209491290518 * 12) ≤ bound6744 * t := by
+  unfold bound6744
   omega
 
 private theorem middle_rate46 (t : ℕ) (ht : 13 ≤ t) :
-    1470 * (51768802344985 * t + 55127050631552 * 13) ≤ bound6743 * t := by
-  unfold bound6743
+    1497 * (51768835112985 * t + 55127135828362 * 13) ≤ bound6744 * t := by
+  unfold bound6744
   omega
 
-theorem rate_bound_6743 (p : FlagDegree)
-    (hs : p.all ≤ 13) (hy : middle p ≤ 62) (ht : total p ≤ 1470)
+theorem rate_bound_6744 (p : FlagDegree)
+    (hs : p.all ≤ 13) (hy : middle p ≤ 62) (ht : total p ≤ 1497)
     (h10 : p.all = 10 → middle p ≤ 58)
     (h11 : p.all = 11 → middle p ≤ 54)
     (h12 : p.all = 12 → middle p ≤ 51)
     (h13 : p.all = 13 → middle p ≤ 46) :
-    1470 * hybridCost6743 p ≤ bound6743 * total p := by
+    1497 * hybridCost6744 p ≤ bound6744 * total p := by
   have hn := middle_le_total p
   have ha := all_le_total p
   by_cases hsmall : p.all ≤ 9
   · by_cases ht11 : total p ≤ 11
-    · exact diagonal_rate6743 p 12 10
+    · exact diagonal_rate6744 p 12 10
         (below_cap_of_bounds p 12 12 10 (by decide) (by decide)
           (by omega) ((hn.trans ht11).trans (by decide))
           (ht11.trans (by decide))) (by decide)
     · by_cases ht61 : total p ≤ 62
-      · have hc := middle_cost_le6743 p 62 9 52028314943505 143166160058792
+      · have hc := middle_cost_le6744 p 62 9 52028337225745 143166297684402
           (below_cap_of_bounds p 62 62 9 (by decide) (by decide) hsmall hy ht61)
           (middle_formula62 p)
-        exact (Nat.mul_le_mul_left 1470 hc).trans (middle_rate62 _ (by omega))
+        exact (Nat.mul_le_mul_left 1497 hc).trans (middle_rate62 _ (by omega))
       · have hlo : 62 ≤ total p := by omega
         have hb := below_cap_of_bounds p (total p) 62 9 (by decide) hlo
           hsmall hy (le_refl _)
-        exact (Nat.mul_le_mul_left 1470 (hybridCost6743_mono hb)).trans
+        exact (Nat.mul_le_mul_left 1497 (hybridCost6744_mono hb)).trans
           (large_rate62 _ hlo ht)
   · have hcases : p.all = 10 ∨ p.all = 11 ∨ p.all = 12 ∨ p.all = 13 := by omega
     rcases hcases with hr | hr | hr | hr
     · have hy57 := h10 hr
       by_cases ht10 : total p ≤ 10
-      · exact diagonal_rate6743 p 12 10
+      · exact diagonal_rate6744 p 12 10
           (below_cap_of_bounds p 12 12 10 (by decide) (by decide)
             (by omega) ((hn.trans ht10).trans (by decide))
             (ht10.trans (by decide))) (by decide)
       · by_cases ht57 : total p ≤ 58
-        · have hc := middle_cost_le6743 p 58 10 53355027431443 117290853153182
+        · have hc := middle_cost_le6744 p 58 10 53355052335123 117290977671592
             (below_cap_of_bounds p 58 58 10 (by decide) (by decide)
               (by omega) hy57 ht57) (middle_formula58 p)
-          exact (Nat.mul_le_mul_left 1470 hc).trans (middle_rate58 _ (by omega))
+          exact (Nat.mul_le_mul_left 1497 hc).trans (middle_rate58 _ (by omega))
         · have hlo : 58 ≤ total p := by omega
           have hb := below_cap_of_bounds p (total p) 58 10 (by decide) hlo
             (by omega) hy57 (le_refl _)
-          exact (Nat.mul_le_mul_left 1470 (hybridCost6743_mono hb)).trans
+          exact (Nat.mul_le_mul_left 1497 (hybridCost6744_mono hb)).trans
             (large_rate58 _ hlo ht)
     · have hy53 := h11 hr
       by_cases ht53 : total p ≤ 54
-      · have hc := middle_cost_le6743 p 54 11 53754012827669 93992565946772
+      · have hc := middle_cost_le6744 p 54 11 53754040352789 93992677357982
           (below_cap_of_bounds p 54 54 11 (by decide) (by decide)
             (by omega) hy53 ht53) (middle_formula54 p)
-        exact (Nat.mul_le_mul_left 1470 hc).trans (middle_rate54 _ (by omega))
+        exact (Nat.mul_le_mul_left 1497 hc).trans (middle_rate54 _ (by omega))
       · have hlo : 54 ≤ total p := by omega
         have hb := below_cap_of_bounds p (total p) 54 11 (by decide) hlo
           (by omega) hy53 (le_refl _)
-        exact (Nat.mul_le_mul_left 1470 (hybridCost6743_mono hb)).trans
+        exact (Nat.mul_le_mul_left 1497 (hybridCost6744_mono hb)).trans
           (large_rate54 _ hlo ht)
     · have hy50 := h12 hr
       by_cases ht50 : total p ≤ 51
-      · have hc := middle_cost_le6743 p 51 12 54445060325399 77209390365068
+      · have hc := middle_cost_le6744 p 51 12 54445090471959 77209491290518
           (below_cap_of_bounds p 51 51 12 (by decide) (by decide)
             (by omega) hy50 ht50) (middle_formula51 p)
-        exact (Nat.mul_le_mul_left 1470 hc).trans (middle_rate51 _ (by omega))
+        exact (Nat.mul_le_mul_left 1497 hc).trans (middle_rate51 _ (by omega))
       · have hlo : 51 ≤ total p := by omega
         have hb := below_cap_of_bounds p (total p) 51 12 (by decide) hlo
           (by omega) hy50 (le_refl _)
-        exact (Nat.mul_le_mul_left 1470 (hybridCost6743_mono hb)).trans
+        exact (Nat.mul_le_mul_left 1497 (hybridCost6744_mono hb)).trans
           (large_rate51 _ hlo ht)
     · have hy45 := h13 hr
       by_cases ht45 : total p ≤ 46
-      · have hc := middle_cost_le6743 p 46 13 51768802344985 55127050631552
+      · have hc := middle_cost_le6744 p 46 13 51768835112985 55127135828362
           (below_cap_of_bounds p 46 46 13 (by decide) (by decide)
             (by omega) hy45 ht45) (middle_formula46 p)
-        exact (Nat.mul_le_mul_left 1470 hc).trans (middle_rate46 _ (by omega))
+        exact (Nat.mul_le_mul_left 1497 hc).trans (middle_rate46 _ (by omega))
       · have hlo : 46 ≤ total p := by omega
         have hb := below_cap_of_bounds p (total p) 46 13 (by decide) hlo
           (by omega) hy45 (le_refl _)
-        exact (Nat.mul_le_mul_left 1470 (hybridCost6743_mono hb)).trans
+        exact (Nat.mul_le_mul_left 1497 (hybridCost6744_mono hb)).trans
           (large_rate46 _ hlo ht)
 
-theorem aggregate_6743 {I : Type*} [Fintype I] (p : I → FlagDegree)
+theorem aggregate_6744 {I : Type*} [Fintype I] (p : I → FlagDegree)
     (hs : ∀ i, (p i).all ≤ 13)
     (hy : ∀ i, middle (p i) ≤ 62)
-    (htsum : (∑ i, total (p i)) ≤ 1470)
+    (htsum : (∑ i, total (p i)) ≤ 1497)
     (h10 : ∀ i, (p i).all = 10 → middle (p i) ≤ 58)
     (h11 : ∀ i, (p i).all = 11 → middle (p i) ≤ 54)
     (h12 : ∀ i, (p i).all = 12 → middle (p i) ≤ 51)
     (h13 : ∀ i, (p i).all = 13 → middle (p i) ≤ 46) :
-    (∑ i, hybridCost6743 (p i)) ≤ bound6743 := by
+    (∑ i, hybridCost6744 (p i)) ≤ bound6744 := by
   classical
-  have hti (i : I) : total (p i) ≤ 1470 :=
+  have hti (i : I) : total (p i) ≤ 1497 :=
     (Finset.single_le_sum (fun _ _ => Nat.zero_le _) (Finset.mem_univ i)).trans htsum
-  have hscaled : 1470 * (∑ i, hybridCost6743 (p i)) ≤ 1470 * bound6743 := by
+  have hscaled : 1497 * (∑ i, hybridCost6744 (p i)) ≤ 1497 * bound6744 := by
     calc
-      _ = ∑ i, 1470 * hybridCost6743 (p i) := by rw [Finset.mul_sum]
-      _ ≤ ∑ i, bound6743 * total (p i) :=
-        Finset.sum_le_sum (fun i _ => rate_bound_6743 (p i)
+      _ = ∑ i, 1497 * hybridCost6744 (p i) := by rw [Finset.mul_sum]
+      _ ≤ ∑ i, bound6744 * total (p i) :=
+        Finset.sum_le_sum (fun i _ => rate_bound_6744 (p i)
           (hs i) (hy i) (hti i) (h10 i) (h11 i) (h12 i) (h13 i))
-      _ = bound6743 * (∑ i, total (p i)) := by rw [Finset.mul_sum]
-      _ ≤ bound6743 * 1470 := Nat.mul_le_mul_left _ htsum
-      _ = 1470 * bound6743 := by ring
+      _ = bound6744 * (∑ i, total (p i)) := by rw [Finset.mul_sum]
+      _ ≤ bound6744 * 1497 := Nat.mul_le_mul_left _ htsum
+      _ = 1497 * bound6744 := by ring
   exact Nat.le_of_mul_le_mul_left hscaled (by decide)
 
 end ProximityPrize.SubmissionLower.LocatorFactorAggregate

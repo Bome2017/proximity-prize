@@ -15,31 +15,31 @@ local instance : DecidableEq K := Classical.decEq K
 local instance : DecidableEq I := Classical.decEq I
 
 abbrev AKernel (u0 u1 : I → K) :=
-  ConstraintKernel (K := K) 12736710 131071 100000 20 70 IRSProfile.domain u0 u1
+  ConstraintKernel (K := K) 13463782 131071 110000 21 74 IRSProfile.domain u0 u1
 abbrev AuxKernel (u0 u1 : I → K) :=
-  ConstraintKernel (K := K) 11463039 131071 100000 18 63 IRSProfile.domain u0 u1
+  ConstraintKernel (K := K) 12008238 131071 100000 19 66 IRSProfile.domain u0 u1
 abbrev CKernel (u0 u1 : I → K) :=
-  ConstraintKernel (K := K) 8187885 131071 43759 13 45 IRSProfile.domain u0 u1
+  ConstraintKernel (K := K) 8187435 131071 43759 13 45 IRSProfile.domain u0 u1
 abbrev BKernel (u0 u1 : I → K) :=
-  ConstraintKernel (K := K) 15829911 131071 1470 27 87 IRSProfile.domain u0 u1
+  ConstraintKernel (K := K) 15829041 131071 1497 27 87 IRSProfile.domain u0 u1
 
-theorem gateA : Fintype.card I * localRankBound 70 100000 20 <
-    coefficientCount 12736710 131071 100000 20 := by
+theorem gateA : Fintype.card I * localRankBound 74 110000 21 <
+    coefficientCount 13463782 131071 110000 21 := by
   rw [show Fintype.card I = 262144 by norm_num [I, IRSProfile.Index]]
   have h := LocatorArithmetic.kernelA_nullity
   omega
-theorem gateAux : Fintype.card I * localRankBound 63 100000 18 <
-    coefficientCount 11463039 131071 100000 18 := by
+theorem gateAux : Fintype.card I * localRankBound 66 100000 19 <
+    coefficientCount 12008238 131071 100000 19 := by
   rw [show Fintype.card I = 262144 by norm_num [I, IRSProfile.Index]]
   have h := LocatorArithmetic.kernelAux_nullity
   omega
 theorem gateC : Fintype.card I * localRankBound 45 43759 13 <
-    coefficientCount 8187885 131071 43759 13 := by
+    coefficientCount 8187435 131071 43759 13 := by
   rw [show Fintype.card I = 262144 by norm_num [I, IRSProfile.Index]]
   have h := LocatorArithmetic.kernelC_nullity
   omega
-theorem gateB : Fintype.card I * localRankBound 87 1470 27 <
-    coefficientCount 15829911 131071 1470 27 := by
+theorem gateB : Fintype.card I * localRankBound 87 1497 27 <
+    coefficientCount 15829041 131071 1497 27 := by
   rw [show Fintype.card I = 262144 by norm_num [I, IRSProfile.Index]]
   have h := LocatorArithmetic.kernelB_nullity
   omega
@@ -61,43 +61,43 @@ theorem full_divisor_mem_box (D w L s m : ℕ)
     D w L s hQ (hdiv v) (reconstruct_mem_globalCoefficientBox K D w L s a)
 
 theorem full_A_divisor_mem_box (u0 u1 : I → K) (H : P4) (_hH : H ≠ 0)
-    (hdiv : ∀ v : AKernel u0 u1, H ∣ reconstruct K 12736710 131071 100000 20 v.1) :
-    H ∈ globalCoefficientBox K 12736710 131071 100000 20 :=
-  full_divisor_mem_box 12736710 131071 100000 20 70 gateA u0 u1 H hdiv
+    (hdiv : ∀ v : AKernel u0 u1, H ∣ reconstruct K 13463782 131071 110000 21 v.1) :
+    H ∈ globalCoefficientBox K 13463782 131071 110000 21 :=
+  full_divisor_mem_box 13463782 131071 110000 21 74 gateA u0 u1 H hdiv
 
 theorem full_Aux_divisor_mem_box (u0 u1 : I → K) (H : P4) (_hH : H ≠ 0)
-    (hdiv : ∀ v : AuxKernel u0 u1, H ∣ reconstruct K 11463039 131071 100000 18 v.1) :
-    H ∈ globalCoefficientBox K 11463039 131071 100000 18 :=
-  full_divisor_mem_box 11463039 131071 100000 18 63 gateAux u0 u1 H hdiv
+    (hdiv : ∀ v : AuxKernel u0 u1, H ∣ reconstruct K 12008238 131071 100000 19 v.1) :
+    H ∈ globalCoefficientBox K 12008238 131071 100000 19 :=
+  full_divisor_mem_box 12008238 131071 100000 19 66 gateAux u0 u1 H hdiv
 
 theorem full_C_divisor_mem_box (u0 u1 : I → K) (H : P4) (_hH : H ≠ 0)
-    (hdiv : ∀ v : CKernel u0 u1, H ∣ reconstruct K 8187885 131071 43759 13 v.1) :
-    H ∈ globalCoefficientBox K 8187885 131071 43759 13 :=
-  full_divisor_mem_box 8187885 131071 43759 13 45 gateC u0 u1 H hdiv
+    (hdiv : ∀ v : CKernel u0 u1, H ∣ reconstruct K 8187435 131071 43759 13 v.1) :
+    H ∈ globalCoefficientBox K 8187435 131071 43759 13 :=
+  full_divisor_mem_box 8187435 131071 43759 13 45 gateC u0 u1 H hdiv
 
 theorem full_B_divisor_mem_box (u0 u1 : I → K) (H : P4) (_hH : H ≠ 0)
-    (hdiv : ∀ v : BKernel u0 u1, H ∣ reconstruct K 15829911 131071 1470 27 v.1) :
-    H ∈ globalCoefficientBox K 15829911 131071 1470 27 :=
-  full_divisor_mem_box 15829911 131071 1470 27 87 gateB u0 u1 H hdiv
+    (hdiv : ∀ v : BKernel u0 u1, H ∣ reconstruct K 15829041 131071 1497 27 v.1) :
+    H ∈ globalCoefficientBox K 15829041 131071 1497 27 :=
+  full_divisor_mem_box 15829041 131071 1497 27 87 gateB u0 u1 H hdiv
 
 theorem common_C_ys_le (u0 u1 : I → K) (H : P4) (_hH : H ≠ 0)
-    (hbox : H ∈ globalCoefficientBox K 8187885 131071 43759 13)
-    (_hdiv : ∀ v : CKernel u0 u1, H ∣ reconstruct K 8187885 131071 43759 13 v.1) :
+    (hbox : H ∈ globalCoefficientBox K 8187435 131071 43759 13)
+    (_hdiv : ∀ v : CKernel u0 u1, H ∣ reconstruct K 8187435 131071 43759 13 v.1) :
     wt residualYSWeights H ≤ 62 := by
   by_contra hnot
   have hy : 63 ≤ wt residualYSWeights H := by omega
   have hcaps := (mem_flagGlobalCoefficientBox_iff H
-    8187885 131071 43759 13 (by decide)).mp hbox
+    8187435 131071 43759 13 (by decide)).mp hbox
   have hr : wt residualSWeights H ≤ 13 := hcaps.2.1
   have hw := residualYS_mul_le_contact_add_slope H 131071 (by decide)
   omega
 
 theorem common_B_total_le (u0 u1 : I → K) (H : P4) (hH : H ≠ 0)
-    (hdiv : ∀ v : BKernel u0 u1, H ∣ reconstruct K 15829911 131071 1470 27 v.1) :
-    wt residualTotalWeights H ≤ 1470 := by
+    (hdiv : ∀ v : BKernel u0 u1, H ∣ reconstruct K 15829041 131071 1497 27 v.1) :
+    wt residualTotalWeights H ≤ 1497 := by
   have hbox := full_B_divisor_mem_box u0 u1 H hH hdiv
   exact ((mem_flagGlobalCoefficientBox_iff H
-    15829911 131071 1470 27 (by decide)).mp hbox).1
+    15829041 131071 1497 27 (by decide)).mp hbox).1
 
 end
 end ProximityPrize.SubmissionLower.LocatorCaps

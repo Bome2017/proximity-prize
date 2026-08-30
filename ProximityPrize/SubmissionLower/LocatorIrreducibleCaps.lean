@@ -28,24 +28,24 @@ local instance : CharP K 2130706433 := by
   exact charP_of_injective_algebraMap' KoalaBear.Field 2130706433
 
 theorem r13_collar_sum :
-    (∑ j ∈ Finset.range 51, ∑ r ∈ Finset.range 8,
-      (99954 - j - r) * min 131074 (6576386 - 131071 * j - 131070 * r)) =
-        4890686735920 := by decide
+    (∑ j ∈ Finset.range 56, ∑ r ∈ Finset.range 9,
+      (109954 - j - r) * min 131074 (7303458 - 131071 * j - 131070 * r)) =
+        6706943447457 := by decide
 
 theorem r12_collar_sum :
-    (∑ j ∈ Finset.range 46, ∑ r ∈ Finset.range 9,
-      (99949 - j - r) * min 131074 (5921030 - 131071 * j - 131070 * r)) =
-        4853542426374 := by decide
+    (∑ j ∈ Finset.range 51, ∑ r ∈ Finset.range 10,
+      (109949 - j - r) * min 131074 (6648102 - 131071 * j - 131070 * r)) =
+        6659538848145 := by decide
 
 theorem r11_collar_sum :
-    (∑ j ∈ Finset.range 43, ∑ r ∈ Finset.range 10,
-      (99946 - j - r) * min 131074 (5527816 - 131071 * j - 131070 * r)) =
-        4934324508280 := by decide
+    (∑ j ∈ Finset.range 48, ∑ r ∈ Finset.range 11,
+      (109946 - j - r) * min 131074 (6254888 - 131071 * j - 131070 * r)) =
+        6770681380408 := by decide
 
 theorem r10_collar_sum :
-    (∑ j ∈ Finset.range 29, ∑ r ∈ Finset.range 9,
-      (99942 - j - r) * min 131074 (3729860 - 131071 * j - 131070 * r)) =
-        2882963457372 := by decide
+    (∑ j ∈ Finset.range 33, ∑ r ∈ Finset.range 10,
+      (99942 - j - r) * min 131074 (4275059 - 131071 * j - 131070 * r)) =
+        3682528759190 := by decide
 
 /-- The abstract collar bound is supplied with the proved irreducible
 low-prefix exclusion, rather than with an independent rank hypothesis. -/
@@ -88,7 +88,7 @@ private theorem rank_le_small_sum
 theorem full_A_r13_factor_ys_le
     (u0 u1 : I → K) (F : P4) (hF : Irreducible F)
     (hdiv : ∀ v : AKernel u0 u1,
-      F ∣ reconstruct K 12736710 131071 100000 20 v.1)
+      F ∣ reconstruct K 13463782 131071 110000 21 v.1)
     (hR : F.degreeOf (2 : Fin 4) = 13) :
     wt residualYSWeights F ≤ 46 := by
   by_contra hnot
@@ -99,27 +99,27 @@ theorem full_A_r13_factor_ys_le
   have hc : 6160324 ≤ wt (contactWeights 131071) F := by omega
   have ht : 47 ≤ wt residualTotalWeights F :=
     hYS.trans (residual_weight_nested F).2
-  have hD : 12736710 - wt (contactWeights 131071) F ≤ 6576386 := by omega
-  have hL : 100000 - wt residualTotalWeights F ≤ 99953 := by omega
-  have hq : 20 - wt residualSWeights F ≤ 7 := by omega
-  have hupper := rank_le_small_sum 12736710 100000 20 70 (by decide) u0 u1 F hF hdiv
+  have hD : 13463782 - wt (contactWeights 131071) F ≤ 7303458 := by omega
+  have hL : 110000 - wt residualTotalWeights F ≤ 109953 := by omega
+  have hq : 21 - wt residualSWeights F ≤ 8 := by omega
+  have hupper := rank_le_small_sum 13463782 110000 21 74 (by decide) u0 u1 F hF hdiv
     (by rw [hR]; decide) (by rw [hR]; decide) (by rw [hR]; decide)
-    6576386 99953 7 51 hD hL hq (by decide)
-  simp only [show 7 + 1 = 8 by decide, show 99953 + 1 = 99954 by decide,
+    7303458 109953 8 56 hD hL hq (by decide)
+  simp only [show 8 + 1 = 9 by decide, show 109953 + 1 = 109954 by decide,
     r13_collar_sum] at hupper
-  change Module.finrank K (AKernel u0 u1) ≤ 4890686735920 at hupper
+  change Module.finrank K (AKernel u0 u1) ≤ 6706943447457 at hupper
   have hlower := constraintKernel_finrank_lower_bound (K := K)
-    12736710 131071 100000 20 70 IRSProfile.domain u0 u1
+    13463782 131071 110000 21 74 IRSProfile.domain u0 u1
   simp only [show Fintype.card I = 262144 by norm_num [I, IRSProfile.Index],
     LocatorArithmetic.kernelA_nullity] at hlower
-  change 4953442449347 ≤ Module.finrank K (AKernel u0 u1) at hlower
+  change 6776939096664 ≤ Module.finrank K (AKernel u0 u1) at hlower
   omega
 
 /-- An irreducible R12 factor dividing the entire A70 kernel has YS<=51. -/
 theorem full_A_r12_factor_ys_le
     (u0 u1 : I → K) (F : P4) (hF : Irreducible F)
     (hdiv : ∀ v : AKernel u0 u1,
-      F ∣ reconstruct K 12736710 131071 100000 20 v.1)
+      F ∣ reconstruct K 13463782 131071 110000 21 v.1)
     (hR : F.degreeOf (2 : Fin 4) = 12) :
     wt residualYSWeights F ≤ 51 := by
   by_contra hnot
@@ -130,27 +130,27 @@ theorem full_A_r12_factor_ys_le
   have hc : 6815680 ≤ wt (contactWeights 131071) F := by omega
   have ht : 52 ≤ wt residualTotalWeights F :=
     hYS.trans (residual_weight_nested F).2
-  have hD : 12736710 - wt (contactWeights 131071) F ≤ 5921030 := by omega
-  have hL : 100000 - wt residualTotalWeights F ≤ 99948 := by omega
-  have hq : 20 - wt residualSWeights F ≤ 8 := by omega
-  have hupper := rank_le_small_sum 12736710 100000 20 70 (by decide) u0 u1 F hF hdiv
+  have hD : 13463782 - wt (contactWeights 131071) F ≤ 6648102 := by omega
+  have hL : 110000 - wt residualTotalWeights F ≤ 109948 := by omega
+  have hq : 21 - wt residualSWeights F ≤ 9 := by omega
+  have hupper := rank_le_small_sum 13463782 110000 21 74 (by decide) u0 u1 F hF hdiv
     (by rw [hR]; decide) (by rw [hR]; decide) (by rw [hR]; decide)
-    5921030 99948 8 46 hD hL hq (by decide)
-  simp only [show 8 + 1 = 9 by decide, show 99948 + 1 = 99949 by decide,
+    6648102 109948 9 51 hD hL hq (by decide)
+  simp only [show 9 + 1 = 10 by decide, show 109948 + 1 = 109949 by decide,
     r12_collar_sum] at hupper
-  change Module.finrank K (AKernel u0 u1) ≤ 4853542426374 at hupper
+  change Module.finrank K (AKernel u0 u1) ≤ 6659538848145 at hupper
   have hlower := constraintKernel_finrank_lower_bound (K := K)
-    12736710 131071 100000 20 70 IRSProfile.domain u0 u1
+    13463782 131071 110000 21 74 IRSProfile.domain u0 u1
   simp only [show Fintype.card I = 262144 by norm_num [I, IRSProfile.Index],
     LocatorArithmetic.kernelA_nullity] at hlower
-  change 4953442449347 ≤ Module.finrank K (AKernel u0 u1) at hlower
+  change 6776939096664 ≤ Module.finrank K (AKernel u0 u1) at hlower
   omega
 
 /-- An irreducible R11 factor dividing the entire A70 kernel has YS<=54. -/
 theorem full_A_r11_factor_ys_le
     (u0 u1 : I → K) (F : P4) (hF : Irreducible F)
     (hdiv : ∀ v : AKernel u0 u1,
-      F ∣ reconstruct K 12736710 131071 100000 20 v.1)
+      F ∣ reconstruct K 13463782 131071 110000 21 v.1)
     (hR : F.degreeOf (2 : Fin 4) = 11) :
     wt residualYSWeights F ≤ 54 := by
   by_contra hnot
@@ -161,27 +161,27 @@ theorem full_A_r11_factor_ys_le
   have hc : 7208894 ≤ wt (contactWeights 131071) F := by omega
   have ht : 55 ≤ wt residualTotalWeights F :=
     hYS.trans (residual_weight_nested F).2
-  have hD : 12736710 - wt (contactWeights 131071) F ≤ 5527816 := by omega
-  have hL : 100000 - wt residualTotalWeights F ≤ 99945 := by omega
-  have hq : 20 - wt residualSWeights F ≤ 9 := by omega
-  have hupper := rank_le_small_sum 12736710 100000 20 70 (by decide) u0 u1 F hF hdiv
+  have hD : 13463782 - wt (contactWeights 131071) F ≤ 6254888 := by omega
+  have hL : 110000 - wt residualTotalWeights F ≤ 109945 := by omega
+  have hq : 21 - wt residualSWeights F ≤ 10 := by omega
+  have hupper := rank_le_small_sum 13463782 110000 21 74 (by decide) u0 u1 F hF hdiv
     (by rw [hR]; decide) (by rw [hR]; decide) (by rw [hR]; decide)
-    5527816 99945 9 43 hD hL hq (by decide)
-  simp only [show 9 + 1 = 10 by decide, show 99945 + 1 = 99946 by decide,
+    6254888 109945 10 48 hD hL hq (by decide)
+  simp only [show 10 + 1 = 11 by decide, show 109945 + 1 = 109946 by decide,
     r11_collar_sum] at hupper
-  change Module.finrank K (AKernel u0 u1) ≤ 4934324508280 at hupper
+  change Module.finrank K (AKernel u0 u1) ≤ 6770681380408 at hupper
   have hlower := constraintKernel_finrank_lower_bound (K := K)
-    12736710 131071 100000 20 70 IRSProfile.domain u0 u1
+    13463782 131071 110000 21 74 IRSProfile.domain u0 u1
   simp only [show Fintype.card I = 262144 by norm_num [I, IRSProfile.Index],
     LocatorArithmetic.kernelA_nullity] at hlower
-  change 4953442449347 ≤ Module.finrank K (AKernel u0 u1) at hlower
+  change 6776939096664 ≤ Module.finrank K (AKernel u0 u1) at hlower
   omega
 
 /-- The auxiliary A63 kernel gives the R10 factor bound YS<=58. -/
 theorem full_Aux_r10_factor_ys_le
     (u0 u1 : I → K) (F : P4) (hF : Irreducible F)
     (hdiv : ∀ v : AuxKernel u0 u1,
-      F ∣ reconstruct K 11463039 131071 100000 18 v.1)
+      F ∣ reconstruct K 12008238 131071 100000 19 v.1)
     (hR : F.degreeOf (2 : Fin 4) = 10) :
     wt residualYSWeights F ≤ 58 := by
   by_contra hnot
@@ -192,20 +192,20 @@ theorem full_Aux_r10_factor_ys_le
   have hc : 7733179 ≤ wt (contactWeights 131071) F := by omega
   have ht : 59 ≤ wt residualTotalWeights F :=
     hYS.trans (residual_weight_nested F).2
-  have hD : 11463039 - wt (contactWeights 131071) F ≤ 3729860 := by omega
+  have hD : 12008238 - wt (contactWeights 131071) F ≤ 4275059 := by omega
   have hL : 100000 - wt residualTotalWeights F ≤ 99941 := by omega
-  have hq : 18 - wt residualSWeights F ≤ 8 := by omega
-  have hupper := rank_le_small_sum 11463039 100000 18 63 (by decide) u0 u1 F hF hdiv
+  have hq : 19 - wt residualSWeights F ≤ 9 := by omega
+  have hupper := rank_le_small_sum 12008238 100000 19 66 (by decide) u0 u1 F hF hdiv
     (by rw [hR]; decide) (by rw [hR]; decide) (by rw [hR]; decide)
-    3729860 99941 8 29 hD hL hq (by decide)
-  simp only [show 8 + 1 = 9 by decide, show 99941 + 1 = 99942 by decide,
+    4275059 99941 9 33 hD hL hq (by decide)
+  simp only [show 9 + 1 = 10 by decide, show 99941 + 1 = 99942 by decide,
     r10_collar_sum] at hupper
-  change Module.finrank K (AuxKernel u0 u1) ≤ 2882963457372 at hupper
+  change Module.finrank K (AuxKernel u0 u1) ≤ 3682528759190 at hupper
   have hlower := constraintKernel_finrank_lower_bound (K := K)
-    11463039 131071 100000 18 63 IRSProfile.domain u0 u1
+    12008238 131071 100000 19 66 IRSProfile.domain u0 u1
   simp only [show Fintype.card I = 262144 by norm_num [I, IRSProfile.Index],
     LocatorArithmetic.kernelAux_nullity] at hlower
-  change 2948801310715 ≤ Module.finrank K (AuxKernel u0 u1) at hlower
+  change 3688325558435 ≤ Module.finrank K (AuxKernel u0 u1) at hlower
   omega
 
 end

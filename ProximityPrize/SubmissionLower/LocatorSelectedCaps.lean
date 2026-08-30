@@ -16,12 +16,12 @@ noncomputable section
 local instance : GCDMonoid P4 := UniqueFactorizationMonoid.toGCDMonoid P4
 
 theorem common_C_flag {u0 u1 : I → K} (S : SelectedPair u0 u1) :
-    gcd S.QA S.QB ∈ globalCoefficientBox K 8187885 131071 43759 13 :=
+    gcd S.QA S.QB ∈ globalCoefficientBox K 8187435 131071 43759 13 :=
   LocatorCaps.full_C_divisor_mem_box u0 u1 _
     (gcd_ne_zero_of_left S.QA_ne) S.common_divides_C
 
 theorem common_total_le {u0 u1 : I → K} (S : SelectedPair u0 u1) :
-    wt residualTotalWeights (gcd S.QA S.QB) ≤ 1470 :=
+    wt residualTotalWeights (gcd S.QA S.QB) ≤ 1497 :=
   LocatorCaps.common_B_total_le u0 u1 _
     (gcd_ne_zero_of_left S.QA_ne) S.common_divides_B
 
@@ -33,7 +33,7 @@ theorem common_ys_le {u0 u1 : I → K} (S : SelectedPair u0 u1) :
 theorem common_slope_le {u0 u1 : I → K} (S : SelectedPair u0 u1) :
     wt residualSWeights (gcd S.QA S.QB) ≤ 13 :=
   ((mem_flagGlobalCoefficientBox_iff (gcd S.QA S.QB)
-    8187885 131071 43759 13 (by decide)).mp S.common_C_flag).2.1
+    8187435 131071 43759 13 (by decide)).mp S.common_C_flag).2.1
 
 theorem common_degreeR_le {u0 u1 : I → K} (S : SelectedPair u0 u1) :
     (gcd S.QA S.QB).degreeOf (2 : Fin 4) ≤ 13 := by

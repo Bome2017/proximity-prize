@@ -5,7 +5,7 @@ import ProximityPrize.SubmissionLower.EQ
 import ProximityPrize.SubmissionLower.J3
 import ProximityPrize.SubmissionLower.LocatorFactorAggregate
 
-/- Factor-adapted stage count for the 80191-error row.
+/- Factor-adapted stage count for the 80201-error row.
    Both counting branches below use existing counting theorems; no independent
    seed-count assumption or ProtocolClaim is introduced. -/
 namespace ProximityPrize.SubmissionLower.LocatorFixedStage
@@ -37,11 +37,11 @@ set_option maxHeartbeats 500000
 
 def n : ℕ := 262144
 def w : ℕ := 131071
-def errors : ℕ := 80191
-def agreements : ℕ := 181953
-def gap : ℕ := 50882
+def errors : ℕ := 80201
+def agreements : ℕ := 181943
+def gap : ℕ := 50872
 def prime : ℕ := 2130706433
-def weightedCap : ℕ := 8187885
+def weightedCap : ℕ := 8187435
 
 abbrev K := IRSProfile.Field
 abbrev I := IRSProfile.Index
@@ -105,20 +105,20 @@ theorem identityDegree_linear (flag : FlagDegree) (a b s : ℕ) :
   ring
 
 def hybridSlackZ (b s : ℕ) : ℕ :=
-  12038825741428870 + 9615747195338752 * b +
-    10356986788911876 * s + 2622478326693888 * s ^ 2 +
-    5244956653387776 * b * s
+  12035132012537930 + 9613857382203392 * b +
+    10354066163964636 * s + 2621962922754048 * s ^ 2 +
+    5243925845508096 * b * s
 def hybridSlackYZ (a b s : ℕ) : ℕ :=
-  7905698466823366 + 9615747195338752 * a +
-    9615747195338752 * b + 7601568605841540 * s +
-    2622478326693888 * s ^ 2 + 5244956653387776 * a * s +
-    5244956653387776 * b * s
+  7901489333992556 + 9613857382203392 * a +
+    9613857382203392 * b + 7598304378267720 * s +
+    2621962922754048 * s ^ 2 + 5243925845508096 * a * s +
+    5243925845508096 * b * s
 def hybridSlackAll (a b s : ℕ) : ℕ :=
-  6461508428997962 + 10356986788911876 * a +
-    7601568605841540 * b + 2622478326693888 * b ^ 2 +
-    7601568605841540 * s + 2622478326693888 * s ^ 2 +
-    5244956653387776 * a * b + 5244956653387776 * a * s +
-    5244956653387776 * b * s
+  6456697986983092 + 10354066163964636 * a +
+    7598304378267720 * b + 2621962922754048 * b ^ 2 +
+    7598304378267720 * s + 2621962922754048 * s ^ 2 +
+    5243925845508096 * a * b + 5243925845508096 * a * s +
+    5243925845508096 * b * s
 def hybridSlack (flag : FlagDegree) (a b s : ℕ) : ℕ :=
   flag.zOnly * hybridSlackZ b s + flag.yz * hybridSlackYZ a b s +
     flag.all * hybridSlackAll a b s
@@ -178,7 +178,7 @@ theorem tangent_gate (a b s : ℕ) :
     (Nat.add_le_add_left hb 1)
 
 theorem flag_characteristic (a b s : ℕ) (flag : FlagDegree)
-    (hS : s + 2 ≤ 13) (hY : b + s + 3 ≤ 62) (hT : a + b + s + 3 ≤ 1470)
+    (hS : s + 2 ≤ 13) (hY : b + s + 3 ≤ 62) (hT : a + b + s + 3 ≤ 1497)
     (hflag : flag.all ≤ s + 2 ∧ flag.yz + flag.all ≤ b + s + 3 ∧
       flag.zOnly + flag.yz + flag.all ≤ a + b + s + 3) :
     flag.yz + flag.all < prime ∧ flag.all < prime ∧
@@ -709,7 +709,7 @@ def FixedStageBound (a b s : ℕ) : Prop :=
     Gamma.card ≤ hybridStageCost flag a b s
 
 theorem fixedStageBound (a b s : ℕ)
-    (hS : s + 2 ≤ 13) (hY : b + s + 3 ≤ 62) (hT : a + b + s + 3 ≤ 1470) :
+    (hS : s + 2 ≤ 13) (hY : b + s + 3 ≤ 62) (hT : a + b + s + 3 ≤ 1497) :
     FixedStageBound a b s := by
   intro Gamma flag S hnodes hagreement hbox hflag
   have hflagChar := flag_characteristic a b s flag hS hY hT hflag
@@ -802,7 +802,7 @@ theorem fixedStageBound (a b s : ℕ)
       ⟨S0.surface_s_weight, S0.surface_ys_weight, S0.surface_total_weight⟩
     have hmix : 2 * (flag.zOnly + flag.yz + flag.all) * (a + b + s + 4) < prime := by
       calc
-        _ ≤ 2 * 1470 * 1471 := Nat.mul_le_mul
+        _ ≤ 2 * 1497 * 1471 := Nat.mul_le_mul
           (Nat.mul_le_mul_left 2 (hflag.2.2.trans hT)) (by omega)
         _ < prime := by norm_num [prime]
     obtain ⟨M, hcost, _, _, _, hmoving⟩ :=
