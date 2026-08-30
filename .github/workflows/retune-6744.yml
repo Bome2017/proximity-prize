@@ -1,0 +1,35 @@
+name: Materialize 67.44 locator candidate
+
+on:
+  push:
+    branches:
+      - codex/6744-locator-retune
+    paths:
+      - .github/workflows/retune-6744.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  retune:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Apply exact 67.44 retune
+        run: python3 tools/r6744.py
+      - name: Source integrity checks
+        run: |
+          git diff --check
+          test "$(cat ProximityPrize/SubmissionLower/score.txt)" = "6744"
+          test "$(cat ProximityPrize/SubmissionLower/radius.txt)" = "10265855/33554432"
+          grep -q 'ProtocolClaim 6744 10265855 33554432' ProximityPrize/SubmissionLower/Solution.lean
+      - name: Commit materialized candidate
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add ProximityPrize/SubmissionLower
+          git commit -m 'Materialize locator certificate at 67.44'
+          git push
