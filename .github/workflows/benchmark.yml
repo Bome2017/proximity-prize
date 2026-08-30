@@ -78,6 +78,9 @@ jobs:
           COMMIT: ${{ github.sha }}
         run: python3 scripts/submit.py > verifier-result.json
 
+      - name: Check the verifier's verdict
+        run: python3 scripts/verdict-gate.py verifier-result.json
+
       - name: Write Yukon score
         run: python3 scripts/write-verifier-score.py "$PROFILE" verifier-result.json
 
