@@ -1,4 +1,4 @@
-name: Materialize 67.44 locator candidate
+name: Validate 67.44 locator candidate
 
 on:
   push:
@@ -9,59 +9,77 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
-  retune:
-    runs-on: ubuntu-latest
+  validate:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 180
+    env:
+      LEAN_NUM_THREADS: 2
+      MATHLIB_NO_CACHE_ON_UPDATE: 1
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
         with:
           fetch-depth: 0
-      - name: Apply exact 67.44 retune
+          clean: true
+          persist-credentials: false
+
+      - name: Install pinned Lean toolchain
+        shell: bash
         run: |
-          set +e
-          python3 tools/r6744.py
-          rc=$?
-          set -e
-          test "$rc" -eq 1
-          python3 - <<'PY'
-          from pathlib import Path
-          p = Path('ProximityPrize/SubmissionLower/LocatorIrreducibleCaps.lean')
-          s = p.read_text()
-          replacements = [
-            ('rank_le_small_sum 13463782 100000 20 70',
-             'rank_le_small_sum 13463782 110000 21 74'),
-            ('rank_le_small_sum 12008238 100000 18 63',
-             'rank_le_small_sum 12008238 100000 19 66'),
-            ('have hq : 20 - wt residualSWeights F ≤ 7',
-             'have hq : 21 - wt residualSWeights F ≤ 8'),
-            ('have hq : 20 - wt residualSWeights F ≤ 8',
-             'have hq : 21 - wt residualSWeights F ≤ 9'),
-            ('have hq : 20 - wt residualSWeights F ≤ 9',
-             'have hq : 21 - wt residualSWeights F ≤ 10'),
-            ('have hq : 18 - wt residualSWeights F ≤ 8',
-             'have hq : 19 - wt residualSWeights F ≤ 9'),
-          ]
-          for old, new in replacements:
-              if old not in s:
-                  raise SystemExit(f'missing follow-up site: {old}')
-              s = s.replace(old, new)
-          p.write_text(s)
-          PY
-      - name: Source integrity checks
+          set -euo pipefail
+          curl --proto '=https' --tlsv1.2 -sSf https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh | sh -s -- -y --default-toolchain none
+          echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
+
+      - name: Fetch locked dependencies
+        shell: bash
         run: |
+          set -euo pipefail
+          lake update
+          git diff --exit-code -- lake-manifest.json lean-toolchain lakefile.toml
+          lake exe cache get || true
+
+      - name: Submission source gates
+        shell: bash
+        run: |
+          set -euo pipefail
+          bash scripts/check-submission-imports.sh lower ProximityPrize/SubmissionLower
           git diff --check
           test "$(cat ProximityPrize/SubmissionLower/score.txt)" = "6744"
           test "$(cat ProximityPrize/SubmissionLower/radius.txt)" = "10265855/33554432"
           grep -q 'ProtocolClaim 6744 10265855 33554432' ProximityPrize/SubmissionLower/Solution.lean
-          ! grep -R -n -E '100000 20 70|100000 18 63|80191|181953|10264575' ProximityPrize/SubmissionLower/Locator*.lean ProximityPrize/SubmissionLower/Solution.lean
-          grep -q 'rank_le_small_sum 13463782 110000 21 74' ProximityPrize/SubmissionLower/LocatorIrreducibleCaps.lean
-          grep -q 'rank_le_small_sum 12008238 100000 19 66' ProximityPrize/SubmissionLower/LocatorIrreducibleCaps.lean
-      - name: Commit materialized candidate
+          test "$(find ProximityPrize/SubmissionLower -type f -printf '%s\n' | awk '{s+=$1} END {print s}')" -le 4194304
+
+      - name: Build exact candidate
+        shell: bash
         run: |
-          git config user.name 'github-actions[bot]'
-          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add ProximityPrize/SubmissionLower
-          git commit -m 'Materialize locator certificate at 67.44'
-          git push
+          set -euo pipefail
+          lake build ProximityPrize.SubmissionLower.Solution
+
+      - name: Exact theorem and axiom closure
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat > /tmp/check-6744.lean <<'EOF'
+          import ProximityPrize.SubmissionLower.Solution
+          #check (ProximityPrize.Benchmark.candidate :
+            ProximityPrize.Benchmark.ProtocolClaim 6744 10265855 33554432)
+          #print axioms ProximityPrize.Benchmark.candidate
+          open Lean Lean.Meta
+          open Elab Command in
+          run_cmd liftTermElabM do
+            let allowed : List Name := [``propext, ``Classical.choice, ``Quot.sound]
+            let used ← collectAxioms ``ProximityPrize.Benchmark.candidate
+            let bad := used.toList.filter (fun ax => !allowed.contains ax)
+            unless bad.isEmpty do
+              throwError "candidate has forbidden axioms: {bad}"
+          EOF
+          lake env lean /tmp/check-6744.lean
+
+      - name: Kernel replay of exported module
+        shell: bash
+        run: |
+          set -euo pipefail
+          LEAN_NUM_THREADS=1 LEAN_ABORT_ON_PANIC=1 \
+            lake env leanchecker ProximityPrize.SubmissionLower.Solution
