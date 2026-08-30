@@ -19,7 +19,11 @@ jobs:
         with:
           fetch-depth: 0
       - name: Apply exact 67.44 retune
-        run: python3 tools/r6744.py
+        run: |
+          python3 tools/r6744.py || {
+            grep -R -n -C 2 -E '100000 20 70|100000 18 63' ProximityPrize/SubmissionLower || true
+            exit 1
+          }
       - name: Source integrity checks
         run: |
           git diff --check
