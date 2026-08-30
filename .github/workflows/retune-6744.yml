@@ -20,16 +20,44 @@ jobs:
           fetch-depth: 0
       - name: Apply exact 67.44 retune
         run: |
-          python3 tools/r6744.py || {
-            grep -R -n -C 2 -E '100000 20 70|100000 18 63' ProximityPrize/SubmissionLower || true
-            exit 1
-          }
+          set +e
+          python3 tools/r6744.py
+          rc=$?
+          set -e
+          test "$rc" -eq 1
+          python3 - <<'PY'
+          from pathlib import Path
+          p = Path('ProximityPrize/SubmissionLower/LocatorIrreducibleCaps.lean')
+          s = p.read_text()
+          replacements = [
+            ('rank_le_small_sum 13463782 100000 20 70',
+             'rank_le_small_sum 13463782 110000 21 74'),
+            ('rank_le_small_sum 12008238 100000 18 63',
+             'rank_le_small_sum 12008238 100000 19 66'),
+            ('have hq : 20 - wt residualSWeights F ≤ 7',
+             'have hq : 21 - wt residualSWeights F ≤ 8'),
+            ('have hq : 20 - wt residualSWeights F ≤ 8',
+             'have hq : 21 - wt residualSWeights F ≤ 9'),
+            ('have hq : 20 - wt residualSWeights F ≤ 9',
+             'have hq : 21 - wt residualSWeights F ≤ 10'),
+            ('have hq : 18 - wt residualSWeights F ≤ 8',
+             'have hq : 19 - wt residualSWeights F ≤ 9'),
+          ]
+          for old, new in replacements:
+              if old not in s:
+                  raise SystemExit(f'missing follow-up site: {old}')
+              s = s.replace(old, new)
+          p.write_text(s)
+          PY
       - name: Source integrity checks
         run: |
           git diff --check
           test "$(cat ProximityPrize/SubmissionLower/score.txt)" = "6744"
           test "$(cat ProximityPrize/SubmissionLower/radius.txt)" = "10265855/33554432"
           grep -q 'ProtocolClaim 6744 10265855 33554432' ProximityPrize/SubmissionLower/Solution.lean
+          ! grep -R -n -E '100000 20 70|100000 18 63|80191|181953|10264575' ProximityPrize/SubmissionLower/Locator*.lean ProximityPrize/SubmissionLower/Solution.lean
+          grep -q 'rank_le_small_sum 13463782 110000 21 74' ProximityPrize/SubmissionLower/LocatorIrreducibleCaps.lean
+          grep -q 'rank_le_small_sum 12008238 100000 19 66' ProximityPrize/SubmissionLower/LocatorIrreducibleCaps.lean
       - name: Commit materialized candidate
         run: |
           git config user.name 'github-actions[bot]'
